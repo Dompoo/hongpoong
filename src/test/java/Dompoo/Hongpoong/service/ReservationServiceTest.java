@@ -4,9 +4,9 @@ import Dompoo.Hongpoong.domain.Reservation;
 import Dompoo.Hongpoong.exception.ReservationAheadShiftFail;
 import Dompoo.Hongpoong.exception.ReservationNotFound;
 import Dompoo.Hongpoong.repository.ReservationRepository;
-import Dompoo.Hongpoong.request.ReservationCreateRequest;
-import Dompoo.Hongpoong.request.ReservationEditRequest;
-import Dompoo.Hongpoong.request.ReservationShiftRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationShiftRequest;
 import Dompoo.Hongpoong.response.MenuResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,8 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -31,7 +30,7 @@ class ReservationServiceTest {
     private ReservationRepository repository;
 
     @BeforeEach
-    void beforeEach() {
+    void setUp() {
         repository.deleteAll();
     }
 
@@ -248,8 +247,8 @@ class ReservationServiceTest {
         service.editReservation(reservation.getId(), request);
 
         //then
-        Reservation find = repository.findById(reservation.getId())
-                .orElseThrow(() -> new RuntimeException("해당 예약이 없습니다."));
+        Reservation find = assertDoesNotThrow(() -> repository.findById(reservation.getId())
+                .orElseThrow());
         assertEquals(find.getMember(), "member1");
         assertEquals(find.getDate(), LocalDate.of(2000, 12, 15));
         assertEquals(find.getTime(), 13);

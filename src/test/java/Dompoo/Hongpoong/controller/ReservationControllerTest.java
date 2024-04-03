@@ -2,9 +2,9 @@ package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.domain.Reservation;
 import Dompoo.Hongpoong.repository.ReservationRepository;
-import Dompoo.Hongpoong.request.ReservationCreateRequest;
-import Dompoo.Hongpoong.request.ReservationEditRequest;
-import Dompoo.Hongpoong.request.ReservationShiftRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationShiftRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ class ReservationControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void beforeEach() {
+    void setUp() {
         repository.deleteAll();
     }
 

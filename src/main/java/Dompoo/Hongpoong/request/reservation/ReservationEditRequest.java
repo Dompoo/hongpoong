@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.request;
+package Dompoo.Hongpoong.request.reservation;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,8 +1,8 @@
 package Dompoo.Hongpoong.controller;
 
-import Dompoo.Hongpoong.request.ReservationCreateRequest;
-import Dompoo.Hongpoong.request.ReservationEditRequest;
-import Dompoo.Hongpoong.request.ReservationShiftRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationShiftRequest;
 import Dompoo.Hongpoong.response.MenuResponse;
 import Dompoo.Hongpoong.service.ReservationService;
 import lombok.RequiredArgsConstructor;

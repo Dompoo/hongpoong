@@ -40,6 +40,10 @@ class ReservationControllerTest {
         repository.deleteAll();
     }
 
+    /**
+     * 예약 전체 조회 API 테스트 코드
+     */
+
     @Test
     @DisplayName("전체 예약 조회")
     void menu() throws Exception {
@@ -75,9 +79,81 @@ class ReservationControllerTest {
                 .andDo(print());
     }
 
+    /**
+     * 예약 추가 API 테스트 코드
+     */
+
     @Test
     @DisplayName("예약 추가")
     void add() throws Exception {
+        //given
+        ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .member("member1")
+                .date(LocalDate.of(2025, 12, 20))
+                .time(12)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/reservation")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.member").value("member1"))
+                .andExpect(jsonPath("$.date").value("2025-12-20"))
+                .andExpect(jsonPath("$.time").value(12))
+                .andExpect(jsonPath("$.priority").value(1))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("예약 추가시 예약자는 비어있을 수 없다.")
+    void addFail1() throws Exception {
+        //given
+        ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .date(LocalDate.of(2025, 12, 20))
+                .time(12)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/reservation")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[예약자는 비어있을 수 없습니다.]"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("예약 추가시 예약자는 공백일 수 없다.")
+    void addFail2() throws Exception {
+        //given
+        ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .member("")
+                .date(LocalDate.of(2025, 12, 20))
+                .time(12)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/reservation")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[예약자는 비어있을 수 없습니다.]"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("예약 추가시 날짜는 과거일 수 없다.")
+    void addFail3() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .member("member1")
@@ -92,13 +168,58 @@ class ReservationControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(json)
                 )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.member").value("member1"))
-                .andExpect(jsonPath("$.date").value("2000-12-20"))
-                .andExpect(jsonPath("$.time").value(12))
-                .andExpect(jsonPath("$.priority").value(1))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[과거 날짜일 수 없습니다.]"))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("예약 추가시 시간은 9시 이상이어야 한다.")
+    void addFail4() throws Exception {
+        //given
+        ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .member("member1")
+                .date(LocalDate.of(2025, 12, 20))
+                .time(8)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/reservation")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[9시 이상의 시간이어야 합니다.]"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("예약 추가시 시간은 22시 이하이어야 한다.")
+    void addFail5() throws Exception {
+        //given
+        ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .member("member1")
+                .date(LocalDate.of(2025, 12, 20))
+                .time(23)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/reservation")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[22시 이하의 시간이어야 합니다.]"))
+                .andDo(print());
+    }
+
+    /**
+     * 예약 상세 조회 API 테스트 코드
+     */
 
     @Test
     @DisplayName("예약 상세 조회")
@@ -140,6 +261,10 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$.message").value("존재하지 않는 예약입니다."))
                 .andDo(print());
     }
+
+    /**
+     * 예약 우서눈위 변경 API 테스트 코드
+     */
 
     @Test
     @DisplayName("예약 우선순위 변경")
@@ -192,7 +317,7 @@ class ReservationControllerTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 예약 우선순위 변경")
+    @DisplayName("우선순위를 앞으로 변경할 수 없다.")
     void shiftFail2() throws Exception {
         //given
         Reservation reservation = repository.save(Reservation.builder()
@@ -217,18 +342,48 @@ class ReservationControllerTest {
     }
 
     @Test
+    @DisplayName("우선순위는 최대 1이어야 한다.")
+    void shiftFail3() throws Exception {
+        //given
+        Reservation reservation = repository.save(Reservation.builder()
+                .member("member2")
+                .date(LocalDate.of(2000, 12, 20))
+                .time(12)
+                .priority(3)
+                .build());
+
+        ReservationShiftRequest request = ReservationShiftRequest.builder()
+                .priority(0)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/reservation/{id}", reservation.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[우선순위는 최대 1입니다.]"))
+                .andDo(print());
+    }
+
+    /**
+     * 예약 수정 API 테스트 코드
+     */
+
+    @Test
     @DisplayName("예약 전체 수정")
     void edit() throws Exception {
         //given
         Reservation reservation = repository.save(Reservation.builder()
                 .member("member1")
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
-                .date(LocalDate.of(2000, 12, 15))
+                .date(LocalDate.of(2025, 12, 15))
                 .time(13)
                 .build();
 
@@ -269,11 +424,37 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("존재하지 않는 예약 수정")
-    void editFail() throws Exception {
+    void editFail1() throws Exception {
         //given
         Reservation reservation = repository.save(Reservation.builder()
                 .member("member1")
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
+                .time(12)
+                .priority(1)
+                .build());
+
+        ReservationEditRequest request = ReservationEditRequest.builder()
+                .date(LocalDate.of(2025, 12, 15))
+                .time(13)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(patch("/reservation/{id}", reservation.getId() + 1)
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("예약 수정시 과거날짜일 수 없다.")
+    void editFail2() throws Exception {
+        //given
+        Reservation reservation = repository.save(Reservation.builder()
+                .member("member1")
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -289,9 +470,68 @@ class ReservationControllerTest {
         mockMvc.perform(patch("/reservation/{id}", reservation.getId() + 1)
                         .contentType(APPLICATION_JSON)
                         .content(json))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[과거 날짜일 수 없습니다.]"))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("예약 수정시 9시 이상이어야 한다.")
+    void editFail3() throws Exception {
+        //given
+        Reservation reservation = repository.save(Reservation.builder()
+                .member("member1")
+                .date(LocalDate.of(2025, 12, 20))
+                .time(12)
+                .priority(1)
+                .build());
+
+        ReservationEditRequest request = ReservationEditRequest.builder()
+                .date(LocalDate.of(2025, 12, 15))
+                .time(8)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(patch("/reservation/{id}", reservation.getId() + 1)
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[9시 이상의 시간이어야 합니다.]"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("예약 수정시 22시 이하이어야 한다.")
+    void editFail4() throws Exception {
+        //given
+        Reservation reservation = repository.save(Reservation.builder()
+                .member("member1")
+                .date(LocalDate.of(2025, 12, 20))
+                .time(12)
+                .priority(1)
+                .build());
+
+        ReservationEditRequest request = ReservationEditRequest.builder()
+                .date(LocalDate.of(2025, 12, 15))
+                .time(23)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(patch("/reservation/{id}", reservation.getId() + 1)
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[22시 이하의 시간이어야 합니다.]"))
+                .andDo(print());
+    }
+
+    /**
+     * 예약 삭제 API 테스트 코드
+     */
 
     @Test
     @DisplayName("예약 삭제")

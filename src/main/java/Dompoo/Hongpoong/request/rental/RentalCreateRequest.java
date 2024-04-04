@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.request.rental;
 
+import jakarta.validation.constraints.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,11 +21,23 @@ import java.time.LocalDate;
  */
 public class RentalCreateRequest {
 
+    @NotBlank(message = "품목은 비어있을 수 없습니다.")
     private String product;
+
+    @Min(value = 1, message = "개수는 1개 이상이어야 합니다.")
     private Integer count;
+
+    @NotBlank(message = "대여할 멤버는 비어있을 수 없습니다.")
     private String fromMember;
+
+    @NotBlank(message = "대여받을 멤버는 비어있을 수 없습니다.")
     private String toMember;
+
+    @FutureOrPresent(message = "과거 날짜일 수 없습니다.")
     private LocalDate date;
+
+    @Min(value = 9, message = "9시 이상의 시간이어야 합니다.")
+    @Max(value = 22, message = "22시 이하의 시간이어야 합니다.")
     private Integer time;
 
     @Builder

@@ -5,6 +5,7 @@ import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationShiftRequest;
 import Dompoo.Hongpoong.response.MenuResponse;
 import Dompoo.Hongpoong.service.ReservationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class ReservationController {
     }
 
     @PostMapping("")
-    public MenuResponse addReservation(@RequestBody ReservationCreateRequest request) {
+    public MenuResponse addReservation(@RequestBody @Valid ReservationCreateRequest request) {
         return service.addReservation(request);
     }
 
@@ -33,12 +34,12 @@ public class ReservationController {
     }
 
     @PostMapping("/{id}")
-    public void shiftReservation(@PathVariable Long id, @RequestBody ReservationShiftRequest request) {
+    public void shiftReservation(@PathVariable Long id, @RequestBody @Valid ReservationShiftRequest request) {
         service.shiftReservation(id, request);
     }
 
     @PatchMapping("/{id}")
-    public void editReservation(@PathVariable Long id, @RequestBody ReservationEditRequest request) {
+    public void editReservation(@PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
         service.editReservation(id, request);
     }
 

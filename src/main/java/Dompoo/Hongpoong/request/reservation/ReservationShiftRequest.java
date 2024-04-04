@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.request.reservation;
 
+import jakarta.validation.constraints.Min;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ RequestBody
 */
 public class ReservationShiftRequest {
 
+    @Min(value = 1, message = "우선순위는 최대 1입니다.")
     private Integer priority;
 
     @Builder

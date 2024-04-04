@@ -4,6 +4,7 @@ import Dompoo.Hongpoong.request.rental.RentalCreateRequest;
 import Dompoo.Hongpoong.request.rental.RentalEditRequest;
 import Dompoo.Hongpoong.response.RentalResponse;
 import Dompoo.Hongpoong.service.RentalService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class RentalController {
     }
 
     @PostMapping("")
-    public void addRental(@RequestBody RentalCreateRequest request) {
+    public void addRental(@RequestBody @Valid RentalCreateRequest request) {
         service.addRental(request);
     }
 
@@ -32,7 +33,7 @@ public class RentalController {
     }
 
     @PutMapping("/{id}")
-    public void editRental(@PathVariable Long id, @RequestBody RentalEditRequest request) {
+    public void editRental(@PathVariable Long id, @Valid @RequestBody RentalEditRequest request) {
         service.editRental(id, request);
     }
 

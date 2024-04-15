@@ -1,0 +1,39 @@
+### 이메일 추가 요청
+POST http://localhost:8080/auth/email
+Content-Type: application/json
+
+{
+  "email": "dompoo@gmail.com"
+}
+
+### 이메일 추가 승인
+POST http://localhost:8080/auth/email/accept
+Content-Type: application/json
+
+{
+  "id": 1,
+  "acceptResult": true
+}
+
+### 회원가입
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "email": "dompoo@gmail.com",
+  "username": "이창근",
+  "password1": "1234",
+  "password2": "1234"
+}
+
+### 로그인
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "email": "dompoo@gmail.com",
+  "password": "1234"
+}
+
+### 로그아웃
+POST http://localhost:8080/auth/logout

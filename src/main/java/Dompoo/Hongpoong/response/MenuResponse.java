@@ -9,14 +9,14 @@ import java.time.LocalDate;
 public class MenuResponse {
 
     private final Long id;
-    private final String member;
+    private final String username;
     private final LocalDate date;
     private final Integer time;
     private final Integer priority;
 
     public MenuResponse(Reservation reservation) {
         this.id = reservation.getId();
-        this.member = reservation.getMember();
+        this.username = reservation.getMember().getUsername();
         this.date = reservation.getDate();
         this.time = reservation.getTime();
         this.priority = reservation.getPriority();

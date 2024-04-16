@@ -1,11 +1,11 @@
 package Dompoo.Hongpoong.exception;
 
-public class PasswordNotCorrect extends MyException {
+public class DeleteFailException extends MyException {
 
-    private static final String MESSAGE = "비밀번호가 일치하지 않습니다.";
+    private static final String MESSAGE = "삭제할 수 없습니다.";
     private static final String STATUS_CODE = "400";
 
-    public PasswordNotCorrect() {
+    public DeleteFailException() {
         super(MESSAGE);
     }
 

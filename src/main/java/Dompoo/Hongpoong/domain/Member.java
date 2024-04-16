@@ -1,10 +1,10 @@
 package Dompoo.Hongpoong.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,6 +18,15 @@ public class Member {
     private String email;
     private String username;
     private String password;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fromMember", cascade = CascadeType.REMOVE)
+    private List<Rental> giveRentals = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toMember", cascade = CascadeType.REMOVE)
+    private List<Rental> receiveRentals = new ArrayList<>();
 
     @Builder
     public Member(Long id, String email, String username, String password) {

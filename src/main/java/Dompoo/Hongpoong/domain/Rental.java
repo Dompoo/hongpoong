@@ -1,9 +1,6 @@
 package Dompoo.Hongpoong.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -28,18 +25,35 @@ public class Rental {
     private Long id;
     private String product;
     private Integer count;
-    private String fromMember;
-    private String toMember;
+
+    @ManyToOne
+    @JoinColumn(name = "from_member")
+    private Member fromMember;
+
+    @ManyToOne
+    @JoinColumn(name = "to_member")
+    private Member toMember;
+
     private LocalDate date;
     private Integer time;
 
     @Builder
-    public Rental(String product, Integer count, String fromMember, String toMember, LocalDate date, Integer time) {
+    public Rental(String product, Integer count, Member fromMember, Member toMember, LocalDate date, Integer time) {
         this.product = product;
         this.count = count;
-        this.fromMember = fromMember;
-        this.toMember = toMember;
+        setFromMember(fromMember);
+        setToMember(toMember);
         this.date = date;
         this.time = time;
+    }
+
+    public void setFromMember(Member member) {
+        this.fromMember = member;
+        member.getGiveRentals().add(this);
+    }
+
+    public void setToMember(Member member) {
+        this.toMember = member;
+        member.getReceiveRentals().add(this);
     }
 }

@@ -10,12 +10,12 @@ import java.util.List;
 @Getter
 public class UserPrincipal extends User {
 
-    private final Long userId;
+    private final Long memberId;
 
     public UserPrincipal (Member member) {
         super(member.getEmail(),
                 member.getPassword(),
                 List.of(new SimpleGrantedAuthority("ROLE_USER")));
-        userId = member.getId();
+        memberId = member.getId();
     }
 }

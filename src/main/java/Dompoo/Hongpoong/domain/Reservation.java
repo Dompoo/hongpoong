@@ -1,10 +1,7 @@
 package Dompoo.Hongpoong.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -27,16 +24,25 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String member;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     private LocalDate date;
     private Integer time;
     private Integer priority;
 
     @Builder
-    public Reservation(String member, LocalDate date, Integer time, Integer priority) {
-        this.member = member;
+    public Reservation(Member member, LocalDate date, Integer time, Integer priority) {
+        setMember(member);
         this.date = date;
         this.time = time;
         this.priority = priority;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.getReservations().add(this);
     }
 }

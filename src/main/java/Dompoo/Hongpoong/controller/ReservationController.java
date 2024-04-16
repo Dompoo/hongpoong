@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.controller;
 
+import Dompoo.Hongpoong.config.UserPrincipal;
 import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationShiftRequest;
@@ -24,8 +25,8 @@ public class ReservationController {
     }
 
     @PostMapping("")
-    public MenuResponse addReservation(@RequestBody @Valid ReservationCreateRequest request) {
-        return service.addReservation(request);
+    public MenuResponse addReservation(UserPrincipal principal, @RequestBody @Valid ReservationCreateRequest request) {
+        return service.addReservation(principal.getMemberId(), request);
     }
 
     @GetMapping("/{id}")
@@ -34,17 +35,17 @@ public class ReservationController {
     }
 
     @PostMapping("/{id}")
-    public void shiftReservation(@PathVariable Long id, @RequestBody @Valid ReservationShiftRequest request) {
-        service.shiftReservation(id, request);
+    public void shiftReservation(UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid ReservationShiftRequest request) {
+        service.shiftReservation(principal.getMemberId(), id, request);
     }
 
     @PatchMapping("/{id}")
-    public void editReservation(@PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
-        service.editReservation(id, request);
+    public void editReservation(UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
+        service.editReservation(principal.getMemberId(), id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteReservation(@PathVariable Long id) {
-        service.deleteReservation(id);
+    public void deleteReservation(UserPrincipal principal, @PathVariable Long id) {
+        service.deleteReservation(principal.getMemberId(), id);
     }
 }

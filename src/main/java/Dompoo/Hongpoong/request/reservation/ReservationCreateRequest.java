@@ -3,7 +3,6 @@ package Dompoo.Hongpoong.request.reservation;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,9 +23,6 @@ RequestBody
 */
 public class ReservationCreateRequest {
 
-    @NotBlank(message = "예약자는 비어있을 수 없습니다.")
-    private String member;
-
     @FutureOrPresent(message = "과거 날짜일 수 없습니다.")
     private LocalDate date;
 
@@ -35,8 +31,7 @@ public class ReservationCreateRequest {
     private Integer time;
 
     @Builder
-    public ReservationCreateRequest(String member, LocalDate date, Integer time) {
-        this.member = member;
+    public ReservationCreateRequest(LocalDate date, Integer time) {
         this.date = date;
         this.time = time;
     }

@@ -1,11 +1,11 @@
 package Dompoo.Hongpoong.exception;
 
-public class NotAcceptedUser extends MyException {
+public class EditFailException extends MyException {
 
-    private static final String MESSAGE = "승인되지 않은 유저입니다.";
+    private static final String MESSAGE = "수정할 수 없습니다.";
     private static final String STATUS_CODE = "400";
 
-    public NotAcceptedUser() {
+    public EditFailException() {
         super(MESSAGE);
     }
 

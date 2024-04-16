@@ -20,8 +20,8 @@ public class RentalResponse {
         this.id = rental.getId();
         this.product = rental.getProduct();
         this.count = rental.getCount();
-        this.fromMember = rental.getFromMember();
-        this.toMember = rental.getToMember();
+        this.fromMember = rental.getFromMember().getUsername();
+        this.toMember = rental.getToMember().getUsername();
         this.date = rental.getDate();
         this.time = rental.getTime();
     }

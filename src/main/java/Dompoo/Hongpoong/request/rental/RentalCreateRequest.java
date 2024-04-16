@@ -30,9 +30,6 @@ public class RentalCreateRequest {
     @NotBlank(message = "대여할 멤버는 비어있을 수 없습니다.")
     private String fromMember;
 
-    @NotBlank(message = "대여받을 멤버는 비어있을 수 없습니다.")
-    private String toMember;
-
     @FutureOrPresent(message = "과거 날짜일 수 없습니다.")
     private LocalDate date;
 
@@ -41,11 +38,10 @@ public class RentalCreateRequest {
     private Integer time;
 
     @Builder
-    public RentalCreateRequest(String product, Integer count, String fromMember, String toMember, LocalDate date, Integer time) {
+    public RentalCreateRequest(String product, Integer count, String fromMember, LocalDate date, Integer time) {
         this.product = product;
         this.count = count;
         this.fromMember = fromMember;
-        this.toMember = toMember;
         this.date = date;
         this.time = time;
     }

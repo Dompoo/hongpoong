@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.controller;
 
+import Dompoo.Hongpoong.config.UserPrincipal;
 import Dompoo.Hongpoong.request.rental.RentalCreateRequest;
 import Dompoo.Hongpoong.request.rental.RentalEditRequest;
 import Dompoo.Hongpoong.response.RentalResponse;
@@ -23,8 +24,8 @@ public class RentalController {
     }
 
     @PostMapping("")
-    public void addRental(@RequestBody @Valid RentalCreateRequest request) {
-        service.addRental(request);
+    public void addRental(UserPrincipal principal, @RequestBody @Valid RentalCreateRequest request) {
+        service.addRental(principal.getMemberId(), request);
     }
 
     @GetMapping("/{id}")
@@ -33,12 +34,12 @@ public class RentalController {
     }
 
     @PutMapping("/{id}")
-    public void editRental(@PathVariable Long id, @Valid @RequestBody RentalEditRequest request) {
-        service.editRental(id, request);
+    public void editRental(UserPrincipal principal, @PathVariable Long id, @Valid @RequestBody RentalEditRequest request) {
+        service.editRental(principal.getMemberId(), id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRental(@PathVariable Long id) {
-        service.deleteRental(id);
+    public void deleteRental(UserPrincipal principal, @PathVariable Long id) {
+        service.deleteRental(principal.getMemberId(), id);
     }
 }

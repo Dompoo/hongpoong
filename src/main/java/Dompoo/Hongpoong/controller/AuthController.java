@@ -25,20 +25,20 @@ public class AuthController {
 
     @PostMapping("/email")
     public void requestEmail(@RequestBody @Valid AddEmailRequest request) {
-        service.addEmail(request);
+        service.addWhiteList(request);
     }
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
     //관리자 API
     @PostMapping("/email/accept")
     public void acceptEmail(@RequestBody @Valid AcceptEmailRequest request) {
-        service.acceptEmail(request);
+        service.acceptWhiteList(request);
     }
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
     //관리자 API
     @GetMapping("/email")
     public List<EmailResponse> emailRequestList() {
-        return service.getEmailList();
+        return service.getWhiteList();
     }
 }

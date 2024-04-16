@@ -30,7 +30,7 @@ public class AuthService {
 
     public void signup(SignupRequest request) {
         if (!Objects.equals(request.getPassword1(), request.getPassword2())) {
-            throw new PasswordNotCorrect();
+            throw new PasswordNotSame();
         }
 
         if (repository.findByUsername(request.getUsername()).isPresent()) {
@@ -41,7 +41,7 @@ public class AuthService {
                 .orElseThrow(NotInWhitelist::new);
 
         if (!whitelist.getIsAccepted()) {
-            throw new NotAcceptedUser();
+            throw new NotAcceptedMember();
         }
 
         repository.save(Member.builder()
@@ -51,15 +51,19 @@ public class AuthService {
                 .build());
     }
 
-    public void addEmail(AddEmailRequest request) {
+    public void addWhiteList(AddEmailRequest request) {
+        if(whitelistRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new AlreadyExistsEmail();
+        }
+
         whitelistRepository.save(Whitelist.builder()
                 .email(request.getEmail())
                 .isAccepted(false)
                 .build());
     }
 
-    public void acceptEmail(AcceptEmailRequest request) {
-        Whitelist whitelist = whitelistRepository.findById(request.getId())
+    public void acceptWhiteList(AcceptEmailRequest request) {
+        Whitelist whitelist = whitelistRepository.findById(request.getEmailId())
                 .orElseThrow(EmailNotFound::new);
         if (request.isAcceptResult()) {
             whitelist.setIsAccepted(true);
@@ -68,7 +72,7 @@ public class AuthService {
         }
     }
 
-    public List<EmailResponse> getEmailList() {
+    public List<EmailResponse> getWhiteList() {
         return whitelistRepository.findAll()
                 .stream().map(EmailResponse::new)
                 .collect(Collectors.toList());

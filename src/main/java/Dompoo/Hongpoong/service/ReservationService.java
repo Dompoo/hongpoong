@@ -1,8 +1,9 @@
 package Dompoo.Hongpoong.service;
 
+import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.Reservation;
-import Dompoo.Hongpoong.exception.ReservationAheadShiftFail;
-import Dompoo.Hongpoong.exception.ReservationNotFound;
+import Dompoo.Hongpoong.exception.*;
+import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
 import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
@@ -19,10 +20,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReservationService {
 
-    private final ReservationRepository repository;
+    private final ReservationRepository reservationRepository;
+    private final MemberRepository memberRepository;
 
     public List<MenuResponse> getList() {
-        return repository.findAll().stream()
+        return reservationRepository.findAll().stream()
                 .map(MenuResponse::new)
                 .collect(Collectors.toList());
     }
@@ -31,15 +33,18 @@ public class ReservationService {
      * request를 받아서 해당 날의 모든 예약 목록중
      * 예약시간이 겹치는 것 개수 + 1을 예약 순서로 설정하여 저장한다.
      */
-    public MenuResponse addReservation(ReservationCreateRequest request) {
-        List<Reservation> findReservations = repository.findAllByDate(request.getDate());
+    public MenuResponse addReservation(Long memberId, ReservationCreateRequest request) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFound::new);
+
+        List<Reservation> findReservations = reservationRepository.findAllByDate(request.getDate());
 
         long overlapCount = findReservations.stream()
                 .filter(r -> Objects.equals(r.getTime(), request.getTime()))
                 .count();
 
-        Reservation savedReservation = repository.save(Reservation.builder()
-                .member(request.getMember())
+        Reservation savedReservation = reservationRepository.save(Reservation.builder()
+                .member(member)
                 .date(request.getDate())
                 .time(request.getTime())
                 .priority((int) (overlapCount + 1))
@@ -48,8 +53,8 @@ public class ReservationService {
         return new MenuResponse(savedReservation);
     }
 
-    public MenuResponse findReservation(Long id) {
-        Reservation reservation = repository.findById(id)
+    public MenuResponse findReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
 
         return new MenuResponse(reservation);
@@ -60,15 +65,19 @@ public class ReservationService {
      * 현재 우선순위 ~ 원하는 우선순위 인 예약들의 우선순위를 +1
      * 해당하는 예약의 우선순위는 원하는 우선순위로.
      */
-    public void shiftReservation(Long id, ReservationShiftRequest request) {
-        Reservation reservation = repository.findById(id)
+    public void shiftReservation(Long memberId, Long reservationId, ReservationShiftRequest request) {
+        Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
 
         if (reservation.getPriority() > request.getPriority()) {
             throw new ReservationAheadShiftFail();
         }
 
-        List<Reservation> reservations = repository.findAllByDate(reservation.getDate());
+        if (!reservation.getMember().getId().equals(memberId)) {
+            throw new EditFailException();
+        }
+
+        List<Reservation> reservations = reservationRepository.findAllByDate(reservation.getDate());
 
         reservations.stream()
                 .filter(r -> reservation.getPriority() < r.getPriority()
@@ -78,19 +87,26 @@ public class ReservationService {
         reservation.setPriority(request.getPriority());
     }
 
-    public void editReservation(Long id, ReservationEditRequest request) {
-        Reservation reservation = repository.findById(id)
+    public void editReservation(Long memberId, Long reservationId, ReservationEditRequest request) {
+        Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
+
+        if (!reservation.getMember().getId().equals(memberId)) {
+            throw new EditFailException();
+        }
 
         if (request.getDate() != null) reservation.setDate(request.getDate());
         if (request.getTime() != null) reservation.setTime(request.getTime());
     }
 
-    public void deleteReservation(Long id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-        } else {
-            throw new ReservationNotFound();
+    public void deleteReservation(Long memberId, Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(ReservationNotFound::new);
+
+        if (!reservation.getMember().getId().equals(memberId)) {
+            throw new DeleteFailException();
         }
+
+        reservationRepository.delete(reservation);
     }
 }

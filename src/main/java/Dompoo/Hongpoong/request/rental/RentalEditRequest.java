@@ -27,7 +27,7 @@ public class RentalEditRequest {
     @Min(value = 1, message = "개수는 1개 이상이어야 합니다.")
     private Integer count;
 
-    private String fromMember;
+    private String responseMember;
 
     @FutureOrPresent(message = "과거 날짜일 수 없습니다.")
     private LocalDate date;
@@ -37,10 +37,10 @@ public class RentalEditRequest {
     private Integer time;
 
     @Builder
-    public RentalEditRequest(String product, Integer count, String fromMember, LocalDate date, Integer time) {
+    public RentalEditRequest(String product, Integer count, String responseMember, LocalDate date, Integer time) {
         this.product = product;
         this.count = count;
-        this.fromMember = fromMember;
+        this.responseMember = responseMember;
         this.date = date;
         this.time = time;
     }

@@ -27,33 +27,33 @@ public class Rental {
     private Integer count;
 
     @ManyToOne
-    @JoinColumn(name = "from_member")
-    private Member fromMember;
+    @JoinColumn(name = "request_member")
+    private Member requestMember;
 
     @ManyToOne
-    @JoinColumn(name = "to_member")
-    private Member toMember;
+    @JoinColumn(name = "response_member")
+    private Member responseMember;
 
     private LocalDate date;
     private Integer time;
 
     @Builder
-    public Rental(String product, Integer count, Member fromMember, Member toMember, LocalDate date, Integer time) {
+    public Rental(String product, Integer count, Member responseMember, Member requestMember, LocalDate date, Integer time) {
         this.product = product;
         this.count = count;
-        setFromMember(fromMember);
-        setToMember(toMember);
+        setRequestMember(requestMember);
+        setResponseMember(responseMember);
         this.date = date;
         this.time = time;
     }
 
-    public void setFromMember(Member member) {
-        this.fromMember = member;
-        member.getGiveRentals().add(this);
+    public void setRequestMember(Member member) {
+        this.requestMember = member;
+        member.getReceiveRentals().add(this);
     }
 
-    public void setToMember(Member member) {
-        this.toMember = member;
-        member.getReceiveRentals().add(this);
+    public void setResponseMember(Member member) {
+        this.responseMember = member;
+        member.getGiveRentals().add(this);
     }
 }

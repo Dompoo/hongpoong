@@ -31,18 +31,18 @@ public class RentalService {
     }
 
     public void addRental(Long memberId, RentalCreateRequest request) {
-        Member toMember = memberRepository.findById(memberId)
+        Member requestMember = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
 
-        Member fromMember = memberRepository.findByUsername(request.getFromMember())
+        Member responseMember = memberRepository.findByUsername(request.getResponseMember())
                 .orElseThrow(MemberNotFound::new);
 
 
         rentalRepository.save(Rental.builder()
                 .product(request.getProduct())
                 .count(request.getCount())
-                .fromMember(fromMember)
-                .toMember(toMember)
+                .requestMember(requestMember)
+                .responseMember(responseMember)
                 .date(request.getDate())
                 .time(request.getTime())
                 .build());
@@ -59,14 +59,14 @@ public class RentalService {
         Rental rental = rentalRepository.findById(rentalId)
                 .orElseThrow(RentalNotFound::new);
 
-        if (!rental.getToMember().getId().equals(memberId)) {
+        if (!rental.getRequestMember().getId().equals(memberId)) {
             throw new EditFailException();
         }
 
-        if (request.getFromMember() != null) {
-            Member fromMember = memberRepository.findByUsername(request.getFromMember())
+        if (request.getResponseMember() != null) {
+            Member fromMember = memberRepository.findByUsername(request.getResponseMember())
                     .orElseThrow(MemberNotFound::new);
-            rental.setFromMember(fromMember);
+            rental.setResponseMember(fromMember);
         }
         if (request.getProduct() != null) rental.setProduct(request.getProduct());
         if (request.getCount() != null) rental.setCount(request.getCount());
@@ -78,7 +78,7 @@ public class RentalService {
         Rental rental = rentalRepository.findById(rentalId)
                 .orElseThrow(RentalNotFound::new);
 
-        if (!rental.getToMember().getId().equals(memberId)) {
+        if (!rental.getRequestMember().getId().equals(memberId)) {
             throw new DeleteFailException();
         }
 

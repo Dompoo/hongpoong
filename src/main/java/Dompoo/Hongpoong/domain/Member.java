@@ -22,10 +22,10 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Reservation> reservations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "fromMember", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "responseMember", cascade = CascadeType.REMOVE)
     private List<Rental> giveRentals = new ArrayList<>();
 
-    @OneToMany(mappedBy = "toMember", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "requestMember", cascade = CascadeType.REMOVE)
     private List<Rental> receiveRentals = new ArrayList<>();
 
     @Builder

@@ -323,7 +323,7 @@ class ReservationServiceTest {
 
         //then
         assertEquals(e.getMessage(), "수정할 수 없습니다.");
-        assertEquals(e.statusCode(), "400");
+        assertEquals(e.statusCode(), "403");
     }
 
     @Test
@@ -419,7 +419,7 @@ class ReservationServiceTest {
 
         //then
         assertEquals(e.getMessage(), "수정할 수 없습니다.");
-        assertEquals(e.statusCode(), "400");
+        assertEquals(e.statusCode(), "403");
     }
 
     @Test
@@ -496,6 +496,6 @@ class ReservationServiceTest {
 
         //then
         assertEquals(e.getMessage(), "삭제할 수 없습니다.");
-        assertEquals(e.statusCode(), "400");
+        assertEquals(e.statusCode(), "403");
     }
 }

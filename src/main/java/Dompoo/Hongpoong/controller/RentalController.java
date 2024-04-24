@@ -7,6 +7,7 @@ import Dompoo.Hongpoong.response.RentalResponse;
 import Dompoo.Hongpoong.service.RentalService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class RentalController {
     }
 
     @PostMapping("")
-    public void addRental(UserPrincipal principal, @RequestBody @Valid RentalCreateRequest request) {
+    public void addRental(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid RentalCreateRequest request) {
         service.addRental(principal.getMemberId(), request);
     }
 
@@ -34,12 +35,12 @@ public class RentalController {
     }
 
     @PutMapping("/{id}")
-    public void editRental(UserPrincipal principal, @PathVariable Long id, @Valid @RequestBody RentalEditRequest request) {
+    public void editRental(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @Valid @RequestBody RentalEditRequest request) {
         service.editRental(principal.getMemberId(), id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRental(UserPrincipal principal, @PathVariable Long id) {
+    public void deleteRental(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id) {
         service.deleteRental(principal.getMemberId(), id);
     }
 }

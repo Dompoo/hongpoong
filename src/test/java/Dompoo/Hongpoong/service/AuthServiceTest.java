@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class AuthServiceTest {
 
+
     @Autowired
     private AuthService service;
     @Autowired
@@ -31,6 +32,15 @@ class AuthServiceTest {
     private WhitelistRepository whitelistRepository;
     @Autowired
     private PasswordEncoder encoder;
+
+    private static final String EMAIL = "dompoo@gmail.com";
+    private static final String USERNAME = "창근";
+    private static final String PASSWORD = "1234";
+    private static final String NOT_SAME_PASSWORD = "5678";
+    private static final String ALREADY_EXISTS_USERNAME = "이미 존재하는 유저명입니다.";
+    private static final String NOT_IN_WHITELIST = "요청하지 않은 유저입니다.";
+    private static final String NOT_ACCEPTED_MEMBER = "승인되지 않은 유저입니다.";
+    private static final String PASSWORD_NOT_SAME = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
 
     @BeforeEach
     void setUp() {
@@ -43,14 +53,14 @@ class AuthServiceTest {
     void addWhiteList() {
         //given
         AddEmailRequest request = AddEmailRequest.builder()
-                .email("dompoo@gmail.com")
+                .email(EMAIL)
                 .build();
         //when
         service.addWhiteList(request);
 
         //then
         assertEquals(whitelistRepository.count(), 1);
-        assertEquals(whitelistRepository.findAll().getFirst().getEmail(), "dompoo@gmail.com");
+        assertEquals(whitelistRepository.findAll().getFirst().getEmail(), EMAIL);
         assertEquals(whitelistRepository.findAll().getFirst().getIsAccepted(), false);
     }
 
@@ -59,12 +69,12 @@ class AuthServiceTest {
     void addWhiteListFail() {
         //given
         whitelistRepository.save(Whitelist.builder()
-                .email("dompoo@gmail.com")
+                .email(EMAIL)
                 .isAccepted(false)
                 .build());
 
         AddEmailRequest request = AddEmailRequest.builder()
-                .email("dompoo@gmail.com")
+                .email(EMAIL)
                 .build();
         //when
         AlreadyExistsEmail e = assertThrows(AlreadyExistsEmail.class,
@@ -80,7 +90,7 @@ class AuthServiceTest {
     void getWhiteList() {
         //given
         whitelistRepository.save(Whitelist.builder()
-                .email("dompoo@gmail.com")
+                .email(EMAIL)
                 .isAccepted(false)
                 .build());
 
@@ -92,7 +102,7 @@ class AuthServiceTest {
         List<EmailResponse> whiteList = service.getWhiteList();
 
         //then
-        assertEquals(whiteList.getFirst().getEmail(), "dompoo@gmail.com");
+        assertEquals(whiteList.getFirst().getEmail(), EMAIL);
         assertFalse(whiteList.getFirst().isAccepted());
         assertEquals(whiteList.get(1).getEmail(), "dompoo2@naver.com");
         assertTrue(whiteList.get(1).isAccepted());
@@ -103,7 +113,7 @@ class AuthServiceTest {
     void acceptWhiteList() {
         //given
         Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
-                .email("dompoo@gmail.com")
+                .email(EMAIL)
                 .isAccepted(false)
                 .build());
 
@@ -116,7 +126,7 @@ class AuthServiceTest {
 
         //then
         assertEquals(whitelistRepository.count(), 1);
-        assertEquals(whitelistRepository.findAll().getFirst().getEmail(), "dompoo@gmail.com");
+        assertEquals(whitelistRepository.findAll().getFirst().getEmail(), EMAIL);
         assertEquals(whitelistRepository.findAll().getFirst().getIsAccepted(), true);
     }
 
@@ -125,7 +135,7 @@ class AuthServiceTest {
     void notAcceptWhiteList() {
         //given
         Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
-                .email("dompoo@gmail.com")
+                .email(EMAIL)
                 .isAccepted(false)
                 .build());
 
@@ -145,15 +155,15 @@ class AuthServiceTest {
     void signup() {
         //given
         whitelistRepository.save(Whitelist.builder()
-                .email("dompoo@gmail.com")
+                .email(EMAIL)
                 .isAccepted(true)
                 .build());
 
         SignupRequest request = SignupRequest.builder()
-                .email("dompoo@gmail.com")
-                .username("창근")
-                .password1("1234")
-                .password2("1234")
+                .email(EMAIL)
+                .username(USERNAME)
+                .password1(PASSWORD)
+                .password2(PASSWORD)
                 .build();
 
         //when
@@ -161,8 +171,8 @@ class AuthServiceTest {
 
         //then
         assertEquals(memberRepository.count(), 1);
-        assertEquals(memberRepository.findAll().getFirst().getUsername(), "창근");
-        assertTrue(encoder.matches("1234", memberRepository.findAll().getFirst().getPassword()));
+        assertEquals(memberRepository.findAll().getFirst().getUsername(), USERNAME);
+        assertTrue(encoder.matches(PASSWORD, memberRepository.findAll().getFirst().getPassword()));
     }
 
     @Test
@@ -170,15 +180,15 @@ class AuthServiceTest {
     void signupFail1() {
         //given
         whitelistRepository.save(Whitelist.builder()
-                .email("dompoo@gmail.com")
+                .email(EMAIL)
                 .isAccepted(true)
                 .build());
 
         SignupRequest request = SignupRequest.builder()
                 .email("notdompoo@gmail.com")
-                .username("창근")
-                .password1("1234")
-                .password2("1234")
+                .username(USERNAME)
+                .password1(PASSWORD)
+                .password2(PASSWORD)
                 .build();
 
         //when
@@ -186,7 +196,7 @@ class AuthServiceTest {
                 () -> service.signup(request));
 
         //then
-        assertEquals(e.getMessage(), "요청하지 않은 유저입니다.");
+        assertEquals(e.getMessage(), NOT_IN_WHITELIST);
         assertEquals(e.statusCode(), "400");
     }
 
@@ -195,15 +205,15 @@ class AuthServiceTest {
     void signupFail2() {
         //given
         whitelistRepository.save(Whitelist.builder()
-                .email("dompoo@gmail.com")
+                .email(EMAIL)
                 .isAccepted(false)
                 .build());
 
         SignupRequest request = SignupRequest.builder()
-                .email("dompoo@gmail.com")
-                .username("창근")
-                .password1("1234")
-                .password2("1234")
+                .email(EMAIL)
+                .username(USERNAME)
+                .password1(PASSWORD)
+                .password2(PASSWORD)
                 .build();
 
         //when
@@ -211,7 +221,7 @@ class AuthServiceTest {
                 () -> service.signup(request));
 
         //then
-        assertEquals(e.getMessage(), "승인되지 않은 유저입니다.");
+        assertEquals(e.getMessage(), NOT_ACCEPTED_MEMBER);
         assertEquals(e.statusCode(), "400");
     }
 
@@ -220,9 +230,9 @@ class AuthServiceTest {
     void signupFail3() {
         //given
         SignupRequest request = SignupRequest.builder()
-                .username("창근")
-                .password1("1234")
-                .password2("5678")
+                .username(USERNAME)
+                .password1(PASSWORD)
+                .password2(NOT_SAME_PASSWORD)
                 .build();
 
         //when
@@ -231,7 +241,7 @@ class AuthServiceTest {
 
         //then
         assertEquals(e.statusCode(), "400");
-        assertEquals(e.getMessage(), "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+        assertEquals(e.getMessage(), PASSWORD_NOT_SAME);
     }
 
     @Test
@@ -239,14 +249,14 @@ class AuthServiceTest {
     void signupFail4() {
         //given
         memberRepository.save(Member.builder()
-                .email("dompoo@gmail.com")
-                .username("창근")
-                .password("1234")
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
                 .build());
 
         SignupRequest request = SignupRequest.builder()
                 .email("dompoo2@gmail.com")
-                .username("창근")
+                .username(USERNAME)
                 .password1("abcd")
                 .password2("abcd")
                 .build();
@@ -257,7 +267,7 @@ class AuthServiceTest {
 
         //then
         assertEquals(e.statusCode(), "400");
-        assertEquals(e.getMessage(), "이미 존재하는 유저명입니다.");
+        assertEquals(e.getMessage(), ALREADY_EXISTS_USERNAME);
     }
 
 }

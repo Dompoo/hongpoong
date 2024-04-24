@@ -29,8 +29,7 @@ public class Member {
     private List<Rental> receiveRentals = new ArrayList<>();
 
     @Builder
-    public Member(Long id, String email, String username, String password) {
-        this.id = id;
+    public Member(String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;

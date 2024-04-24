@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.request.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SignupRequest {
 
-    @NotBlank(message = "이메일은 비어있을 수 없습니다.")
     @Email(message = "이메일 형식으로 입력해주세요.")
+    @NotNull(message = "이메일은 비어있을 수 없습니다.")
     private String email;
     @NotBlank(message = "이름은 비어있을 수 없습니다.")
     private String username;

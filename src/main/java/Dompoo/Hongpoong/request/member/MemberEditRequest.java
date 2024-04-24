@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.request.Member;
+package Dompoo.Hongpoong.request.member;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

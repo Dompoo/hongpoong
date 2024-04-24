@@ -8,6 +8,7 @@ import Dompoo.Hongpoong.response.MenuResponse;
 import Dompoo.Hongpoong.service.ReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class ReservationController {
     }
 
     @PostMapping("")
-    public MenuResponse addReservation(UserPrincipal principal, @RequestBody @Valid ReservationCreateRequest request) {
+    public MenuResponse addReservation(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid ReservationCreateRequest request) {
         return service.addReservation(principal.getMemberId(), request);
     }
 
@@ -35,17 +36,17 @@ public class ReservationController {
     }
 
     @PostMapping("/{id}")
-    public void shiftReservation(UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid ReservationShiftRequest request) {
+    public void shiftReservation(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid ReservationShiftRequest request) {
         service.shiftReservation(principal.getMemberId(), id, request);
     }
 
     @PatchMapping("/{id}")
-    public void editReservation(UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
+    public void editReservation(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
         service.editReservation(principal.getMemberId(), id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteReservation(UserPrincipal principal, @PathVariable Long id) {
+    public void deleteReservation(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id) {
         service.deleteReservation(principal.getMemberId(), id);
     }
 }

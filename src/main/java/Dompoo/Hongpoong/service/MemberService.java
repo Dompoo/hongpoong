@@ -4,7 +4,7 @@ import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.exception.MemberNotFound;
 import Dompoo.Hongpoong.exception.PasswordNotSame;
 import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.request.Member.MemberEditRequest;
+import Dompoo.Hongpoong.request.member.MemberEditRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

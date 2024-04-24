@@ -66,6 +66,9 @@ public class AuthService {
         Whitelist whitelist = whitelistRepository.findById(request.getEmailId())
                 .orElseThrow(EmailNotFound::new);
         if (request.isAcceptResult()) {
+            if (whitelist.getIsAccepted()) {
+                throw new AlreadyAcceptedEmail();
+            }
             whitelist.setIsAccepted(true);
         } else {
             whitelistRepository.delete(whitelist);

@@ -34,9 +34,19 @@ class RentalServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    private static final String RESPONSE_MEMBER_USERNAME = "창근";
+    private static final String RESPONSE_MEMBER_EMAIL = "dompoo@gmail.com";
+    private static final String RESPONSE_MEMBER_PASSWORD = "1234";
+    private static final String REQUEST_MEMBER_USERNAME = "윤호";
+    private static final String REQUEST_MEMBER_EMAIL = "yoonH@naver.com";
+    private static final String REQUEST_MEMBER_PASSWORD = "qwer";
+    private static final String RENTAL_PRODUCT = "장구";
+    private static final LocalDate RENTAL_DATE = LocalDate.of(2000, 12, 20);
+
     @BeforeEach
     void setUp() {
         rentalRepository.deleteAll();
+        memberRepository.deleteAll();
     }
 
     @Test
@@ -44,23 +54,23 @@ class RentalServiceTest {
     void list() {
         //given
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Rental rental1 = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -79,17 +89,17 @@ class RentalServiceTest {
         //then
         assertEquals(rentalRepository.count(), 2);
         assertEquals(list.getFirst().getId(), rental1.getId());
-        assertEquals(list.getFirst().getProduct(), "장구");
+        assertEquals(list.getFirst().getProduct(), RENTAL_PRODUCT);
         assertEquals(list.getFirst().getCount(), 1);
-        assertEquals(list.getFirst().getResponseMember(), "창근");
-        assertEquals(list.getFirst().getRequestMember(), "윤호");
-        assertEquals(list.getFirst().getDate(), LocalDate.of(2000, 12, 20));
+        assertEquals(list.getFirst().getResponseMember(), RESPONSE_MEMBER_USERNAME);
+        assertEquals(list.getFirst().getRequestMember(), REQUEST_MEMBER_USERNAME);
+        assertEquals(list.getFirst().getDate(), RENTAL_DATE);
         assertEquals(list.getFirst().getTime(), 13);
         assertEquals(list.get(1).getId(), rental2.getId());
         assertEquals(list.get(1).getProduct(), "소고");
         assertEquals(list.get(1).getCount(), 4);
-        assertEquals(list.get(1).getResponseMember(), "창근");
-        assertEquals(list.get(1).getRequestMember(), "윤호");
+        assertEquals(list.get(1).getResponseMember(), RESPONSE_MEMBER_USERNAME);
+        assertEquals(list.get(1).getRequestMember(), REQUEST_MEMBER_USERNAME);
         assertEquals(list.get(1).getDate(), LocalDate.of(2000, 12, 30));
         assertEquals(list.get(1).getTime(), 15);
     }
@@ -99,22 +109,22 @@ class RentalServiceTest {
     void addOne() {
         //given
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         RentalCreateRequest request = RentalCreateRequest.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember.getUsername())
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build();
 
@@ -123,11 +133,11 @@ class RentalServiceTest {
 
         //then
         assertEquals(rentalRepository.count(), 1);
-        assertEquals(rentalRepository.findAll().getFirst().getProduct(), "장구");
+        assertEquals(rentalRepository.findAll().getFirst().getProduct(), RENTAL_PRODUCT);
         assertEquals(rentalRepository.findAll().getFirst().getCount(), 1);
         assertEquals(rentalRepository.findAll().getFirst().getResponseMember().getId(), responseMember.getId());
         assertEquals(rentalRepository.findAll().getFirst().getRequestMember().getId(), requestMember.getId());
-        assertEquals(rentalRepository.findAll().getFirst().getDate(), LocalDate.of(2000, 12, 20));
+        assertEquals(rentalRepository.findAll().getFirst().getDate(), RENTAL_DATE);
         assertEquals(rentalRepository.findAll().getFirst().getTime(), 13);
     }
 
@@ -136,22 +146,22 @@ class RentalServiceTest {
     void addOneFail() {
         //given
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         RentalCreateRequest request = RentalCreateRequest.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember.getUsername())
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build();
 
@@ -169,23 +179,23 @@ class RentalServiceTest {
     void getOne() {
         //given
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -194,11 +204,11 @@ class RentalServiceTest {
 
         //then
         assertEquals(response.getId(), rental.getId());
-        assertEquals(response.getProduct(), "장구");
+        assertEquals(response.getProduct(), RENTAL_PRODUCT);
         assertEquals(response.getCount(), 1);
-        assertEquals(response.getResponseMember(), "창근");
-        assertEquals(response.getRequestMember(), "윤호");
-        assertEquals(response.getDate(), LocalDate.of(2000, 12, 20));
+        assertEquals(response.getResponseMember(), RESPONSE_MEMBER_USERNAME);
+        assertEquals(response.getRequestMember(), REQUEST_MEMBER_USERNAME);
+        assertEquals(response.getDate(), RENTAL_DATE);
         assertEquals(response.getTime(), 13);
     }
 
@@ -206,23 +216,23 @@ class RentalServiceTest {
     @DisplayName("존재하지 않는 예약 상세 조회")
     void getOneFail() {
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -240,15 +250,15 @@ class RentalServiceTest {
     void edit1() {
         //given
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Member editMember = memberRepository.save(Member.builder()
@@ -258,11 +268,11 @@ class RentalServiceTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -293,23 +303,23 @@ class RentalServiceTest {
     void edit2() {
         //given
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -328,7 +338,7 @@ class RentalServiceTest {
         assertEquals(find.getCount(), 2);
         assertEquals(find.getResponseMember().getId(), responseMember.getId());
         assertEquals(find.getRequestMember().getId(), requestMember.getId());
-        assertEquals(find.getDate(), LocalDate.of(2000, 12, 20));
+        assertEquals(find.getDate(), RENTAL_DATE);
         assertEquals(find.getTime(), 13);
     }
 
@@ -337,23 +347,23 @@ class RentalServiceTest {
     void editFail1() {
         //given
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -379,23 +389,23 @@ class RentalServiceTest {
     void editFail2() {
         //given
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -413,7 +423,7 @@ class RentalServiceTest {
 
         //then
         assertEquals(e.getMessage(), "수정할 수 없습니다.");
-        assertEquals(e.statusCode(), "400");
+        assertEquals(e.statusCode(), "403");
     }
 
     @Test
@@ -421,15 +431,15 @@ class RentalServiceTest {
     void editFail3() {
         //given
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Member anotherMember = memberRepository.save(Member.builder()
@@ -439,11 +449,11 @@ class RentalServiceTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -461,7 +471,7 @@ class RentalServiceTest {
 
         //then
         assertEquals(e.getMessage(), "수정할 수 없습니다.");
-        assertEquals(e.statusCode(), "400");
+        assertEquals(e.statusCode(), "403");
     }
 
     @Test
@@ -469,23 +479,23 @@ class RentalServiceTest {
     void editFail4() {
         //given
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -511,23 +521,23 @@ class RentalServiceTest {
     void delete() {
         //given
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -542,23 +552,23 @@ class RentalServiceTest {
     @DisplayName("존재하지 않는 대여 삭제")
     void deleteFail1() {
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -575,23 +585,23 @@ class RentalServiceTest {
     @DisplayName("존재하지 않는 유저가 대여 삭제 시도")
     void deleteFail2() {
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -601,22 +611,22 @@ class RentalServiceTest {
 
         //then
         assertEquals(e.getMessage(), "삭제할 수 없습니다.");
-        assertEquals(e.statusCode(), "400");
+        assertEquals(e.statusCode(), "403");
     }
 
     @Test
     @DisplayName("대여자가 아닌 유저가 대여 삭제 시도시 실패")
     void deleteFail3() {
         Member responseMember = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
+                .username(RESPONSE_MEMBER_USERNAME)
+                .email(RESPONSE_MEMBER_EMAIL)
+                .password(RESPONSE_MEMBER_PASSWORD)
                 .build());
 
         Member requestMember = memberRepository.save(Member.builder()
-                .username("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
+                .username(REQUEST_MEMBER_USERNAME)
+                .email(REQUEST_MEMBER_EMAIL)
+                .password(REQUEST_MEMBER_PASSWORD)
                 .build());
 
         Member anotherMember = memberRepository.save(Member.builder()
@@ -626,11 +636,11 @@ class RentalServiceTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .product("장구")
+                .product(RENTAL_PRODUCT)
                 .count(1)
                 .responseMember(responseMember)
                 .requestMember(requestMember)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(RENTAL_DATE)
                 .time(13)
                 .build());
 
@@ -640,6 +650,6 @@ class RentalServiceTest {
 
         //then
         assertEquals(e.getMessage(), "삭제할 수 없습니다.");
-        assertEquals(e.statusCode(), "400");
+        assertEquals(e.statusCode(), "403");
     }
 }

@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.config;
+package Dompoo.Hongpoong.config.security;
 
 import Dompoo.Hongpoong.domain.Member;
 import lombok.Getter;

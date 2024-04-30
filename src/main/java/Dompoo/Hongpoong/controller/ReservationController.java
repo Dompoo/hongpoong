@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.controller;
 
-import Dompoo.Hongpoong.config.UserPrincipal;
+import Dompoo.Hongpoong.config.security.UserPrincipal;
 import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationShiftRequest;

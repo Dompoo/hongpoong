@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.config;
+package Dompoo.Hongpoong.config.security;
 
 import Dompoo.Hongpoong.config.handler.*;
 import Dompoo.Hongpoong.domain.Member;
@@ -12,7 +12,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,7 +27,7 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 import static org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -36,17 +35,14 @@ public class SecurityConfig {
     private final MemberRepository memberRepository;
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring()
-                .requestMatchers("/error")
-                .requestMatchers(toH2Console())
-                .requestMatchers("/favicon.ico");
-    }
-
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers(toH2Console()).permitAll()
+                        .requestMatchers("/favicon.ico").permitAll()
+                        .requestMatchers("/chat").permitAll()
+                        .requestMatchers("/ws/chat").permitAll()
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/auth/signup").permitAll()
                         .requestMatchers("/auth/email").permitAll()
@@ -56,17 +52,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.addHeaderWriter(new XFrameOptionsHeaderWriter(SAMEORIGIN)))
                 .addFilterBefore(emailPasswordAuthFilter(), UsernamePasswordAuthenticationFilter.class)
-                .rememberMe(rm -> rm
-                        .rememberMeParameter("remember-me")
-                        .alwaysRemember(true)
-                        .tokenValiditySeconds(2592000)
-                        .userDetailsService(userDetailsService(memberRepository)))
                 .exceptionHandling(e -> e
                         .accessDeniedHandler(new Http403Handler())
                         .authenticationEntryPoint(new Http401Handler()))
                 .logout((logout) -> logout
-                        .logoutUrl("auth/logout")
-                        .deleteCookies("JSESSIONID", "remember-me")
+                        .logoutUrl("/auth/logout")
+                        .deleteCookies("SESSION")
                         .logoutSuccessHandler(new LogoutSuccessHandler())
                 )
                 .build();

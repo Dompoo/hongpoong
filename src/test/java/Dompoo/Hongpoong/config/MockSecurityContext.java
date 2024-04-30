@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.config;
 
+import Dompoo.Hongpoong.config.security.UserPrincipal;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.config.handler;
 
-import Dompoo.Hongpoong.config.UserPrincipal;
+import Dompoo.Hongpoong.config.security.UserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-        log.info("인증 성공, user={}", principal.getUsername());
+        log.info("인증 성공 [유저이메일 : {}]", principal.getUsername());
 
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(UTF_8.name());

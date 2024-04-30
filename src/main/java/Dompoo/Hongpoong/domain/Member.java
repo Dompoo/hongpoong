@@ -28,10 +28,18 @@ public class Member {
     @OneToMany(mappedBy = "requestMember", cascade = CascadeType.REMOVE)
     private List<Rental> receiveRentals = new ArrayList<>();
 
+    @ManyToMany
+    private List<ChatRoom> chatRooms = new ArrayList<>();
+
     @Builder
     public Member(String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;
+    }
+
+    public void joinChatRoom(ChatRoom chatRoom){
+        this.chatRooms.add(chatRoom);
+        chatRoom.getMembers().add(this);
     }
 }

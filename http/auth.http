@@ -11,7 +11,7 @@ POST http://localhost:8080/auth/email/accept
 Content-Type: application/json
 
 {
-  "id": 1,
+  "emailId": 1,
   "acceptResult": true
 }
 

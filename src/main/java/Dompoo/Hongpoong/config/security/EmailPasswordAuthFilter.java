@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.config;
+package Dompoo.Hongpoong.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.controller;
 
-import Dompoo.Hongpoong.config.UserPrincipal;
+import Dompoo.Hongpoong.config.security.UserPrincipal;
 import Dompoo.Hongpoong.request.rental.RentalCreateRequest;
 import Dompoo.Hongpoong.request.rental.RentalEditRequest;
 import Dompoo.Hongpoong.response.RentalResponse;

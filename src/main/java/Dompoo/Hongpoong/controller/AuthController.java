@@ -29,14 +29,14 @@ public class AuthController {
     }
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    //관리자 API
+    //TODO: 관리자 API
     @PostMapping("/email/accept")
     public void acceptEmail(@RequestBody @Valid AcceptEmailRequest request) {
         service.acceptWhiteList(request);
     }
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    //관리자 API
+    //TODO: 관리자 API
     @GetMapping("/email")
     public List<EmailResponse> emailRequestList() {
         return service.getWhiteList();

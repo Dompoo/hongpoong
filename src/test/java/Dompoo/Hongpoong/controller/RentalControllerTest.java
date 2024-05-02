@@ -9,7 +9,7 @@ import Dompoo.Hongpoong.request.rental.RentalCreateRequest;
 import Dompoo.Hongpoong.request.rental.RentalEditRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,13 +45,14 @@ class RentalControllerTest {
     private static final String REQUEST_MEMBER_USERNAME = "윤호";
     private static final String REQUEST_MEMBER_EMAIL = "yoonH@naver.com";
     private static final String REQUEST_MEMBER_PASSWORD = "qwer";
+    private static final Member.Club CLUB = Member.Club.SANTLE;
     private static final String RENTAL_PRODUCT = "장구";
     private static final int RENTAL_COUNT = 1;
     private static final LocalDate RENTAL_DATE = LocalDate.of(2025, 12, 20);
     private static final String RENTAL_DATE_STRING = "2025-12-20";
     private static final int RENTAL_TIME = 13;
 
-    @BeforeEach
+    @AfterEach
     void setUp() {
         rentalRepository.deleteAll();
     }
@@ -69,12 +70,14 @@ class RentalControllerTest {
                 .email(REQUEST_MEMBER_EMAIL)
                 .username(REQUEST_MEMBER_USERNAME)
                 .password(REQUEST_MEMBER_PASSWORD)
+                .club(Member.Club.SANTLE)
                 .build());
 
         Member member2 = memberRepository.save(Member.builder()
                 .email(RESPONSE_MEMBER_EMAIL)
                 .username(RESPONSE_MEMBER_USERNAME)
                 .password(RESPONSE_MEMBER_PASSWORD)
+                .club(Member.Club.SANTLE)
                 .build());
 
         rentalRepository.save(Rental.builder()
@@ -769,6 +772,96 @@ class RentalControllerTest {
         //expected
         mockMvc.perform(delete("/rental/{id}", rental.getId() + RENTAL_COUNT))
                 .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("관리자 대여 전체 조회")
+    @WithMockMember(role = "ROLE_ADMIN")
+    void rentalLog() throws Exception {
+        Member requestMember = memberRepository.save(Member.builder()
+                .email(REQUEST_MEMBER_EMAIL)
+                .username(REQUEST_MEMBER_USERNAME)
+                .password(REQUEST_MEMBER_PASSWORD)
+                .build());
+
+        Member responseMember = memberRepository.save(Member.builder()
+                .email(RESPONSE_MEMBER_EMAIL)
+                .username(RESPONSE_MEMBER_USERNAME)
+                .password(RESPONSE_MEMBER_PASSWORD)
+                .build());
+
+        rentalRepository.save(Rental.builder()
+                .product(RENTAL_PRODUCT)
+                .count(RENTAL_COUNT)
+                .requestMember(requestMember)
+                .responseMember(responseMember)
+                .date(RENTAL_DATE)
+                .time(RENTAL_TIME)
+                .build());
+
+        rentalRepository.save(Rental.builder()
+                .product(RENTAL_PRODUCT)
+                .count(RENTAL_COUNT)
+                .requestMember(responseMember)
+                .responseMember(requestMember)
+                .date(RENTAL_DATE)
+                .time(RENTAL_TIME)
+                .build());
+
+        //expected
+        mockMvc.perform(get("/rental/manage"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].product").value(RENTAL_PRODUCT))
+                .andExpect(jsonPath("$[0].count").value(RENTAL_COUNT))
+                .andExpect(jsonPath("$[0].requestMember").value(REQUEST_MEMBER_USERNAME))
+                .andExpect(jsonPath("$[0].responseMember").value(RESPONSE_MEMBER_USERNAME))
+                .andExpect(jsonPath("$[1].product").value(RENTAL_PRODUCT))
+                .andExpect(jsonPath("$[1].count").value(RENTAL_COUNT))
+                .andExpect(jsonPath("$[1].requestMember").value(RESPONSE_MEMBER_USERNAME))
+                .andExpect(jsonPath("$[1].responseMember").value(REQUEST_MEMBER_USERNAME))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원은 관리자 대여 전체 조회할 수 없다.")
+    @WithMockMember
+    void rentalLogFail() throws Exception {
+        Member requestMember = memberRepository.save(Member.builder()
+                .email(REQUEST_MEMBER_EMAIL)
+                .username(REQUEST_MEMBER_USERNAME)
+                .password(REQUEST_MEMBER_PASSWORD)
+                .build());
+
+        Member responseMember = memberRepository.save(Member.builder()
+                .email(RESPONSE_MEMBER_EMAIL)
+                .username(RESPONSE_MEMBER_USERNAME)
+                .password(RESPONSE_MEMBER_PASSWORD)
+                .build());
+
+        Rental rental1 = rentalRepository.save(Rental.builder()
+                .product(RENTAL_PRODUCT)
+                .count(RENTAL_COUNT)
+                .requestMember(requestMember)
+                .responseMember(responseMember)
+                .date(RENTAL_DATE)
+                .time(RENTAL_TIME)
+                .build());
+
+        Rental rental2 = rentalRepository.save(Rental.builder()
+                .product(RENTAL_PRODUCT)
+                .count(RENTAL_COUNT)
+                .requestMember(responseMember)
+                .responseMember(requestMember)
+                .date(RENTAL_DATE)
+                .time(RENTAL_TIME)
+                .build());
+
+        //expected
+        mockMvc.perform(get("/rental/manage"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
                 .andDo(print());
     }
 }

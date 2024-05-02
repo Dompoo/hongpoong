@@ -498,4 +498,38 @@ class ReservationServiceTest {
         assertEquals(e.getMessage(), "삭제할 수 없습니다.");
         assertEquals(e.statusCode(), "403");
     }
+
+    @Test
+    @DisplayName("예약 관리자 수정")
+    void editAdmin() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .username("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .build());
+
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .member(member)
+                .date(LocalDate.of(2000, 12, 20))
+                .time(12)
+                .priority(1)
+                .build());
+
+        ReservationEditRequest request = ReservationEditRequest.builder()
+                .date(LocalDate.of(2000, 12, 15))
+                .time(13)
+                .build();
+
+        //when
+        service.edit(reservation.getId(), request);
+
+        //then
+        Reservation find = assertDoesNotThrow(() -> reservationRepository.findById(reservation.getId())
+                .orElseThrow());
+        assertEquals(find.getMember().getId(), member.getId());
+        assertEquals(find.getDate(), LocalDate.of(2000, 12, 15));
+        assertEquals(find.getTime(), 13);
+        assertEquals(find.getPriority(), 1);
+    }
 }

@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.controller;
 
+import Dompoo.Hongpoong.config.WithMockMember;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.Whitelist;
 import Dompoo.Hongpoong.repository.MemberRepository;
@@ -44,6 +45,7 @@ class AuthControllerTest {
     private static final String USERNAME = "창근";
     private static final String EMAIL = "dompoo@gmail.com";
     private static final String PASSWORD = "1234";
+    private static final Member.Club CLUB = Member.Club.SANTLE;
 
     @Test
     @DisplayName("회원가입")
@@ -59,6 +61,7 @@ class AuthControllerTest {
                 .username(USERNAME)
                 .password1(PASSWORD)
                 .password2(PASSWORD)
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -85,6 +88,7 @@ class AuthControllerTest {
                 .username(USERNAME)
                 .password1(PASSWORD)
                 .password2("5678")
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -112,6 +116,7 @@ class AuthControllerTest {
                 .email(EMAIL)
                 .password1(PASSWORD)
                 .password2(PASSWORD)
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -139,6 +144,7 @@ class AuthControllerTest {
                 .username(" ")
                 .password1(PASSWORD)
                 .password2(PASSWORD)
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -165,6 +171,7 @@ class AuthControllerTest {
                 .email(EMAIL)
                 .username(USERNAME)
                 .password2(PASSWORD)
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -191,6 +198,7 @@ class AuthControllerTest {
                 .email(EMAIL)
                 .username(USERNAME)
                 .password1(PASSWORD)
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -216,6 +224,7 @@ class AuthControllerTest {
         memberRepository.save(Member.builder()
                 .username(USERNAME)
                 .password(PASSWORD)
+                .club(CLUB)
                 .build());
 
         SignupRequest request = SignupRequest.builder()
@@ -223,6 +232,7 @@ class AuthControllerTest {
                 .username(USERNAME)
                 .password1("abcd")
                 .password2("abcd")
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -250,6 +260,7 @@ class AuthControllerTest {
                 .username(USERNAME)
                 .password1(PASSWORD)
                 .password2(PASSWORD)
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -277,6 +288,7 @@ class AuthControllerTest {
                 .username(USERNAME)
                 .password1(PASSWORD)
                 .password2(PASSWORD)
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -304,6 +316,7 @@ class AuthControllerTest {
                 .username(USERNAME)
                 .password1(PASSWORD)
                 .password2(PASSWORD)
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -326,6 +339,7 @@ class AuthControllerTest {
                 .username(USERNAME)
                 .password1(PASSWORD)
                 .password2(PASSWORD)
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -353,6 +367,7 @@ class AuthControllerTest {
                 .username(USERNAME)
                 .password1(PASSWORD)
                 .password2(PASSWORD)
+                .club(CLUB)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -363,6 +378,33 @@ class AuthControllerTest {
                         .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("승인되지 않은 유저입니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원가입시 동아리가 비어있을 수 없다.")
+    void signupFail11() throws Exception {
+        //given
+        whitelistRepository.save(Whitelist.builder()
+                .email(EMAIL)
+                .isAccepted(true)
+                .build());
+
+        SignupRequest request = SignupRequest.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password1(PASSWORD)
+                .password2(PASSWORD)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[동아리는 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
 
@@ -417,6 +459,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("화이트리스트 승인")
+    @WithMockMember(role = "ROLE_ADMIN")
     void acceptEmail() throws Exception {
         //given
         Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
@@ -441,6 +484,7 @@ class AuthControllerTest {
 
     @Test
     @DisplayName("화이트리스트 승인시 이미 승인된 이메일은 승인할 수 없다.")
+    @WithMockMember(role = "ROLE_ADMIN")
     void acceptEmailFail() throws Exception {
         //given
         Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
@@ -466,7 +510,34 @@ class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("회원은 화이트리스트 승인할 수 없다.")
+    @WithMockMember
+    void acceptEmailFail1() throws Exception {
+        //given
+        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
+                .email(EMAIL)
+                .isAccepted(true)
+                .build());
+
+        AcceptEmailRequest request = AcceptEmailRequest.builder()
+                .emailId(whitelist.getId())
+                .acceptResult(true)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/auth/email/accept")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("화이트리스트 리스트 조회")
+    @WithMockMember(role = "ROLE_ADMIN")
     void emailRequestList() throws Exception {
         //given
         whitelistRepository.save(Whitelist.builder()
@@ -486,6 +557,28 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$[0].accepted").value(false))
                 .andExpect(jsonPath("$[1].email").value("yoonH@naver.com"))
                 .andExpect(jsonPath("$[1].accepted").value(true))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원은 화이트리스트 리스트 조회할 수 없다.")
+    @WithMockMember
+    void emailRequestListFail() throws Exception {
+        //given
+        whitelistRepository.save(Whitelist.builder()
+                .email(EMAIL)
+                .isAccepted(false)
+                .build());
+
+        whitelistRepository.save(Whitelist.builder()
+                .email("yoonH@naver.com")
+                .isAccepted(true)
+                .build());
+
+        //expected
+        mockMvc.perform(get("/auth/email"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
                 .andDo(print());
     }
 }

@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class AuthServiceTest {
 
-
     @Autowired
     private AuthService service;
     @Autowired

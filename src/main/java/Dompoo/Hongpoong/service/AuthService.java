@@ -48,6 +48,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword1()))
+                .club(request.getClub())
                 .build());
     }
 

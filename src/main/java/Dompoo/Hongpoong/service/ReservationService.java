@@ -109,4 +109,12 @@ public class ReservationService {
 
         reservationRepository.delete(reservation);
     }
+
+    public void edit(Long id, ReservationEditRequest request) {
+        Reservation reservation = reservationRepository.findById(id)
+                .orElseThrow(ReservationNotFound::new);
+
+        if (request.getDate() != null) reservation.setDate(request.getDate());
+        if (request.getTime() != null) reservation.setTime(request.getTime());
+    }
 }

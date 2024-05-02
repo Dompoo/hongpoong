@@ -23,6 +23,7 @@ public class MockSecurityContext implements WithSecurityContextFactory<WithMockM
                 .email(annotation.email())
                 .username(annotation.username())
                 .password(annotation.password())
+                .club(annotation.club())
                 .build());
 
         UserPrincipal principal = new UserPrincipal(member);

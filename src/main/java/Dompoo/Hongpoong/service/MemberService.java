@@ -5,10 +5,16 @@ import Dompoo.Hongpoong.exception.MemberNotFound;
 import Dompoo.Hongpoong.exception.PasswordNotSame;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.request.member.MemberEditRequest;
+import Dompoo.Hongpoong.request.member.MemberRoleEditRequest;
+import Dompoo.Hongpoong.response.MemberResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
@@ -34,5 +40,22 @@ public class MemberService {
                 .orElseThrow(MemberNotFound::new);
 
         repository.delete(member);
+    }
+
+    public List<MemberResponse> getList() {
+        return repository.findAll().stream()
+                .map(MemberResponse::new)
+                .collect(toList());
+    }
+
+    public void editRole(Long id, MemberRoleEditRequest request) {
+        Member member = repository.findById(id)
+                .orElseThrow(MemberNotFound::new);
+
+        if (request.isAdmin()) {
+            member.setRole(Member.Role.ROLE_ADMIN);
+        } else {
+            member.setRole(Member.Role.ROLE_USER);
+        }
     }
 }

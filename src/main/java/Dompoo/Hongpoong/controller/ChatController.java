@@ -15,12 +15,12 @@ public class ChatController {
 
     private final ChatService service;
 
-    @PostMapping
+    @PostMapping("")
     public ChatRoomResponse createRoom(@RequestBody ChatRoomCreateRequest request) {
         return service.createRoom(request);
     }
 
-    @GetMapping
+    @GetMapping("")
     public List<ChatRoomResponse> findAllRoom() {
         return service.findAll();
     }

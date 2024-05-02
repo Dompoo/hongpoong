@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.config;
 
+import Dompoo.Hongpoong.domain.Member;
 import org.springframework.security.test.context.support.WithSecurityContext;
 
 import java.lang.annotation.Retention;
@@ -16,4 +17,6 @@ public @interface WithMockMember {
     String password() default "1234";
 
     String role() default "ROLE_USER";
+
+    Member.Club club() default Member.Club.SANTLE;
 }

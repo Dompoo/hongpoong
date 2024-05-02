@@ -8,6 +8,7 @@ import Dompoo.Hongpoong.response.MenuResponse;
 import Dompoo.Hongpoong.service.ReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,5 +49,11 @@ public class ReservationController {
     @DeleteMapping("/{id}")
     public void deleteReservation(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id) {
         service.deleteReservation(principal.getMemberId(), id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PatchMapping("/manage/{id}")
+    public void edit(@PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
+        service.edit(id, request);
     }
 }

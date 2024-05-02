@@ -679,4 +679,71 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$.message").value("삭제할 수 없습니다."))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("관리자 예약 수정")
+    @WithMockMember(role = "ROLE_ADMIN")
+    void editManage() throws Exception {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .email("yoonH@naver.com")
+                .username("윤호")
+                .password("qwer")
+                .build());
+
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .member(member)
+                .date(LocalDate.of(2025, 12, 20))
+                .time(12)
+                .priority(1)
+                .build());
+
+        ReservationEditRequest request = ReservationEditRequest.builder()
+                .date(LocalDate.of(2025, 12, 15))
+                .time(13)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(patch("/reservation/manage/{id}", reservation.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원은 관리자 예약 수정할 수 없다.")
+    @WithMockMember
+    void editManageFail() throws Exception {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .email("yoonH@naver.com")
+                .username("윤호")
+                .password("qwer")
+                .build());
+
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .member(member)
+                .date(LocalDate.of(2025, 12, 20))
+                .time(12)
+                .priority(1)
+                .build());
+
+        ReservationEditRequest request = ReservationEditRequest.builder()
+                .date(LocalDate.of(2025, 12, 15))
+                .time(13)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(patch("/reservation/manage/{id}", reservation.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
+                .andDo(print());
+    }
 }

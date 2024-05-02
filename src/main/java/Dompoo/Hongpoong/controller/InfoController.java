@@ -6,6 +6,7 @@ import Dompoo.Hongpoong.response.InfoDetailResponse;
 import Dompoo.Hongpoong.response.InfoListResponse;
 import Dompoo.Hongpoong.service.InfoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class InfoController {
 
     private final InfoService service;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public void createInfo(@RequestBody InfoCreateRequest request) {
         service.addInfo(request);
@@ -32,13 +34,13 @@ public class InfoController {
         return service.getDetail(infoId);
     }
 
-    //TODO: 관리자 API
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{infoId}")
     public void editInfo(@PathVariable Long infoId, @RequestBody InfoEditRequest request) {
         service.editInfo(infoId, request);
     }
 
-    //TODO: 관리자 API
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{infoId}")
     public void deleteInfo(@PathVariable Long infoId) {
         service.deleteInfo(infoId);

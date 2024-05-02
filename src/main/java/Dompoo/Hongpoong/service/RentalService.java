@@ -24,8 +24,12 @@ public class RentalService {
     private final RentalRepository rentalRepository;
     private final MemberRepository memberRepository;
 
-    public List<RentalResponse> getList() {
+    public List<RentalResponse> getList(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFound::new);
+
         return rentalRepository.findAll().stream()
+                .filter(rental -> rental.getRequestMember().getClub().equals(member.getClub()) || rental.getResponseMember().getClub().equals(member.getClub()))
                 .map(RentalResponse::new)
                 .collect(Collectors.toList());
     }
@@ -83,5 +87,11 @@ public class RentalService {
         }
 
         rentalRepository.delete(rental);
+    }
+
+    public List<RentalResponse> getLog() {
+        return rentalRepository.findAll().stream()
+                .map(RentalResponse::new)
+                .collect(Collectors.toList());
     }
 }

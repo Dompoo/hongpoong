@@ -5,12 +5,16 @@ import Dompoo.Hongpoong.exception.MemberNotFound;
 import Dompoo.Hongpoong.exception.PasswordNotSame;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.request.member.MemberEditRequest;
+import Dompoo.Hongpoong.request.member.MemberRoleEditRequest;
+import Dompoo.Hongpoong.response.MemberResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -131,6 +135,63 @@ class MemberServiceTest {
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
                 () -> service.deleteMember(member.getId() + 1));
+
+        //then
+        assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
+        assertEquals(e.statusCode(), "404");
+    }
+
+    @Test
+    @DisplayName("회원 리스트 조회")
+    void getList() {
+        //given
+        memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .username(NEW_USERNAME)
+                .password(NEW_PASSWORD)
+                .build());
+
+        //when
+        List<MemberResponse> list = service.getList();
+
+        //then
+        assertEquals(2, list.size());
+        assertEquals(USERNAME, list.get(0).getUsername());
+        assertEquals(PASSWORD, list.get(0).getPassword());
+        assertEquals(NEW_USERNAME, list.get(1).getUsername());
+        assertEquals(NEW_PASSWORD, list.get(1).getPassword());
+    }
+
+    @Test
+    @DisplayName("회원 권한 변경")
+    void editRole() {
+        //given
+        Member find = memberRepository.findAll().getFirst();
+
+        MemberRoleEditRequest request = MemberRoleEditRequest.builder()
+                .isAdmin(true)
+                .build();
+
+        //when
+        service.editRole(find.getId(), request);
+
+        //then
+        assertEquals(memberRepository.findAll().getFirst().getRole(), "ROLE_ADMIN");
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 회원 권한 변경")
+    void editRoleFail() {
+        //given
+        Member find = memberRepository.findAll().getFirst();
+
+        MemberRoleEditRequest request = MemberRoleEditRequest.builder()
+                .isAdmin(true)
+                .build();
+
+        //when
+        MemberNotFound e = assertThrows(MemberNotFound.class,
+                () -> service.editRole(find.getId() + 1, request));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");

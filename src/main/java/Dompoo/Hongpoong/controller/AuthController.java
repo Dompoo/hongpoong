@@ -7,6 +7,7 @@ import Dompoo.Hongpoong.response.EmailResponse;
 import Dompoo.Hongpoong.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,15 +29,13 @@ public class AuthController {
         service.addWhiteList(request);
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    //TODO: 관리자 API
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/email/accept")
     public void acceptEmail(@RequestBody @Valid AcceptEmailRequest request) {
         service.acceptWhiteList(request);
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    //TODO: 관리자 API
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/email")
     public List<EmailResponse> emailRequestList() {
         return service.getWhiteList();

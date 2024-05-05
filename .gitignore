@@ -39,3 +39,5 @@ out/
 ### mysql password ###
 src/main/resources/application-secret.yml
 src/main/java/Dompoo/Hongpoong/InitAdmin.java
+/Users/dompoo/project/Hongpoong/docker-compose.yml
+/Users/dompoo/project/Hongpoong/Dockerfile

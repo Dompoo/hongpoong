@@ -58,4 +58,11 @@ public class MemberService {
             member.setRole(Member.Role.ROLE_USER);
         }
     }
+
+    public MemberResponse getStatus(Long memberId) {
+        Member member = repository.findById(memberId)
+                .orElseThrow(MemberNotFound::new);
+
+        return new MemberResponse(member);
+    }
 }

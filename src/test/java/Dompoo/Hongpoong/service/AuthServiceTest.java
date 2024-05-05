@@ -9,6 +9,7 @@ import Dompoo.Hongpoong.request.auth.AcceptEmailRequest;
 import Dompoo.Hongpoong.request.auth.AddEmailRequest;
 import Dompoo.Hongpoong.request.auth.SignupRequest;
 import Dompoo.Hongpoong.response.EmailResponse;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 class AuthServiceTest {
 
     @Autowired
@@ -40,6 +42,7 @@ class AuthServiceTest {
     private static final String NOT_IN_WHITELIST = "요청하지 않은 유저입니다.";
     private static final String NOT_ACCEPTED_MEMBER = "승인되지 않은 유저입니다.";
     private static final String PASSWORD_NOT_SAME = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
+    private static final String ALREADY_USED_EMAIL = "이미 회원가입된 이메일입니다.";
 
     @BeforeEach
     void setUp() {
@@ -269,4 +272,77 @@ class AuthServiceTest {
         assertEquals(e.getMessage(), ALREADY_EXISTS_USERNAME);
     }
 
+    @Test
+    @DisplayName("회원가입시 사용된 화이트리스트는 안된다.")
+    void signupFail5() {
+        //given
+        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
+                .email(EMAIL)
+                .isAccepted(true)
+                .build());
+
+        whitelist.setIsUsed(true);
+
+        SignupRequest request = SignupRequest.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password1(PASSWORD)
+                .password2(PASSWORD)
+                .build();
+
+        //when
+        AlreadyUsedEmail e = assertThrows(AlreadyUsedEmail.class, () ->
+                service.signup(request));
+
+        //then
+        assertEquals(e.statusCode(), "400");
+        assertEquals(e.getMessage(), ALREADY_USED_EMAIL);
+    }
+
+    @Test
+    @DisplayName("화이트리스트 삭제")
+    void deleteWhiteList() {
+        //given
+        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
+                .email(EMAIL)
+                .isAccepted(true)
+                .build());
+
+        memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .build());
+
+        //when
+        service.deleteWhiteList(whitelist.getId());
+
+        //then
+        assertEquals(memberRepository.count(), 0);
+        assertEquals(whitelistRepository.count(), 0);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 화이트리스트 삭제")
+    void deleteWhiteListFail() {
+        //given
+        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
+                .email(EMAIL)
+                .isAccepted(true)
+                .build());
+
+        memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .build());
+
+        //when
+        EmailNotFound e = assertThrows(EmailNotFound.class, () ->
+                service.deleteWhiteList(whitelist.getId() + 1));
+
+        //then
+        assertEquals(e.statusCode(), "404");
+        assertEquals(e.getMessage(), "존재하지 않는 이메일입니다.");
+    }
 }

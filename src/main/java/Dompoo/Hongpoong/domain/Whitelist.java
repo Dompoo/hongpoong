@@ -14,10 +14,12 @@ public class Whitelist {
     private Long id;
     private String email;
     private Boolean isAccepted;
+    private Boolean isUsed;
 
     @Builder
     public Whitelist(String email, Boolean isAccepted) {
         this.email = email;
         this.isAccepted = isAccepted;
+        this.isUsed = false;
     }
 }

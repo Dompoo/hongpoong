@@ -2,10 +2,7 @@ package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.Rental;
-import Dompoo.Hongpoong.exception.DeleteFailException;
-import Dompoo.Hongpoong.exception.EditFailException;
-import Dompoo.Hongpoong.exception.MemberNotFound;
-import Dompoo.Hongpoong.exception.RentalNotFound;
+import Dompoo.Hongpoong.exception.*;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.RentalRepository;
 import Dompoo.Hongpoong.request.rental.RentalCreateRequest;
@@ -41,6 +38,9 @@ public class RentalService {
         Member responseMember = memberRepository.findByUsername(request.getResponseMember())
                 .orElseThrow(MemberNotFound::new);
 
+        if (requestMember.getId().equals(responseMember.getId())) {
+            throw new SelfRentalException();
+        }
 
         rentalRepository.save(Rental.builder()
                 .product(request.getProduct())

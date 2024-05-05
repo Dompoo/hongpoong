@@ -8,6 +8,7 @@ import Dompoo.Hongpoong.repository.WhitelistRepository;
 import Dompoo.Hongpoong.request.auth.AcceptEmailRequest;
 import Dompoo.Hongpoong.request.auth.SignupRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,13 +18,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 class AuthControllerTest {
 
@@ -409,6 +410,36 @@ class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("회원가입시 이미 사용된 이메일을 사용할 수 없다.")
+    void signupFail12() throws Exception {
+        //given
+        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
+                .email(EMAIL)
+                .isAccepted(true)
+                .build());
+
+        whitelist.setIsUsed(true);
+
+        SignupRequest request = SignupRequest.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password1(PASSWORD)
+                .password2(PASSWORD)
+                .club(CLUB)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("이미 회원가입된 이메일입니다."))
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("화이트리스트 추가")
     void addWhiteList() throws Exception {
         //given
@@ -581,4 +612,77 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("화이트리스트 삭제")
+    @WithMockMember(role = "ROLE_ADMIN")
+    void deleteWhiteList() throws Exception {
+        //given
+        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
+                .email(EMAIL)
+                .isAccepted(false)
+                .build());
+
+        memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .club(CLUB)
+                .build());
+
+        //expected
+        mockMvc.perform(delete("/auth/email/{id}", whitelist.getId()))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원은 화이트리스트 삭제할 수 없다.")
+    @WithMockMember
+    void deleteWhiteListFail1() throws Exception {
+        //given
+        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
+                .email(EMAIL)
+                .isAccepted(false)
+                .build());
+
+        memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .club(CLUB)
+                .build());
+
+        //expected
+        mockMvc.perform(delete("/auth/email/{id}", whitelist.getId()))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 화이트리스트 삭제")
+    @WithMockMember(role = "ROLE_ADMIN")
+    void deleteWhiteListFail2() throws Exception {
+        //given
+        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
+                .email(EMAIL)
+                .isAccepted(false)
+                .build());
+
+        memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .club(CLUB)
+                .build());
+
+        //expected
+        mockMvc.perform(delete("/auth/email/{id}", whitelist.getId() + 1))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("존재하지 않는 이메일입니다."))
+                .andDo(print());
+    }
+
+
 }

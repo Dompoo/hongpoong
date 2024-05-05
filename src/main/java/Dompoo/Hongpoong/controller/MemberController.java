@@ -20,6 +20,11 @@ public class MemberController {
 
     private final MemberService service;
 
+    @GetMapping("/status")
+    public MemberResponse getStatus(@AuthenticationPrincipal UserPrincipal principal) {
+        return service.getStatus(principal.getMemberId());
+    }
+
     @PutMapping("")
     public void editMember(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid MemberEditRequest request) {
         service.editMember(principal.getMemberId(), request);

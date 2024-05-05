@@ -35,6 +35,9 @@ public class Member {
     @ManyToMany
     private List<ChatRoom> chatRooms = new ArrayList<>();
 
+    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private Setting setting;
+
     public enum Role {
         ROLE_USER("ROLE_USER"), ROLE_ADMIN("ROLE_ADMIN");
 

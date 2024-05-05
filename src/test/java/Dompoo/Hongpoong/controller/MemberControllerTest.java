@@ -42,6 +42,20 @@ class MemberControllerTest {
         repository.deleteAll();
     }
 
+    //로그인 정보
+    @Test
+    @DisplayName("로그인 정보")
+    @WithMockMember
+    void getStatus() throws Exception {
+        //expected
+        mockMvc.perform(get("/member/status"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("dompoo@gmail.com"))
+                .andExpect(jsonPath("$.username").value("창근"))
+                .andExpect(jsonPath("$.password").value("1234"))
+                .andDo(print());
+    }
+
     //회원정보 수정
     @Test
     @DisplayName("회원정보 수정")

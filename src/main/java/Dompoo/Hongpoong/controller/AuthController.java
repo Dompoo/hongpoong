@@ -40,4 +40,10 @@ public class AuthController {
     public List<EmailResponse> emailRequestList() {
         return service.getWhiteList();
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/email/{id}")
+    public void deleteEmail(@PathVariable Long id) {
+        service.deleteWhiteList(id);
+    }
 }

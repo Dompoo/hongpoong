@@ -47,6 +47,44 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("로그인 정보")
+    void getStatus() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .username(NEW_USERNAME)
+                .password(NEW_PASSWORD)
+                .build());
+
+        //when
+        MemberResponse response = service.getStatus(member.getId());
+
+        //then
+        assertEquals(response.getEmail(), EMAIL);
+        assertEquals(response.getUsername(), NEW_USERNAME);
+        assertEquals(response.getPassword(), NEW_PASSWORD);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 회원의 로그인 정보")
+    void getStatusFail() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .username(NEW_USERNAME)
+                .password(NEW_PASSWORD)
+                .build());
+
+        //when
+        MemberNotFound e = assertThrows(MemberNotFound.class, () ->
+                service.getStatus(member.getId() + 1));
+
+        //then
+        assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
+        assertEquals(e.statusCode(), "404");
+    }
+
+    @Test
     @DisplayName("멤버 정보 전체 수정")
     void editMember1() {
         //given

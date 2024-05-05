@@ -2,10 +2,7 @@ package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.Rental;
-import Dompoo.Hongpoong.exception.DeleteFailException;
-import Dompoo.Hongpoong.exception.EditFailException;
-import Dompoo.Hongpoong.exception.MemberNotFound;
-import Dompoo.Hongpoong.exception.RentalNotFound;
+import Dompoo.Hongpoong.exception.*;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.RentalRepository;
 import Dompoo.Hongpoong.request.rental.RentalCreateRequest;
@@ -177,6 +174,33 @@ class RentalServiceTest {
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
         assertEquals(e.statusCode(), "404");
+    }
+
+    @Test
+    @DisplayName("대여 추가시 자신에게 빌릴 수 없다.")
+    void addOneFail1() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .username(MEM1_USERNAME)
+                .email(MEM1_EMAIL)
+                .password(MEM1_PASSWORD)
+                .build());
+
+        RentalCreateRequest request = RentalCreateRequest.builder()
+                .product(RENTAL_PRODUCT)
+                .count(1)
+                .responseMember(member.getUsername())
+                .date(RENTAL_DATE)
+                .time(13)
+                .build();
+
+        //when
+        SelfRentalException e = assertThrows(SelfRentalException.class, () ->
+                service.addRental(member.getId(), request));
+
+        //then
+        assertEquals(e.getMessage(), "자신에게 대여할 수 없습니다.");
+        assertEquals(e.statusCode(), "400");
     }
 
     @Test

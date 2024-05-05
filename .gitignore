@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### mysql password ###
+src/main/resources/application-secret.yml
+src/main/java/Dompoo/Hongpoong/InitAdmin.java

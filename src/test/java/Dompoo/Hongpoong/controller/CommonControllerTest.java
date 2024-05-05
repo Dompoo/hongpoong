@@ -48,7 +48,7 @@ class CommonControllerTest {
     @WithMockMember
     void settingList() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Setting setting = settingRepository.save(Setting.builder()
                 .member(member)
@@ -67,7 +67,7 @@ class CommonControllerTest {
     @WithMockMember
     void doSetting() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Setting setting = settingRepository.save(Setting.builder()
                 .member(member)

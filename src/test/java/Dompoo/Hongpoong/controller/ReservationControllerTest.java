@@ -100,7 +100,7 @@ class ReservationControllerTest {
     @WithMockMember
     void add() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(LocalDate.of(2025, 12, 20))
@@ -256,7 +256,7 @@ class ReservationControllerTest {
     @WithMockMember
     void shift1() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
@@ -284,7 +284,7 @@ class ReservationControllerTest {
     @WithMockMember
     void shiftFail1() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
@@ -312,7 +312,7 @@ class ReservationControllerTest {
     @WithMockMember
     void shiftFail2() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
@@ -340,7 +340,7 @@ class ReservationControllerTest {
     @WithMockMember
     void shiftFail3() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
@@ -406,7 +406,7 @@ class ReservationControllerTest {
     @WithMockMember
     void edit() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
@@ -435,7 +435,7 @@ class ReservationControllerTest {
     @WithMockMember
     void edit2() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
@@ -463,7 +463,7 @@ class ReservationControllerTest {
     @WithMockMember
     void editFail1() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
@@ -492,7 +492,7 @@ class ReservationControllerTest {
     @WithMockMember
     void editFail2() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
@@ -522,7 +522,7 @@ class ReservationControllerTest {
     @WithMockMember
     void editFail3() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
@@ -552,7 +552,7 @@ class ReservationControllerTest {
     @WithMockMember
     void editFail4() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
@@ -620,7 +620,7 @@ class ReservationControllerTest {
     @WithMockMember
     void delete1() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
@@ -640,7 +640,7 @@ class ReservationControllerTest {
     @WithMockMember
     void deleteFail() throws Exception {
         //given
-        Member member = memberRepository.findAll().getFirst();
+        Member member = memberRepository.findAll().getLast();
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)

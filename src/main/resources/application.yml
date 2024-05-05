@@ -2,16 +2,14 @@ spring:
   application:
     name: Hongpoong
   profiles:
-    active: dev
-  h2:
-    console:
-      enabled: true
-
-  datasource:
-    url: jdbc:h2:mem:hongpoong
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-
+    active: local
+    include: secret
+#    include: secret의 mysql 설정정보 가져옴
   jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
     defer-datasource-initialization: true

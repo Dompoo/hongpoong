@@ -2,14 +2,17 @@ spring:
   application:
     name: Hongpoong
   profiles:
-    active: local
     include: secret
+    active: local
 #    include: secret의 mysql 설정정보 가져옴
   jpa:
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+#    sql보기 및 포맷팅
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
     hibernate:
       ddl-auto: update
     defer-datasource-initialization: true
+server:
+  port: 8080

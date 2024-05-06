@@ -7,7 +7,7 @@ import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.RentalRepository;
 import Dompoo.Hongpoong.request.rental.RentalCreateRequest;
 import Dompoo.Hongpoong.request.rental.RentalEditRequest;
-import Dompoo.Hongpoong.response.RentalResponse;
+import Dompoo.Hongpoong.response.rental.RentalResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

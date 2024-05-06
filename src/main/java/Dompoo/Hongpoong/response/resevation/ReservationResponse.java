@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.response;
+package Dompoo.Hongpoong.response.resevation;
 
 import Dompoo.Hongpoong.domain.Reservation;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class MenuResponse {
+public class ReservationResponse {
 
     private final Long id;
     private final String username;
@@ -14,7 +14,7 @@ public class MenuResponse {
     private final Integer time;
     private final Integer priority;
 
-    public MenuResponse(Reservation reservation) {
+    public ReservationResponse(Reservation reservation) {
         this.id = reservation.getId();
         this.username = reservation.getMember().getUsername();
         this.date = reservation.getDate();

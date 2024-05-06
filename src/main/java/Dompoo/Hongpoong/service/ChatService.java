@@ -6,7 +6,7 @@ import Dompoo.Hongpoong.exception.MemberNotFound;
 import Dompoo.Hongpoong.repository.ChatRoomRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.request.chat.ChatRoomCreateRequest;
-import Dompoo.Hongpoong.response.ChatRoomResponse;
+import Dompoo.Hongpoong.response.chat.ChatRoomResponse;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

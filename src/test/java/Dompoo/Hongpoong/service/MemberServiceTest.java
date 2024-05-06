@@ -6,7 +6,7 @@ import Dompoo.Hongpoong.exception.PasswordNotSame;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.request.member.MemberEditRequest;
 import Dompoo.Hongpoong.request.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.response.MemberResponse;
+import Dompoo.Hongpoong.response.member.MemberResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

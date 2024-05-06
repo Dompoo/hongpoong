@@ -2,8 +2,8 @@ package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.request.info.InfoCreateRequest;
 import Dompoo.Hongpoong.request.info.InfoEditRequest;
-import Dompoo.Hongpoong.response.InfoDetailResponse;
-import Dompoo.Hongpoong.response.InfoListResponse;
+import Dompoo.Hongpoong.response.info.InfoDetailResponse;
+import Dompoo.Hongpoong.response.info.InfoListResponse;
 import Dompoo.Hongpoong.service.InfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

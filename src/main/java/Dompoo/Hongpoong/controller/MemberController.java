@@ -3,7 +3,7 @@ package Dompoo.Hongpoong.controller;
 import Dompoo.Hongpoong.config.security.UserPrincipal;
 import Dompoo.Hongpoong.request.member.MemberEditRequest;
 import Dompoo.Hongpoong.request.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.response.MemberResponse;
+import Dompoo.Hongpoong.response.member.MemberResponse;
 import Dompoo.Hongpoong.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

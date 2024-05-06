@@ -10,7 +10,7 @@ import Dompoo.Hongpoong.repository.WhitelistRepository;
 import Dompoo.Hongpoong.request.auth.AcceptEmailRequest;
 import Dompoo.Hongpoong.request.auth.AddEmailRequest;
 import Dompoo.Hongpoong.request.auth.SignupRequest;
-import Dompoo.Hongpoong.response.EmailResponse;
+import Dompoo.Hongpoong.response.auth.EmailResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

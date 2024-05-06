@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.response;
+package Dompoo.Hongpoong.response.auth;
 
 import Dompoo.Hongpoong.domain.Whitelist;
 import lombok.Builder;

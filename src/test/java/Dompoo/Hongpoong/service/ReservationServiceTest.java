@@ -8,7 +8,7 @@ import Dompoo.Hongpoong.repository.ReservationRepository;
 import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationShiftRequest;
-import Dompoo.Hongpoong.response.MenuResponse;
+import Dompoo.Hongpoong.response.resevation.ReservationResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -62,7 +62,7 @@ class ReservationServiceTest {
                 .build());
 
         //when
-        List<MenuResponse> list = service.getList();
+        List<ReservationResponse> list = service.getList();
 
         //then
         assertEquals(2, list.size());
@@ -94,7 +94,7 @@ class ReservationServiceTest {
                 .build();
 
         //when
-        MenuResponse response = service.addReservation(member.getId(), request);
+        ReservationResponse response = service.addReservation(member.getId(), request);
 
         //then
         assertEquals(1, reservationRepository.count());
@@ -144,7 +144,7 @@ class ReservationServiceTest {
                 .build());
 
         //when
-        MenuResponse response = service.findReservation(reservation.getId());
+        ReservationResponse response = service.findReservation(reservation.getId());
 
         //then
         assertEquals(response.getId(), reservation.getId());

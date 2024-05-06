@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.response;
+package Dompoo.Hongpoong.response.member;
 
 import Dompoo.Hongpoong.domain.Member;
 import lombok.Getter;

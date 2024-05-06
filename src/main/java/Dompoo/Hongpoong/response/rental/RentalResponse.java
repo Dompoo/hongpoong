@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.response;
+package Dompoo.Hongpoong.response.rental;
 
 import Dompoo.Hongpoong.domain.Rental;
 import lombok.Getter;

@@ -2,7 +2,7 @@ package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.config.security.UserPrincipal;
 import Dompoo.Hongpoong.request.common.SettingSaveRequest;
-import Dompoo.Hongpoong.response.SettingResponse;
+import Dompoo.Hongpoong.response.common.SettingResponse;
 import Dompoo.Hongpoong.service.CommonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

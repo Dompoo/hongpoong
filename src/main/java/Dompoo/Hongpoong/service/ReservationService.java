@@ -8,7 +8,7 @@ import Dompoo.Hongpoong.repository.ReservationRepository;
 import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationShiftRequest;
-import Dompoo.Hongpoong.response.MenuResponse;
+import Dompoo.Hongpoong.response.resevation.ReservationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +23,9 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
 
-    public List<MenuResponse> getList() {
+    public List<ReservationResponse> getList() {
         return reservationRepository.findAll().stream()
-                .map(MenuResponse::new)
+                .map(ReservationResponse::new)
                 .collect(Collectors.toList());
     }
 
@@ -33,7 +33,7 @@ public class ReservationService {
      * request를 받아서 해당 날의 모든 예약 목록중
      * 예약시간이 겹치는 것 개수 + 1을 예약 순서로 설정하여 저장한다.
      */
-    public MenuResponse addReservation(Long memberId, ReservationCreateRequest request) {
+    public ReservationResponse addReservation(Long memberId, ReservationCreateRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
 
@@ -50,14 +50,14 @@ public class ReservationService {
                 .priority((int) (overlapCount + 1))
                 .build());
 
-        return new MenuResponse(savedReservation);
+        return new ReservationResponse(savedReservation);
     }
 
-    public MenuResponse findReservation(Long reservationId) {
+    public ReservationResponse findReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
 
-        return new MenuResponse(reservation);
+        return new ReservationResponse(reservation);
     }
 
     /**

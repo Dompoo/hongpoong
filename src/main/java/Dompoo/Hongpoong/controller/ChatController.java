@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.request.chat.ChatRoomCreateRequest;
-import Dompoo.Hongpoong.response.ChatRoomResponse;
+import Dompoo.Hongpoong.response.chat.ChatRoomResponse;
 import Dompoo.Hongpoong.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

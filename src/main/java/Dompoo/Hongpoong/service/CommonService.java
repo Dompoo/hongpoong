@@ -4,7 +4,7 @@ import Dompoo.Hongpoong.domain.Setting;
 import Dompoo.Hongpoong.exception.MemberNotFound;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.request.common.SettingSaveRequest;
-import Dompoo.Hongpoong.response.SettingResponse;
+import Dompoo.Hongpoong.response.common.SettingResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

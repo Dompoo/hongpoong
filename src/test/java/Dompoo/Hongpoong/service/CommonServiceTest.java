@@ -5,7 +5,7 @@ import Dompoo.Hongpoong.domain.Setting;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.SettingRepository;
 import Dompoo.Hongpoong.request.common.SettingSaveRequest;
-import Dompoo.Hongpoong.response.SettingResponse;
+import Dompoo.Hongpoong.response.common.SettingResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;

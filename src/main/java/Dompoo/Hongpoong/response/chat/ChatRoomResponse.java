@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.response;
+package Dompoo.Hongpoong.response.chat;
 
 import Dompoo.Hongpoong.domain.ChatRoom;
 import lombok.Builder;

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ChatMessageCreateRequest {
+public class ChatMessageCreateDto {
     private MessageType type;
     private Long roomId;
     private String sender;

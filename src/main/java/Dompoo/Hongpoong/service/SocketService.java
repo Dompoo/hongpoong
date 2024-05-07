@@ -4,7 +4,7 @@ import Dompoo.Hongpoong.domain.ChatRoom;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.exception.ChatFailException;
 import Dompoo.Hongpoong.exception.ChatRoomNotFound;
-import Dompoo.Hongpoong.request.chat.ChatMessageCreateRequest;
+import Dompoo.Hongpoong.request.chat.ChatMessageCreateDto;
 import Dompoo.Hongpoong.repository.ChatRoomRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class SocketService {
     private final Map<Long, Set<WebSocketSession>> chatSessions = new HashMap<>();
     private final ChatRoomRepository repository;
 
-    public void handleAction(WebSocketSession session, ChatMessageCreateRequest message) {
+    public void handleAction(WebSocketSession session, ChatMessageCreateDto message) {
         ChatRoom chatRoom = repository.findById(message.getRoomId())
                 .orElseThrow(ChatRoomNotFound::new);
 
@@ -40,7 +40,7 @@ public class SocketService {
         }
 
         //접속한 경우
-        if (message.getType().equals(ChatMessageCreateRequest.MessageType.ENTER)) {
+        if (message.getType().equals(ChatMessageCreateDto.MessageType.ENTER)) {
             // chatSessions 에 넘어온 session 을 담고,
             Set<WebSocketSession> sessions = chatSessions.getOrDefault(message.getRoomId(), new HashSet<>());
             sessions.add(session);
@@ -52,17 +52,17 @@ public class SocketService {
         }
 
         //메시지를 보낸 경우
-        else if (message.getType().equals(ChatMessageCreateRequest.MessageType.TALK)) {
+        else if (message.getType().equals(ChatMessageCreateDto.MessageType.TALK)) {
             message.setMessage(message.getMessage());
             sendMessageToRoom(message.getRoomId(), message);
         }
     }
 
-    public void sendMessageToRoom(Long roomId, ChatMessageCreateRequest message) {
+    public void sendMessageToRoom(Long roomId, ChatMessageCreateDto message) {
         chatSessions.get(roomId).parallelStream().forEach(session -> sendMessage(session, message));
     }
 
-    private void sendMessage(WebSocketSession session, ChatMessageCreateRequest message) {
+    private void sendMessage(WebSocketSession session, ChatMessageCreateDto message) {
         try{
             session.sendMessage(new TextMessage(mapper.writeValueAsString(message)));
         } catch (IOException e) {

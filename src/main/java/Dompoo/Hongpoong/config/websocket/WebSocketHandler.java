@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.config.websocket;
 
-import Dompoo.Hongpoong.request.chat.ChatMessageCreateRequest;
+import Dompoo.Hongpoong.request.chat.ChatMessageCreateDto;
 import Dompoo.Hongpoong.service.SocketService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         log.info("payload {}", payload);
 
-        ChatMessageCreateRequest chatMessage = objectMapper.readValue(payload, ChatMessageCreateRequest.class);
+        ChatMessageCreateDto chatMessage = objectMapper.readValue(payload, ChatMessageCreateDto.class);
         log.info("session {}", chatMessage.toString());
 
         socketService.handleAction(session, chatMessage);

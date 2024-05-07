@@ -9,6 +9,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+/*
+RequestBody
+{
+    "emailId": 1,
+    "acceptResult" : true
+}
+ */
 public class AcceptEmailRequest {
 
     @Min(value = 1, message = "승인/거절할 이메일을 선택해주세요.")

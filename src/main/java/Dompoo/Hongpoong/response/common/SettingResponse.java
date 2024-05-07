@@ -4,6 +4,14 @@ import Dompoo.Hongpoong.domain.Setting;
 import lombok.Getter;
 
 @Getter
+/*
+ResponseBody
+
+<단건조회시>
+{
+    "push": false
+}
+ */
 public class SettingResponse {
 
     private Long id;

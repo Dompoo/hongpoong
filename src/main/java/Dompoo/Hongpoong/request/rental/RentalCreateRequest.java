@@ -12,12 +12,14 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 /*
-"품목": "장구",
-"개수": "1",
-"주는 멤버": "산틀",
-"받는 멤버": "화랑",
-"날짜": "24/04/18",
-"시간": 17
+RequestBody
+{
+    "product": "장구",
+    "count": 1,
+    "fromMember": "산틀",
+    "date": "24/04/18",
+    "time": 13
+}
  */
 public class RentalCreateRequest {
 

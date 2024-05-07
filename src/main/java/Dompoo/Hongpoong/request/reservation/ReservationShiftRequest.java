@@ -12,9 +12,9 @@ import lombok.Setter;
 /*
 RequestBody
 {
-    "예약순서": 3
+    "priority": 3
 }
-*/
+ */
 public class ReservationShiftRequest {
 
     @Min(value = 1, message = "우선순위는 최대 1입니다.")

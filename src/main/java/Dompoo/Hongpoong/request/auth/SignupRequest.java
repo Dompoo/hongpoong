@@ -12,6 +12,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+/*
+RequestBody
+{
+    "email" : "dompoo@gmail.com",
+    "username" : "창근",
+    "password1" : "1234",
+    "password2" : "1234"
+}
+ */
 public class SignupRequest {
 
     @Email(message = "이메일 형식으로 입력해주세요.")

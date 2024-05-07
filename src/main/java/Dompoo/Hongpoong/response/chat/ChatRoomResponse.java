@@ -5,6 +5,24 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+/*
+ResponseBody
+
+<List조회시>
+[
+    {
+        "roomId": 1,
+        "name": "채팅방1",
+        "memberCount": 3
+    },
+    {
+        "roomId": 2,
+        "name": "채팅방2",
+        "memberCount": 2
+    },
+    . . .
+]
+ */
 public class ChatRoomResponse {
 
     private Long roomId; // 채팅방 아이디

@@ -10,6 +10,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+/*
+RequestBody
+{
+    "email": "dompoo@gmail.com"
+}
+ */
 public class AddEmailRequest {
 
     @NotBlank(message = "이메일은 비어있을 수 없습니다.")

@@ -16,11 +16,10 @@ import java.time.LocalDate;
 /*
 RequestBody
 {
-    "예약자": "화랑",
-    "날짜": "2024-03-17",
-    "시간": 18
+    "date": "2024-12-18",
+    "time": 18
 }
-*/
+ */
 public class ReservationCreateRequest {
 
     @FutureOrPresent(message = "과거 날짜일 수 없습니다.")

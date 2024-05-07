@@ -6,6 +6,37 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
+/*
+ResponseBody
+
+<List조회시>
+[
+    {
+        "id": 1,
+        "username": "화랑",
+        "date": "24/04/18",
+        "time": 18
+        "priority" : 1
+    },
+    {
+        "id": 2,
+        "username": "화랑",
+        "date": "24/04/18",
+        "time": 18
+        "priority" : 1
+    },
+    . . .
+]
+
+<단건조회시>
+{
+    "id": 2,
+    "date": "24/04/18",
+    "username": "화랑",
+    "time": 18
+    "priority" : 1
+},
+ */
 public class ReservationResponse {
 
     private final Long id;

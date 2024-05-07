@@ -9,6 +9,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+/*
+RequestBody
+{
+    "username": "memberA",
+    "password1": "1234",
+    "password2": "1234"
+}
+ */
 public class MemberEditRequest {
 
     @NotBlank(message = "이름은 비어있을 수 없습니다.")

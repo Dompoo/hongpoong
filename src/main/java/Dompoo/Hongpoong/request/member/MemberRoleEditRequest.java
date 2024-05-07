@@ -8,6 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+/*
+RequestBody
+{
+    "memberRole": "USER"
+}
+ */
 public class MemberRoleEditRequest {
 
     private boolean isAdmin;

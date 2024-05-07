@@ -6,6 +6,16 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
+/*
+ResponseBody
+<단건조회시>
+{
+    "id": 1,
+    "title": "공지사항 제목",
+    "content": "공지사항 내용",
+    "date": "2024-05-01T14:49:58.836833"
+}
+ */
 public class InfoDetailResponse {
 
     private final Long id;

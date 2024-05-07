@@ -2,9 +2,20 @@ package Dompoo.Hongpoong.request.info;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+/*
+RequestBody
+{
+    "title":"공지사항 제목",
+    "content":"공지사항 내용"
+}
+ */
 public class InfoCreateRequest {
 
     @NotBlank

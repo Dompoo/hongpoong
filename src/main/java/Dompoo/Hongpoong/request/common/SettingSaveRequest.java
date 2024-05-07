@@ -8,6 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+/*
+RequestBody
+{
+    "push": true
+}
+ */
 public class SettingSaveRequest {
 
     private boolean push;

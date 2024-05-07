@@ -1,0 +1,21 @@
+spring:
+  datasource:
+
+#    mysql 설정
+    url: jdbc:mysql://localhost:3307/hongpoong
+    username: root
+    password: 1234
+  session:
+    jdbc:
+      initialize-schema: always
+
+#    h2 설정
+#    url: jdbc:h2:mem:hongpoong
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#  h2:
+#    console:
+#      enabled: true
+
+

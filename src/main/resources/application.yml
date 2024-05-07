@@ -2,8 +2,9 @@ spring:
   application:
     name: Hongpoong
   profiles:
-    include: secret
+    include: database
     active: local
+
   jpa:
 #    sql보기 및 포맷팅
     show-sql: true

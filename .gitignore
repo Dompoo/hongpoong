@@ -37,7 +37,7 @@ out/
 .vscode/
 
 ### mysql password ###
-src/main/resources/application-secret.yml
+src/main/resources/application-database.yml.yml
 src/main/java/Dompoo/Hongpoong/InitAdmin.java
 docker-compose.yml
 Dockerfile

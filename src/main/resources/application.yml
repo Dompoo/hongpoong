@@ -4,15 +4,14 @@ spring:
   profiles:
     include: secret
     active: local
-#    include: secret의 mysql 설정정보 가져옴
   jpa:
 #    sql보기 및 포맷팅
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     defer-datasource-initialization: true
 server:
   port: 8080

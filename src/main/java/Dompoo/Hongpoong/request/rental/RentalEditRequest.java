@@ -19,7 +19,7 @@ RequestBody
     "product": "장구",
     "count": "1",
     "fromMember": "산틀",
-    "date": "24/04/18",
+    "date": "2024-04-18",
     "time": 13
 }
  */

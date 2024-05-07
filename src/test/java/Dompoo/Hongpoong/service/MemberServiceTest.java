@@ -6,7 +6,7 @@ import Dompoo.Hongpoong.exception.PasswordNotSame;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.request.member.MemberEditRequest;
 import Dompoo.Hongpoong.request.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.response.member.MemberResponse;
+import Dompoo.Hongpoong.response.member.MemberListResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,7 +57,7 @@ class MemberServiceTest {
                 .build());
 
         //when
-        MemberResponse response = service.getStatus(member.getId());
+        MemberListResponse response = service.getStatus(member.getId());
 
         //then
         assertEquals(response.getEmail(), EMAIL);
@@ -190,7 +190,7 @@ class MemberServiceTest {
                 .build());
 
         //when
-        List<MemberResponse> list = service.getList();
+        List<MemberListResponse> list = service.getList();
 
         //then
         assertEquals(2, list.size());

@@ -6,7 +6,8 @@ import Dompoo.Hongpoong.exception.PasswordNotSame;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.request.member.MemberEditRequest;
 import Dompoo.Hongpoong.request.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.response.member.MemberResponse;
+import Dompoo.Hongpoong.response.member.MemberListResponse;
+import Dompoo.Hongpoong.response.member.MemberStatusResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,7 @@ public class MemberService {
 
     private final MemberRepository repository;
     private final PasswordEncoder encoder;
+    private final PasswordEncoder passwordEncoder;
 
     public void editMember(Long memberId, MemberEditRequest request) {
         Member member = repository.findById(memberId)
@@ -42,9 +44,9 @@ public class MemberService {
         repository.delete(member);
     }
 
-    public List<MemberResponse> getList() {
+    public List<MemberListResponse> getList() {
         return repository.findAll().stream()
-                .map(MemberResponse::new)
+                .map(MemberListResponse::new)
                 .collect(toList());
     }
 
@@ -59,10 +61,10 @@ public class MemberService {
         }
     }
 
-    public MemberResponse getStatus(Long memberId) {
+    public MemberStatusResponse getStatus(Long memberId) {
         Member member = repository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
 
-        return new MemberResponse(member);
+        return new MemberStatusResponse(member);
     }
 }

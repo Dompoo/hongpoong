@@ -3,7 +3,8 @@ package Dompoo.Hongpoong.controller;
 import Dompoo.Hongpoong.config.security.UserPrincipal;
 import Dompoo.Hongpoong.request.member.MemberEditRequest;
 import Dompoo.Hongpoong.request.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.response.member.MemberResponse;
+import Dompoo.Hongpoong.response.member.MemberListResponse;
+import Dompoo.Hongpoong.response.member.MemberStatusResponse;
 import Dompoo.Hongpoong.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class MemberController {
     private final MemberService service;
 
     @GetMapping("/status")
-    public MemberResponse getStatus(@AuthenticationPrincipal UserPrincipal principal) {
+    public MemberStatusResponse getStatus(@AuthenticationPrincipal UserPrincipal principal) {
         return service.getStatus(principal.getMemberId());
     }
 
@@ -37,7 +38,7 @@ public class MemberController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/manage")
-    public List<MemberResponse> memberList() {
+    public List<MemberListResponse> memberList() {
         return service.getList();
     }
 

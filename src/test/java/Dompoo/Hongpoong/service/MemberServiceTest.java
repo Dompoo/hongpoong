@@ -7,6 +7,7 @@ import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.request.member.MemberEditRequest;
 import Dompoo.Hongpoong.request.member.MemberRoleEditRequest;
 import Dompoo.Hongpoong.response.member.MemberListResponse;
+import Dompoo.Hongpoong.response.member.MemberStatusResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,7 +58,7 @@ class MemberServiceTest {
                 .build());
 
         //when
-        MemberListResponse response = service.getStatus(member.getId());
+        MemberStatusResponse response = service.getStatus(member.getId());
 
         //then
         assertEquals(response.getEmail(), EMAIL);
@@ -195,9 +196,7 @@ class MemberServiceTest {
         //then
         assertEquals(2, list.size());
         assertEquals(USERNAME, list.get(0).getUsername());
-        assertEquals(PASSWORD, list.get(0).getPassword());
         assertEquals(NEW_USERNAME, list.get(1).getUsername());
-        assertEquals(NEW_PASSWORD, list.get(1).getPassword());
     }
 
     @Test

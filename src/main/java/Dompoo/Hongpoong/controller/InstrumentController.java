@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.config.security.UserPrincipal;
 import Dompoo.Hongpoong.request.Instrument.InstrumentCreateRequest;
+import Dompoo.Hongpoong.request.Instrument.InstrumentEditRequest;
 import Dompoo.Hongpoong.response.Instrument.InstrumentResponse;
 import Dompoo.Hongpoong.service.InstrumentService;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,10 @@ public class InstrumentController {
     @GetMapping("/{id}")
     public InstrumentResponse getOne(@PathVariable Long id) {
         return service.getOne(id);
+    }
+
+    @PutMapping("/{id}")
+    public void edit(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, InstrumentEditRequest request) {
+        service.editOne(principal.getMemberId(), id, request);
     }
 }

@@ -2,11 +2,14 @@ package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.domain.Instrument;
 import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.exception.EditFailException;
 import Dompoo.Hongpoong.exception.MemberNotFound;
 import Dompoo.Hongpoong.repository.InstrumentRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.request.Instrument.InstrumentCreateRequest;
+import Dompoo.Hongpoong.request.Instrument.InstrumentEditRequest;
 import Dompoo.Hongpoong.response.Instrument.InstrumentResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class InstrumentService {
 
@@ -39,5 +43,15 @@ public class InstrumentService {
     public InstrumentResponse getOne(Long id) {
         return new InstrumentResponse(repository.findById(id)
                 .orElseThrow(MemberNotFound::new));
+    }
+
+    public void editOne(Long memberId, Long id, InstrumentEditRequest request) {
+        Instrument instrument = repository.findById(id)
+                .orElseThrow(MemberNotFound::new);
+
+        if (!instrument.getMember().getId().equals(memberId)) throw new EditFailException();
+
+        if (request.getProduct() != null) instrument.setProduct(request.getProduct());
+        if (request.getAvailable() != null) instrument.setAvailable(request.getAvailable());
     }
 }

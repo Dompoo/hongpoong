@@ -37,4 +37,10 @@ public class InstrumentController {
     public void edit(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, InstrumentEditRequest request) {
         service.editOne(principal.getMemberId(), id, request);
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id) {
+        service.deleteOne(principal.getMemberId(), id);
+
+    }
 }

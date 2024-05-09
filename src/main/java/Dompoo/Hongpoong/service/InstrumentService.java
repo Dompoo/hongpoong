@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.domain.Instrument;
 import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.exception.DeleteFailException;
 import Dompoo.Hongpoong.exception.EditFailException;
 import Dompoo.Hongpoong.exception.MemberNotFound;
 import Dompoo.Hongpoong.repository.InstrumentRepository;
@@ -53,5 +54,14 @@ public class InstrumentService {
 
         if (request.getProduct() != null) instrument.setProduct(request.getProduct());
         if (request.getAvailable() != null) instrument.setAvailable(request.getAvailable());
+    }
+
+    public void deleteOne(Long memberId, Long id) {
+        Instrument instrument = repository.findById(id)
+                .orElseThrow(MemberNotFound::new);
+
+        if (!instrument.getMember().getId().equals(memberId)) throw new DeleteFailException();
+
+        repository.delete(instrument);
     }
 }

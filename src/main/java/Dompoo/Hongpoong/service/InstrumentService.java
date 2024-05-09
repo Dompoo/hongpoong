@@ -35,4 +35,9 @@ public class InstrumentService {
                 .member(member)
                 .build());
     }
+
+    public InstrumentResponse getOne(Long id) {
+        return new InstrumentResponse(repository.findById(id)
+                .orElseThrow(MemberNotFound::new));
+    }
 }

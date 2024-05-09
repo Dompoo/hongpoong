@@ -32,6 +32,9 @@ public class Member {
     @OneToMany(mappedBy = "requestMember", cascade = CascadeType.REMOVE)
     private List<Rental> receiveRentals = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Instrument> instruments = new ArrayList<>();
+
     @ManyToMany
     private List<ChatRoom> chatRooms = new ArrayList<>();
 

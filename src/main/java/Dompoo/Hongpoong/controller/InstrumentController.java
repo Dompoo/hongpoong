@@ -24,8 +24,13 @@ public class InstrumentController {
     }
 
     @GetMapping("")
-    public List<InstrumentResponse> getList() {
-        return service.getList();
+    public List<InstrumentResponse> getListFromOther(@AuthenticationPrincipal UserPrincipal principal) {
+        return service.getListOther(principal.getMemberId());
+    }
+
+    @GetMapping("/list")
+    public List<InstrumentResponse> getList(@AuthenticationPrincipal UserPrincipal principal) {
+        return service.getList(principal.getMemberId());
     }
 
     @GetMapping("/{id}")

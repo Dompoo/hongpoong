@@ -25,8 +25,24 @@ public class InstrumentService {
     private final InstrumentRepository repository;
     private final MemberRepository memberRepository;
 
-    public List<InstrumentResponse> getList() {
+    //member의 클럽과 다른 클럽 소속의 악기리스트 return
+    public List<InstrumentResponse> getListOther(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFound::new);
+
         return repository.findAll().stream()
+                .filter(instrument -> !instrument.getMember().getClub().equals(member.getClub()))
+                .map(InstrumentResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    //member의 클럽과 같은 클럽 소속의 악기리스트 return
+    public List<InstrumentResponse> getList(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(MemberNotFound::new);
+
+        return repository.findAll().stream()
+                .filter(instrument -> instrument.getMember().getClub().equals(member.getClub()))
                 .map(InstrumentResponse::new)
                 .collect(Collectors.toList());
     }

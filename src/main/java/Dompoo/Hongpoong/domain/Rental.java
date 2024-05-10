@@ -3,7 +3,8 @@ package Dompoo.Hongpoong.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 {
@@ -23,37 +24,26 @@ public class Rental {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String product;
-    private Integer count;
+
+    @OneToMany(mappedBy = "rental")
+    private List<Instrument> instruments = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "request_member")
     private Member requestMember;
 
-    @ManyToOne
-    @JoinColumn(name = "response_member")
-    private Member responseMember;
-
-    private LocalDate date;
-    private Integer time;
+    @OneToOne
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservation;
 
     @Builder
-    public Rental(String product, Integer count, Member responseMember, Member requestMember, LocalDate date, Integer time) {
-        this.product = product;
-        this.count = count;
+    public Rental(Member requestMember, Reservation reservation) {
         setRequestMember(requestMember);
-        setResponseMember(responseMember);
-        this.date = date;
-        this.time = time;
+        setReservation(reservation);
     }
 
-    public void setRequestMember(Member member) {
-        this.requestMember = member;
-        member.getReceiveRentals().add(this);
-    }
-
-    public void setResponseMember(Member member) {
-        this.responseMember = member;
-        member.getGiveRentals().add(this);
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+        reservation.setRental(this);
     }
 }

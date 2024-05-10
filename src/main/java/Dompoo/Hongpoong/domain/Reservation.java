@@ -29,6 +29,9 @@ public class Reservation {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne(mappedBy = "reservation")
+    private Rental rental;
+
     private LocalDate date;
     private Integer time;
     private Integer priority;

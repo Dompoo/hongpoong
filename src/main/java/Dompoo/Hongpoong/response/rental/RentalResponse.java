@@ -1,9 +1,12 @@
 package Dompoo.Hongpoong.response.rental;
 
 import Dompoo.Hongpoong.domain.Rental;
+import Dompoo.Hongpoong.response.Instrument.InstrumentResponse;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 /*
@@ -46,20 +49,17 @@ ResponseBody
 public class RentalResponse {
 
     private Long id;
-    private String product;
-    private Integer count;
+    private List<InstrumentResponse> instruments = new ArrayList<>();
     private String requestMember;
-    private String responseMember;
     private LocalDate date;
     private Integer time;
 
     public RentalResponse(Rental rental) {
         this.id = rental.getId();
-        this.product = rental.getProduct();
-        this.count = rental.getCount();
+        rental.getInstruments()
+                .forEach(instrument -> instruments.add(new InstrumentResponse(instrument)));
         this.requestMember = rental.getRequestMember().getUsername();
-        this.responseMember = rental.getResponseMember().getUsername();
-        this.date = rental.getDate();
-        this.time = rental.getTime();
+        this.date = rental.getReservation().getDate();
+        this.time = rental.getReservation().getTime();
     }
 }

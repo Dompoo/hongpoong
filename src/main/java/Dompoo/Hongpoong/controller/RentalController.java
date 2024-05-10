@@ -2,7 +2,6 @@ package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.config.security.UserPrincipal;
 import Dompoo.Hongpoong.request.rental.RentalCreateRequest;
-import Dompoo.Hongpoong.request.rental.RentalEditRequest;
 import Dompoo.Hongpoong.response.rental.RentalResponse;
 import Dompoo.Hongpoong.service.RentalService;
 import jakarta.validation.Valid;
@@ -20,10 +19,10 @@ public class RentalController {
 
     private final RentalService service;
 
-    @GetMapping("")
-    public List<RentalResponse> rentalMenu(@AuthenticationPrincipal UserPrincipal principal) {
-        return service.getList(principal.getMemberId());
-    }
+//    @GetMapping("")
+//    public List<RentalResponse> rentalMenu(@AuthenticationPrincipal UserPrincipal principal) {
+//        return service.getList(principal.getMemberId());
+//    }
 
     @PostMapping("")
     public void addRental(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid RentalCreateRequest request) {
@@ -35,10 +34,10 @@ public class RentalController {
         return service.getDetail(id);
     }
 
-    @PutMapping("/{id}")
-    public void editRental(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @Valid @RequestBody RentalEditRequest request) {
-        service.editRental(principal.getMemberId(), id, request);
-    }
+//    @PutMapping("/{id}")
+//    public void editRental(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @Valid @RequestBody RentalEditRequest request) {
+//        service.editRental(principal.getMemberId(), id, request);
+//    }
 
     @DeleteMapping("/{id}")
     public void deleteRental(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id) {

@@ -21,6 +21,10 @@ public class Instrument {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @ManyToOne
+    @JoinColumn(name = "rental_id")
+    private Rental rental;
+
     @Builder
     public Instrument(String product, Member member) {
         this.product = product;
@@ -30,5 +34,10 @@ public class Instrument {
     public void setMember(Member member) {
         this.member = member;
         member.getInstruments().add(this);
+    }
+
+    public void setRental(Rental rental) {
+        this.rental = rental;
+        rental.getInstruments().add(this);
     }
 }

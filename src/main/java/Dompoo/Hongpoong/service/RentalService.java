@@ -34,7 +34,6 @@ public class RentalService {
                 .orElseThrow(ReservationNotFound::new);
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(requestMember)
                 .reservation(reservation)
                 .build());
 
@@ -61,7 +60,7 @@ public class RentalService {
         Rental rental = rentalRepository.findById(rentalId)
                 .orElseThrow(RentalNotFound::new);
 
-        if (!rental.getRequestMember().getId().equals(memberId)) {
+        if (!rental.getReservation().getMember().getId().equals(memberId)) {
             throw new DeleteFailException();
         }
 

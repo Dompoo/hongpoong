@@ -58,7 +58,7 @@ public class RentalResponse {
         this.id = rental.getId();
         rental.getInstruments()
                 .forEach(instrument -> instruments.add(new InstrumentResponse(instrument)));
-        this.requestMember = rental.getRequestMember().getUsername();
+        this.requestMember = rental.getReservation().getMember().getUsername();
         this.date = rental.getReservation().getDate();
         this.time = rental.getReservation().getTime();
     }

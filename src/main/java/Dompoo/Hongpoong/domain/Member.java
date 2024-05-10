@@ -26,9 +26,6 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Reservation> reservations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "requestMember", cascade = CascadeType.REMOVE)
-    private List<Rental> rentals = new ArrayList<>();
-
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Instrument> instruments = new ArrayList<>();
 

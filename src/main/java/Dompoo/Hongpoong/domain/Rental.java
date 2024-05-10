@@ -25,20 +25,15 @@ public class Rental {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "rental")
+    @OneToMany(mappedBy = "rental", cascade = CascadeType.PERSIST)
     private List<Instrument> instruments = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "request_member")
-    private Member requestMember;
 
     @OneToOne
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
     @Builder
-    public Rental(Member requestMember, Reservation reservation) {
-        setRequestMember(requestMember);
+    public Rental(Reservation reservation) {
         setReservation(reservation);
     }
 

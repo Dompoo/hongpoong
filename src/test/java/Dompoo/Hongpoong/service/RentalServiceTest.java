@@ -51,20 +51,14 @@ class RentalServiceTest {
     private static final Member.Club CLUB = Member.Club.SANTLE;
 
     private static final LocalDate DATE = LocalDate.of(2025, 12, 20);
-    private static final String DATE_STRING = "2025-12-20";
     private static final int TIME = 13;
-
-
-    private static final String MEM3_USERNAME = "2아영";
-    private static final String MEM3_EMAIL = "young@hanmail.com";
-    private static final String MEM3_PASSWORD = "asdf";
-    private static final String RENTAL_PRODUCT = "장구";
-    private static final LocalDate RENTAL_DATE = LocalDate.of(2000, 12, 20);
 
     @BeforeEach
     void setUp() {
-        rentalRepository.deleteAll();
         memberRepository.deleteAll();
+        reservationRepository.deleteAll();
+        instrumentRepository.deleteAll();
+        rentalRepository.deleteAll();
     }
 
     @Test
@@ -97,12 +91,6 @@ class RentalServiceTest {
                 .member(instrumentMember)
                 .build());
 
-//        Rental rental = rentalRepository.save(Rental.builder()
-//                .requestMember(reservationMember)
-//                .reservation(reservation)
-//                .build());
-//        rental.getInstruments().add(instrument);
-
         RentalCreateRequest request = RentalCreateRequest.builder()
                 .reservationId(reservation.getId())
                 .instrumentIds(List.of(instrument.getId()))
@@ -114,7 +102,7 @@ class RentalServiceTest {
         //then
         assertEquals(rentalRepository.count(), 1);
         assertEquals(rentalRepository.findAll().getFirst().getInstruments().size(), 1);
-        assertEquals(rentalRepository.findAll().getFirst().getRequestMember().getId(), reservationMember.getId());
+        assertEquals(rentalRepository.findAll().getFirst().getReservation().getMember().getId(), reservationMember.getId());
         assertEquals(rentalRepository.findAll().getFirst().getReservation().getId(), reservation.getId());
     }
 
@@ -149,10 +137,9 @@ class RentalServiceTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //when
         RentalResponse response = service.getDetail(rental.getId());
@@ -195,10 +182,9 @@ class RentalServiceTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //when
         RentalNotFound e = assertThrows(RentalNotFound.class,
@@ -240,10 +226,9 @@ class RentalServiceTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //when
         service.deleteRental(reservationMember.getId(), rental.getId());
@@ -282,10 +267,9 @@ class RentalServiceTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //when
         RentalNotFound e = assertThrows(RentalNotFound.class, () ->
@@ -326,10 +310,9 @@ class RentalServiceTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //when
         DeleteFailException e = assertThrows(DeleteFailException.class, () ->
@@ -377,10 +360,9 @@ class RentalServiceTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //when
         DeleteFailException e = assertThrows(DeleteFailException.class, () ->
@@ -422,10 +404,9 @@ class RentalServiceTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //when
         List<RentalResponse> list = service.getLog();

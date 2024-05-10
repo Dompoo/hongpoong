@@ -61,8 +61,6 @@ class RentalControllerTest {
 
     @AfterEach
     void setUp() {
-        reservationRepository.deleteAll();
-        instrumentRepository.deleteAll();
         rentalRepository.deleteAll();
     }
 
@@ -144,10 +142,9 @@ class RentalControllerTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //expected
         mockMvc.perform(get("/rental/{id}", rental.getId()))
@@ -185,10 +182,9 @@ class RentalControllerTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //expected
         mockMvc.perform(get("/rental/{id}", rental.getId() + 1))
@@ -229,10 +225,9 @@ class RentalControllerTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //expected
         mockMvc.perform(delete("/rental/{id}", rental.getId()))
@@ -267,10 +262,9 @@ class RentalControllerTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //expected
         mockMvc.perform(delete("/rental/{id}", rental.getId() + 1))
@@ -304,10 +298,9 @@ class RentalControllerTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //expected
         mockMvc.perform(get("/rental/manage"))
@@ -347,10 +340,9 @@ class RentalControllerTest {
                 .build());
 
         Rental rental = rentalRepository.save(Rental.builder()
-                .requestMember(reservationMember)
                 .reservation(reservation)
                 .build());
-        rental.getInstruments().add(instrument);
+        instrument.setRental(rental);
 
         //expected
         mockMvc.perform(get("/rental/manage"))

@@ -49,15 +49,10 @@ class RentalControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static final String RESERVE_USERNAME = "창근";
-    private static final String RESERVE_EMAIL = "dompoo@gmail.com";
-    private static final String RESERVE_PASSWORD = "1234";
+    private static final String INSTRUMENT_OWNER_USERNAME = "윤호";
+    private static final String INSTRUMENT_OWNER_EMAIL = "yoonH@naver.com";
+    private static final String INSTRUMENT_OWNER_PASSWORD = "1234";
 
-    private static final String INSTUMENT_OWNER_USERNAME = "윤호";
-    private static final String INSTUMENT_OWNER_EMAIL = "yoonH@naver.com";
-    private static final String INSTUMENT_OWNER_PASSWORD = "1234";
-
-    private static final String PRODUCT = "1234";
     private static final Member.Club CLUB = Member.Club.SANTLE;
 
     private static final LocalDate DATE = LocalDate.of(2025, 12, 20);
@@ -83,9 +78,9 @@ class RentalControllerTest {
         Member reservationMember = memberRepository.findAll().getLast();
 
         Member instrumentMember = memberRepository.save(Member.builder()
-                .email(INSTUMENT_OWNER_EMAIL)
-                .username(INSTUMENT_OWNER_USERNAME)
-                .password(INSTUMENT_OWNER_PASSWORD)
+                .email(INSTRUMENT_OWNER_EMAIL)
+                .username(INSTRUMENT_OWNER_USERNAME)
+                .password(INSTRUMENT_OWNER_PASSWORD)
                 .club(CLUB)
                 .build());
 
@@ -130,9 +125,9 @@ class RentalControllerTest {
         Member reservationMember = memberRepository.findAll().getLast();
 
         Member instrumentMember = memberRepository.save(Member.builder()
-                .email(INSTUMENT_OWNER_EMAIL)
-                .username(INSTUMENT_OWNER_EMAIL)
-                .password(INSTUMENT_OWNER_PASSWORD)
+                .email(INSTRUMENT_OWNER_EMAIL)
+                .username(INSTRUMENT_OWNER_EMAIL)
+                .password(INSTRUMENT_OWNER_PASSWORD)
                 .club(CLUB)
                 .build());
 
@@ -157,7 +152,7 @@ class RentalControllerTest {
         //expected
         mockMvc.perform(get("/rental/{id}", rental.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.requestMember").value(RESERVE_USERNAME))
+                .andExpect(jsonPath("$.requestMember").value("창근"))
                 .andExpect(jsonPath("$.date").value(DATE_STRING))
                 .andExpect(jsonPath("$.time").value(TIME))
                 .andDo(print());
@@ -171,9 +166,9 @@ class RentalControllerTest {
         Member reservationMember = memberRepository.findAll().getLast();
 
         Member instrumentMember = memberRepository.save(Member.builder()
-                .email(INSTUMENT_OWNER_EMAIL)
-                .username(INSTUMENT_OWNER_EMAIL)
-                .password(INSTUMENT_OWNER_PASSWORD)
+                .email(INSTRUMENT_OWNER_EMAIL)
+                .username(INSTRUMENT_OWNER_EMAIL)
+                .password(INSTRUMENT_OWNER_PASSWORD)
                 .club(CLUB)
                 .build());
 
@@ -215,9 +210,9 @@ class RentalControllerTest {
         Member reservationMember = memberRepository.findAll().getLast();
 
         Member instrumentMember = memberRepository.save(Member.builder()
-                .email(INSTUMENT_OWNER_EMAIL)
-                .username(INSTUMENT_OWNER_EMAIL)
-                .password(INSTUMENT_OWNER_PASSWORD)
+                .email(INSTRUMENT_OWNER_EMAIL)
+                .username(INSTRUMENT_OWNER_EMAIL)
+                .password(INSTRUMENT_OWNER_PASSWORD)
                 .club(CLUB)
                 .build());
 
@@ -253,9 +248,9 @@ class RentalControllerTest {
         Member reservationMember = memberRepository.findAll().getLast();
 
         Member instrumentMember = memberRepository.save(Member.builder()
-                .email(INSTUMENT_OWNER_EMAIL)
-                .username(INSTUMENT_OWNER_EMAIL)
-                .password(INSTUMENT_OWNER_PASSWORD)
+                .email(INSTRUMENT_OWNER_EMAIL)
+                .username(INSTRUMENT_OWNER_EMAIL)
+                .password(INSTRUMENT_OWNER_PASSWORD)
                 .club(CLUB)
                 .build());
 
@@ -290,9 +285,9 @@ class RentalControllerTest {
         Member reservationMember = memberRepository.findAll().getLast();
 
         Member instrumentMember = memberRepository.save(Member.builder()
-                .email(INSTUMENT_OWNER_EMAIL)
-                .username(INSTUMENT_OWNER_EMAIL)
-                .password(INSTUMENT_OWNER_PASSWORD)
+                .email(INSTRUMENT_OWNER_EMAIL)
+                .username(INSTRUMENT_OWNER_EMAIL)
+                .password(INSTRUMENT_OWNER_PASSWORD)
                 .club(CLUB)
                 .build());
 
@@ -318,7 +313,7 @@ class RentalControllerTest {
         mockMvc.perform(get("/rental/manage"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].requestMember").value(RESERVE_USERNAME))
+                .andExpect(jsonPath("$[0].requestMember").value("창근"))
                 .andExpect(jsonPath("$[0].instruments.length()").value(1))
                 .andExpect(jsonPath("$[0].date").value(DATE_STRING))
                 .andExpect(jsonPath("$[0].time").value(TIME))
@@ -333,9 +328,9 @@ class RentalControllerTest {
         Member reservationMember = memberRepository.findAll().getLast();
 
         Member instrumentMember = memberRepository.save(Member.builder()
-                .email(INSTUMENT_OWNER_EMAIL)
-                .username(INSTUMENT_OWNER_EMAIL)
-                .password(INSTUMENT_OWNER_PASSWORD)
+                .email(INSTRUMENT_OWNER_EMAIL)
+                .username(INSTRUMENT_OWNER_EMAIL)
+                .password(INSTRUMENT_OWNER_PASSWORD)
                 .club(CLUB)
                 .build());
 

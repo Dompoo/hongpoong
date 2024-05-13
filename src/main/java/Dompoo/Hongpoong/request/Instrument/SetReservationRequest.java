@@ -8,6 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+/*
+RequestBody
+{
+    "reservationId": 1,
+}
+ */
 public class SetReservationRequest {
 
     private Long reservationId;

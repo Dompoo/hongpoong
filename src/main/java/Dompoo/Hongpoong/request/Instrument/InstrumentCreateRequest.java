@@ -8,6 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+/*
+RequestBody
+{
+    "product": "장구"
+}
+ */
 public class InstrumentCreateRequest {
 
     private String product;

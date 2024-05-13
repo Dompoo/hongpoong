@@ -89,9 +89,11 @@ class ReservationServiceTest {
                 .build());
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .number(13)
                 .date(LocalDate.of(2025, 12, 20))
                 .startTime(13)
                 .endTime(17)
+                .message("")
                 .build();
 
         //when
@@ -112,9 +114,11 @@ class ReservationServiceTest {
                 .build());
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .number(13)
                 .date(LocalDate.of(2025, 12, 20))
                 .startTime(13)
                 .endTime(17)
+                .message("")
                 .build();
 
         //when

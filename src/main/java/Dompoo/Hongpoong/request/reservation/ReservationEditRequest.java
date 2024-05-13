@@ -16,11 +16,15 @@ import java.time.LocalDate;
 /*
 RequestBody
 {
+    "number": 3,
     "date": "2024-12-18",
     "time": 18
+    "message": "산틀 정기공연 연습"
 }
  */
 public class ReservationEditRequest {
+
+    private Integer number;
 
     @FutureOrPresent(message = "과거 날짜일 수 없습니다.")
     private LocalDate date;
@@ -29,9 +33,13 @@ public class ReservationEditRequest {
     @Max(value = 22, message = "22시 이하의 시간이어야 합니다.")
     private Integer time;
 
+    private String message;
+
     @Builder
-    public ReservationEditRequest(LocalDate date, Integer time) {
+    public ReservationEditRequest(Integer number, LocalDate date, Integer time, String message) {
+        this.number = number;
         this.date = date;
         this.time = time;
+        this.message = message;
     }
 }

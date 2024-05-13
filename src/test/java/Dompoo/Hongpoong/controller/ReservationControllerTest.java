@@ -62,16 +62,20 @@ class ReservationControllerTest {
 
         Reservation reservation1 = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .number(15)
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
+                .message("")
                 .build());
 
         Reservation reservation2 = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .number(13)
+                .date(LocalDate.of(2025, 12, 20))
                 .time(13)
                 .priority(1)
+                .message("")
                 .build());
 
         //expected
@@ -80,14 +84,17 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].id").value(reservation1.getId()))
                 .andExpect(jsonPath("$[0].username").value("창근"))
-                .andExpect(jsonPath("$[0].date").value("2000-12-20"))
+                .andExpect(jsonPath("$[0].number").value(15))
+                .andExpect(jsonPath("$[0].date").value("2025-12-20"))
                 .andExpect(jsonPath("$[0].time").value(12))
                 .andExpect(jsonPath("$[0].priority").value(1))
+                .andExpect(jsonPath("$[0].message").value(""))
                 .andExpect(jsonPath("$[1].id").value(reservation2.getId()))
                 .andExpect(jsonPath("$[1].username").value("창근"))
-                .andExpect(jsonPath("$[1].date").value("2000-12-20"))
+                .andExpect(jsonPath("$[1].number").value(13))
+                .andExpect(jsonPath("$[1].date").value("2025-12-20"))
                 .andExpect(jsonPath("$[1].time").value(13))
-                .andExpect(jsonPath("$[1].priority").value(1))
+                .andExpect(jsonPath("$[1].message").value(""))
                 .andDo(print());
     }
 
@@ -101,9 +108,11 @@ class ReservationControllerTest {
     void add() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .number(13)
                 .date(LocalDate.of(2025, 12, 20))
                 .startTime(12)
                 .endTime(22)
+                .message("")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -123,9 +132,11 @@ class ReservationControllerTest {
     void addFail3() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .number(13)
                 .date(LocalDate.of(2000, 12, 20))
                 .startTime(12)
                 .endTime(22)
+                .message("")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -146,9 +157,11 @@ class ReservationControllerTest {
     void addFail4() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .number(13)
                 .date(LocalDate.of(2025, 12, 20))
                 .startTime(8)
                 .endTime(22)
+                .message("")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -169,9 +182,11 @@ class ReservationControllerTest {
     void addFail5() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .number(13)
                 .date(LocalDate.of(2025, 12, 20))
-                .startTime(21)
+                .startTime(12)
                 .endTime(23)
+                .message("")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -192,9 +207,11 @@ class ReservationControllerTest {
     void addFail6() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .number(13)
                 .date(LocalDate.of(2025, 12, 20))
                 .startTime(13)
                 .endTime(12)
+                .message("")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -226,7 +243,7 @@ class ReservationControllerTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -236,7 +253,7 @@ class ReservationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(reservation.getId()))
                 .andExpect(jsonPath("$.username").value("창근"))
-                .andExpect(jsonPath("$.date").value("2000-12-20"))
+                .andExpect(jsonPath("$.date").value("2025-12-20"))
                 .andExpect(jsonPath("$.time").value(12))
                 .andExpect(jsonPath("$.priority").value(1))
                 .andDo(print());
@@ -255,7 +272,7 @@ class ReservationControllerTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -281,7 +298,7 @@ class ReservationControllerTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -309,7 +326,7 @@ class ReservationControllerTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -337,7 +354,7 @@ class ReservationControllerTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(3)
                 .build());
@@ -365,7 +382,7 @@ class ReservationControllerTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(3)
                 .build());
@@ -398,7 +415,7 @@ class ReservationControllerTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -460,7 +477,7 @@ class ReservationControllerTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -645,7 +662,7 @@ class ReservationControllerTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -665,7 +682,7 @@ class ReservationControllerTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -689,7 +706,7 @@ class ReservationControllerTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());

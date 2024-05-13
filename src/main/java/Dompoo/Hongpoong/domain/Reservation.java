@@ -30,6 +30,8 @@ public class Reservation {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    private Integer number;
+
     @OneToMany(mappedBy = "reservation")
     private List<Instrument> instruments;
 
@@ -37,12 +39,17 @@ public class Reservation {
     private Integer time;
     private Integer priority;
 
+    @Lob
+    private String message;
+
     @Builder
-    public Reservation(Member member, LocalDate date, Integer time, Integer priority) {
+    public Reservation(Member member, Integer number, LocalDate date, Integer time, Integer priority, String message) {
         setMember(member);
+        this.number = number;
         this.date = date;
         this.time = time;
         this.priority = priority;
+        this.message = message;
     }
 
     public void setMember(Member member) {

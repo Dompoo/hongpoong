@@ -41,15 +41,19 @@ public class ReservationResponse {
 
     private final Long id;
     private final String username;
+    private final Integer number;
     private final LocalDate date;
     private final Integer time;
     private final Integer priority;
+    private final String message;
 
     public ReservationResponse(Reservation reservation) {
         this.id = reservation.getId();
         this.username = reservation.getMember().getUsername();
+        this.number = reservation.getNumber();
         this.date = reservation.getDate();
         this.time = reservation.getTime();
         this.priority = reservation.getPriority();
+        this.message = reservation.getMessage();
     }
 }

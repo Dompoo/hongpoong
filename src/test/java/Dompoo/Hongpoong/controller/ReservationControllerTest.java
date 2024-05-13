@@ -100,11 +100,10 @@ class ReservationControllerTest {
     @WithMockMember
     void add() throws Exception {
         //given
-        Member member = memberRepository.findAll().getLast();
-
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -115,10 +114,6 @@ class ReservationControllerTest {
                         .content(json)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("창근"))
-                .andExpect(jsonPath("$.date").value("2025-12-20"))
-                .andExpect(jsonPath("$.time").value(12))
-                .andExpect(jsonPath("$.priority").value(1))
                 .andDo(print());
     }
 
@@ -129,7 +124,8 @@ class ReservationControllerTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(LocalDate.of(2000, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -151,7 +147,8 @@ class ReservationControllerTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(LocalDate.of(2025, 12, 20))
-                .time(8)
+                .startTime(8)
+                .endTime(22)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -173,7 +170,8 @@ class ReservationControllerTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(LocalDate.of(2025, 12, 20))
-                .time(23)
+                .startTime(21)
+                .endTime(23)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -185,6 +183,29 @@ class ReservationControllerTest {
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("[22시 이하의 시간이어야 합니다.]"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("예약 추가시 시작시간은 종료시간보다 앞서야 한다.")
+    @WithMockMember
+    void addFail6() throws Exception {
+        //given
+        ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .date(LocalDate.of(2025, 12, 20))
+                .startTime(13)
+                .endTime(12)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/reservation")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("시작 시간은 종료 시간보다 앞서야 합니다."))
                 .andDo(print());
     }
 

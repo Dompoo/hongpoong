@@ -49,14 +49,14 @@ class ReservationServiceTest {
 
         Reservation reservation1 = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
 
         Reservation reservation2 = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -89,20 +89,20 @@ class ReservationServiceTest {
                 .build());
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()
-                .date(LocalDate.of(2000, 12, 20))
-                .time(12)
+                .date(LocalDate.of(2025, 12, 20))
+                .startTime(13)
+                .endTime(17)
                 .build();
 
         //when
-        ReservationResponse response = service.addReservation(member.getId(), request);
+        service.addReservation(member.getId(), request);
 
         //then
-        assertEquals(1, reservationRepository.count());
-        assertEquals(response.getId(), reservationRepository.findAll().getFirst().getId());
+        assertEquals(4, reservationRepository.count());
     }
 
     @Test
-    @DisplayName("예약 추가 실패")
+    @DisplayName("존재하지 않는 유저가 예약 추가 시도시 실패한다.")
     void addFail() {
         //given
         Member member = memberRepository.save(Member.builder()
@@ -112,8 +112,9 @@ class ReservationServiceTest {
                 .build());
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()
-                .date(LocalDate.of(2000, 12, 20))
-                .time(12)
+                .date(LocalDate.of(2025, 12, 20))
+                .startTime(13)
+                .endTime(17)
                 .build();
 
         //when
@@ -138,7 +139,7 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -149,7 +150,7 @@ class ReservationServiceTest {
         //then
         assertEquals(response.getId(), reservation.getId());
         assertEquals(response.getUsername(), "창근");
-        assertEquals(response.getDate(), LocalDate.of(2000, 12, 20));
+        assertEquals(response.getDate(), LocalDate.of(2025, 12, 20));
         assertEquals(response.getTime(), 12);
         assertEquals(response.getPriority(), 1);
     }
@@ -166,7 +167,7 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -192,31 +193,31 @@ class ReservationServiceTest {
 
         Reservation reservation1 = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
         Reservation reservation2 = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(2)
                 .build());
         Reservation reservation3 = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(3)
                 .build());
         Reservation reservation4 = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(4)
                 .build());
         Reservation reservation5 = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(5)
                 .build());
@@ -248,7 +249,7 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(2)
                 .build());
@@ -278,7 +279,7 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(2)
                 .build());
@@ -308,7 +309,7 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(2)
                 .build());
@@ -338,13 +339,13 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
-                .date(LocalDate.of(2000, 12, 15))
+                .date(LocalDate.of(2025, 12, 15))
                 .time(13)
                 .build();
 
@@ -355,7 +356,7 @@ class ReservationServiceTest {
         Reservation find = assertDoesNotThrow(() -> reservationRepository.findById(reservation.getId())
                 .orElseThrow());
         assertEquals(find.getMember().getId(), member.getId());
-        assertEquals(find.getDate(), LocalDate.of(2000, 12, 15));
+        assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
         assertEquals(find.getTime(), 13);
         assertEquals(find.getPriority(), 1);
     }
@@ -372,13 +373,13 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
-                .date(LocalDate.of(2000, 12, 15))
+                .date(LocalDate.of(2025, 12, 15))
                 .time(13)
                 .build();
 
@@ -403,13 +404,13 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
-                .date(LocalDate.of(2000, 12, 15))
+                .date(LocalDate.of(2025, 12, 15))
                 .time(13)
                 .build();
 
@@ -435,7 +436,7 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -459,7 +460,7 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -485,7 +486,7 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
@@ -511,13 +512,13 @@ class ReservationServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
-                .date(LocalDate.of(2000, 12, 20))
+                .date(LocalDate.of(2025, 12, 20))
                 .time(12)
                 .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
-                .date(LocalDate.of(2000, 12, 15))
+                .date(LocalDate.of(2025, 12, 15))
                 .time(13)
                 .build();
 
@@ -528,7 +529,7 @@ class ReservationServiceTest {
         Reservation find = assertDoesNotThrow(() -> reservationRepository.findById(reservation.getId())
                 .orElseThrow());
         assertEquals(find.getMember().getId(), member.getId());
-        assertEquals(find.getDate(), LocalDate.of(2000, 12, 15));
+        assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
         assertEquals(find.getTime(), 13);
         assertEquals(find.getPriority(), 1);
     }

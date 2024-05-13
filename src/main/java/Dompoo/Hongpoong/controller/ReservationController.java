@@ -27,8 +27,8 @@ public class ReservationController {
     }
 
     @PostMapping("")
-    public ReservationResponse addReservation(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid ReservationCreateRequest request) {
-        return service.addReservation(principal.getMemberId(), request);
+    public void addReservation(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid ReservationCreateRequest request) {
+        service.addReservation(principal.getMemberId(), request);
     }
 
     @GetMapping("/{id}")

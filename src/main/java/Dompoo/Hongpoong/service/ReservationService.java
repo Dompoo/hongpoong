@@ -12,6 +12,7 @@ import Dompoo.Hongpoong.response.resevation.ReservationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -33,24 +34,33 @@ public class ReservationService {
      * request를 받아서 해당 날의 모든 예약 목록중
      * 예약시간이 겹치는 것 개수 + 1을 예약 순서로 설정하여 저장한다.
      */
-    public ReservationResponse addReservation(Long memberId, ReservationCreateRequest request) {
+    public void addReservation(Long memberId, ReservationCreateRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
 
+        if (request.getStartTime() > request.getEndTime()) {
+            throw new EndForwardStart();
+        }
+
         List<Reservation> findReservations = reservationRepository.findAllByDate(request.getDate());
 
-        long overlapCount = findReservations.stream()
-                .filter(r -> Objects.equals(r.getTime(), request.getTime()))
-                .count();
+        ArrayList<Reservation> newReservations = new ArrayList<>();
 
-        Reservation savedReservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(request.getDate())
-                .time(request.getTime())
-                .priority((int) (overlapCount + 1))
-                .build());
+        for (Integer i = request.getStartTime(); i < request.getEndTime(); i++) {
+            int count = 0;
+            for (Reservation r : findReservations) {
+                if (Objects.equals(r.getTime(), i)) count++;
+            }
 
-        return new ReservationResponse(savedReservation);
+            newReservations.add(Reservation.builder()
+                    .member(member)
+                    .date(request.getDate())
+                    .time(i)
+                    .priority(count + 1)
+                    .build());
+        }
+
+        reservationRepository.saveAll(newReservations);
     }
 
     public ReservationResponse findReservation(Long reservationId) {

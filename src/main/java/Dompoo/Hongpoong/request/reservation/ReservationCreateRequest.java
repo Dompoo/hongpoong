@@ -17,7 +17,8 @@ import java.time.LocalDate;
 RequestBody
 {
     "date": "2024-12-18",
-    "time": 18
+    "startTime": 18
+    "endTime": 22
 }
  */
 public class ReservationCreateRequest {
@@ -27,11 +28,16 @@ public class ReservationCreateRequest {
 
     @Min(value = 9, message = "9시 이상의 시간이어야 합니다.")
     @Max(value = 22, message = "22시 이하의 시간이어야 합니다.")
-    private Integer time;
+    private Integer startTime;
+
+    @Min(value = 9, message = "9시 이상의 시간이어야 합니다.")
+    @Max(value = 22, message = "22시 이하의 시간이어야 합니다.")
+    private Integer endTime;
 
     @Builder
-    public ReservationCreateRequest(LocalDate date, Integer time) {
+    public ReservationCreateRequest(LocalDate date, Integer startTime, Integer endTime) {
         this.date = date;
-        this.time = time;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 }

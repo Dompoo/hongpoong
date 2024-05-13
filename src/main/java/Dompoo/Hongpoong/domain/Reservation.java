@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /*
 {
@@ -29,8 +30,8 @@ public class Reservation {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "reservation")
-    private Rental rental;
+    @OneToMany(mappedBy = "reservation")
+    private List<Instrument> instruments;
 
     private LocalDate date;
     private Integer time;

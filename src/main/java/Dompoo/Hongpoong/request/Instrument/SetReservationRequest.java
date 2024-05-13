@@ -8,12 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class InstrumentCreateRequest {
+public class SetReservationRequest {
 
-    private String product;
+    private Long reservationId;
 
     @Builder
-    public InstrumentCreateRequest(String product) {
-        this.product = product;
+    public SetReservationRequest(Long reservationId) {
+        this.reservationId = reservationId;
     }
 }

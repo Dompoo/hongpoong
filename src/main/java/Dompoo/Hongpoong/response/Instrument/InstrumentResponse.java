@@ -11,7 +11,7 @@ public class InstrumentResponse {
 
     public InstrumentResponse(Instrument instrument) {
         this.id = instrument.getId();
-        this.product = instrument.getProduct();
+        this.product = instrument.getName();
         this.club = instrument.getMember().getClub();
     }
 }

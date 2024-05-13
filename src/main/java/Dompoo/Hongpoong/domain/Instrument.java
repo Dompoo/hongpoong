@@ -13,22 +13,23 @@ public class Instrument {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String product;
+    private String name;
 
-    private boolean available = true;
+    private boolean available;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "rental_id")
-    private Rental rental;
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservation;
 
     @Builder
-    public Instrument(String product, Member member) {
-        this.product = product;
+    public Instrument(String name, Member member) {
+        this.name = name;
         setMember(member);
+        this.available = true;
     }
 
     public void setMember(Member member) {
@@ -36,8 +37,12 @@ public class Instrument {
         member.getInstruments().add(this);
     }
 
-    public void setRental(Rental rental) {
-        this.rental = rental;
-        rental.getInstruments().add(this);
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+        reservation.getInstruments().add(this);
+    }
+
+    public void returnInstrument() {
+        this.reservation = null;
     }
 }

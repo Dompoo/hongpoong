@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.request.Instrument;
 
+import Dompoo.Hongpoong.domain.Instrument;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +17,10 @@ RequestBody
  */
 public class InstrumentCreateRequest {
 
-    private String product;
+    private Instrument.InstrumentType type;
 
     @Builder
-    public InstrumentCreateRequest(String product) {
-        this.product = product;
+    public InstrumentCreateRequest(Instrument.InstrumentType type) {
+        this.type = type;
     }
 }

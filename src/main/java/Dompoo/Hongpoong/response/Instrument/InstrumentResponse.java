@@ -19,7 +19,7 @@ public class InstrumentResponse {
 
     public InstrumentResponse(Instrument instrument) {
         this.id = instrument.getId();
-        this.product = instrument.getName();
+        this.product = instrument.getType().name();
         this.club = instrument.getMember().getClub();
     }
 }

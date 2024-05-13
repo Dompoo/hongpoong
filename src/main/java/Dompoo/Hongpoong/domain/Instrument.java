@@ -13,7 +13,7 @@ public class Instrument {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private Instrument.InstrumentType type;
 
     private boolean available;
 
@@ -25,9 +25,19 @@ public class Instrument {
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
+    public enum InstrumentType {
+        KKWANGGWARI("꽹과리"), JANGGU("장구"), BUK("북"), SOGO("소고"), JING("징");
+
+        private final String value;
+
+        InstrumentType(String value) {
+            this.value = value;
+        }
+    }
+
     @Builder
-    public Instrument(String name, Member member) {
-        this.name = name;
+    public Instrument(InstrumentType type, Member member) {
+        this.type = type;
         setMember(member);
         this.available = true;
     }

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +55,7 @@ public class InstrumentService {
                 .orElseThrow(MemberNotFound::new);
 
         instrumentRepository.save(Instrument.builder()
-                .name(request.getProduct())
+                .type(request.getType())
                 .member(member)
                 .build());
     }
@@ -67,7 +68,10 @@ public class InstrumentService {
                 .orElseThrow(InstrumentNotFound::new);
 
         // 예약의 id 와 member id가 다르면 throw
+        if (!Objects.equals(reservation.getMember().getId(), memberId)) throw new RentalFail();
         // 악기의 id 와 member id가 같으면 throw
+        if (Objects.equals(instrument.getMember().getId(), memberId)) throw new RentalFail();
+        // 악기가 이미 대여중이면 throw
         if (!instrument.isAvailable()) throw new InstrumentNotAvailable();
 
         instrument.setReservation(reservation);
@@ -79,6 +83,7 @@ public class InstrumentService {
                 .orElseThrow(InstrumentNotFound::new);
 
         //악기의 예약 id와 member id가 다르면 throw
+        if (!Objects.equals(instrument.getReservation().getMember().getId(), memberId)) throw new ReturnFail();
 
         instrument.returnInstrument();
         instrument.setAvailable(true);
@@ -95,7 +100,7 @@ public class InstrumentService {
 
         if (!instrument.getMember().getId().equals(memberId)) throw new EditFailException();
 
-        if (request.getProduct() != null) instrument.setName(request.getProduct());
+        if (request.getProduct() != null) instrument.setType(Instrument.InstrumentType.valueOf(request.getProduct()));
         if (request.getAvailable() != null) instrument.setAvailable(request.getAvailable());
     }
 

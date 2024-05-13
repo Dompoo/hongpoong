@@ -100,7 +100,7 @@ public class InstrumentService {
 
         if (!instrument.getMember().getId().equals(memberId)) throw new EditFailException();
 
-        if (request.getProduct() != null) instrument.setType(Instrument.InstrumentType.valueOf(request.getProduct()));
+        if (request.getType() != null) instrument.setType(request.getType());
         if (request.getAvailable() != null) instrument.setAvailable(request.getAvailable());
     }
 

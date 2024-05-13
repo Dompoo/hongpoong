@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.request.Instrument;
 
+import Dompoo.Hongpoong.domain.Instrument;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,17 +12,18 @@ import lombok.Setter;
 /*
 RequestBody
 {
-    "product": "장구",
+    "type": "1",
     "available": false
 }
  */
 public class InstrumentEditRequest {
 
-    private String product;
+    private Instrument.InstrumentType type;
     private Boolean available;
 
-    public InstrumentEditRequest(String product, boolean available) {
-        this.product = product;
+    @Builder
+    public InstrumentEditRequest(Instrument.InstrumentType type, boolean available) {
+        this.type = type;
         this.available = available;
     }
 }

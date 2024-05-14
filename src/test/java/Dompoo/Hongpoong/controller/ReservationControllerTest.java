@@ -7,7 +7,6 @@ import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
 import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
-import Dompoo.Hongpoong.request.reservation.ReservationShiftRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
@@ -65,7 +64,6 @@ class ReservationControllerTest {
                 .number(15)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .message("")
                 .build());
 
@@ -74,7 +72,6 @@ class ReservationControllerTest {
                 .number(13)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(13)
-                .priority(1)
                 .message("")
                 .build());
 
@@ -87,7 +84,6 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$[0].number").value(15))
                 .andExpect(jsonPath("$[0].date").value("2025-12-20"))
                 .andExpect(jsonPath("$[0].time").value(12))
-                .andExpect(jsonPath("$[0].priority").value(1))
                 .andExpect(jsonPath("$[0].message").value(""))
                 .andExpect(jsonPath("$[1].id").value(reservation2.getId()))
                 .andExpect(jsonPath("$[1].username").value("창근"))
@@ -245,7 +241,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         //expected
@@ -255,7 +250,6 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$.username").value("창근"))
                 .andExpect(jsonPath("$.date").value("2025-12-20"))
                 .andExpect(jsonPath("$.time").value(12))
-                .andExpect(jsonPath("$.priority").value(1))
                 .andDo(print());
     }
 
@@ -274,7 +268,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         //expected
@@ -282,156 +275,6 @@ class ReservationControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("404"))
                 .andExpect(jsonPath("$.message").value("존재하지 않는 예약입니다."))
-                .andDo(print());
-    }
-
-    /**
-     * 예약 우서눈위 변경 API 테스트 코드
-     */
-
-    @Test
-    @DisplayName("예약 우선순위 변경")
-    @WithMockMember
-    void shift1() throws Exception {
-        //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(1)
-                .build());
-
-        ReservationShiftRequest request = ReservationShiftRequest.builder()
-                .priority(4)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(post("/reservation/{id}", reservation.getId())
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 예약 우선순위 변경")
-    @WithMockMember
-    void shiftFail1() throws Exception {
-        //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(1)
-                .build());
-
-        ReservationShiftRequest request = ReservationShiftRequest.builder()
-                .priority(4)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(post("/reservation/{id}", reservation.getId() + 1)
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isNotFound())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("우선순위를 앞으로 변경할 수 없다.")
-    @WithMockMember
-    void shiftFail2() throws Exception {
-        //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(3)
-                .build());
-
-        ReservationShiftRequest request = ReservationShiftRequest.builder()
-                .priority(1)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(post("/reservation/{id}", reservation.getId())
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("우선순위는 최대 1이어야 한다.")
-    @WithMockMember
-    void shiftFail3() throws Exception {
-        //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(3)
-                .build());
-
-        ReservationShiftRequest request = ReservationShiftRequest.builder()
-                .priority(0)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(post("/reservation/{id}", reservation.getId())
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("[우선순위는 최대 1입니다.]"))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("내가 한 예약만 우선수위 변경할 수 있다.")
-    @WithMockMember
-    void shiftFail4() throws Exception {
-        //given
-        Member member = memberRepository.save(Member.builder()
-                .email("dompoo@gmail.com")
-                .username("창근")
-                .password("1234")
-                .build());
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(1)
-                .build());
-
-        ReservationShiftRequest request = ReservationShiftRequest.builder()
-                .priority(4)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(post("/reservation/{id}", reservation.getId())
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").value("수정할 수 없습니다."))
                 .andDo(print());
     }
 
@@ -450,7 +293,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -479,7 +321,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -507,7 +348,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -536,7 +376,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -566,7 +405,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -596,7 +434,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -630,7 +467,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -664,7 +500,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         //expected
@@ -684,7 +519,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         //expected
@@ -708,7 +542,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         //expected
@@ -733,7 +566,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -766,7 +598,6 @@ class ReservationControllerTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()

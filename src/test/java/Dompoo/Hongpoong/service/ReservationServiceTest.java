@@ -7,7 +7,6 @@ import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
 import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
-import Dompoo.Hongpoong.request.reservation.ReservationShiftRequest;
 import Dompoo.Hongpoong.response.resevation.ReservationResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,14 +50,12 @@ class ReservationServiceTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         Reservation reservation2 = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         //when
@@ -74,8 +71,6 @@ class ReservationServiceTest {
         assertEquals(list.get(1).getDate(), reservation2.getDate());
         assertEquals(list.get(0).getTime(), reservation1.getTime());
         assertEquals(list.get(1).getTime(), reservation2.getTime());
-        assertEquals(list.get(0).getPriority(), reservation1.getPriority());
-        assertEquals(list.get(1).getPriority(), reservation2.getPriority());
     }
 
     @Test
@@ -145,7 +140,6 @@ class ReservationServiceTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         //when
@@ -156,7 +150,6 @@ class ReservationServiceTest {
         assertEquals(response.getUsername(), "창근");
         assertEquals(response.getDate(), LocalDate.of(2025, 12, 20));
         assertEquals(response.getTime(), 12);
-        assertEquals(response.getPriority(), 1);
     }
 
     @Test
@@ -173,7 +166,6 @@ class ReservationServiceTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         //when
@@ -183,152 +175,6 @@ class ReservationServiceTest {
         //then
         assertEquals(e.getMessage(), "존재하지 않는 예약입니다.");
         assertEquals(e.statusCode(), "404");
-    }
-
-    @Test
-    @DisplayName("예약 우선순위 변경")
-    void shift() {
-        //given
-        Member member = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
-                .build());
-
-        Reservation reservation1 = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(1)
-                .build());
-        Reservation reservation2 = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(2)
-                .build());
-        Reservation reservation3 = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(3)
-                .build());
-        Reservation reservation4 = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(4)
-                .build());
-        Reservation reservation5 = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(5)
-                .build());
-
-        ReservationShiftRequest request = ReservationShiftRequest.builder()
-                .priority(4)
-                .build();
-
-        //when
-        service.shiftReservation(member.getId(), reservation2.getId(), request);
-
-        //then
-        assertEquals(reservationRepository.findById(reservation1.getId()).get().getPriority(), 1);
-        assertEquals(reservationRepository.findById(reservation2.getId()).get().getPriority(), 4);
-        assertEquals(reservationRepository.findById(reservation3.getId()).get().getPriority(), 2);
-        assertEquals(reservationRepository.findById(reservation4.getId()).get().getPriority(), 3);
-        assertEquals(reservationRepository.findById(reservation5.getId()).get().getPriority(), 5);
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 예약 우선순위 변경 실패")
-    void shiftFail1() {
-        //given
-        Member member = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
-                .build());
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(2)
-                .build());
-
-        ReservationShiftRequest request = ReservationShiftRequest.builder()
-                .priority(4)
-                .build();
-
-        //when
-        ReservationNotFound e = assertThrows(ReservationNotFound.class, () ->
-                service.shiftReservation(member.getId(), reservation.getId() + 1, request));
-
-        //then
-        assertEquals(e.getMessage(), "존재하지 않는 예약입니다.");
-        assertEquals(e.statusCode(), "404");
-    }
-
-    @Test
-    @DisplayName("예약 현재의 우선순위보다 앞으로 변경 실패")
-    void shiftFail2() {
-        //given
-        Member member = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
-                .build());
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(2)
-                .build());
-
-        ReservationShiftRequest request = ReservationShiftRequest.builder()
-                .priority(1)
-                .build();
-
-        //when
-        ReservationAheadShiftFail e = assertThrows(ReservationAheadShiftFail.class, () ->
-                service.shiftReservation(member.getId(), reservation.getId(), request));
-
-        //then
-        assertEquals(e.getMessage(), "현재 우선순위보다 높습니다.");
-        assertEquals(e.statusCode(), "400");
-    }
-
-    @Test
-    @DisplayName("예약자가 아닌 유저가 예약 우선순위 변경 시도시 실패")
-    void shiftFail3() {
-        //given
-        Member member = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
-                .build());
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .time(12)
-                .priority(2)
-                .build());
-
-        ReservationShiftRequest request = ReservationShiftRequest.builder()
-                .priority(4)
-                .build();
-
-        //when
-        EditFailException e = assertThrows(EditFailException.class, () ->
-                service.shiftReservation(member.getId() + 1, reservation.getId(), request));
-
-        //then
-        assertEquals(e.getMessage(), "수정할 수 없습니다.");
-        assertEquals(e.statusCode(), "403");
     }
 
     @Test
@@ -345,7 +191,6 @@ class ReservationServiceTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -362,7 +207,6 @@ class ReservationServiceTest {
         assertEquals(find.getMember().getId(), member.getId());
         assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
         assertEquals(find.getTime(), 13);
-        assertEquals(find.getPriority(), 1);
     }
 
     @Test
@@ -379,7 +223,6 @@ class ReservationServiceTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -410,7 +253,6 @@ class ReservationServiceTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -442,7 +284,6 @@ class ReservationServiceTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         //when
@@ -466,7 +307,6 @@ class ReservationServiceTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         //when
@@ -492,7 +332,6 @@ class ReservationServiceTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         //when
@@ -518,7 +357,6 @@ class ReservationServiceTest {
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
                 .time(12)
-                .priority(1)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
@@ -535,6 +373,5 @@ class ReservationServiceTest {
         assertEquals(find.getMember().getId(), member.getId());
         assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
         assertEquals(find.getTime(), 13);
-        assertEquals(find.getPriority(), 1);
     }
 }

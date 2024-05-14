@@ -15,13 +15,13 @@ RequestBody
     "reservationId": 1,
 }
  */
-public class SetReservationRequest {
+public class InstrumentBorrowRequest {
 
     @NotNull(message = "악기 대여할 예약은 비어있을 수 없습니다.")
     private Long reservationId;
 
     @Builder
-    public SetReservationRequest(Long reservationId) {
+    public InstrumentBorrowRequest(Long reservationId) {
         this.reservationId = reservationId;
     }
 }

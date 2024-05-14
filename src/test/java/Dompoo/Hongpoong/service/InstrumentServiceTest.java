@@ -6,11 +6,11 @@ import Dompoo.Hongpoong.domain.Reservation;
 import Dompoo.Hongpoong.repository.InstrumentRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
+import Dompoo.Hongpoong.request.Instrument.InstrumentBorrowRequest;
 import Dompoo.Hongpoong.request.Instrument.InstrumentCreateRequest;
 import Dompoo.Hongpoong.request.Instrument.InstrumentEditRequest;
-import Dompoo.Hongpoong.request.Instrument.SetReservationRequest;
+import Dompoo.Hongpoong.response.Instrument.InstrumentBorrowResponse;
 import Dompoo.Hongpoong.response.Instrument.InstrumentResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -141,7 +141,7 @@ class InstrumentServiceTest {
 
     @Test
     @DisplayName("악기 빌리기")
-    void borrow() throws JsonProcessingException {
+    void borrow() {
         //given
         Member me = memberRepository.save(Member.builder()
                 .username("창근")
@@ -170,15 +170,59 @@ class InstrumentServiceTest {
                 .type(KKWANGGWARI)
                 .build());
 
-        SetReservationRequest request = SetReservationRequest.builder()
+        InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId())
                 .build();
 
         //when
-        service.setReservation(me.getId(), instrument.getId(), request);
+        InstrumentBorrowResponse response = service.borrowOne(me.getId(), instrument.getId(), request);
 
         //then
         assertEquals(instrumentRepository.findAll().getFirst().getReservation().getId(), reservation.getId());
+        assertEquals(instrument.getId(), response.getInstrumentId());
+        assertEquals(LocalDate.of(2025, 12, 20), response.getReturnDate());
+        assertEquals(18, response.getReturnTime());
+    }
+
+    @Test
+    @DisplayName("악기 반납하기")
+    void returnOne() {
+        //given
+        Member me = memberRepository.save(Member.builder()
+                .username("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .club(SANTLE)
+                .build());
+
+        Member other = memberRepository.save(Member.builder()
+                .username("강윤호")
+                .email("yoonH@naver.com")
+                .password("qwer")
+                .club(HWARANG)
+                .build());
+
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .member(me)
+                .number(15)
+                .date(LocalDate.of(2025, 12, 20))
+                .time(18)
+                .message("")
+                .build());
+
+        Instrument instrument = instrumentRepository.save(Instrument.builder()
+                .member(other)
+                .type(KKWANGGWARI)
+                .build());
+
+        instrument.setReservation(reservation);
+
+        //when
+        service.returnOne(instrument.getId());
+
+        //then
+        assertEquals(instrument.getReservation(), null);
+        assertEquals(reservation.getInstruments().size(), 0);
     }
 
     @Test

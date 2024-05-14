@@ -54,6 +54,7 @@ public class Instrument {
     }
 
     public void returnInstrument() {
+        this.reservation.getInstruments().remove(this);
         this.reservation = null;
     }
 }

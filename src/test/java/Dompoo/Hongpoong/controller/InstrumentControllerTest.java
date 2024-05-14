@@ -9,7 +9,7 @@ import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
 import Dompoo.Hongpoong.request.Instrument.InstrumentCreateRequest;
 import Dompoo.Hongpoong.request.Instrument.InstrumentEditRequest;
-import Dompoo.Hongpoong.request.Instrument.SetReservationRequest;
+import Dompoo.Hongpoong.request.Instrument.InstrumentBorrowRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
@@ -179,7 +179,7 @@ class InstrumentControllerTest {
                 .type(KKWANGGWARI)
                 .build());
 
-        SetReservationRequest request = SetReservationRequest.builder()
+        InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId())
                 .build();
 
@@ -190,6 +190,9 @@ class InstrumentControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.instrumentId").value(instrument.getId()))
+                .andExpect(jsonPath("$.returnDate").value("2025-12-20"))
+                .andExpect(jsonPath("$.returnTime").value(18))
                 .andDo(print());
     }
 
@@ -213,7 +216,7 @@ class InstrumentControllerTest {
                 .type(KKWANGGWARI)
                 .build());
 
-        SetReservationRequest request = SetReservationRequest.builder()
+        InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId())
                 .build();
 
@@ -254,7 +257,7 @@ class InstrumentControllerTest {
                 .type(KKWANGGWARI)
                 .build());
 
-        SetReservationRequest request = SetReservationRequest.builder()
+        InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId() + 1)
                 .build();
 
@@ -295,7 +298,7 @@ class InstrumentControllerTest {
                 .type(KKWANGGWARI)
                 .build());
 
-        SetReservationRequest request = SetReservationRequest.builder()
+        InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId())
                 .build();
 
@@ -307,6 +310,40 @@ class InstrumentControllerTest {
                         .content(json))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("존재하지 않는 악기입니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("악기 반납하기")
+    @WithMockMember
+    void returnOne() throws Exception {
+        //given
+        Member me = memberRepository.findAll().getLast();
+        Member other = memberRepository.save(Member.builder()
+                .username("강윤호")
+                .email("yoonH@naver.com")
+                .password("qwer")
+                .club(SANTLE)
+                .build());
+
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .member(me)
+                .number(15)
+                .date(LocalDate.of(2025, 12, 20))
+                .time(18)
+                .message("")
+                .build());
+
+        Instrument instrument = instrumentRepository.save(Instrument.builder()
+                .member(other)
+                .type(KKWANGGWARI)
+                .build());
+
+        instrument.setReservation(reservation);
+
+        //expected
+        mockMvc.perform(post("/instrument/return/{id}", instrument.getId()))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 

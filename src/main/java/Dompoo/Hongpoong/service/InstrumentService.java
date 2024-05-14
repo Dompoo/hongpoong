@@ -7,9 +7,10 @@ import Dompoo.Hongpoong.exception.*;
 import Dompoo.Hongpoong.repository.InstrumentRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
+import Dompoo.Hongpoong.request.Instrument.InstrumentBorrowRequest;
 import Dompoo.Hongpoong.request.Instrument.InstrumentCreateRequest;
 import Dompoo.Hongpoong.request.Instrument.InstrumentEditRequest;
-import Dompoo.Hongpoong.request.Instrument.SetReservationRequest;
+import Dompoo.Hongpoong.response.Instrument.InstrumentBorrowResponse;
 import Dompoo.Hongpoong.response.Instrument.InstrumentResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +61,7 @@ public class InstrumentService {
                 .build());
     }
 
-    public void setReservation(Long memberId, Long id, SetReservationRequest request) {
+    public InstrumentBorrowResponse borrowOne(Long memberId, Long id, InstrumentBorrowRequest request) {
         Reservation reservation = reservationRepository.findById(request.getReservationId())
                 .orElseThrow(ReservationNotFound::new);
 
@@ -76,14 +77,13 @@ public class InstrumentService {
 
         instrument.setReservation(reservation);
         instrument.setAvailable(false);
+
+        return new InstrumentBorrowResponse(instrument);
     }
 
-    public void returnInstrument(Long memberId, Long id) {
+    public void returnOne(Long id) {
         Instrument instrument = instrumentRepository.findById(id)
                 .orElseThrow(InstrumentNotFound::new);
-
-        //악기의 예약 id와 member id가 다르면 throw
-        if (!Objects.equals(instrument.getReservation().getMember().getId(), memberId)) throw new ReturnFail();
 
         instrument.returnInstrument();
         instrument.setAvailable(true);

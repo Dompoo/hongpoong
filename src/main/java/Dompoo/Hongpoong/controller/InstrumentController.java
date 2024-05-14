@@ -3,7 +3,8 @@ package Dompoo.Hongpoong.controller;
 import Dompoo.Hongpoong.config.security.UserPrincipal;
 import Dompoo.Hongpoong.request.Instrument.InstrumentCreateRequest;
 import Dompoo.Hongpoong.request.Instrument.InstrumentEditRequest;
-import Dompoo.Hongpoong.request.Instrument.SetReservationRequest;
+import Dompoo.Hongpoong.request.Instrument.InstrumentBorrowRequest;
+import Dompoo.Hongpoong.response.Instrument.InstrumentBorrowResponse;
 import Dompoo.Hongpoong.response.Instrument.InstrumentResponse;
 import Dompoo.Hongpoong.service.InstrumentService;
 import jakarta.validation.Valid;
@@ -36,13 +37,13 @@ public class InstrumentController {
     }
 
     @PostMapping("/{id}")
-    public void setReservation(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid SetReservationRequest request) {
-        service.setReservation(principal.getMemberId(), id, request);
+    public InstrumentBorrowResponse borrowOne(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid InstrumentBorrowRequest request) {
+        return service.borrowOne(principal.getMemberId(), id, request);
     }
 
     @PostMapping("/return/{id}")
-    public void returnInstrument(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id) {
-        service.returnInstrument(principal.getMemberId(), id);
+    public void returnOne(@PathVariable Long id) {
+        service.returnOne(id);
     }
 
     @GetMapping("/{id}")

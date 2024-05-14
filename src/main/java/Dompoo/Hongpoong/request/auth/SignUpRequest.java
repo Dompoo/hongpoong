@@ -21,7 +21,7 @@ RequestBody
     "password2" : "1234"
 }
  */
-public class SignupRequest {
+public class SignUpRequest {
 
     @Email(message = "이메일 형식으로 입력해주세요.")
     @NotNull(message = "이메일은 비어있을 수 없습니다.")
@@ -36,7 +36,7 @@ public class SignupRequest {
     private Member.Club club;
 
     @Builder
-    public SignupRequest(String email, String username, String password1, String password2, Member.Club club) {
+    public SignUpRequest(String email, String username, String password1, String password2, Member.Club club) {
         this.email = email;
         this.username = username;
         this.password1 = password1;

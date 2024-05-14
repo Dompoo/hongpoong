@@ -2,7 +2,7 @@ package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.request.auth.AcceptSignUpRequest;
 import Dompoo.Hongpoong.request.auth.EmailValidRequest;
-import Dompoo.Hongpoong.request.auth.SignupRequest;
+import Dompoo.Hongpoong.request.auth.SignUpRequest;
 import Dompoo.Hongpoong.response.auth.EmailValidResponse;
 import Dompoo.Hongpoong.response.auth.SignUpResponse;
 import Dompoo.Hongpoong.service.AuthService;
@@ -26,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public void requestSignup(@RequestBody @Valid SignupRequest request) {
+    public void requestSignup(@RequestBody @Valid SignUpRequest request) {
         service.requestSignup(request);
     }
 
@@ -40,11 +40,5 @@ public class AuthController {
     @GetMapping("/signup")
     public List<SignUpResponse> emailRequestList() {
         return service.getSignUp();
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/signup/{id}")
-    public void deleteEmail(@PathVariable Long id) {
-        service.deleteSignUp(id);
     }
 }

@@ -9,7 +9,7 @@ import Dompoo.Hongpoong.repository.SettingRepository;
 import Dompoo.Hongpoong.repository.SignUpRepository;
 import Dompoo.Hongpoong.request.auth.AcceptSignUpRequest;
 import Dompoo.Hongpoong.request.auth.EmailValidRequest;
-import Dompoo.Hongpoong.request.auth.SignupRequest;
+import Dompoo.Hongpoong.request.auth.SignUpRequest;
 import Dompoo.Hongpoong.response.auth.SignUpResponse;
 import Dompoo.Hongpoong.response.auth.EmailValidResponse;
 import jakarta.transaction.Transactional;
@@ -37,17 +37,17 @@ public class AuthService {
         Optional<Member> findMember = memberRepository.findByEmail(request.getEmail());
         Optional<SignUp> findSignUp = signUpRepository.findByEmail(request.getEmail());
 
-        EmailValidResponse response = EmailValidResponse.builder()
-                .valid(true)
+        boolean valid = true;
+
+        if (findMember.isPresent()) valid = false;
+        if (findSignUp.isPresent()) valid = false;
+
+        return EmailValidResponse.builder()
+                .valid(valid)
                 .build();
-
-        response.setValid(findMember.isEmpty());
-        response.setValid(findSignUp.isEmpty());
-
-        return response;
     }
 
-    public void requestSignup(SignupRequest request) {
+    public void requestSignup(SignUpRequest request) {
         if (!Objects.equals(request.getPassword1(), request.getPassword2())) {
             throw new PasswordNotSame();
         }
@@ -87,12 +87,5 @@ public class AuthService {
         return signUpRepository.findAll()
                 .stream().map(SignUpResponse::new)
                 .collect(Collectors.toList());
-    }
-
-    public void deleteSignUp(Long id) {
-        SignUp signUp = signUpRepository.findById(id)
-                .orElseThrow(SignUpNotFound::new);
-
-        signUpRepository.delete(signUp);
     }
 }

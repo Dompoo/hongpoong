@@ -1,16 +1,18 @@
 package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.Whitelist;
-import Dompoo.Hongpoong.exception.*;
+import Dompoo.Hongpoong.domain.Member.Club;
+import Dompoo.Hongpoong.domain.SignUp;
+import Dompoo.Hongpoong.exception.AlreadyExistEmail;
+import Dompoo.Hongpoong.exception.PasswordNotSame;
+import Dompoo.Hongpoong.exception.SignUpNotFound;
 import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.repository.WhitelistRepository;
-import Dompoo.Hongpoong.request.auth.AcceptEmailRequest;
-import Dompoo.Hongpoong.request.auth.AddEmailRequest;
+import Dompoo.Hongpoong.repository.SignUpRepository;
+import Dompoo.Hongpoong.request.auth.AcceptSignUpRequest;
 import Dompoo.Hongpoong.request.auth.EmailValidRequest;
-import Dompoo.Hongpoong.request.auth.SignupRequest;
-import Dompoo.Hongpoong.response.auth.EmailResponse;
+import Dompoo.Hongpoong.request.auth.SignUpRequest;
 import Dompoo.Hongpoong.response.auth.EmailValidResponse;
+import Dompoo.Hongpoong.response.auth.SignUpResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
+import static Dompoo.Hongpoong.domain.Member.Club.HWARANG;
 import static Dompoo.Hongpoong.domain.Member.Club.SANTLE;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,28 +36,26 @@ class AuthServiceTest {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    private WhitelistRepository whitelistRepository;
+    private SignUpRepository signUpRepository;
     @Autowired
     private PasswordEncoder encoder;
 
     private static final String EMAIL = "dompoo@gmail.com";
     private static final String USERNAME = "창근";
     private static final String PASSWORD = "1234";
+    private static final Club CLUB = SANTLE;
     private static final String NOT_SAME_PASSWORD = "5678";
-    private static final String ALREADY_EXISTS_USERNAME = "이미 존재하는 유저명입니다.";
-    private static final String NOT_IN_WHITELIST = "요청하지 않은 유저입니다.";
-    private static final String NOT_ACCEPTED_MEMBER = "승인되지 않은 유저입니다.";
+    private static final String ALREADY_EXIST_EMAIL = "이미 존재하는 이메일입니다.";
     private static final String PASSWORD_NOT_SAME = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
-    private static final String ALREADY_USED_EMAIL = "이미 회원가입된 이메일입니다.";
 
     @BeforeEach
     void setUp() {
         memberRepository.deleteAll();
-        whitelistRepository.deleteAll();
+        signUpRepository.deleteAll();
     }
 
     @Test
-    @DisplayName("이메일 검증 - 성공")
+    @DisplayName("이메일 유효성 검사 - 성공")
     void checkEmail() {
         //given
         EmailValidRequest request = EmailValidRequest.builder()
@@ -69,7 +70,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("이메일 검증 - 실패")
+    @DisplayName("이메일 유효성 검사 - 실패")
     void checkEmailFail() {
         //given
         memberRepository.save(Member.builder()
@@ -91,195 +92,41 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("화이트리스트 추가")
-    void addWhiteList() {
+    @DisplayName("회원가입 요청")
+    void requestSignup() {
         //given
-        AddEmailRequest request = AddEmailRequest.builder()
-                .email(EMAIL)
-                .build();
-        //when
-        service.addWhiteList(request);
-
-        //then
-        assertEquals(whitelistRepository.count(), 1);
-        assertEquals(whitelistRepository.findAll().getFirst().getEmail(), EMAIL);
-        assertEquals(whitelistRepository.findAll().getFirst().getIsAccepted(), false);
-    }
-
-    @Test
-    @DisplayName("화이트리스트 추가시 이메일은 중복되면 안된다.")
-    void addWhiteListFail() {
-        //given
-        whitelistRepository.save(Whitelist.builder()
-                .email(EMAIL)
-                .isAccepted(false)
-                .build());
-
-        AddEmailRequest request = AddEmailRequest.builder()
-                .email(EMAIL)
-                .build();
-        //when
-        AlreadyExistsEmail e = assertThrows(AlreadyExistsEmail.class,
-                () -> service.addWhiteList(request));
-
-        //then
-        assertEquals(e.getMessage(), "이미 존재하는 이메일입니다.");
-        assertEquals(e.statusCode(), "400");
-    }
-
-    @Test
-    @DisplayName("화이트리스트 조회")
-    void getWhiteList() {
-        //given
-        whitelistRepository.save(Whitelist.builder()
-                .email(EMAIL)
-                .isAccepted(false)
-                .build());
-
-        whitelistRepository.save(Whitelist.builder()
-                .email("dompoo2@naver.com")
-                .isAccepted(true)
-                .build());
-        //when
-        List<EmailResponse> whiteList = service.getWhiteList();
-
-        //then
-        assertEquals(whiteList.getFirst().getEmail(), EMAIL);
-        assertFalse(whiteList.getFirst().isAccepted());
-        assertEquals(whiteList.get(1).getEmail(), "dompoo2@naver.com");
-        assertTrue(whiteList.get(1).isAccepted());
-    }
-
-    @Test
-    @DisplayName("화이트리스트 승인")
-    void acceptWhiteList() {
-        //given
-        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
-                .email(EMAIL)
-                .isAccepted(false)
-                .build());
-
-        AcceptEmailRequest request = AcceptEmailRequest.builder()
-                .emailId(whitelist.getId())
-                .acceptResult(true)
-                .build();
-        //when
-        service.acceptWhiteList(request);
-
-        //then
-        assertEquals(whitelistRepository.count(), 1);
-        assertEquals(whitelistRepository.findAll().getFirst().getEmail(), EMAIL);
-        assertEquals(whitelistRepository.findAll().getFirst().getIsAccepted(), true);
-    }
-
-    @Test
-    @DisplayName("화이트리스트 거절")
-    void notAcceptWhiteList() {
-        //given
-        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
-                .email(EMAIL)
-                .isAccepted(false)
-                .build());
-
-        AcceptEmailRequest request = AcceptEmailRequest.builder()
-                .emailId(whitelist.getId())
-                .acceptResult(false)
-                .build();
-        //when
-        service.acceptWhiteList(request);
-
-        //then
-        assertEquals(whitelistRepository.count(), 0);
-    }
-
-    @Test
-    @DisplayName("회원가입")
-    void signup() {
-        //given
-        whitelistRepository.save(Whitelist.builder()
-                .email(EMAIL)
-                .isAccepted(true)
-                .build());
-
-        SignupRequest request = SignupRequest.builder()
+        SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
                 .username(USERNAME)
                 .password1(PASSWORD)
                 .password2(PASSWORD)
+                .club(CLUB)
                 .build();
 
         //when
-        service.signup(request);
+        service.requestSignup(request);
 
         //then
-        assertEquals(memberRepository.count(), 1);
-        assertEquals(memberRepository.findAll().getFirst().getUsername(), USERNAME);
-        assertTrue(encoder.matches(PASSWORD, memberRepository.findAll().getFirst().getPassword()));
+        assertEquals(signUpRepository.count(), 1);
+        assertEquals(signUpRepository.findAll().getFirst().getUsername(), USERNAME);
+        assertTrue(encoder.matches(PASSWORD, signUpRepository.findAll().getFirst().getPassword()));
     }
 
     @Test
-    @DisplayName("회원가입시 화이트리스트에 올라간 이메일만 가능하다.")
-    void signupFail1() {
+    @DisplayName("회원가입 요청시 비밀번호와 비밀번호확인은 일치해야 한다.")
+    void requestSignupFail3() {
         //given
-        whitelistRepository.save(Whitelist.builder()
+        SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
-                .isAccepted(true)
-                .build());
-
-        SignupRequest request = SignupRequest.builder()
-                .email("notdompoo@gmail.com")
-                .username(USERNAME)
-                .password1(PASSWORD)
-                .password2(PASSWORD)
-                .build();
-
-        //when
-        NotInWhitelist e = assertThrows(NotInWhitelist.class,
-                () -> service.signup(request));
-
-        //then
-        assertEquals(e.getMessage(), NOT_IN_WHITELIST);
-        assertEquals(e.statusCode(), "400");
-    }
-
-    @Test
-    @DisplayName("회원가입시 화이트리스트에서 승인된 이메일만 가능하다.")
-    void signupFail2() {
-        //given
-        whitelistRepository.save(Whitelist.builder()
-                .email(EMAIL)
-                .isAccepted(false)
-                .build());
-
-        SignupRequest request = SignupRequest.builder()
-                .email(EMAIL)
-                .username(USERNAME)
-                .password1(PASSWORD)
-                .password2(PASSWORD)
-                .build();
-
-        //when
-        NotAcceptedMember e = assertThrows(NotAcceptedMember.class,
-                () -> service.signup(request));
-
-        //then
-        assertEquals(e.getMessage(), NOT_ACCEPTED_MEMBER);
-        assertEquals(e.statusCode(), "400");
-    }
-
-    @Test
-    @DisplayName("회원가입시 비밀번호와 비밀번호확인은 일치해야 한다.")
-    void signupFail3() {
-        //given
-        SignupRequest request = SignupRequest.builder()
                 .username(USERNAME)
                 .password1(PASSWORD)
                 .password2(NOT_SAME_PASSWORD)
+                .club(CLUB)
                 .build();
 
         //when
         PasswordNotSame e = assertThrows(PasswordNotSame.class, () ->
-                service.signup(request));
+                service.requestSignup(request));
 
         //then
         assertEquals(e.statusCode(), "400");
@@ -287,76 +134,131 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입시 사용된 화이트리스트는 안된다.")
-    void signupFail5() {
+    @DisplayName("회원가입 요청시 이메일은 중복되면 안된다.")
+    void requestSignupFail4() {
         //given
-        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
+        memberRepository.save(Member.builder()
                 .email(EMAIL)
-                .isAccepted(true)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .club(SANTLE)
                 .build());
 
-        whitelist.setIsUsed(true);
-
-        SignupRequest request = SignupRequest.builder()
+        SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
                 .username(USERNAME)
                 .password1(PASSWORD)
                 .password2(PASSWORD)
+                .club(CLUB)
                 .build();
 
         //when
-        AlreadyUsedEmail e = assertThrows(AlreadyUsedEmail.class, () ->
-                service.signup(request));
+        AlreadyExistEmail e = assertThrows(AlreadyExistEmail.class, () ->
+                service.requestSignup(request));
 
         //then
         assertEquals(e.statusCode(), "400");
-        assertEquals(e.getMessage(), ALREADY_USED_EMAIL);
+        assertEquals(e.getMessage(), ALREADY_EXIST_EMAIL);
     }
 
     @Test
-    @DisplayName("화이트리스트 삭제")
-    void deleteWhiteList() {
+    @DisplayName("회원가입 요청 승인")
+    void acceptSignUp() {
         //given
-        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
-                .email(EMAIL)
-                .isAccepted(true)
-                .build());
-
-        memberRepository.save(Member.builder()
+        SignUp signUp = signUpRepository.save(SignUp.builder()
                 .email(EMAIL)
                 .username(USERNAME)
                 .password(PASSWORD)
+                .club(SANTLE)
                 .build());
 
+        AcceptSignUpRequest request = AcceptSignUpRequest.builder()
+                .emailId(signUp.getId())
+                .acceptResult(true)
+                .build();
+
         //when
-        service.deleteWhiteList(whitelist.getId());
+        service.acceptSignUp(request);
 
         //then
-        assertEquals(memberRepository.count(), 0);
-        assertEquals(whitelistRepository.count(), 0);
+        assertEquals(0, signUpRepository.findAll().size());
+        assertEquals(1, memberRepository.findAll().size());
+        assertEquals(EMAIL, memberRepository.findAll().getFirst().getEmail());
     }
 
     @Test
-    @DisplayName("존재하지 않는 화이트리스트 삭제")
-    void deleteWhiteListFail() {
+    @DisplayName("회원가입 요청 거절")
+    void refuseSignUp() {
         //given
-        Whitelist whitelist = whitelistRepository.save(Whitelist.builder()
-                .email(EMAIL)
-                .isAccepted(true)
-                .build());
-
-        memberRepository.save(Member.builder()
+        SignUp signUp = signUpRepository.save(SignUp.builder()
                 .email(EMAIL)
                 .username(USERNAME)
                 .password(PASSWORD)
+                .club(SANTLE)
+                .build());
+
+        AcceptSignUpRequest request = AcceptSignUpRequest.builder()
+                .emailId(signUp.getId())
+                .acceptResult(false)
+                .build();
+
+        //when
+        service.acceptSignUp(request);
+
+        //then
+        assertEquals(0, signUpRepository.findAll().size());
+        assertEquals(0, memberRepository.findAll().size());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 회원가입 요청 승인")
+    void acceptSignUpFail() {
+        //given
+        SignUp signUp = signUpRepository.save(SignUp.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .club(SANTLE)
+                .build());
+
+        AcceptSignUpRequest request = AcceptSignUpRequest.builder()
+                .emailId(signUp.getId() + 1)
+                .acceptResult(true)
+                .build();
+
+        //when
+        SignUpNotFound e = assertThrows(SignUpNotFound.class, () ->
+                service.acceptSignUp(request));
+
+        //then
+        assertEquals("존재하지 않는 회원가입 요청입니다.", e.getMessage());
+        assertEquals("404", e.statusCode());
+    }
+
+    @Test
+    @DisplayName("회원가입 요청 리스트 조회")
+    void getSignUpList() {
+        //given
+        signUpRepository.save(SignUp.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .club(SANTLE)
+                .build());
+
+        signUpRepository.save(SignUp.builder()
+                .email("yoonH@naver.com")
+                .username("윤호")
+                .password("qwer")
+                .club(HWARANG)
                 .build());
 
         //when
-        EmailNotFound e = assertThrows(EmailNotFound.class, () ->
-                service.deleteWhiteList(whitelist.getId() + 1));
+        List<SignUpResponse> response = service.getSignUp();
 
         //then
-        assertEquals(e.statusCode(), "404");
-        assertEquals(e.getMessage(), "존재하지 않는 이메일입니다.");
+        assertEquals(2, response.size());
+        assertEquals(EMAIL, response.getFirst().getEmail());
+        assertEquals("yoonH@naver.com", response.get(1).getEmail());
     }
 }

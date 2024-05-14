@@ -1,11 +1,11 @@
 package Dompoo.Hongpoong.exception;
 
-public class EmailNotFound extends MyException {
+public class SignUpNotFound extends MyException {
 
     private static final String MESSAGE = "존재하지 않는 이메일입니다.";
     private static final String STATUS_CODE = "404";
 
-    public EmailNotFound() {
+    public SignUpNotFound() {
         super(MESSAGE);
     }
 

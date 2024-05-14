@@ -16,7 +16,7 @@ RequestBody
     "acceptResult" : true
 }
  */
-public class AcceptEmailRequest {
+public class AcceptSignUpRequest {
 
     @Min(value = 1, message = "승인/거절할 이메일을 선택해주세요.")
     private Long emailId;
@@ -24,7 +24,7 @@ public class AcceptEmailRequest {
     private boolean acceptResult;
 
     @Builder
-    public AcceptEmailRequest(Long emailId, boolean acceptResult) {
+    public AcceptSignUpRequest(Long emailId, boolean acceptResult) {
         this.emailId = emailId;
         this.acceptResult = acceptResult;
     }

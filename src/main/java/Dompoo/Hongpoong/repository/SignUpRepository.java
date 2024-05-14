@@ -1,11 +1,11 @@
 package Dompoo.Hongpoong.repository;
 
-import Dompoo.Hongpoong.domain.Whitelist;
+import Dompoo.Hongpoong.domain.SignUp;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface WhitelistRepository extends JpaRepository<Whitelist, Long> {
+public interface SignUpRepository extends JpaRepository<SignUp, Long> {
     Boolean existsByEmail(String email);
-    Optional<Whitelist> findByEmail(String email);
+    Optional<SignUp> findByEmail(String email);
 }

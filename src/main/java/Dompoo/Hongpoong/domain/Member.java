@@ -64,6 +64,14 @@ public class Member {
         this.role = ROLE_USER;
     }
 
+    public Member(SignUp signUp) {
+        this.email = signUp.getEmail();
+        this.username = signUp.getEmail();
+        this.password = signUp.getPassword();
+        this.club = signUp.getClub();
+        this.role = ROLE_USER;
+    }
+
     public void joinChatRoom(ChatRoom chatRoom){
         this.chatRooms.add(chatRoom);
         chatRoom.getMembers().add(this);

@@ -1,11 +1,10 @@
 package Dompoo.Hongpoong.controller;
 
-import Dompoo.Hongpoong.request.auth.AcceptEmailRequest;
-import Dompoo.Hongpoong.request.auth.AddEmailRequest;
+import Dompoo.Hongpoong.request.auth.AcceptSignUpRequest;
 import Dompoo.Hongpoong.request.auth.EmailValidRequest;
 import Dompoo.Hongpoong.request.auth.SignupRequest;
-import Dompoo.Hongpoong.response.auth.EmailResponse;
 import Dompoo.Hongpoong.response.auth.EmailValidResponse;
+import Dompoo.Hongpoong.response.auth.SignUpResponse;
 import Dompoo.Hongpoong.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,36 +20,31 @@ public class AuthController {
 
     private final AuthService service;
 
-    @PostMapping("/signup/email")
+    @PostMapping("/email")
     public EmailValidResponse checkEmailValid(@RequestBody @Valid EmailValidRequest request) {
         return service.checkEmailValid(request);
     }
 
     @PostMapping("/signup")
-    public void signup(@RequestBody @Valid SignupRequest request) {
-        service.signup(request);
-    }
-
-    @PostMapping("/email")
-    public void requestEmail(@RequestBody @Valid AddEmailRequest request) {
-        service.addWhiteList(request);
+    public void requestSignup(@RequestBody @Valid SignupRequest request) {
+        service.requestSignup(request);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/email/accept")
-    public void acceptEmail(@RequestBody @Valid AcceptEmailRequest request) {
-        service.acceptWhiteList(request);
+    @PostMapping("/signup/accept")
+    public void acceptSignup(@RequestBody @Valid AcceptSignUpRequest request) {
+        service.acceptSignUp(request);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/email")
-    public List<EmailResponse> emailRequestList() {
-        return service.getWhiteList();
+    @GetMapping("/signup")
+    public List<SignUpResponse> emailRequestList() {
+        return service.getSignUp();
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/email/{id}")
+    @DeleteMapping("/signup/{id}")
     public void deleteEmail(@PathVariable Long id) {
-        service.deleteWhiteList(id);
+        service.deleteSignUp(id);
     }
 }

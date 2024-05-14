@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.response.auth;
 
-import Dompoo.Hongpoong.domain.Whitelist;
+import Dompoo.Hongpoong.domain.SignUp;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -23,16 +23,16 @@ ResponseBody
     . . .
 ]
  */
-public class EmailResponse {
+public class SignUpResponse {
 
     private final Long id;
     private final String email;
     private final boolean isAccepted;
 
     @Builder
-    public EmailResponse(Whitelist whitelist) {
-        this.id = whitelist.getId();
-        this.email = whitelist.getEmail();
-        this.isAccepted = whitelist.getIsAccepted();
+    public SignUpResponse(SignUp signUp) {
+        this.id = signUp.getId();
+        this.email = signUp.getEmail();
+        this.isAccepted = signUp.getIsAccepted();
     }
 }

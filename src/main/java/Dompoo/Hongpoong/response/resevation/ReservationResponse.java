@@ -4,6 +4,7 @@ import Dompoo.Hongpoong.domain.Reservation;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 /*
@@ -31,10 +32,12 @@ ResponseBody
 <단건조회시>
 {
     "id": 2,
-    "date": "24/04/18",
     "username": "화랑",
-    "time": 18
-    "priority" : 1
+    "number": 15
+    "date": "24/04/18",
+    "time": 18,
+    "message": "",
+    "lastModifed": ""
 },
  */
 public class ReservationResponse {
@@ -44,8 +47,8 @@ public class ReservationResponse {
     private final Integer number;
     private final LocalDate date;
     private final Integer time;
-    private final Integer priority;
     private final String message;
+    private final LocalDateTime lastModifed;
 
     public ReservationResponse(Reservation reservation) {
         this.id = reservation.getId();
@@ -53,7 +56,7 @@ public class ReservationResponse {
         this.number = reservation.getNumber();
         this.date = reservation.getDate();
         this.time = reservation.getTime();
-        this.priority = reservation.getPriority();
         this.message = reservation.getMessage();
+        this.lastModifed = reservation.getLastModified();
     }
 }

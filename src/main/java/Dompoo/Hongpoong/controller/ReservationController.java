@@ -3,7 +3,6 @@ package Dompoo.Hongpoong.controller;
 import Dompoo.Hongpoong.config.security.UserPrincipal;
 import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
-import Dompoo.Hongpoong.request.reservation.ReservationShiftRequest;
 import Dompoo.Hongpoong.response.resevation.ReservationResponse;
 import Dompoo.Hongpoong.service.ReservationService;
 import jakarta.validation.Valid;
@@ -34,11 +33,6 @@ public class ReservationController {
     @GetMapping("/{id}")
     public ReservationResponse reservationDetail(@PathVariable Long id) {
         return service.findReservation(id);
-    }
-
-    @PostMapping("/{id}")
-    public void shiftReservation(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid ReservationShiftRequest request) {
-        service.shiftReservation(principal.getMemberId(), id, request);
     }
 
     @PatchMapping("/{id}")

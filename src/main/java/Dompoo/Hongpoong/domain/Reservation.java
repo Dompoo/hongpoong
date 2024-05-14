@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,19 +39,19 @@ public class Reservation {
 
     private LocalDate date;
     private Integer time;
-    private Integer priority;
+    private LocalDateTime lastModified;
 
     @Lob
     private String message;
 
     @Builder
-    public Reservation(Member member, Integer number, LocalDate date, Integer time, Integer priority, String message) {
+    public Reservation(Member member, Integer number, LocalDate date, Integer time, String message) {
         setMember(member);
         this.number = number;
         this.date = date;
         this.time = time;
-        this.priority = priority;
         this.message = message;
+        lastModified = LocalDateTime.now();
     }
 
     public void setMember(Member member) {

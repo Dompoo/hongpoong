@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -33,7 +34,7 @@ public class Reservation {
     private Integer number;
 
     @OneToMany(mappedBy = "reservation")
-    private List<Instrument> instruments;
+    private List<Instrument> instruments = new ArrayList<>();
 
     private LocalDate date;
     private Integer time;

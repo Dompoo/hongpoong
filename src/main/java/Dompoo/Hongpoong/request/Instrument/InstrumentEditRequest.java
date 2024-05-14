@@ -22,7 +22,7 @@ public class InstrumentEditRequest {
     private Boolean available;
 
     @Builder
-    public InstrumentEditRequest(Instrument.InstrumentType type, boolean available) {
+    public InstrumentEditRequest(Instrument.InstrumentType type, Boolean available) {
         this.type = type;
         this.available = available;
     }

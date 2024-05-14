@@ -106,7 +106,7 @@ public class InstrumentService {
 
     public void deleteOne(Long memberId, Long id) {
         Instrument instrument = instrumentRepository.findById(id)
-                .orElseThrow(MemberNotFound::new);
+                .orElseThrow(InstrumentNotFound::new);
 
         if (!instrument.getMember().getId().equals(memberId)) throw new DeleteFailException();
 

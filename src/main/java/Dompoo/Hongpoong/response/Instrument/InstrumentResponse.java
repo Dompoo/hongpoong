@@ -14,12 +14,12 @@ ResponseBody
  */
 public class InstrumentResponse {
     private Long id;
-    private String product;
+    private String type;
     private String club;
 
     public InstrumentResponse(Instrument instrument) {
         this.id = instrument.getId();
-        this.product = instrument.getType().name();
+        this.type = instrument.getType().getValue();
         this.club = instrument.getMember().getClub();
     }
 }

@@ -25,6 +25,7 @@ public class Instrument {
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
+    @Getter
     public enum InstrumentType {
         KKWANGGWARI("꽹과리"), JANGGU("장구"), BUK("북"), SOGO("소고"), JING("징");
 

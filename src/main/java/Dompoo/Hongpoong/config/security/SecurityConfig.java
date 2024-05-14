@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/favicon.ico").permitAll()
                         .requestMatchers("/auth/login").permitAll()
                         .requestMatchers("/auth/signup").permitAll()
+                        .requestMatchers("/auth/signup/email").permitAll()
                         .requestMatchers("/auth/email").permitAll()
                         .anyRequest().authenticated()
                 )

@@ -1,11 +1,11 @@
 package Dompoo.Hongpoong.exception;
 
-public class AlreadyExistsUsername extends MyException {
+public class AlreadyExistEmail extends MyException {
 
-    private static final String MESSAGE = "이미 존재하는 유저명입니다.";
+    private static final String MESSAGE = "이미 존재하는 이메일입니다.";
     private static final String STATUS_CODE = "400";
 
-    public AlreadyExistsUsername() {
+    public AlreadyExistEmail() {
         super(MESSAGE);
     }
 

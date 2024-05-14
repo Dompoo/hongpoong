@@ -6,6 +6,7 @@ import Dompoo.Hongpoong.domain.Whitelist;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.WhitelistRepository;
 import Dompoo.Hongpoong.request.auth.AcceptEmailRequest;
+import Dompoo.Hongpoong.request.auth.EmailValidRequest;
 import Dompoo.Hongpoong.request.auth.SignupRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -47,6 +48,51 @@ class AuthControllerTest {
     private static final String EMAIL = "dompoo@gmail.com";
     private static final String PASSWORD = "1234";
     private static final Member.Club CLUB = Member.Club.SANTLE;
+
+    @Test
+    @DisplayName("이메일 유효성 검사 - 성공")
+    void checkEmail() throws Exception {
+        //given
+        EmailValidRequest request = EmailValidRequest.builder()
+                .email(EMAIL)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/auth/signup/email")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.valid").value(true))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("이메일 유효성 검사 - 실패")
+    void checkEmailFail() throws Exception {
+        //given
+        memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .club(CLUB)
+                .build());
+
+        EmailValidRequest request = EmailValidRequest.builder()
+                .email(EMAIL)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/auth/signup/email")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.valid").value(false))
+                .andDo(print());
+    }
 
     @Test
     @DisplayName("회원가입")
@@ -210,41 +256,6 @@ class AuthControllerTest {
                         .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("[비밀번호확인은 비어있을 수 없습니다.]"))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("회원가입시 유저명은 중복되면 안된다.")
-    void signupFail5() throws Exception {
-        //given
-        whitelistRepository.save(Whitelist.builder()
-                .email(EMAIL)
-                .isAccepted(true)
-                .build());
-
-        memberRepository.save(Member.builder()
-                .username(USERNAME)
-                .password(PASSWORD)
-                .club(CLUB)
-                .build());
-
-        SignupRequest request = SignupRequest.builder()
-                .email(EMAIL)
-                .username(USERNAME)
-                .password1("abcd")
-                .password2("abcd")
-                .club(CLUB)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(post("/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("이미 존재하는 유저명입니다."))
-                .andExpect(jsonPath("$.code").value("400"))
                 .andDo(print());
     }
 

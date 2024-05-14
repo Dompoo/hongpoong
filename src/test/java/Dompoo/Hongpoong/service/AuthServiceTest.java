@@ -7,8 +7,10 @@ import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.WhitelistRepository;
 import Dompoo.Hongpoong.request.auth.AcceptEmailRequest;
 import Dompoo.Hongpoong.request.auth.AddEmailRequest;
+import Dompoo.Hongpoong.request.auth.EmailValidRequest;
 import Dompoo.Hongpoong.request.auth.SignupRequest;
 import Dompoo.Hongpoong.response.auth.EmailResponse;
+import Dompoo.Hongpoong.response.auth.EmailValidResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
+import static Dompoo.Hongpoong.domain.Member.Club.SANTLE;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -48,6 +51,43 @@ class AuthServiceTest {
     void setUp() {
         memberRepository.deleteAll();
         whitelistRepository.deleteAll();
+    }
+
+    @Test
+    @DisplayName("이메일 검증 - 성공")
+    void checkEmail() {
+        //given
+        EmailValidRequest request = EmailValidRequest.builder()
+                .email(EMAIL)
+                .build();
+
+        //when
+        EmailValidResponse response = service.checkEmailValid(request);
+
+        //then
+        assertTrue(response.getValid());
+    }
+
+    @Test
+    @DisplayName("이메일 검증 - 실패")
+    void checkEmailFail() {
+        //given
+        memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .club(SANTLE)
+                .build());
+
+        EmailValidRequest request = EmailValidRequest.builder()
+                .email(EMAIL)
+                .build();
+
+        //when
+        EmailValidResponse response = service.checkEmailValid(request);
+
+        //then
+        assertFalse(response.getValid());
     }
 
     @Test
@@ -244,32 +284,6 @@ class AuthServiceTest {
         //then
         assertEquals(e.statusCode(), "400");
         assertEquals(e.getMessage(), PASSWORD_NOT_SAME);
-    }
-
-    @Test
-    @DisplayName("회원가입시 유저명은 중복되면 안된다.")
-    void signupFail4() {
-        //given
-        memberRepository.save(Member.builder()
-                .email(EMAIL)
-                .username(USERNAME)
-                .password(PASSWORD)
-                .build());
-
-        SignupRequest request = SignupRequest.builder()
-                .email("dompoo2@gmail.com")
-                .username(USERNAME)
-                .password1("abcd")
-                .password2("abcd")
-                .build();
-
-        //when
-        AlreadyExistsUsername e = assertThrows(AlreadyExistsUsername.class, () ->
-                service.signup(request));
-
-        //then
-        assertEquals(e.statusCode(), "400");
-        assertEquals(e.getMessage(), ALREADY_EXISTS_USERNAME);
     }
 
     @Test

@@ -2,8 +2,10 @@ package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.request.auth.AcceptEmailRequest;
 import Dompoo.Hongpoong.request.auth.AddEmailRequest;
+import Dompoo.Hongpoong.request.auth.EmailValidRequest;
 import Dompoo.Hongpoong.request.auth.SignupRequest;
 import Dompoo.Hongpoong.response.auth.EmailResponse;
+import Dompoo.Hongpoong.response.auth.EmailValidResponse;
 import Dompoo.Hongpoong.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,11 @@ import java.util.List;
 public class AuthController {
 
     private final AuthService service;
+
+    @PostMapping("/signup/email")
+    public EmailValidResponse checkEmailValid(@RequestBody @Valid EmailValidRequest request) {
+        return service.checkEmailValid(request);
+    }
 
     @PostMapping("/signup")
     public void signup(@RequestBody @Valid SignupRequest request) {

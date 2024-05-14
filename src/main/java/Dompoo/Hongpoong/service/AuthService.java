@@ -9,15 +9,19 @@ import Dompoo.Hongpoong.repository.SettingRepository;
 import Dompoo.Hongpoong.repository.WhitelistRepository;
 import Dompoo.Hongpoong.request.auth.AcceptEmailRequest;
 import Dompoo.Hongpoong.request.auth.AddEmailRequest;
+import Dompoo.Hongpoong.request.auth.EmailValidRequest;
 import Dompoo.Hongpoong.request.auth.SignupRequest;
 import Dompoo.Hongpoong.response.auth.EmailResponse;
+import Dompoo.Hongpoong.response.auth.EmailValidResponse;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,13 +34,21 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final SettingRepository settingRepository;
 
+    public EmailValidResponse checkEmailValid(@Valid EmailValidRequest request) {
+        Optional<Member> find = repository.findByEmail(request.getEmail());
+
+        return EmailValidResponse.builder()
+                .valid(find.isEmpty())
+                .build();
+    }
+
     public void signup(SignupRequest request) {
         if (!Objects.equals(request.getPassword1(), request.getPassword2())) {
             throw new PasswordNotSame();
         }
 
-        if (repository.findByUsername(request.getUsername()).isPresent()) {
-            throw new AlreadyExistsUsername();
+        if (repository.findByEmail(request.getEmail()).isPresent()) {
+            throw new AlreadyExistEmail();
         }
 
         Whitelist whitelist = whitelistRepository.findByEmail(request.getEmail())

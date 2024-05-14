@@ -189,7 +189,7 @@ class MemberControllerTest {
                 .build());
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .isAdmin(true)
+                .role(Member.Role.ROLE_LEADER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -215,7 +215,7 @@ class MemberControllerTest {
                 .build());
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .isAdmin(true)
+                .role(Member.Role.ROLE_LEADER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);

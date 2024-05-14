@@ -24,7 +24,6 @@ public class MemberService {
 
     private final MemberRepository repository;
     private final PasswordEncoder encoder;
-    private final PasswordEncoder passwordEncoder;
 
     public void editMember(Long memberId, MemberEditRequest request) {
         Member member = repository.findById(memberId)
@@ -54,11 +53,7 @@ public class MemberService {
         Member member = repository.findById(id)
                 .orElseThrow(MemberNotFound::new);
 
-        if (request.isAdmin()) {
-            member.setRole(Member.Role.ROLE_ADMIN);
-        } else {
-            member.setRole(Member.Role.ROLE_USER);
-        }
+        member.setRole(request.getRole());
     }
 
     public MemberStatusResponse getStatus(Long memberId) {

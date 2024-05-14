@@ -56,7 +56,7 @@ class InstrumentControllerTest {
 
     @Test
     @DisplayName("악기 추가")
-    @WithMockMember
+    @WithMockMember(role = "ROLE_LEADER")
     void addOne() throws Exception {
         //given
         InstrumentCreateRequest request = InstrumentCreateRequest.builder()
@@ -74,7 +74,7 @@ class InstrumentControllerTest {
     }
 
     @Test
-    @DisplayName("악기는 비어있을 수 없다.")
+    @DisplayName("악기 추가시 악기는 비어있을 수 없다.")
     @WithMockMember
     void addOneFail() throws Exception {
         //given
@@ -89,6 +89,26 @@ class InstrumentControllerTest {
                         .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("[악기는 비어있을 수 없습니다.]"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원은 악기 추가할 수 없다.")
+    @WithMockMember
+    void addOneFail1() throws Exception {
+        //given
+        InstrumentCreateRequest request = InstrumentCreateRequest.builder()
+                .type(JANGGU)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/instrument")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
                 .andDo(print());
     }
 
@@ -388,7 +408,7 @@ class InstrumentControllerTest {
 
     @Test
     @DisplayName("악기 수정")
-    @WithMockMember
+    @WithMockMember(role = "ROLE_LEADER")
     void editOne() throws Exception {
         //given
         Member me = memberRepository.findAll().getLast();
@@ -415,7 +435,7 @@ class InstrumentControllerTest {
 
     @Test
     @DisplayName("존재하지 않는 악기 수정")
-    @WithMockMember
+    @WithMockMember(role = "ROLE_LEADER")
     void editOneFail() throws Exception {
         //given
         Member me = memberRepository.findAll().getLast();
@@ -442,8 +462,36 @@ class InstrumentControllerTest {
     }
 
     @Test
-    @DisplayName("악기 삭제")
+    @DisplayName("회원은 악기 수정할 수 없다.")
     @WithMockMember
+    void editOneFail1() throws Exception {
+        //given
+        Member me = memberRepository.findAll().getLast();
+
+        Instrument instrument = instrumentRepository.save(Instrument.builder()
+                .member(me)
+                .type(KKWANGGWARI)
+                .build());
+
+        InstrumentEditRequest request = InstrumentEditRequest.builder()
+                .available(true)
+                .type(JANGGU)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(put("/instrument/{id}", instrument.getId())
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("악기 삭제")
+    @WithMockMember(role = "ROLE_LEADER")
     void deleteOne() throws Exception {
         //given
         Member me = memberRepository.findAll().getLast();
@@ -461,7 +509,7 @@ class InstrumentControllerTest {
 
     @Test
     @DisplayName("존재하지 않는 악기 삭제")
-    @WithMockMember
+    @WithMockMember(role = "ROLE_LEADER")
     void deleteOneFail() throws Exception {
         //given
         Member me = memberRepository.findAll().getLast();
@@ -478,4 +526,22 @@ class InstrumentControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("회원은 악기 삭제할 수 없다.")
+    @WithMockMember
+    void deleteOneFail1() throws Exception {
+        //given
+        Member me = memberRepository.findAll().getLast();
+
+        Instrument instrument = instrumentRepository.save(Instrument.builder()
+                .member(me)
+                .type(KKWANGGWARI)
+                .build());
+
+        //expected
+        mockMvc.perform(delete("/instrument/{id}", instrument.getId()))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
+                .andDo(print());
+    }
 }

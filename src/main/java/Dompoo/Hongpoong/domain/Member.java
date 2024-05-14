@@ -36,7 +36,7 @@ public class Member {
     private Setting setting;
 
     public enum Role {
-        ROLE_USER("ROLE_USER"), ROLE_ADMIN("ROLE_ADMIN");
+        ROLE_USER("ROLE_CREW"), ROLE_LEADER("ROLE_LEADER"), ROLE_ADMIN("ROLE_ADMIN");
 
         private final String value;
 

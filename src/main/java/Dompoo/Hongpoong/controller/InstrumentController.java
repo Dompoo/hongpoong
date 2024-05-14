@@ -9,6 +9,7 @@ import Dompoo.Hongpoong.response.Instrument.InstrumentResponse;
 import Dompoo.Hongpoong.service.InstrumentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class InstrumentController {
     private final InstrumentService service;
 
     @PostMapping("")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_LEADER')")
     public void addOne(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid InstrumentCreateRequest request) {
         service.addOne(principal.getMemberId(), request);
     }
@@ -52,11 +54,13 @@ public class InstrumentController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_LEADER')")
     public void edit(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody InstrumentEditRequest request) {
         service.editOne(principal.getMemberId(), id, request);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_LEADER')")
     public void delete(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id) {
         service.deleteOne(principal.getMemberId(), id);
 

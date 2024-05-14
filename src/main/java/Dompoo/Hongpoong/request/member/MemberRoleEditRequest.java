@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.request.member;
 
+import Dompoo.Hongpoong.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,15 +12,15 @@ import lombok.Setter;
 /*
 RequestBody
 {
-    "memberRole": "USER"
+    "role": "ROLE_LEADER"
 }
  */
 public class MemberRoleEditRequest {
 
-    private boolean isAdmin;
+    private Member.Role role;
 
     @Builder
-    public MemberRoleEditRequest(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public MemberRoleEditRequest(Member.Role role) {
+        this.role = role;
     }
 }

@@ -206,14 +206,14 @@ class MemberServiceTest {
         Member find = memberRepository.findAll().getFirst();
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .isAdmin(true)
+                .role(Member.Role.ROLE_LEADER)
                 .build();
 
         //when
         service.editRole(find.getId(), request);
 
         //then
-        assertEquals(memberRepository.findAll().getFirst().getRole(), "ROLE_ADMIN");
+        assertEquals(memberRepository.findAll().getFirst().getRole(), "ROLE_LEADER");
     }
 
     @Test
@@ -223,7 +223,7 @@ class MemberServiceTest {
         Member find = memberRepository.findAll().getFirst();
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .isAdmin(true)
+                .role(Member.Role.ROLE_LEADER)
                 .build();
 
         //when

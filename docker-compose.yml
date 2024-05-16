@@ -16,7 +16,8 @@ services:
 
   service:
     container_name: service
-    build: .
+    image: dompoo/service:0516
+    restart: unless-stopped
     ports:
       - "8080:8080"
     depends_on:

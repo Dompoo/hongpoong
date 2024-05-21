@@ -48,7 +48,7 @@ class AuthControllerTest {
     private static final String USERNAME = "창근";
     private static final String EMAIL = "dompoo@gmail.com";
     private static final String PASSWORD = "1234";
-    private static final Member.Club CLUB = SANTLE;
+    private static final Integer CLUB = 1;
 
     @Test
     @DisplayName("이메일 유효성 검사 - 성공")
@@ -77,7 +77,7 @@ class AuthControllerTest {
                 .email(EMAIL)
                 .username(USERNAME)
                 .password(PASSWORD)
-                .club(CLUB)
+                .club(SANTLE)
                 .build());
 
         EmailValidRequest request = EmailValidRequest.builder()

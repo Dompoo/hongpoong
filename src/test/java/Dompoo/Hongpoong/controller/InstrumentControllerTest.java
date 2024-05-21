@@ -60,7 +60,7 @@ class InstrumentControllerTest {
     void addOne() throws Exception {
         //given
         InstrumentCreateRequest request = InstrumentCreateRequest.builder()
-                .type(JANGGU)
+                .type(1)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -98,7 +98,7 @@ class InstrumentControllerTest {
     void addOneFail1() throws Exception {
         //given
         InstrumentCreateRequest request = InstrumentCreateRequest.builder()
-                .type(JANGGU)
+                .type(1)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -420,7 +420,7 @@ class InstrumentControllerTest {
 
         InstrumentEditRequest request = InstrumentEditRequest.builder()
                 .available(true)
-                .type(JANGGU)
+                .type(1)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -447,7 +447,7 @@ class InstrumentControllerTest {
 
         InstrumentEditRequest request = InstrumentEditRequest.builder()
                 .available(true)
-                .type(JANGGU)
+                .type(1)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -475,7 +475,7 @@ class InstrumentControllerTest {
 
         InstrumentEditRequest request = InstrumentEditRequest.builder()
                 .available(true)
-                .type(JANGGU)
+                .type(1)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);

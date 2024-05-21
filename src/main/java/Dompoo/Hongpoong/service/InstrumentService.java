@@ -56,7 +56,7 @@ public class InstrumentService {
                 .orElseThrow(MemberNotFound::new);
 
         instrumentRepository.save(Instrument.builder()
-                .type(request.getType())
+                .type(Instrument.InstrumentType.byInt(request.getType()))
                 .member(member)
                 .build());
     }
@@ -100,7 +100,7 @@ public class InstrumentService {
 
         if (!instrument.getMember().getId().equals(memberId)) throw new EditFailException();
 
-        if (request.getType() != null) instrument.setType(request.getType());
+        if (request.getType() != null) instrument.setType(Instrument.InstrumentType.byInt(request.getType()));
         if (request.getAvailable() != null) instrument.setAvailable(request.getAvailable());
     }
 

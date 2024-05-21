@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
+import static Dompoo.Hongpoong.domain.Member.Club.SANTLE;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -44,6 +45,7 @@ class MemberServiceTest {
                 .email(EMAIL)
                 .username(USERNAME)
                 .password(PASSWORD)
+                .club(SANTLE)
                 .build());
     }
 
@@ -55,6 +57,7 @@ class MemberServiceTest {
                 .email(EMAIL)
                 .username(NEW_USERNAME)
                 .password(NEW_PASSWORD)
+                .club(SANTLE)
                 .build());
 
         //when
@@ -188,6 +191,7 @@ class MemberServiceTest {
                 .email(EMAIL)
                 .username(NEW_USERNAME)
                 .password(NEW_PASSWORD)
+                .club(SANTLE)
                 .build());
 
         //when

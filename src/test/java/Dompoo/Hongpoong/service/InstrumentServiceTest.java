@@ -58,7 +58,7 @@ class InstrumentServiceTest {
                 .build());
 
         InstrumentCreateRequest request = InstrumentCreateRequest.builder()
-                .type(JANGGU)
+                .type(1)
                 .build();
 
         //when
@@ -266,7 +266,7 @@ class InstrumentServiceTest {
                 .build());
 
         InstrumentEditRequest request = InstrumentEditRequest.builder()
-                .type(JANGGU)
+                .type(1)
                 .available(false)
                 .build();
 
@@ -274,7 +274,7 @@ class InstrumentServiceTest {
         service.editOne(me.getId(), instrument.getId(), request);
 
         //then
-        assertEquals("장구", instrumentRepository.findAll().getFirst().getType().getValue());
+        assertEquals("장구", instrumentRepository.findAll().getFirst().getType());
         assertFalse(instrumentRepository.findAll().getFirst().isAvailable());
     }
 
@@ -302,7 +302,7 @@ class InstrumentServiceTest {
         service.editOne(me.getId(), instrument.getId(), request);
 
         //then
-        assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType().getValue());
+        assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType());
         assertFalse(instrumentRepository.findAll().getFirst().isAvailable());
     }
 
@@ -323,14 +323,14 @@ class InstrumentServiceTest {
                 .build());
 
         InstrumentEditRequest request = InstrumentEditRequest.builder()
-                .type(JANGGU)
+                .type(1)
                 .build();
 
         //when
         service.editOne(me.getId(), instrument.getId(), request);
 
         //then
-        assertEquals("장구", instrumentRepository.findAll().getFirst().getType().getValue());
+        assertEquals("장구", instrumentRepository.findAll().getFirst().getType());
         assertTrue(instrumentRepository.findAll().getFirst().isAvailable());
     }
 

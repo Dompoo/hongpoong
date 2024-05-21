@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.Member.Club;
 import Dompoo.Hongpoong.domain.Setting;
 import Dompoo.Hongpoong.domain.SignUp;
 import Dompoo.Hongpoong.exception.*;
@@ -64,7 +65,7 @@ public class AuthService {
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword1()))
-                .club(request.getClub())
+                .club(Club.byInt(request.getClub()))
                 .build());
     }
 

@@ -45,13 +45,24 @@ public class Member {
         }
     }
 
+    @Getter
     public enum Club {
-        HWARANG("신명화랑"), SANTLE("산틀"), AKBAN("악반"), DEULNEOK("들녘");
+        HWARANG("신명화랑"), SANTLE("산틀"), AKBAN("악반"), DEULNEOK("들녘"), ETC("기타");
 
         private final String value;
 
         Club(String value) {
             this.value = value;
+        }
+
+        public static Club byInt(int value) {
+            return switch (value) {
+                case 0 -> HWARANG;
+                case 1 -> SANTLE;
+                case 2 -> AKBAN;
+                case 3 -> DEULNEOK;
+                default -> ETC;
+            };
         }
     }
 
@@ -72,7 +83,7 @@ public class Member {
         this.role = ROLE_USER;
     }
 
-    public void joinChatRoom(ChatRoom chatRoom){
+    public void joinChatRoom(ChatRoom chatRoom) {
         this.chatRooms.add(chatRoom);
         chatRoom.getMembers().add(this);
     }

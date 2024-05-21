@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.response.auth;
 
-import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.SignUp;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +11,7 @@ ResponseBody
     "email": "dompoo@gmail.com"
     "username": "dompoo"
     "password": "1234"
-    "club": "SANTLE"
+    "club": "산틀"
 }
  */
 public class SignUpResponse {
@@ -21,7 +20,7 @@ public class SignUpResponse {
     private String email;
     private String username;
     private String password;
-    private Member.Club club;
+    private String club;
 
     @Builder
     public SignUpResponse(SignUp signUp) {
@@ -29,6 +28,6 @@ public class SignUpResponse {
         this.email = signUp.getEmail();
         this.username = signUp.getUsername();
         this.password = signUp.getPassword();
-        this.club = signUp.getClub();
+        this.club = signUp.getClub().getValue();
     }
 }

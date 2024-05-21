@@ -1,7 +1,6 @@
 package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.Member.Club;
 import Dompoo.Hongpoong.domain.SignUp;
 import Dompoo.Hongpoong.exception.AlreadyExistEmail;
 import Dompoo.Hongpoong.exception.PasswordNotSame;
@@ -43,7 +42,7 @@ class AuthServiceTest {
     private static final String EMAIL = "dompoo@gmail.com";
     private static final String USERNAME = "창근";
     private static final String PASSWORD = "1234";
-    private static final Club CLUB = SANTLE;
+    private static final Integer CLUB = 1;
     private static final String NOT_SAME_PASSWORD = "5678";
     private static final String ALREADY_EXIST_EMAIL = "이미 존재하는 이메일입니다.";
     private static final String PASSWORD_NOT_SAME = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";

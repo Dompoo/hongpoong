@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.request.auth;
 
-import Dompoo.Hongpoong.domain.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +18,7 @@ RequestBody
     "username" : "창근",
     "password1" : "1234",
     "password2" : "1234"
+    "club" : 0
 }
  */
 public class SignUpRequest {
@@ -33,10 +33,10 @@ public class SignUpRequest {
     @NotBlank(message = "비밀번호확인은 비어있을 수 없습니다.")
     private String password2;
     @NotNull(message = "동아리는 비어있을 수 없습니다.")
-    private Member.Club club;
+    private Integer club;
 
     @Builder
-    public SignUpRequest(String email, String username, String password1, String password2, Member.Club club) {
+    public SignUpRequest(String email, String username, String password1, String password2, Integer club) {
         this.email = email;
         this.username = username;
         this.password1 = password1;

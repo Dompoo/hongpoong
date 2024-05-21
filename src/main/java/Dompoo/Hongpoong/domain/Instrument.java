@@ -34,6 +34,16 @@ public class Instrument {
         InstrumentType(String value) {
             this.value = value;
         }
+
+        public static InstrumentType byInt(int value) {
+            return switch (value) {
+                case 0 -> KKWANGGWARI;
+                case 1 -> JANGGU;
+                case 2 -> BUK;
+                case 3 -> SOGO;
+                default -> JING;
+            };
+        }
     }
 
     @Builder
@@ -56,5 +66,9 @@ public class Instrument {
     public void returnInstrument() {
         this.reservation.getInstruments().remove(this);
         this.reservation = null;
+    }
+
+    public String getType() {
+        return type.getValue();
     }
 }

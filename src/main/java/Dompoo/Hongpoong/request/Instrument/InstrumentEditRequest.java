@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.request.Instrument;
 
-import Dompoo.Hongpoong.domain.Instrument;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +17,11 @@ RequestBody
  */
 public class InstrumentEditRequest {
 
-    private Instrument.InstrumentType type;
+    private Integer type;
     private Boolean available;
 
     @Builder
-    public InstrumentEditRequest(Instrument.InstrumentType type, Boolean available) {
+    public InstrumentEditRequest(Integer type, Boolean available) {
         this.type = type;
         this.available = available;
     }

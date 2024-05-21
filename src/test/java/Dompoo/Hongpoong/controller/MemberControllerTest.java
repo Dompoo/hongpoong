@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static Dompoo.Hongpoong.domain.Member.Club.SANTLE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -101,12 +102,14 @@ class MemberControllerTest {
                 .email(EMAIL)
                 .username(USERNAME)
                 .password(PASSWORD)
+                .club(SANTLE)
                 .build());
 
         repository.save(Member.builder()
                 .email(EMAIL)
                 .username(NEW_USERNAME)
                 .password(NEW_PASSWORD)
+                .club(SANTLE)
                 .build());
 
         //expected

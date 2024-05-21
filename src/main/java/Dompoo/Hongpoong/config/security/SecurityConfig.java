@@ -3,6 +3,7 @@ package Dompoo.Hongpoong.config.security;
 import Dompoo.Hongpoong.config.handler.*;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.repository.MemberRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +34,8 @@ public class SecurityConfig {
 
     private final MemberRepository memberRepository;
 
+    private final ObjectMapper objectMapper;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -49,8 +52,8 @@ public class SecurityConfig {
                 .headers(headers -> headers.addHeaderWriter(new XFrameOptionsHeaderWriter(SAMEORIGIN)))
                 .addFilterBefore(emailPasswordAuthFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(e -> e
-                        .accessDeniedHandler(new Http403Handler())
-                        .authenticationEntryPoint(new Http401Handler()))
+                        .accessDeniedHandler(new Http403Handler(objectMapper))
+                        .authenticationEntryPoint(new Http401Handler(objectMapper)))
                 .logout((logout) -> logout
                         .logoutUrl("/auth/logout")
                         .deleteCookies("SESSION")
@@ -63,7 +66,7 @@ public class SecurityConfig {
     public EmailPasswordAuthFilter emailPasswordAuthFilter() {
         EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/auth/login");
         filter.setAuthenticationManager(authenticationManager());
-        filter.setAuthenticationFailureHandler(new LoginFailHandler());
+        filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));
         filter.setAuthenticationSuccessHandler(new LoginSuccessHandler());
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
 

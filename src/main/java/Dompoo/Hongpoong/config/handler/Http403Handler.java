@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.config.handler;
 
-import Dompoo.Hongpoong.exception.ErrorResponse;
+import Dompoo.Hongpoong.exception.config.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

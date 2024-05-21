@@ -1,5 +1,6 @@
-package Dompoo.Hongpoong.exception;
+package Dompoo.Hongpoong.exception.config;
 
+import Dompoo.Hongpoong.exception.MyException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -22,12 +23,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MyException.class)
     public ResponseEntity<ErrorResponse> handlerException(MyException e, HttpServletRequest request) {
 
-        log.error("errorCode: {} , url: {} , message: {}", e.statusCode(), request.getRequestURI(), e.getMessage());
-
         ErrorResponse response = ErrorResponse.builder()
                 .code(e.statusCode())
                 .message(e.getMessage())
                 .build();
+
+        log.error("[비즈니스 오류{}] {}]", response.getCode(), response.getMessage());
 
         return ResponseEntity
                 .status(Integer.parseInt(e.statusCode()))
@@ -44,9 +45,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
                 .toList();
 
         ErrorResponse response = ErrorResponse.builder()
-                .message(String.valueOf(errors))
                 .code("400")
+                .message(String.valueOf(errors))
                 .build();
+
+        log.error("[파라미터 오류] {}", response.getMessage());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)

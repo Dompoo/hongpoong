@@ -67,7 +67,7 @@ public class SecurityConfig {
         EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/auth/login");
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));
-        filter.setAuthenticationSuccessHandler(new LoginSuccessHandler());
+        filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(objectMapper));
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
 
         SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();

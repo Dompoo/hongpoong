@@ -11,11 +11,16 @@ import java.util.List;
 public class UserPrincipal extends User {
 
     private final Long memberId;
+    private final String username;
+    private final String role;
 
     public UserPrincipal (Member member) {
         super(member.getEmail(),
                 member.getPassword(),
                 List.of(new SimpleGrantedAuthority(member.getRole())));
+
         memberId = member.getId();
+        username = member.getUsername();
+        role = member.getRole();
     }
 }

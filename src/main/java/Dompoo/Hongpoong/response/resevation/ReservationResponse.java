@@ -44,6 +44,7 @@ public class ReservationResponse {
 
     private final Long id;
     private final String username;
+    private final String email;
     private final Integer number;
     private final LocalDate date;
     private final Integer startTime;
@@ -54,6 +55,7 @@ public class ReservationResponse {
     public ReservationResponse(Reservation reservation) {
         this.id = reservation.getId();
         this.username = reservation.getMember().getUsername();
+        this.email = reservation.getMember().getEmail();
         this.number = reservation.getNumber();
         this.date = reservation.getDate();
         this.startTime = reservation.getStartTime();

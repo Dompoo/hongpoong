@@ -7,6 +7,7 @@ import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
 import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationSearchRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
@@ -77,8 +78,16 @@ class ReservationControllerTest {
                 .message("")
                 .build());
 
+        ReservationSearchRequest request = ReservationSearchRequest.builder()
+                .date(LocalDate.of(2025, 12, 20))
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
         //expected
-        mockMvc.perform(get("/reservation"))
+        mockMvc.perform(post("/reservation/search")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].id").value(reservation1.getId()))
@@ -96,6 +105,7 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$[1].endTime").value(22))
                 .andExpect(jsonPath("$[1].message").value(""))
                 .andDo(print());
+
     }
 
     /**

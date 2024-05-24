@@ -7,6 +7,7 @@ import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
 import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.response.resevation.ReservationResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,8 +61,12 @@ class ReservationServiceTest {
                 .endTime(21)
                 .build());
 
+        ReservationSearchRequest request = ReservationSearchRequest.builder()
+                .date(LocalDate.of(2025, 12, 20))
+                .build();
+
         //when
-        List<ReservationResponse> list = service.getList();
+        List<ReservationResponse> list = service.getList(request);
 
         //then
         assertEquals(2, list.size());

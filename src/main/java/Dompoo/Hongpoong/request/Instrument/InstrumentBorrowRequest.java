@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 /*
-RequestBody
+RequestBody /instrument/borrow
 {
     "reservationId": 1,
     "instrumentId": 2

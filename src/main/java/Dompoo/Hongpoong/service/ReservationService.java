@@ -7,6 +7,7 @@ import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
 import Dompoo.Hongpoong.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.request.reservation.ReservationEditRequest;
+import Dompoo.Hongpoong.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.response.resevation.ReservationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,8 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
 
-    public List<ReservationResponse> getList() {
-        return reservationRepository.findAll().stream()
+    public List<ReservationResponse> getList(ReservationSearchRequest request) {
+        return reservationRepository.findAllByDate(request.getDate()).stream()
                 .map(ReservationResponse::new)
                 .collect(Collectors.toList());
     }

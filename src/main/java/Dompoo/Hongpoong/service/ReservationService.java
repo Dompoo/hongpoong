@@ -58,7 +58,7 @@ public class ReservationService {
         return new ReservationResponse(reservation);
     }
 
-    public void editReservation(Long memberId, Long reservationId, ReservationEditRequest request) {
+    public ReservationResponse editReservation(Long memberId, Long reservationId, ReservationEditRequest request) {
 
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
@@ -71,11 +71,15 @@ public class ReservationService {
             throw new EndForwardStart();
         }
 
+        if (request.getNumber() != null) reservation.setNumber(request.getNumber());
         if (request.getDate() != null) reservation.setDate(request.getDate());
         if (request.getStartTime() != null) reservation.setStartTime(request.getStartTime());
         if (request.getEndTime() != null) reservation.setEndTime(request.getEndTime());
+        if (request.getMessage() != null) reservation.setMessage(request.getMessage());
 
         reservation.setLastModified(LocalDateTime.now());
+
+        return new ReservationResponse(reservation);
     }
 
     public void deleteReservation(Long memberId, Long reservationId) {

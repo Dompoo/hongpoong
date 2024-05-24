@@ -326,6 +326,11 @@ class ReservationControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(reservation.getId()))
+                .andExpect(jsonPath("$.startTime").value(11))
+                .andExpect(jsonPath("$.endTime").value(13))
+                .andExpect(jsonPath("$.date").value("2025-12-15"))
+
                 .andDo(print());
     }
 

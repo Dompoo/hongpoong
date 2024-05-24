@@ -37,8 +37,8 @@ public class ReservationController {
     }
 
     @PatchMapping("/{id}")
-    public void editReservation(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
-        service.editReservation(principal.getMemberId(), id, request);
+    public ReservationResponse editReservation(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
+        return service.editReservation(principal.getMemberId(), id, request);
     }
 
     @DeleteMapping("/{id}")

@@ -37,7 +37,7 @@ ResponseBody
     "date": "24/04/18",
     "time": 18,
     "message": "",
-    "lastModifed": ""
+    "lastModified": ""
 },
  */
 public class ReservationResponse {
@@ -48,7 +48,7 @@ public class ReservationResponse {
     private final LocalDate date;
     private final Integer time;
     private final String message;
-    private final LocalDateTime lastModifed;
+    private final LocalDateTime lastmodified;
 
     public ReservationResponse(Reservation reservation) {
         this.id = reservation.getId();
@@ -57,6 +57,6 @@ public class ReservationResponse {
         this.date = reservation.getDate();
         this.time = reservation.getTime();
         this.message = reservation.getMessage();
-        this.lastModifed = reservation.getLastModified();
+        this.lastmodified = reservation.getLastModified();
     }
 }

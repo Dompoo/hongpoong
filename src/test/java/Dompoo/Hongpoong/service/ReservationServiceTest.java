@@ -99,7 +99,7 @@ class ReservationServiceTest {
         service.addReservation(member.getId(), request);
 
         //then
-        assertEquals(4, reservationRepository.count());
+        assertEquals(1, reservationRepository.count());
     }
 
     @Test

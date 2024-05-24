@@ -13,6 +13,7 @@ import lombok.Setter;
 RequestBody
 {
     "reservationId": 1,
+    "instrumentId": 2
 }
  */
 public class InstrumentBorrowRequest {
@@ -20,8 +21,12 @@ public class InstrumentBorrowRequest {
     @NotNull(message = "악기 대여할 예약은 비어있을 수 없습니다.")
     private Long reservationId;
 
+    @NotNull(message = "악기는 비어있을 수 없습니다.")
+    private Long instrumentId;
+
     @Builder
-    public InstrumentBorrowRequest(Long reservationId) {
+    public InstrumentBorrowRequest(Long reservationId, Long instrumentId) {
         this.reservationId = reservationId;
+        this.instrumentId = instrumentId;
     }
 }

@@ -38,9 +38,9 @@ public class InstrumentController {
         return service.getList(principal.getMemberId());
     }
 
-    @PostMapping("/{id}")
-    public InstrumentBorrowResponse borrowOne(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid InstrumentBorrowRequest request) {
-        return service.borrowOne(principal.getMemberId(), id, request);
+    @PostMapping("/borrow")
+    public InstrumentBorrowResponse borrowOne(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid InstrumentBorrowRequest request) {
+        return service.borrowOne(principal.getMemberId(), request);
     }
 
     @PostMapping("/return/{id}")

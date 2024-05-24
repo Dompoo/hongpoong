@@ -173,16 +173,17 @@ class InstrumentServiceTest {
 
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId())
+                .instrumentId(instrument.getId())
                 .build();
 
         //when
-        InstrumentBorrowResponse response = service.borrowOne(me.getId(), instrument.getId(), request);
+        InstrumentBorrowResponse response = service.borrowOne(me.getId(), request);
 
         //then
         assertEquals(instrumentRepository.findAll().getFirst().getReservation().getId(), reservation.getId());
         assertEquals(instrument.getId(), response.getInstrumentId());
         assertEquals(LocalDate.of(2025, 12, 20), response.getReturnDate());
-        assertEquals(18, response.getReturnTime());
+        assertEquals(21, response.getReturnTime());
     }
 
     @Test

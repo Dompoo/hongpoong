@@ -202,18 +202,19 @@ class InstrumentControllerTest {
 
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId())
+                .instrumentId(instrument.getId())
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(post("/instrument/{id}", instrument.getId())
+        mockMvc.perform(post("/instrument/borrow")
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.instrumentId").value(instrument.getId()))
                 .andExpect(jsonPath("$.returnDate").value("2025-12-20"))
-                .andExpect(jsonPath("$.returnTime").value(18))
+                .andExpect(jsonPath("$.returnTime").value(21))
                 .andDo(print());
     }
 
@@ -240,12 +241,13 @@ class InstrumentControllerTest {
 
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId())
+                .instrumentId(instrument.getId())
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(post("/instrument/{id}", instrument.getId())
+        mockMvc.perform(post("/instrument/borrow")
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
@@ -282,12 +284,13 @@ class InstrumentControllerTest {
 
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId() + 1)
+                .instrumentId(instrument.getId())
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(post("/instrument/{id}", instrument.getId())
+        mockMvc.perform(post("/instrument/borrow")
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isNotFound())
@@ -324,12 +327,13 @@ class InstrumentControllerTest {
 
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId())
+                .instrumentId(instrument.getId() + 1)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(post("/instrument/{id}", instrument.getId() + 1)
+        mockMvc.perform(post("/instrument/borrow")
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isNotFound())

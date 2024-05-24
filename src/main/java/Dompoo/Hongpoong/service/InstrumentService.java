@@ -61,11 +61,11 @@ public class InstrumentService {
                 .build());
     }
 
-    public InstrumentBorrowResponse borrowOne(Long memberId, Long id, InstrumentBorrowRequest request) {
+    public InstrumentBorrowResponse borrowOne(Long memberId, InstrumentBorrowRequest request) {
         Reservation reservation = reservationRepository.findById(request.getReservationId())
                 .orElseThrow(ReservationNotFound::new);
 
-        Instrument instrument = instrumentRepository.findById(id)
+        Instrument instrument = instrumentRepository.findById(request.getInstrumentId())
                 .orElseThrow(InstrumentNotFound::new);
 
         // 예약의 id 와 member id가 다르면 throw

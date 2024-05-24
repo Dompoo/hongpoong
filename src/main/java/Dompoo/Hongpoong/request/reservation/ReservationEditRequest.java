@@ -31,15 +31,20 @@ public class ReservationEditRequest {
 
     @Min(value = 9, message = "9시 이상의 시간이어야 합니다.")
     @Max(value = 22, message = "22시 이하의 시간이어야 합니다.")
-    private Integer time;
+    private Integer startTime;
+
+    @Min(value = 9, message = "9시 이상의 시간이어야 합니다.")
+    @Max(value = 22, message = "22시 이하의 시간이어야 합니다.")
+    private Integer endTime;
 
     private String message;
 
     @Builder
-    public ReservationEditRequest(Integer number, LocalDate date, Integer time, String message) {
+    public ReservationEditRequest(Integer number, LocalDate date, Integer startTime, Integer endTime, String message) {
         this.number = number;
         this.date = date;
-        this.time = time;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.message = message;
     }
 }

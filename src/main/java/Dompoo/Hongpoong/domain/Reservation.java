@@ -38,18 +38,20 @@ public class Reservation {
     private List<Instrument> instruments = new ArrayList<>();
 
     private LocalDate date;
-    private Integer time;
+    private Integer startTime;
+    private Integer endTime;
     private LocalDateTime lastModified;
 
     @Lob
     private String message;
 
     @Builder
-    public Reservation(Member member, Integer number, LocalDate date, Integer time, String message) {
+    public Reservation(Member member, Integer number, LocalDate date, Integer startTime, Integer endTime, String message) {
         setMember(member);
         this.number = number;
         this.date = date;
-        this.time = time;
+        this.startTime = startTime;
+        this.endTime = endTime;
         this.message = message;
         lastModified = LocalDateTime.now();
     }

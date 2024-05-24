@@ -49,13 +49,15 @@ class ReservationServiceTest {
         Reservation reservation1 = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         Reservation reservation2 = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         //when
@@ -69,8 +71,10 @@ class ReservationServiceTest {
         assertEquals(list.get(1).getUsername(), reservation2.getMember().getUsername());
         assertEquals(list.get(0).getDate(), reservation1.getDate());
         assertEquals(list.get(1).getDate(), reservation2.getDate());
-        assertEquals(list.get(0).getTime(), reservation1.getTime());
-        assertEquals(list.get(1).getTime(), reservation2.getTime());
+        assertEquals(list.get(0).getStartTime(), reservation1.getStartTime());
+        assertEquals(list.get(0).getEndTime(), reservation1.getEndTime());
+        assertEquals(list.get(1).getStartTime(), reservation2.getStartTime());
+        assertEquals(list.get(1).getEndTime(), reservation2.getEndTime());
     }
 
     @Test
@@ -139,7 +143,8 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         //when
@@ -149,7 +154,8 @@ class ReservationServiceTest {
         assertEquals(response.getId(), reservation.getId());
         assertEquals(response.getUsername(), "창근");
         assertEquals(response.getDate(), LocalDate.of(2025, 12, 20));
-        assertEquals(response.getTime(), 12);
+        assertEquals(response.getStartTime(), 11);
+        assertEquals(response.getEndTime(), 21);
     }
 
     @Test
@@ -165,7 +171,8 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         //when
@@ -190,12 +197,14 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .time(13)
+                .startTime(13)
+                .endTime(19)
                 .build();
 
         //when
@@ -206,7 +215,8 @@ class ReservationServiceTest {
                 .orElseThrow());
         assertEquals(find.getMember().getId(), member.getId());
         assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
-        assertEquals(find.getTime(), 13);
+        assertEquals(find.getStartTime(), 13);
+        assertEquals(find.getEndTime(), 19);
     }
 
     @Test
@@ -222,12 +232,14 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .time(13)
+                .startTime(13)
+                .endTime(19)
                 .build();
 
         //when
@@ -252,12 +264,14 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .time(13)
+                .startTime(13)
+                .endTime(19)
                 .build();
 
         //when
@@ -279,11 +293,11 @@ class ReservationServiceTest {
                 .password("1234")
                 .build());
 
-
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         //when
@@ -306,7 +320,8 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         //when
@@ -331,7 +346,8 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         //when
@@ -356,12 +372,14 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .time(13)
+                .startTime(13)
+                .endTime(19)
                 .build();
 
         //when
@@ -372,6 +390,7 @@ class ReservationServiceTest {
                 .orElseThrow());
         assertEquals(find.getMember().getId(), member.getId());
         assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
-        assertEquals(find.getTime(), 13);
+        assertEquals(find.getStartTime(), 13);
+        assertEquals(find.getEndTime(), 19);
     }
 }

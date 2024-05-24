@@ -22,6 +22,6 @@ public class InstrumentBorrowResponse {
     public InstrumentBorrowResponse(Instrument instrument) {
         this.instrumentId = instrument.getId();
         this.returnDate = instrument.getReservation().getDate();
-        this.returnTime = instrument.getReservation().getTime();
+        this.returnTime = instrument.getReservation().getEndTime();
     }
 }

@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,19 +40,14 @@ public class ReservationService {
             throw new EndForwardStart();
         }
 
-        ArrayList<Reservation> newReservations = new ArrayList<>();
-
-        for (Integer i = request.getStartTime(); i < request.getEndTime(); i++) {
-            newReservations.add(Reservation.builder()
-                    .member(member)
-                    .number(request.getNumber())
-                    .date(request.getDate())
-                    .time(i)
-                    .message(request.getMessage())
-                    .build());
-        }
-
-        reservationRepository.saveAll(newReservations);
+        reservationRepository.save(Reservation.builder()
+                .member(member)
+                .number(request.getNumber())
+                .date(request.getDate())
+                .startTime(request.getStartTime())
+                .endTime(request.getEndTime())
+                .message(request.getMessage())
+                .build());
     }
 
     public ReservationResponse findReservation(Long reservationId) {
@@ -64,6 +58,7 @@ public class ReservationService {
     }
 
     public void editReservation(Long memberId, Long reservationId, ReservationEditRequest request) {
+
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
 
@@ -71,8 +66,13 @@ public class ReservationService {
             throw new EditFailException();
         }
 
+        if (request.getStartTime() > request.getEndTime()) {
+            throw new EndForwardStart();
+        }
+
         if (request.getDate() != null) reservation.setDate(request.getDate());
-        if (request.getTime() != null) reservation.setTime(request.getTime());
+        if (request.getStartTime() != null) reservation.setStartTime(request.getStartTime());
+        if (request.getEndTime() != null) reservation.setEndTime(request.getEndTime());
 
         reservation.setLastModified(LocalDateTime.now());
     }
@@ -93,6 +93,7 @@ public class ReservationService {
                 .orElseThrow(ReservationNotFound::new);
 
         if (request.getDate() != null) reservation.setDate(request.getDate());
-        if (request.getTime() != null) reservation.setTime(request.getTime());
+        if (request.getStartTime() != null) reservation.setStartTime(request.getStartTime());
+        if (request.getEndTime() != null) reservation.setEndTime(request.getEndTime());
     }
 }

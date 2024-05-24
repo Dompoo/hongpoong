@@ -63,7 +63,8 @@ class ReservationControllerTest {
                 .member(member)
                 .number(15)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .message("")
                 .build());
 
@@ -71,7 +72,8 @@ class ReservationControllerTest {
                 .member(member)
                 .number(13)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(13)
+                .startTime(12)
+                .endTime(22)
                 .message("")
                 .build());
 
@@ -83,13 +85,15 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$[0].username").value("창근"))
                 .andExpect(jsonPath("$[0].number").value(15))
                 .andExpect(jsonPath("$[0].date").value("2025-12-20"))
-                .andExpect(jsonPath("$[0].time").value(12))
+                .andExpect(jsonPath("$[0].startTime").value(12))
+                .andExpect(jsonPath("$[0].endTime").value(22))
                 .andExpect(jsonPath("$[0].message").value(""))
                 .andExpect(jsonPath("$[1].id").value(reservation2.getId()))
                 .andExpect(jsonPath("$[1].username").value("창근"))
                 .andExpect(jsonPath("$[1].number").value(13))
                 .andExpect(jsonPath("$[1].date").value("2025-12-20"))
-                .andExpect(jsonPath("$[1].time").value(13))
+                .andExpect(jsonPath("$[1].startTime").value(12))
+                .andExpect(jsonPath("$[1].endTime").value(22))
                 .andExpect(jsonPath("$[1].message").value(""))
                 .andDo(print());
     }
@@ -240,7 +244,8 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         //expected
@@ -249,7 +254,8 @@ class ReservationControllerTest {
                 .andExpect(jsonPath("$.id").value(reservation.getId()))
                 .andExpect(jsonPath("$.username").value("창근"))
                 .andExpect(jsonPath("$.date").value("2025-12-20"))
-                .andExpect(jsonPath("$.time").value(12))
+                .andExpect(jsonPath("$.startTime").value(12))
+                .andExpect(jsonPath("$.endTime").value(22))
                 .andDo(print());
     }
 
@@ -267,7 +273,8 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         //expected
@@ -292,12 +299,14 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .time(13)
+                .startTime(11)
+                .endTime(13)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -320,11 +329,13 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
-                .time(13)
+                .startTime(11)
+                .endTime(18)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -347,12 +358,14 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .time(13)
+                .startTime(11)
+                .endTime(18)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -375,12 +388,14 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2000, 12, 15))
-                .time(13)
+                .startTime(11)
+                .endTime(18)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -404,12 +419,14 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .time(8)
+                .startTime(8)
+                .endTime(18)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -433,12 +450,14 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .time(23)
+                .startTime(11)
+                .endTime(23)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -466,12 +485,14 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .time(13)
+                .startTime(11)
+                .endTime(18)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -499,7 +520,8 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         //expected
@@ -518,7 +540,8 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         //expected
@@ -541,7 +564,8 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         //expected
@@ -565,12 +589,14 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .time(13)
+                .startTime(11)
+                .endTime(18)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -597,12 +623,14 @@ class ReservationControllerTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .member(member)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(12)
+                .startTime(12)
+                .endTime(22)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .time(13)
+                .startTime(11)
+                .endTime(18)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);

@@ -46,7 +46,8 @@ public class ReservationResponse {
     private final String username;
     private final Integer number;
     private final LocalDate date;
-    private final Integer time;
+    private final Integer startTime;
+    private final Integer endTime;
     private final String message;
     private final LocalDateTime lastmodified;
 
@@ -55,7 +56,8 @@ public class ReservationResponse {
         this.username = reservation.getMember().getUsername();
         this.number = reservation.getNumber();
         this.date = reservation.getDate();
-        this.time = reservation.getTime();
+        this.startTime = reservation.getStartTime();
+        this.endTime = reservation.getEndTime();
         this.message = reservation.getMessage();
         this.lastmodified = reservation.getLastModified();
     }

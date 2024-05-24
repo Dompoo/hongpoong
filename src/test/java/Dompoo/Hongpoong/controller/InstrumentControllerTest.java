@@ -190,7 +190,8 @@ class InstrumentControllerTest {
                 .member(me)
                 .number(15)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(18)
+                .startTime(11)
+                .endTime(21)
                 .message("")
                 .build());
 
@@ -227,8 +228,9 @@ class InstrumentControllerTest {
                 .member(me)
                 .number(15)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(18)
                 .message("")
+                .startTime(11)
+                .endTime(21)
                 .build());
 
         Instrument instrument = instrumentRepository.save(Instrument.builder()
@@ -268,7 +270,8 @@ class InstrumentControllerTest {
                 .member(me)
                 .number(15)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(18)
+                .startTime(11)
+                .endTime(21)
                 .message("")
                 .build());
 
@@ -309,7 +312,8 @@ class InstrumentControllerTest {
                 .member(me)
                 .number(15)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(18)
+                .startTime(11)
+                .endTime(21)
                 .message("")
                 .build());
 
@@ -350,7 +354,8 @@ class InstrumentControllerTest {
                 .member(me)
                 .number(15)
                 .date(LocalDate.of(2025, 12, 20))
-                .time(18)
+                .startTime(11)
+                .endTime(21)
                 .message("")
                 .build());
 

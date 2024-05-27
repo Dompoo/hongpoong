@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.exception.config;
 
-import Dompoo.Hongpoong.exception.MyException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;

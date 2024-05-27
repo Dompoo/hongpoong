@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.exception;
 
+import Dompoo.Hongpoong.exception.config.MyException;
+
 public class InstrumentNotAvailable extends MyException {
 
     private static final String MESSAGE = "빌릴 수 없는 악기입니다.";

@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.exception;
 
+import Dompoo.Hongpoong.exception.config.MyException;
+
 public class InstrumentNotFound extends MyException {
 
     private static final String MESSAGE = "존재하지 않는 악기입니다.";

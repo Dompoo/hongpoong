@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.exception;
 
+import Dompoo.Hongpoong.exception.config.MyException;
+
 public class AlreadyExistEmail extends MyException {
 
     private static final String MESSAGE = "이미 존재하는 이메일입니다.";

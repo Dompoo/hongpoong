@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.exception;
 
+import Dompoo.Hongpoong.exception.config.MyException;
+
 public class EditFailException extends MyException {
 
     private static final String MESSAGE = "수정할 수 없습니다.";

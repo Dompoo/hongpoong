@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.exception;
 
+import Dompoo.Hongpoong.exception.config.MyException;
+
 public class DeleteFailException extends MyException {
 
     private static final String MESSAGE = "삭제할 수 없습니다.";

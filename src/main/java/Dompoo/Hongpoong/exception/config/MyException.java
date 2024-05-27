@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.exception;
+package Dompoo.Hongpoong.exception.config;
 
 import lombok.Getter;
 

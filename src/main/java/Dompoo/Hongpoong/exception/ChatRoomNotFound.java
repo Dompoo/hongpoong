@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.exception;
 
+import Dompoo.Hongpoong.exception.config.MyException;
+
 public class ChatRoomNotFound extends MyException {
 
     private static final String MESSAGE = "존재하지 않는 채팅방입니다.";

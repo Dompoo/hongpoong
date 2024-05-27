@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.exception;
 
+import Dompoo.Hongpoong.exception.config.MyException;
+
 public class ChatFailException extends MyException {
 
     private static final String MESSAGE = "채팅할 수 없습니다.";

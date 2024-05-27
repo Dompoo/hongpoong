@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.exception;
 
+import Dompoo.Hongpoong.exception.config.MyException;
+
 public class RentalNotFound extends MyException {
 
     private static final String MESSAGE = "존재하지 않는 대여입니다.";

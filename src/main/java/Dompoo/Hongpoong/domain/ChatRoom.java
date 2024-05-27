@@ -16,25 +16,16 @@ public class ChatRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId; // 채팅방 아이디
-    private String name; // 채팅방 이름
-
+    private Long id;
+    private String roomName;
+    @OneToMany
+    private List<ChatMessage> messages = new ArrayList<>();
     @ManyToMany
-    @JoinTable(
-            name = "chat_room_member",
-            joinColumns = @JoinColumn(name = "room_id"),
-            inverseJoinColumns = @JoinColumn(name = "member_id")
-    )
     private List<Member> members = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "chatRoom")
-//    private List<ChatMessage> messages = new ArrayList<>();
-
     @Builder
-    public ChatRoom(Long roomId, String name, List<Member> members){
-        this.roomId = roomId;
-        this.name = name;
-        members.forEach(this::addMember);
+    public ChatRoom(String roomName) {
+        this.roomName = roomName;
     }
 
     public void addMember(Member member){

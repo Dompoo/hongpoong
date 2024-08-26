@@ -5,7 +5,7 @@ import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.Setting;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.SettingRepository;
-import Dompoo.Hongpoong.request.common.SettingSaveRequest;
+import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;

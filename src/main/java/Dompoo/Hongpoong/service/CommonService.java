@@ -1,10 +1,10 @@
 package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.domain.Setting;
-import Dompoo.Hongpoong.exception.MemberNotFound;
+import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.request.common.SettingSaveRequest;
-import Dompoo.Hongpoong.response.common.SettingResponse;
+import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
+import Dompoo.Hongpoong.api.dto.response.common.SettingResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

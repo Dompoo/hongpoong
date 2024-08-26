@@ -6,7 +6,7 @@ import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.repository.ChatMessageRepository;
 import Dompoo.Hongpoong.repository.ChatRoomRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.request.chat.ChatRoomCreateRequest;
+import Dompoo.Hongpoong.api.dto.request.chat.ChatRoomCreateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;

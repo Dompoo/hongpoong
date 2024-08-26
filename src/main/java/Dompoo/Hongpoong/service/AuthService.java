@@ -1,18 +1,20 @@
 package Dompoo.Hongpoong.service;
 
+import Dompoo.Hongpoong.api.dto.request.auth.AcceptSignUpRequest;
+import Dompoo.Hongpoong.api.dto.request.auth.EmailValidRequest;
+import Dompoo.Hongpoong.api.dto.request.auth.SignUpRequest;
+import Dompoo.Hongpoong.api.dto.response.auth.EmailValidResponse;
+import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
+import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
+import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
+import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.Member.Club;
 import Dompoo.Hongpoong.domain.Setting;
 import Dompoo.Hongpoong.domain.SignUp;
-import Dompoo.Hongpoong.exception.*;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.SettingRepository;
 import Dompoo.Hongpoong.repository.SignUpRepository;
-import Dompoo.Hongpoong.request.auth.AcceptSignUpRequest;
-import Dompoo.Hongpoong.request.auth.EmailValidRequest;
-import Dompoo.Hongpoong.request.auth.SignUpRequest;
-import Dompoo.Hongpoong.response.auth.SignUpResponse;
-import Dompoo.Hongpoong.response.auth.EmailValidResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

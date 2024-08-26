@@ -2,9 +2,9 @@ package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.domain.ChatRoom;
 import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.exception.ChatFailException;
-import Dompoo.Hongpoong.exception.ChatRoomNotFound;
-import Dompoo.Hongpoong.request.chat.ChatMessageCreateDto;
+import Dompoo.Hongpoong.common.exception.impl.ChatFailException;
+import Dompoo.Hongpoong.common.exception.impl.ChatRoomNotFound;
+import Dompoo.Hongpoong.api.dto.request.chat.ChatMessageCreateDto;
 import Dompoo.Hongpoong.repository.ChatRoomRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;

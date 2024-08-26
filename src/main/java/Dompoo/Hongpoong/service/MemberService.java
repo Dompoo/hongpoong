@@ -1,13 +1,13 @@
 package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.exception.MemberNotFound;
-import Dompoo.Hongpoong.exception.PasswordNotSame;
+import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
+import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
 import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.request.member.MemberEditRequest;
-import Dompoo.Hongpoong.request.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.response.member.MemberListResponse;
-import Dompoo.Hongpoong.response.member.MemberStatusResponse;
+import Dompoo.Hongpoong.api.dto.request.member.MemberEditRequest;
+import Dompoo.Hongpoong.api.dto.request.member.MemberRoleEditRequest;
+import Dompoo.Hongpoong.api.dto.response.member.MemberListResponse;
+import Dompoo.Hongpoong.api.dto.response.member.MemberStatusResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

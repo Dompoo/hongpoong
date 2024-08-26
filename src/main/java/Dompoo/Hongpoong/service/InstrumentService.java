@@ -1,17 +1,17 @@
 package Dompoo.Hongpoong.service;
 
+import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentBorrowRequest;
+import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentCreateRequest;
+import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditRequest;
+import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentBorrowResponse;
+import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentResponse;
+import Dompoo.Hongpoong.common.exception.impl.*;
 import Dompoo.Hongpoong.domain.Instrument;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.Reservation;
-import Dompoo.Hongpoong.exception.*;
 import Dompoo.Hongpoong.repository.InstrumentRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
-import Dompoo.Hongpoong.request.Instrument.InstrumentBorrowRequest;
-import Dompoo.Hongpoong.request.Instrument.InstrumentCreateRequest;
-import Dompoo.Hongpoong.request.Instrument.InstrumentEditRequest;
-import Dompoo.Hongpoong.response.Instrument.InstrumentBorrowResponse;
-import Dompoo.Hongpoong.response.Instrument.InstrumentResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.domain;
 
+import Dompoo.Hongpoong.api.dto.request.info.InfoEditDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,9 +25,14 @@ public class Info {
     private LocalDateTime date;
 
     @Builder
-    public Info(String title, String content, LocalDateTime date) {
+    private Info(String title, String content, LocalDateTime date) {
         this.title = title;
         this.content = content;
         this.date = date;
+    }
+    
+    public void edit(InfoEditDto dto) {
+        if (dto.getTitle() != null) this.title = dto.getTitle();
+        if (dto.getContent() != null) this.content = dto.getContent();
     }
 }

@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.api.dto.response.info;
 
 import Dompoo.Hongpoong.domain.Info;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -24,15 +25,24 @@ ResponseBody
     . . .
 ]
  */
-public class InfoListResponse {
+public class InfoResponse {
 
     private final Long id;
     private final String title;
     private final LocalDateTime date;
-
-    public InfoListResponse(Info info) {
-        this.id = info.getId();
-        this.title = info.getTitle();
-        this.date = info.getDate();
+    
+    @Builder
+    private InfoResponse(Long id, String title, LocalDateTime date) {
+        this.id = id;
+        this.title = title;
+        this.date = date;
+    }
+    
+    public static InfoResponse from(Info info) {
+        return InfoResponse.builder()
+                .id(info.getId())
+                .title(info.getTitle())
+                .date(info.getDate())
+                .build();
     }
 }

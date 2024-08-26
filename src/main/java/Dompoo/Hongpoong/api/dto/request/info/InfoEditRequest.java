@@ -21,8 +21,15 @@ public class InfoEditRequest {
     private String content;
 
     @Builder
-    public InfoEditRequest(String title, String content) {
+    private InfoEditRequest(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+    
+    public InfoEditDto toDto() {
+        return InfoEditDto.builder()
+                .title(title)
+                .content(content)
+                .build();
     }
 }

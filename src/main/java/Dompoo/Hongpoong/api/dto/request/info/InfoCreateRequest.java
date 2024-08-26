@@ -1,10 +1,13 @@
 package Dompoo.Hongpoong.api.dto.request.info;
 
+import Dompoo.Hongpoong.domain.Info;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,8 +27,18 @@ public class InfoCreateRequest {
     private String content;
 
     @Builder
-    public InfoCreateRequest(String title, String content) {
+    private InfoCreateRequest(String title, String content) {
         this.title = title;
         this.content = content;
     }
+    
+    public Info toInfo(LocalDateTime now) {
+        return Info.builder()
+                .title(title)
+                .content(content)
+                .date(now)
+                .build();
+    }
+    
+    
 }

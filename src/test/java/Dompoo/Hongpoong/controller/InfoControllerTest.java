@@ -1,12 +1,11 @@
 package Dompoo.Hongpoong.controller;
 
+import Dompoo.Hongpoong.api.dto.request.info.InfoCreateRequest;
+import Dompoo.Hongpoong.api.dto.request.info.InfoEditRequest;
 import Dompoo.Hongpoong.config.WithMockMember;
 import Dompoo.Hongpoong.domain.Info;
 import Dompoo.Hongpoong.repository.InfoRepository;
-import Dompoo.Hongpoong.api.dto.request.info.InfoCreateRequest;
-import Dompoo.Hongpoong.api.dto.request.info.InfoEditRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@Transactional
 class InfoControllerTest {
 
     @Autowired

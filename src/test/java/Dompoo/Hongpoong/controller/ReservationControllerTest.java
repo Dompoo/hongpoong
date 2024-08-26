@@ -1,15 +1,14 @@
 package Dompoo.Hongpoong.controller;
 
+import Dompoo.Hongpoong.api.dto.request.reservation.ReservationCreateRequest;
+import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditRequest;
+import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.config.WithMockMember;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.Reservation;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
-import Dompoo.Hongpoong.api.dto.request.reservation.ReservationCreateRequest;
-import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditRequest;
-import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@Transactional
 class ReservationControllerTest {
 
     @Autowired

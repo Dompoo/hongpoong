@@ -1,12 +1,11 @@
 package Dompoo.Hongpoong.service;
 
+import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
+import Dompoo.Hongpoong.api.dto.response.common.SettingResponse;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.Setting;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.SettingRepository;
-import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
-import Dompoo.Hongpoong.api.dto.response.common.SettingResponse;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Transactional
 class CommonServiceTest {
 
     @Autowired

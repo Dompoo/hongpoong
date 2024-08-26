@@ -1,17 +1,16 @@
 package Dompoo.Hongpoong.service;
 
+import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentBorrowRequest;
+import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentCreateRequest;
+import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditRequest;
+import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentBorrowResponse;
+import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentResponse;
 import Dompoo.Hongpoong.domain.Instrument;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.Reservation;
 import Dompoo.Hongpoong.repository.InstrumentRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
-import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentBorrowRequest;
-import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentCreateRequest;
-import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditRequest;
-import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentBorrowResponse;
-import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentResponse;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Transactional
 class InstrumentServiceTest {
 
     @Autowired

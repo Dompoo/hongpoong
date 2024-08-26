@@ -1,13 +1,12 @@
 package Dompoo.Hongpoong.controller;
 
+import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
 import Dompoo.Hongpoong.config.WithMockMember;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.Setting;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.SettingRepository;
-import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Transactional
 @AutoConfigureMockMvc
 class CommonControllerTest {
 

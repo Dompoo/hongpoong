@@ -1,14 +1,13 @@
 package Dompoo.Hongpoong.controller;
 
+import Dompoo.Hongpoong.api.dto.request.chat.ChatRoomCreateRequest;
 import Dompoo.Hongpoong.config.WithMockMember;
 import Dompoo.Hongpoong.domain.ChatRoom;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.repository.ChatMessageRepository;
 import Dompoo.Hongpoong.repository.ChatRoomRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.api.dto.request.chat.ChatRoomCreateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Transactional
 @AutoConfigureMockMvc
 class ChatControllerTest {
 

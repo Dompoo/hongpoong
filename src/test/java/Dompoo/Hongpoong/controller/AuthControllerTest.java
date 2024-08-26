@@ -1,15 +1,14 @@
 package Dompoo.Hongpoong.controller;
 
+import Dompoo.Hongpoong.api.dto.request.auth.AcceptSignUpRequest;
+import Dompoo.Hongpoong.api.dto.request.auth.EmailValidRequest;
+import Dompoo.Hongpoong.api.dto.request.auth.SignUpRequest;
 import Dompoo.Hongpoong.config.WithMockMember;
 import Dompoo.Hongpoong.domain.Member;
 import Dompoo.Hongpoong.domain.SignUp;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.SignUpRepository;
-import Dompoo.Hongpoong.api.dto.request.auth.AcceptSignUpRequest;
-import Dompoo.Hongpoong.api.dto.request.auth.EmailValidRequest;
-import Dompoo.Hongpoong.api.dto.request.auth.SignUpRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,14 +20,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static Dompoo.Hongpoong.domain.Member.Club.SANTLE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Transactional
 @AutoConfigureMockMvc
 class AuthControllerTest {
 

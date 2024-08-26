@@ -1,18 +1,17 @@
 package Dompoo.Hongpoong.service;
 
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.SignUp;
-import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
-import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
-import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
-import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.repository.SignUpRepository;
 import Dompoo.Hongpoong.api.dto.request.auth.AcceptSignUpRequest;
 import Dompoo.Hongpoong.api.dto.request.auth.EmailValidRequest;
 import Dompoo.Hongpoong.api.dto.request.auth.SignUpRequest;
 import Dompoo.Hongpoong.api.dto.response.auth.EmailValidResponse;
 import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
-import jakarta.transaction.Transactional;
+import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
+import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
+import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
+import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.SignUp;
+import Dompoo.Hongpoong.repository.MemberRepository;
+import Dompoo.Hongpoong.repository.SignUpRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@Transactional
 class AuthServiceTest {
 
     @Autowired

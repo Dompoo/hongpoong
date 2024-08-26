@@ -1,5 +1,8 @@
 package Dompoo.Hongpoong.controller;
 
+import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentBorrowRequest;
+import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentCreateRequest;
+import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditRequest;
 import Dompoo.Hongpoong.config.WithMockMember;
 import Dompoo.Hongpoong.domain.Instrument;
 import Dompoo.Hongpoong.domain.Member;
@@ -7,11 +10,7 @@ import Dompoo.Hongpoong.domain.Reservation;
 import Dompoo.Hongpoong.repository.InstrumentRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
-import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentCreateRequest;
-import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditRequest;
-import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentBorrowRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-@Transactional
 class InstrumentControllerTest {
 
     @Autowired

@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.request.member;
 
-import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.enums.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,10 +17,10 @@ RequestBody
  */
 public class MemberRoleEditRequest {
 
-    private Member.Role role;
+    private Role role;
 
     @Builder
-    public MemberRoleEditRequest(Member.Role role) {
+    public MemberRoleEditRequest(Role role) {
         this.role = role;
     }
 }

@@ -27,9 +27,17 @@ public class MemberEditRequest {
     private String password2;
 
     @Builder
-    public MemberEditRequest(String username, String password1, String password2) {
+    private MemberEditRequest(String username, String password1, String password2) {
         this.username = username;
         this.password1 = password1;
         this.password2 = password2;
+    }
+    
+    public MemberEditDto toDto() {
+        return MemberEditDto.builder()
+                .username(username)
+                .password1(password1)
+                .password2(password2)
+                .build();
     }
 }

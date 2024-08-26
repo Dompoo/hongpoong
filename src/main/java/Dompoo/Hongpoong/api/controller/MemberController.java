@@ -2,7 +2,7 @@ package Dompoo.Hongpoong.api.controller;
 
 import Dompoo.Hongpoong.api.dto.request.member.MemberEditRequest;
 import Dompoo.Hongpoong.api.dto.request.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.api.dto.response.member.MemberListResponse;
+import Dompoo.Hongpoong.api.dto.response.member.MemberResponse;
 import Dompoo.Hongpoong.api.dto.response.member.MemberStatusResponse;
 import Dompoo.Hongpoong.common.security.UserPrincipal;
 import Dompoo.Hongpoong.service.MemberService;
@@ -28,7 +28,7 @@ public class MemberController {
 
     @PutMapping("")
     public void editMember(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid MemberEditRequest request) {
-        service.editMember(principal.getMemberId(), request);
+        service.editMember(principal.getMemberId(), request.toDto());
     }
 
     @DeleteMapping("")
@@ -38,7 +38,7 @@ public class MemberController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/manage")
-    public List<MemberListResponse> memberList() {
+    public List<MemberResponse> memberList() {
         return service.getList();
     }
 

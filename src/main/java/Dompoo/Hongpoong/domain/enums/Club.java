@@ -1,7 +1,17 @@
 package Dompoo.Hongpoong.domain.enums;
 
 public enum Club {
-	HWARANG, SANTLE, AKBAN, DEULNEOK, ETC;
+	HWARANG("화랑"),
+	SANTLE("산틀"),
+	AKBAN("악반"),
+	DEULNEOK("들녘"),
+	ETC("개인");
+	
+	public final String korName;
+	
+	Club(String korName) {
+		this.korName = korName;
+	}
 	
 	public static Club fromInt(int number) {
 		return switch (number) {

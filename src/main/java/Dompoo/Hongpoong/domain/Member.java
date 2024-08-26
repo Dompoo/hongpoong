@@ -1,9 +1,12 @@
 package Dompoo.Hongpoong.domain;
 
+import Dompoo.Hongpoong.api.dto.request.member.MemberEditDto;
+import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static Dompoo.Hongpoong.domain.enums.Role.ROLE_USER;
 
@@ -40,5 +43,15 @@ public class Member {
         this.password = signUp.getPassword();
         this.club = signUp.getClub();
         this.role = ROLE_USER;
+    }
+    
+    public void edit(MemberEditDto dto, PasswordEncoder encoder) {
+        if (dto.isPasswordSame()) {
+            this.password = encoder.encode(dto.getPassword1());
+        } else {
+            throw new PasswordNotSame();
+        }
+        
+        if (dto.getUsername() != null) this.username = dto.getUsername();
     }
 }

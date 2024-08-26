@@ -8,37 +8,42 @@ import lombok.Getter;
 /*
 ResponseBody
 
-<단건조회시>
-{
-    "id": 1,
-    "email": "admin",
-    "username": "admin",
-    "password": "$2a$10$fUgd2TdgIoz72Dn0I3tQg.SqRpUBLmDF6ukCcuj4bb9PYNjJ5l8te",
-    "club": "산틀"
-}
+<List조회시>
+[
+    {
+        "id": 1,
+        "email": "admin",
+        "username": "admin",
+        "club": "산틀"
+    },
+    {
+        "id": 2,
+        "email": "dompoo@gmail.com",
+        "username": "dompoo",
+        "club": "산틀"
+    },
+    . . .
+]
  */
-public class MemberStatusResponse {
+public class MemberResponse {
     private Long id;
     private String email;
     private String username;
-    private String password;
     private String club;
     
     @Builder
-    private MemberStatusResponse(Long id, String email, String username, String password, String club) {
+    private MemberResponse(Long id, String email, String username, String club) {
         this.id = id;
         this.email = email;
         this.username = username;
-        this.password = password;
         this.club = club;
     }
     
-    public static MemberStatusResponse from(Member member) {
-        return MemberStatusResponse.builder()
+    public static MemberResponse from(Member member) {
+        return MemberResponse.builder()
                 .id(member.getId())
                 .email(member.getEmail())
                 .username(member.getUsername())
-                .password(member.getPassword())
                 .club(member.getClub().korName)
                 .build();
     }

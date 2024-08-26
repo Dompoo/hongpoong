@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.request.chat;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,4 +21,10 @@ public class ChatRoomCreateRequest {
 
     private String name;
     private List<Long> members;
+
+    @Builder
+    public ChatRoomCreateRequest(String name, List<Long> members) {
+        this.name = name;
+        this.members = members;
+    }
 }

@@ -1,7 +1,10 @@
 package Dompoo.Hongpoong.domain;
 
-import Dompoo.Hongpoong.domain.Member.Club;
-import jakarta.persistence.*;
+import Dompoo.Hongpoong.domain.enums.Club;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @Getter

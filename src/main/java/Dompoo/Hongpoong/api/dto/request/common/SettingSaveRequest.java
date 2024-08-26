@@ -16,10 +16,16 @@ RequestBody
  */
 public class SettingSaveRequest {
 
-    private boolean push;
+    private Boolean push;
 
     @Builder
-    public SettingSaveRequest(boolean push) {
+    private SettingSaveRequest(Boolean push) {
         this.push = push;
+    }
+    
+    public SettingSaveDto toDto() {
+        return SettingSaveDto.builder()
+                .push(push)
+                .build();
     }
 }

@@ -22,6 +22,6 @@ public class CommonController {
 
     @PostMapping("/setting")
     public void saveSetting(@AuthenticationPrincipal UserPrincipal principal, @RequestBody SettingSaveRequest request) {
-        service.saveSetting(principal.getMemberId(), request);
+        service.saveSetting(principal.getMemberId(), request.toDto());
     }
 }

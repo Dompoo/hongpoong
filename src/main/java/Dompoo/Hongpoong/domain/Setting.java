@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.domain;
 
+import Dompoo.Hongpoong.api.dto.request.common.SettingSaveDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,5 +29,9 @@ public class Setting {
     public void setMember(Member member) {
         member.setSetting(this);
         this.member = member;
+    }
+    
+    public void edit(SettingSaveDto dto) {
+        if (dto.getPush() != null) this.push = dto.getPush();
     }
 }

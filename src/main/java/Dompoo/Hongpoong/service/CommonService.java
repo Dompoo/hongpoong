@@ -1,10 +1,10 @@
 package Dompoo.Hongpoong.service;
 
-import Dompoo.Hongpoong.domain.Setting;
-import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
+import Dompoo.Hongpoong.api.dto.request.common.SettingSaveDto;
 import Dompoo.Hongpoong.api.dto.response.common.SettingResponse;
+import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
+import Dompoo.Hongpoong.domain.Setting;
+import Dompoo.Hongpoong.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,14 +21,14 @@ public class CommonService {
                 .orElseThrow(MemberNotFound::new)
                 .getSetting();
 
-        return new SettingResponse(setting);
+        return SettingResponse.from(setting);
     }
 
-    public void saveSetting(Long memberId, SettingSaveRequest request) {
+    public void saveSetting(Long memberId, SettingSaveDto dto) {
         Setting setting = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new)
                 .getSetting();
-
-        setting.setPush(request.isPush());
+        
+        setting.edit(dto);
     }
 }

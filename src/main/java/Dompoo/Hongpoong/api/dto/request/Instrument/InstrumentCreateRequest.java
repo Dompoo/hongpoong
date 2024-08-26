@@ -1,5 +1,8 @@
 package Dompoo.Hongpoong.api.dto.request.Instrument;
 
+import Dompoo.Hongpoong.domain.Instrument;
+import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +24,14 @@ public class InstrumentCreateRequest {
     private Integer type;
 
     @Builder
-    public InstrumentCreateRequest(Integer type) {
+    private InstrumentCreateRequest(Integer type) {
         this.type = type;
+    }
+    
+    public Instrument toInstrument(Member member) {
+        return Instrument.builder()
+                .type(InstrumentType.fromInt(type))
+                .member(member)
+                .build();
     }
 }

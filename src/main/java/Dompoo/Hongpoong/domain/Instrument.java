@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.domain;
 
+import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditDto;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,5 +36,10 @@ public class Instrument {
 
     public String getType() {
         return type.name();
+    }
+    
+    public void edit(InstrumentEditDto dto) {
+        if (dto.getType() != null) this.type = InstrumentType.fromInt(dto.getType());
+        if (dto.getAvailable() != null) this.available = dto.getAvailable();
     }
 }

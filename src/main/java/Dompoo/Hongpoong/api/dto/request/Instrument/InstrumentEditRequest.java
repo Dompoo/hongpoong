@@ -21,8 +21,15 @@ public class InstrumentEditRequest {
     private Boolean available;
 
     @Builder
-    public InstrumentEditRequest(Integer type, Boolean available) {
+    private InstrumentEditRequest(Integer type, Boolean available) {
         this.type = type;
         this.available = available;
+    }
+    
+    public InstrumentEditDto toDto() {
+        return InstrumentEditDto.builder()
+                .type(type)
+                .available(available)
+                .build();
     }
 }

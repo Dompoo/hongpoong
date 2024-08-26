@@ -56,7 +56,7 @@ public class InstrumentController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_LEADER')")
     public void edit(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody InstrumentEditRequest request) {
-        service.editOne(principal.getMemberId(), id, request);
+        service.editOne(principal.getMemberId(), id, request.toDto());
     }
 
     @DeleteMapping("/{id}")

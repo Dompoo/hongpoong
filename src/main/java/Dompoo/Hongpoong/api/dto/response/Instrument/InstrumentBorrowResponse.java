@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.api.dto.response.Instrument;
 
 import Dompoo.Hongpoong.domain.Instrument;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -18,10 +19,19 @@ public class InstrumentBorrowResponse {
     private Long instrumentId;
     private LocalDate returnDate;
     private Integer returnTime;
-
-    public InstrumentBorrowResponse(Instrument instrument) {
-        this.instrumentId = instrument.getId();
-        this.returnDate = instrument.getReservation().getDate();
-        this.returnTime = instrument.getReservation().getEndTime();
+    
+    @Builder
+    private InstrumentBorrowResponse(Long instrumentId, LocalDate returnDate, Integer returnTime) {
+        this.instrumentId = instrumentId;
+        this.returnDate = returnDate;
+        this.returnTime = returnTime;
+    }
+    
+    public static InstrumentBorrowResponse from(Instrument instrument) {
+        return InstrumentBorrowResponse.builder()
+                .instrumentId(instrument.getId())
+                .returnDate(instrument.getReservation().getDate())
+                .returnTime(instrument.getReservation().getEndTime())
+                .build();
     }
 }

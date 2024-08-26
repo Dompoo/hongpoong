@@ -1,31 +1,16 @@
+version: '3.8'
+
 services:
-  db:
-    container_name: db
-#    platform: linux/amd64
-    image: mysql:8.4
+  mysql:
+    image: mysql:8.0.29
+    container_name: hongpoong-mysql
     restart: always
     ports:
-      - "3306:3306"
+      - "3320:3306"
     environment:
       MYSQL_DATABASE: hongpoong
       MYSQL_ROOT_PASSWORD: 1234
-
-      TZ: Asia/Seoul
-    volumes:
-      - db_data:/var/lib/mysql
-
-  service:
-    container_name: service
-    image: dompoo/service:0516
-    restart: unless-stopped
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/hongpoong
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
-
-volumes:
-  db_data:
+      TZ: "Asia/Seoul"
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci

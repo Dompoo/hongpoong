@@ -1,16 +1,18 @@
 package Dompoo.Hongpoong.service;
 
-import Dompoo.Hongpoong.domain.ChatMessage;
-import Dompoo.Hongpoong.domain.ChatRoom;
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.common.exception.impl.ChatRoomNotFound;
-import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.repository.ChatMessageRepository;
-import Dompoo.Hongpoong.repository.ChatRoomRepository;
-import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.api.dto.request.chat.ChatRoomCreateRequest;
 import Dompoo.Hongpoong.api.dto.response.chat.ChatMessageDTO;
 import Dompoo.Hongpoong.api.dto.response.chat.ChatRoomResponse;
+import Dompoo.Hongpoong.common.exception.impl.ChatRoomNotFound;
+import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
+import Dompoo.Hongpoong.domain.ChatMessage;
+import Dompoo.Hongpoong.domain.ChatRoom;
+import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.UserInChatRoom;
+import Dompoo.Hongpoong.repository.ChatMessageRepository;
+import Dompoo.Hongpoong.repository.ChatRoomRepository;
+import Dompoo.Hongpoong.repository.MemberRepository;
+import Dompoo.Hongpoong.repository.UserInChatRoomRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,8 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final MemberRepository memberRepository;
-
+    private final UserInChatRoomRepository userInChatRoomRepository;
+    
     public ChatRoomResponse createRoom(ChatRoomCreateRequest request){
         Stream<Member> members = request.getMembers().stream()
                 .map(id -> memberRepository.findById(id)
@@ -35,10 +38,11 @@ public class ChatService {
         ChatRoom chatRoom = ChatRoom.builder()
                 .roomName(request.getName())
                 .build();
-
-        members.forEach(chatRoom::addMember);
-
+        
+        List<UserInChatRoom> list = members.map(member -> new UserInChatRoom(member, chatRoom)).toList();
+        
         ChatRoom savedRoom = chatRoomRepository.save(chatRoom);
+        userInChatRoomRepository.saveAll(list);
 
         return new ChatRoomResponse(savedRoom);
     }

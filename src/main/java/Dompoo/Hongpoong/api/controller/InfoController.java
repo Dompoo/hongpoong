@@ -3,12 +3,13 @@ package Dompoo.Hongpoong.api.controller;
 import Dompoo.Hongpoong.api.dto.request.info.InfoCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.info.InfoEditRequest;
 import Dompoo.Hongpoong.api.dto.response.info.InfoDetailResponse;
-import Dompoo.Hongpoong.api.dto.response.info.InfoListResponse;
+import Dompoo.Hongpoong.api.dto.response.info.InfoResponse;
 import Dompoo.Hongpoong.service.InfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -21,11 +22,11 @@ public class InfoController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public void createInfo(@RequestBody InfoCreateRequest request) {
-        service.addInfo(request);
+        service.addInfo(request, LocalDateTime.now());
     }
 
     @GetMapping("")
-    public List<InfoListResponse> getInfoList() {
+    public List<InfoResponse> getInfoList() {
         return service.getList();
     }
 
@@ -37,7 +38,7 @@ public class InfoController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{infoId}")
     public void editInfo(@PathVariable Long infoId, @RequestBody InfoEditRequest request) {
-        service.editInfo(infoId, request);
+        service.editInfo(infoId, request.toDto());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

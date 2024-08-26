@@ -1,19 +1,18 @@
 package Dompoo.Hongpoong.service;
 
-import Dompoo.Hongpoong.domain.Info;
-import Dompoo.Hongpoong.common.exception.impl.InfoNotFound;
-import Dompoo.Hongpoong.repository.InfoRepository;
 import Dompoo.Hongpoong.api.dto.request.info.InfoCreateRequest;
-import Dompoo.Hongpoong.api.dto.request.info.InfoEditRequest;
+import Dompoo.Hongpoong.api.dto.request.info.InfoEditDto;
 import Dompoo.Hongpoong.api.dto.response.info.InfoDetailResponse;
-import Dompoo.Hongpoong.api.dto.response.info.InfoListResponse;
+import Dompoo.Hongpoong.api.dto.response.info.InfoResponse;
+import Dompoo.Hongpoong.common.exception.impl.InfoNotFound;
+import Dompoo.Hongpoong.domain.Info;
+import Dompoo.Hongpoong.repository.InfoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,33 +21,28 @@ public class InfoService {
 
     private final InfoRepository repository;
 
-    public void addInfo(InfoCreateRequest request) {
-        repository.save(Info.builder()
-                .title(request.getTitle())
-                .content(request.getContent())
-                .date(LocalDateTime.now())
-                .build());
+    public void addInfo(InfoCreateRequest request, LocalDateTime now) {
+        repository.save(request.toInfo(now));
     }
 
-    public List<InfoListResponse> getList() {
+    public List<InfoResponse> getList() {
         return repository.findAll().stream()
-                .map(InfoListResponse::new)
-                .collect(Collectors.toList());
+                .map(InfoResponse::from)
+                .toList();
     }
 
     public InfoDetailResponse getDetail(Long infoId) {
         Info info = repository.findById(infoId)
                 .orElseThrow(InfoNotFound::new);
 
-        return new InfoDetailResponse(info);
+        return InfoDetailResponse.from(info);
     }
 
-    public void editInfo(Long infoId, InfoEditRequest request) {
+    public void editInfo(Long infoId, InfoEditDto dto) {
         Info info = repository.findById(infoId)
                 .orElseThrow(InfoNotFound::new);
-
-        if (request.getTitle() != null) info.setTitle(request.getTitle());
-        if (request.getContent() != null) info.setContent(request.getContent());
+        
+        info.edit(dto);
     }
 
     public void deleteInfo(Long infoId) {

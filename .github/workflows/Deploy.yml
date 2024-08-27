@@ -62,7 +62,7 @@ jobs:
             DB_PASSWORD_PROD=${{ secrets.DB_PASSWORD_PROD }}
 
       - name: Docker Deploy executing remote ssh commands using ssh_key
-        uses: appleboy/ssh-action@v0.1.6
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_IP }}
           username: ${{ secrets.REMOTE_SSH_USERNAME }}

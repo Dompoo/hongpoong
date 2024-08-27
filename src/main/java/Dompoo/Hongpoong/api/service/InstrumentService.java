@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.service;
+package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentBorrowRequest;
 import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentCreateRequest;
@@ -6,13 +6,13 @@ import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditDto;
 import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentBorrowResponse;
 import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentResponse;
 import Dompoo.Hongpoong.common.exception.impl.*;
-import Dompoo.Hongpoong.domain.Instrument;
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.Reservation;
+import Dompoo.Hongpoong.domain.entity.Instrument;
+import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.enums.Club;
-import Dompoo.Hongpoong.repository.InstrumentRepository;
-import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.repository.ReservationRepository;
+import Dompoo.Hongpoong.domain.repository.InstrumentRepository;
+import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

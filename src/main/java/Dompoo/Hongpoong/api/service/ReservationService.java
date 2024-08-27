@@ -1,14 +1,14 @@
-package Dompoo.Hongpoong.service;
+package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditDto;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.api.dto.response.resevation.ReservationResponse;
 import Dompoo.Hongpoong.common.exception.impl.*;
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.Reservation;
-import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.repository.ReservationRepository;
+import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

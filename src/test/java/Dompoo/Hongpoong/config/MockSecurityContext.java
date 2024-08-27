@@ -1,8 +1,8 @@
 package Dompoo.Hongpoong.config;
 
 import Dompoo.Hongpoong.common.security.UserPrincipal;
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

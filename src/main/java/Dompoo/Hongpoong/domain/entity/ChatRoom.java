@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.domain;
+package Dompoo.Hongpoong.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

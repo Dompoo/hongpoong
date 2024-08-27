@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.response.chat;
 
-import Dompoo.Hongpoong.domain.ChatMessage;
-import Dompoo.Hongpoong.domain.ChatRoom;
+import Dompoo.Hongpoong.domain.entity.ChatMessage;
+import Dompoo.Hongpoong.domain.entity.ChatRoom;
 import lombok.*;
 
 @Getter

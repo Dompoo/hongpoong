@@ -1,6 +1,6 @@
-package Dompoo.Hongpoong.repository;
+package Dompoo.Hongpoong.domain.repository;
 
-import Dompoo.Hongpoong.domain.Instrument;
+import Dompoo.Hongpoong.domain.entity.Instrument;
 import Dompoo.Hongpoong.domain.enums.Club;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

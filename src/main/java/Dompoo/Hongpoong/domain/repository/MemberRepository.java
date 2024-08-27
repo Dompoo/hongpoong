@@ -1,6 +1,6 @@
-package Dompoo.Hongpoong.repository;
+package Dompoo.Hongpoong.domain.repository;
 
-import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 

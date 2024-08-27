@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.request.chat;
 
-import Dompoo.Hongpoong.domain.ChatRoom;
+import Dompoo.Hongpoong.domain.entity.ChatRoom;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

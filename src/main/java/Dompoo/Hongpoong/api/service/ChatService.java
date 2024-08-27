@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.service;
+package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.request.chat.ChatRoomCreateRequest;
 import Dompoo.Hongpoong.api.dto.response.chat.ChatMessageDto;
@@ -6,14 +6,14 @@ import Dompoo.Hongpoong.api.dto.response.chat.ChatRoomResponse;
 import Dompoo.Hongpoong.common.exception.impl.ChatRoomNotFound;
 import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.domain.ChatMessage;
-import Dompoo.Hongpoong.domain.ChatRoom;
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.MemberInChatRoom;
-import Dompoo.Hongpoong.repository.ChatMessageRepository;
-import Dompoo.Hongpoong.repository.ChatRoomRepository;
-import Dompoo.Hongpoong.repository.MemberInChatRoomRepository;
-import Dompoo.Hongpoong.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.entity.ChatMessage;
+import Dompoo.Hongpoong.domain.entity.ChatRoom;
+import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.entity.MemberInChatRoom;
+import Dompoo.Hongpoong.domain.repository.ChatMessageRepository;
+import Dompoo.Hongpoong.domain.repository.ChatRoomRepository;
+import Dompoo.Hongpoong.domain.repository.MemberInChatRoomRepository;
+import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

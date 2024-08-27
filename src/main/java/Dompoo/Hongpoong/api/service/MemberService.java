@@ -1,12 +1,12 @@
-package Dompoo.Hongpoong.service;
+package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.request.member.MemberEditDto;
 import Dompoo.Hongpoong.api.dto.request.member.MemberRoleEditRequest;
 import Dompoo.Hongpoong.api.dto.response.member.MemberResponse;
 import Dompoo.Hongpoong.api.dto.response.member.MemberStatusResponse;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

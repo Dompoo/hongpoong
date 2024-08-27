@@ -1,8 +1,8 @@
 package Dompoo.Hongpoong.common.security;
 
 import Dompoo.Hongpoong.common.security.handler.*;
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

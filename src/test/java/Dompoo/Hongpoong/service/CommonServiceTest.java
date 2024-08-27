@@ -2,9 +2,10 @@ package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
 import Dompoo.Hongpoong.api.dto.response.common.SettingResponse;
-import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.api.service.CommonService;
+import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Club;
-import Dompoo.Hongpoong.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.domain;
+package Dompoo.Hongpoong.domain.entity;
 
 import Dompoo.Hongpoong.api.dto.request.common.SettingSaveDto;
 import Dompoo.Hongpoong.api.dto.request.member.MemberEditDto;

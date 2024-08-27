@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.request.info;
 
-import Dompoo.Hongpoong.domain.Info;
+import Dompoo.Hongpoong.domain.entity.Info;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;

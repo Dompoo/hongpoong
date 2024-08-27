@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.response.resevation;
 
-import Dompoo.Hongpoong.domain.Reservation;
+import Dompoo.Hongpoong.domain.entity.Reservation;
 import lombok.Builder;
 import lombok.Getter;
 

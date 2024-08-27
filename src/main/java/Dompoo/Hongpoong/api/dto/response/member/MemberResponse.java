@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.response.member;
 
-import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 

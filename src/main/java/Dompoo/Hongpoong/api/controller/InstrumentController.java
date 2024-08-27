@@ -6,7 +6,7 @@ import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditRequest;
 import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentBorrowResponse;
 import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentResponse;
 import Dompoo.Hongpoong.common.security.UserPrincipal;
-import Dompoo.Hongpoong.service.InstrumentService;
+import Dompoo.Hongpoong.api.service.InstrumentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

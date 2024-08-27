@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.response.Instrument;
 
-import Dompoo.Hongpoong.domain.Instrument;
+import Dompoo.Hongpoong.domain.entity.Instrument;
 import Dompoo.Hongpoong.domain.enums.Club;
 import lombok.Builder;
 import lombok.Getter;

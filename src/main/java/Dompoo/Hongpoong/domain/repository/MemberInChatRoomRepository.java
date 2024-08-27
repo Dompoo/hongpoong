@@ -1,8 +1,8 @@
-package Dompoo.Hongpoong.repository;
+package Dompoo.Hongpoong.domain.repository;
 
-import Dompoo.Hongpoong.domain.ChatRoom;
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.MemberInChatRoom;
+import Dompoo.Hongpoong.domain.entity.ChatRoom;
+import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.entity.MemberInChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

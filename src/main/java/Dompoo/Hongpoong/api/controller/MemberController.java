@@ -5,7 +5,7 @@ import Dompoo.Hongpoong.api.dto.request.member.MemberRoleEditRequest;
 import Dompoo.Hongpoong.api.dto.response.member.MemberResponse;
 import Dompoo.Hongpoong.api.dto.response.member.MemberStatusResponse;
 import Dompoo.Hongpoong.common.security.UserPrincipal;
-import Dompoo.Hongpoong.service.MemberService;
+import Dompoo.Hongpoong.api.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

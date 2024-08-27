@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.service;
+package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.request.auth.AcceptSignUpRequest;
 import Dompoo.Hongpoong.api.dto.request.auth.EmailValidRequest;
@@ -8,10 +8,10 @@ import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
 import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
 import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
 import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.SignUp;
-import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.repository.SignUpRepository;
+import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.entity.SignUp;
+import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.repository.SignUpRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -5,7 +5,7 @@ import Dompoo.Hongpoong.api.dto.request.auth.EmailValidRequest;
 import Dompoo.Hongpoong.api.dto.request.auth.SignUpRequest;
 import Dompoo.Hongpoong.api.dto.response.auth.EmailValidResponse;
 import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
-import Dompoo.Hongpoong.service.AuthService;
+import Dompoo.Hongpoong.api.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

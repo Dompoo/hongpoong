@@ -2,8 +2,8 @@ package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
 import Dompoo.Hongpoong.config.WithMockMember;
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.request.auth;
 
-import Dompoo.Hongpoong.domain.SignUp;
+import Dompoo.Hongpoong.domain.entity.SignUp;
 import Dompoo.Hongpoong.domain.enums.Club;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

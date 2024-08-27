@@ -5,7 +5,7 @@ import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.api.dto.response.resevation.ReservationResponse;
 import Dompoo.Hongpoong.common.security.UserPrincipal;
-import Dompoo.Hongpoong.service.ReservationService;
+import Dompoo.Hongpoong.api.service.ReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -4,7 +4,7 @@ import Dompoo.Hongpoong.api.dto.request.info.InfoCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.info.InfoEditRequest;
 import Dompoo.Hongpoong.api.dto.response.info.InfoDetailResponse;
 import Dompoo.Hongpoong.api.dto.response.info.InfoResponse;
-import Dompoo.Hongpoong.service.InfoService;
+import Dompoo.Hongpoong.api.service.InfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

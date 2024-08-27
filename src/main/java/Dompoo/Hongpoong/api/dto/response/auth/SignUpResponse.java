@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.response.auth;
 
-import Dompoo.Hongpoong.domain.SignUp;
+import Dompoo.Hongpoong.domain.entity.SignUp;
 import lombok.Builder;
 import lombok.Getter;
 

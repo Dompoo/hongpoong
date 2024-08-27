@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.common.security;
 
-import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.entity.Member;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

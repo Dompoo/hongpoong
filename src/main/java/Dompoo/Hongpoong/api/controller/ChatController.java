@@ -4,7 +4,7 @@ import Dompoo.Hongpoong.api.dto.request.chat.ChatRoomCreateRequest;
 import Dompoo.Hongpoong.api.dto.response.chat.ChatMessageDto;
 import Dompoo.Hongpoong.api.dto.response.chat.ChatRoomResponse;
 import Dompoo.Hongpoong.common.security.UserPrincipal;
-import Dompoo.Hongpoong.service.ChatService;
+import Dompoo.Hongpoong.api.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;

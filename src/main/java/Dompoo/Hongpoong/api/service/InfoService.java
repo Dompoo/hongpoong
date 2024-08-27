@@ -1,12 +1,12 @@
-package Dompoo.Hongpoong.service;
+package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.request.info.InfoCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.info.InfoEditDto;
 import Dompoo.Hongpoong.api.dto.response.info.InfoDetailResponse;
 import Dompoo.Hongpoong.api.dto.response.info.InfoResponse;
 import Dompoo.Hongpoong.common.exception.impl.InfoNotFound;
-import Dompoo.Hongpoong.domain.Info;
-import Dompoo.Hongpoong.repository.InfoRepository;
+import Dompoo.Hongpoong.domain.entity.Info;
+import Dompoo.Hongpoong.domain.repository.InfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

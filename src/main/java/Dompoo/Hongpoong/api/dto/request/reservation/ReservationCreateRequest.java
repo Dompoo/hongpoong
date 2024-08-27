@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.request.reservation;
 
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.Reservation;
+import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.entity.Reservation;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

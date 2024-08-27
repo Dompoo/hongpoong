@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.request.Instrument;
 
-import Dompoo.Hongpoong.domain.Instrument;
-import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.entity.Instrument;
+import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

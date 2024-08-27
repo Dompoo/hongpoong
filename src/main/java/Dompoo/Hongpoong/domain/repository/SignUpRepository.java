@@ -1,6 +1,6 @@
-package Dompoo.Hongpoong.repository;
+package Dompoo.Hongpoong.domain.repository;
 
-import Dompoo.Hongpoong.domain.SignUp;
+import Dompoo.Hongpoong.domain.entity.SignUp;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

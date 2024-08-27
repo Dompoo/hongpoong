@@ -1,10 +1,14 @@
 package Dompoo.Hongpoong.domain;
 
+import Dompoo.Hongpoong.api.dto.request.common.SettingSaveDto;
 import Dompoo.Hongpoong.api.dto.request.member.MemberEditDto;
 import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -24,9 +28,7 @@ public class Member {
     private String password;
     private Role role;
     private Club club;
-
-    @OneToOne(mappedBy = "member", cascade = CascadeType.REMOVE)
-    private Setting setting;
+    private boolean pushAlarm;
 
     @Builder
     public Member(String email, String username, String password, Club club) {
@@ -34,6 +36,7 @@ public class Member {
         this.username = username;
         this.password = password;
         this.club = club;
+        this.pushAlarm = true;
         this.role = ROLE_USER;
     }
 
@@ -54,5 +57,9 @@ public class Member {
         }
         
         if (dto.getUsername() != null) this.username = dto.getUsername();
+    }
+    
+    public void editSetting(SettingSaveDto dto) {
+        if (dto.getPush() != null) this.pushAlarm = dto.getPush();
     }
 }

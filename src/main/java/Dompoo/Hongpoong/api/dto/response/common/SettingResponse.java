@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.response.common;
 
-import Dompoo.Hongpoong.domain.Setting;
+import Dompoo.Hongpoong.domain.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,24 +10,24 @@ ResponseBody
 
 <단건조회시>
 {
-    "push": false
+    "pushAlarm": false
 }
  */
 public class SettingResponse {
 
     private Long id;
-    private boolean push;
+    private boolean pushAlarm;
     
     @Builder
-    private SettingResponse(Long id, boolean push) {
+    private SettingResponse(Long id, boolean pushAlarm) {
         this.id = id;
-        this.push = push;
+        this.pushAlarm = pushAlarm;
     }
     
-    public static SettingResponse from(Setting setting) {
+    public static SettingResponse from(Member member) {
         return SettingResponse.builder()
-                .id(setting.getId())
-                .push(setting.isPush())
+                .id(member.getId())
+                .pushAlarm(member.isPushAlarm())
                 .build();
     }
 }

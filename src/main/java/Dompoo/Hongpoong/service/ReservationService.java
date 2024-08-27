@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationCreateRequest;
-import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditRequest;
+import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditDto;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.api.dto.response.resevation.ReservationResponse;
 import Dompoo.Hongpoong.common.exception.impl.*;
@@ -25,14 +25,10 @@ public class ReservationService {
 
     public List<ReservationResponse> getList(ReservationSearchRequest request) {
         return reservationRepository.findAllByDate(request.getDate()).stream()
-                .map(ReservationResponse::new)
+                .map(ReservationResponse::from)
                 .collect(Collectors.toList());
     }
-
-    /**
-     * request를 받아서 해당 날의 모든 예약 목록중
-     * 예약시간이 겹치는 것 개수 + 1을 예약 순서로 설정하여 저장한다.
-     */
+    
     public void addReservation(Long memberId, ReservationCreateRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
@@ -41,25 +37,17 @@ public class ReservationService {
             throw new EndForwardStart();
         }
 
-        reservationRepository.save(Reservation.builder()
-                .member(member)
-                .number(request.getNumber())
-                .date(request.getDate())
-                .startTime(request.getStartTime())
-                .endTime(request.getEndTime())
-                .message(request.getMessage())
-                .build());
+        reservationRepository.save(request.toReservation(member));
     }
 
     public ReservationResponse findReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
 
-        return new ReservationResponse(reservation);
+        return ReservationResponse.from(reservation);
     }
 
-    public ReservationResponse editReservation(Long memberId, Long reservationId, ReservationEditRequest request) {
-
+    public ReservationResponse editReservation(Long memberId, Long reservationId, ReservationEditDto dto, LocalDateTime now) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
 
@@ -67,19 +55,13 @@ public class ReservationService {
             throw new EditFailException();
         }
 
-        if (request.getStartTime() > request.getEndTime()) {
+        if (dto.getStartTime() > dto.getEndTime()) {
             throw new EndForwardStart();
         }
-
-        if (request.getNumber() != null) reservation.setNumber(request.getNumber());
-        if (request.getDate() != null) reservation.setDate(request.getDate());
-        if (request.getStartTime() != null) reservation.setStartTime(request.getStartTime());
-        if (request.getEndTime() != null) reservation.setEndTime(request.getEndTime());
-        if (request.getMessage() != null) reservation.setMessage(request.getMessage());
-
-        reservation.setLastModified(LocalDateTime.now());
-
-        return new ReservationResponse(reservation);
+        
+        reservation.edit(dto, now);
+        
+        return ReservationResponse.from(reservation);
     }
 
     public void deleteReservation(Long memberId, Long reservationId) {
@@ -93,12 +75,10 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
-    public void edit(Long id, ReservationEditRequest request) {
+    public void edit(Long id, ReservationEditDto dto, LocalDateTime now) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(ReservationNotFound::new);
 
-        if (request.getDate() != null) reservation.setDate(request.getDate());
-        if (request.getStartTime() != null) reservation.setStartTime(request.getStartTime());
-        if (request.getEndTime() != null) reservation.setEndTime(request.getEndTime());
+        reservation.edit(dto, now);
     }
 }

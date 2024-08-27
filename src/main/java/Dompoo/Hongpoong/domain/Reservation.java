@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.domain;
 
 
+import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,9 +45,13 @@ public class Reservation {
         this.message = message;
         lastModified = LocalDateTime.now();
     }
-
-//    public void setMember(Member member) {
-//        this.member = member;
-//        member.getReservations().add(this);
-//    }
+    
+    public void edit(ReservationEditDto dto, LocalDateTime now) {
+        if (dto.getNumber() != null) this.number = dto.getNumber();
+        if (dto.getDate() != null) this.date = dto.getDate();
+        if (dto.getStartTime() != null) this.startTime = dto.getStartTime();
+        if (dto.getEndTime() != null) this.endTime = dto.getEndTime();
+        if (dto.getMessage() != null) this.message = dto.getMessage();
+        this.lastModified = now;
+    }
 }

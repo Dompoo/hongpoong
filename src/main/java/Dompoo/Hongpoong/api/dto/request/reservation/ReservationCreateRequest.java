@@ -1,6 +1,11 @@
 package Dompoo.Hongpoong.api.dto.request.reservation;
 
-import jakarta.validation.constraints.*;
+import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.Reservation;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,11 +47,22 @@ public class ReservationCreateRequest {
     private String message = "";
 
     @Builder
-    public ReservationCreateRequest(Integer number, LocalDate date, Integer startTime, Integer endTime, String message) {
+    private ReservationCreateRequest(Integer number, LocalDate date, Integer startTime, Integer endTime, String message) {
         this.number = number;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.message = message;
+    }
+    
+    public Reservation toReservation(Member member) {
+        return Reservation.builder()
+                .member(member)
+                .number(number)
+                .date(date)
+                .startTime(startTime)
+                .endTime(endTime)
+                .message(message)
+                .build();
     }
 }

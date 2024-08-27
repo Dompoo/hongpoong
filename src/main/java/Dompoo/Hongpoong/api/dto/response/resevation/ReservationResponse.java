@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.api.dto.response.resevation;
 
 import Dompoo.Hongpoong.domain.Reservation;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -51,16 +52,31 @@ public class ReservationResponse {
     private final Integer endTime;
     private final String message;
     private final LocalDateTime lastmodified;
-
-    public ReservationResponse(Reservation reservation) {
-        this.id = reservation.getId();
-        this.username = reservation.getMember().getUsername();
-        this.email = reservation.getMember().getEmail();
-        this.number = reservation.getNumber();
-        this.date = reservation.getDate();
-        this.startTime = reservation.getStartTime();
-        this.endTime = reservation.getEndTime();
-        this.message = reservation.getMessage();
-        this.lastmodified = reservation.getLastModified();
+    
+    @Builder
+    private ReservationResponse(Long id, String username, String email, Integer number, LocalDate date, Integer startTime, Integer endTime, String message, LocalDateTime lastmodified) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.number = number;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.message = message;
+        this.lastmodified = lastmodified;
+    }
+    
+    public static ReservationResponse from(Reservation reservation) {
+        return ReservationResponse.builder()
+                .id(reservation.getId())
+                .username(reservation.getMember().getUsername())
+                .email(reservation.getMember().getEmail())
+                .number(reservation.getNumber())
+                .date(reservation.getDate())
+                .startTime(reservation.getStartTime())
+                .endTime(reservation.getEndTime())
+                .message(reservation.getMessage())
+                .lastmodified(reservation.getLastModified())
+                .build();
     }
 }

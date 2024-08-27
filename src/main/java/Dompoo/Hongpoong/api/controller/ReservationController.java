@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -38,7 +39,7 @@ public class ReservationController {
 
     @PatchMapping("/{id}")
     public ReservationResponse editReservation(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
-        return service.editReservation(principal.getMemberId(), id, request);
+        return service.editReservation(principal.getMemberId(), id, request.toDto(), LocalDateTime.now());
     }
 
     @DeleteMapping("/{id}")
@@ -49,6 +50,6 @@ public class ReservationController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PatchMapping("/manage/{id}")
     public void edit(@PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
-        service.edit(id, request);
+        service.edit(id, request.toDto(), LocalDateTime.now());
     }
 }

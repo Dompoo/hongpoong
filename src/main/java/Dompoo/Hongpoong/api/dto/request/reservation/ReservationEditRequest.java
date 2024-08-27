@@ -40,11 +40,21 @@ public class ReservationEditRequest {
     private String message;
 
     @Builder
-    public ReservationEditRequest(Integer number, LocalDate date, Integer startTime, Integer endTime, String message) {
+    private ReservationEditRequest(Integer number, LocalDate date, Integer startTime, Integer endTime, String message) {
         this.number = number;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
         this.message = message;
+    }
+    
+    public ReservationEditDto toDto() {
+        return ReservationEditDto.builder()
+                .number(number)
+                .date(date)
+                .startTime(startTime)
+                .endTime(endTime)
+                .message(message)
+                .build();
     }
 }

@@ -9,22 +9,18 @@ import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
 import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
 import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
 import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.Member.Club;
 import Dompoo.Hongpoong.domain.Setting;
 import Dompoo.Hongpoong.domain.SignUp;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.SettingRepository;
 import Dompoo.Hongpoong.repository.SignUpRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -33,17 +29,14 @@ public class AuthService {
 
     private final MemberRepository memberRepository;
     private final SignUpRepository signUpRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder encoder;
     private final SettingRepository settingRepository;
 
-    public EmailValidResponse checkEmailValid(@Valid EmailValidRequest request) {
+    public EmailValidResponse checkEmailValid(EmailValidRequest request) {
         Optional<Member> findMember = memberRepository.findByEmail(request.getEmail());
         Optional<SignUp> findSignUp = signUpRepository.findByEmail(request.getEmail());
-
-        boolean valid = true;
-
-        if (findMember.isPresent()) valid = false;
-        if (findSignUp.isPresent()) valid = false;
+        
+        boolean valid = findMember.isEmpty() && findSignUp.isEmpty();
 
         return EmailValidResponse.builder()
                 .valid(valid)
@@ -51,24 +44,16 @@ public class AuthService {
     }
 
     public void requestSignup(SignUpRequest request) {
-        if (!Objects.equals(request.getPassword1(), request.getPassword2())) {
+        if (!request.getPassword1().equals(request.getPassword2())) {
             throw new PasswordNotSame();
         }
-
-        if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
+        
+        if (memberRepository.findByEmail(request.getEmail()).isPresent()
+                || signUpRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new AlreadyExistEmail();
         }
 
-        if (signUpRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new AlreadyExistEmail();
-        }
-
-        signUpRepository.save(SignUp.builder()
-                .email(request.getEmail())
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword1()))
-                .club(Club.byInt(request.getClub()))
-                .build());
+        signUpRepository.save(request.toSignUp(encoder));
     }
 
     public void acceptSignUp(AcceptSignUpRequest request) {
@@ -76,7 +61,7 @@ public class AuthService {
                 .orElseThrow(SignUpNotFound::new);
 
         if (request.isAcceptResult()) {
-            Member member = memberRepository.save(new Member(signUp));
+            Member member = memberRepository.save(Member.from(signUp));
 
             settingRepository.save(Setting.builder()
                     .member(member)
@@ -87,8 +72,8 @@ public class AuthService {
     }
 
     public List<SignUpResponse> getSignUp() {
-        return signUpRepository.findAll()
-                .stream().map(SignUpResponse::new)
-                .collect(Collectors.toList());
+        return signUpRepository.findAll().stream()
+                .map(SignUpResponse::from)
+                .toList();
     }
 }

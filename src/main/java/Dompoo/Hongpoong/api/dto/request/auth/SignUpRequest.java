@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.api.dto.request.auth;
 
+import Dompoo.Hongpoong.domain.SignUp;
+import Dompoo.Hongpoong.domain.enums.Club;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Setter
@@ -36,11 +39,20 @@ public class SignUpRequest {
     private Integer club;
 
     @Builder
-    public SignUpRequest(String email, String username, String password1, String password2, Integer club) {
+    private SignUpRequest(String email, String username, String password1, String password2, Integer club) {
         this.email = email;
         this.username = username;
         this.password1 = password1;
         this.password2 = password2;
         this.club = club;
+    }
+    
+    public SignUp toSignUp(PasswordEncoder encoder) {
+        return SignUp.builder()
+                .email(email)
+                .username(username)
+                .password(encoder.encode(password1))
+                .club(Club.fromInt(club))
+                .build();
     }
 }

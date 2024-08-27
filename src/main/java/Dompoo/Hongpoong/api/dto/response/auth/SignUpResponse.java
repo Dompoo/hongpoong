@@ -21,13 +21,23 @@ public class SignUpResponse {
     private String username;
     private String password;
     private String club;
-
+    
     @Builder
-    public SignUpResponse(SignUp signUp) {
-        this.id = signUp.getId();
-        this.email = signUp.getEmail();
-        this.username = signUp.getUsername();
-        this.password = signUp.getPassword();
-        this.club = signUp.getClub().getValue();
+    private SignUpResponse(Long id, String email, String username, String password, String club) {
+        this.id = id;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.club = club;
+    }
+    
+    public static SignUpResponse from(SignUp signUp) {
+        return SignUpResponse.builder()
+                .id(signUp.getId())
+                .email(signUp.getEmail())
+                .username(signUp.getUsername())
+                .password(signUp.getPassword())
+                .club(signUp.getClub().korName)
+                .build();
     }
 }

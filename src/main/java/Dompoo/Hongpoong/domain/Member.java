@@ -37,12 +37,13 @@ public class Member {
         this.role = ROLE_USER;
     }
 
-    public Member(SignUp signUp) {
-        this.email = signUp.getEmail();
-        this.username = signUp.getEmail();
-        this.password = signUp.getPassword();
-        this.club = signUp.getClub();
-        this.role = ROLE_USER;
+    public static Member from(SignUp signUp) {
+        return Member.builder()
+                .email(signUp.getEmail())
+                .username(signUp.getEmail())
+                .password(signUp.getPassword())
+                .club(signUp.getClub())
+                .build();
     }
     
     public void edit(MemberEditDto dto, PasswordEncoder encoder) {

@@ -17,10 +17,10 @@ public class UserPrincipal extends User {
     public UserPrincipal (Member member) {
         super(member.getEmail(),
                 member.getPassword(),
-                List.of(new SimpleGrantedAuthority(member.getRole())));
+                List.of(new SimpleGrantedAuthority(member.getRole().name())));
 
         memberId = member.getId();
         username = member.getUsername();
-        role = member.getRole();
+        role = member.getRole().name();
     }
 }

@@ -13,14 +13,13 @@ import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.repository.InstrumentRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class InstrumentService {
 
@@ -28,6 +27,7 @@ public class InstrumentService {
     private final MemberRepository memberRepository;
     private final ReservationRepository reservationRepository;
     
+    @Transactional
     public void addOne(Long memberId, InstrumentCreateRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
@@ -36,6 +36,7 @@ public class InstrumentService {
     }
     
     //member의 클럽과 다른 클럽 소속의 악기리스트 return
+    @Transactional(readOnly = true)
     public List<InstrumentResponse> getListOther(Long memberId) {
         Club club = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new)
@@ -47,6 +48,7 @@ public class InstrumentService {
     }
     
     //member의 클럽과 같은 클럽 소속의 악기리스트 return
+    @Transactional(readOnly = true)
     public List<InstrumentResponse> getList(Long memberId) {
         Club club = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new)
@@ -57,6 +59,7 @@ public class InstrumentService {
                 .toList();
     }
 
+    @Transactional
     public InstrumentBorrowResponse borrowOne(Long memberId, InstrumentBorrowRequest request) {
         Reservation reservation = reservationRepository.findById(request.getReservationId())
                 .orElseThrow(ReservationNotFound::new);
@@ -77,6 +80,7 @@ public class InstrumentService {
         return InstrumentBorrowResponse.from(instrument);
     }
 
+    @Transactional
     public void returnOne(Long id) {
         Instrument instrument = instrumentRepository.findById(id)
                 .orElseThrow(InstrumentNotFound::new);
@@ -85,6 +89,7 @@ public class InstrumentService {
         instrument.setAvailable(true);
     }
 
+    @Transactional(readOnly = true)
     public InstrumentResponse getOne(Long id) {
         Instrument instrument = instrumentRepository.findById(id)
                 .orElseThrow(InstrumentNotFound::new);
@@ -92,6 +97,7 @@ public class InstrumentService {
         return InstrumentResponse.from(instrument, instrument.getMember().getClub());
     }
 
+    @Transactional
     public void editOne(Long memberId, Long id, InstrumentEditDto dto) {
         Instrument instrument = instrumentRepository.findById(id)
                 .orElseThrow(InstrumentNotFound::new);
@@ -101,6 +107,7 @@ public class InstrumentService {
         instrument.edit(dto);
     }
 
+    @Transactional
     public void deleteOne(Long memberId, Long id) {
         Instrument instrument = instrumentRepository.findById(id)
                 .orElseThrow(InstrumentNotFound::new);

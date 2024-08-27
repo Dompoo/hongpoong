@@ -11,6 +11,7 @@ import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,12 +24,14 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = true)
     public List<ReservationResponse> getList(ReservationSearchRequest request) {
         return reservationRepository.findAllByDate(request.getDate()).stream()
                 .map(ReservationResponse::from)
                 .collect(Collectors.toList());
     }
     
+    @Transactional
     public void addReservation(Long memberId, ReservationCreateRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
@@ -40,6 +43,7 @@ public class ReservationService {
         reservationRepository.save(request.toReservation(member));
     }
 
+    @Transactional(readOnly = true)
     public ReservationResponse findReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
@@ -47,6 +51,7 @@ public class ReservationService {
         return ReservationResponse.from(reservation);
     }
 
+    @Transactional
     public ReservationResponse editReservation(Long memberId, Long reservationId, ReservationEditDto dto, LocalDateTime now) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
@@ -64,6 +69,7 @@ public class ReservationService {
         return ReservationResponse.from(reservation);
     }
 
+    @Transactional
     public void deleteReservation(Long memberId, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
@@ -75,6 +81,7 @@ public class ReservationService {
         reservationRepository.delete(reservation);
     }
 
+    @Transactional
     public void edit(Long id, ReservationEditDto dto, LocalDateTime now) {
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(ReservationNotFound::new);

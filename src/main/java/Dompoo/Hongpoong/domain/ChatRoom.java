@@ -18,9 +18,15 @@ public class ChatRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String roomName;
-
+    private int memberCount;
+    
     @Builder
-    public ChatRoom(String roomName) {
+    private ChatRoom(String roomName, int memberCount) {
         this.roomName = roomName;
+        this.memberCount = memberCount;
+    }
+    
+    public void reduceMemberCount() {
+        this.memberCount--;
     }
 }

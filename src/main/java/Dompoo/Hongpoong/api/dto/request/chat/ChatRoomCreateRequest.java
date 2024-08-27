@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.api.dto.request.chat;
 
+import Dompoo.Hongpoong.domain.ChatRoom;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +24,15 @@ public class ChatRoomCreateRequest {
     private List<Long> members;
 
     @Builder
-    public ChatRoomCreateRequest(String name, List<Long> members) {
+    private ChatRoomCreateRequest(String name, List<Long> members) {
         this.name = name;
         this.members = members;
+    }
+    
+    public ChatRoom toChatRoom() {
+        return ChatRoom.builder()
+                .roomName(name)
+                .memberCount(members.size())
+                .build();
     }
 }

@@ -26,9 +26,4 @@ public class ChatMessage {
         this.sender = sender;
         setChatRoom(chatRoom);
     }
-
-//    public void setChatRoom(ChatRoom chatRoom) {
-//        this.chatRoom = chatRoom;
-//        chatRoom.getMessages().add(this);
-//    }
 }

@@ -9,10 +9,8 @@ import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
 import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
 import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
 import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.Setting;
 import Dompoo.Hongpoong.domain.SignUp;
 import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.repository.SettingRepository;
 import Dompoo.Hongpoong.repository.SignUpRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,7 +27,6 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final SignUpRepository signUpRepository;
     private final PasswordEncoder encoder;
-    private final SettingRepository settingRepository;
 
     @Transactional(readOnly = true)
     public EmailValidResponse checkEmailValid(EmailValidRequest request) {
@@ -63,11 +60,7 @@ public class AuthService {
                 .orElseThrow(SignUpNotFound::new);
 
         if (request.isAcceptResult()) {
-            Member member = memberRepository.save(Member.from(signUp));
-
-            settingRepository.save(Setting.builder()
-                    .member(member)
-                    .build());
+            memberRepository.save(Member.from(signUp));
         }
 
         signUpRepository.delete(signUp);

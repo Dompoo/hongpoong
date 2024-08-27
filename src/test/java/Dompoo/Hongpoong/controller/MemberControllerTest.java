@@ -1,10 +1,11 @@
 package Dompoo.Hongpoong.controller;
 
-import Dompoo.Hongpoong.config.WithMockMember;
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.api.dto.request.member.MemberEditRequest;
 import Dompoo.Hongpoong.api.dto.request.member.MemberRoleEditRequest;
+import Dompoo.Hongpoong.config.WithMockMember;
+import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.enums.Role;
+import Dompoo.Hongpoong.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static Dompoo.Hongpoong.domain.Member.Club.SANTLE;
+import static Dompoo.Hongpoong.domain.enums.Club.SANTLE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -194,7 +195,7 @@ class MemberControllerTest {
                 .build());
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Member.Role.ROLE_LEADER)
+                .role(Role.ROLE_LEADER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -220,7 +221,7 @@ class MemberControllerTest {
                 .build());
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Member.Role.ROLE_LEADER)
+                .role(Role.ROLE_LEADER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);

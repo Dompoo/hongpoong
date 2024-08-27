@@ -3,9 +3,8 @@ package Dompoo.Hongpoong.service;
 import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
 import Dompoo.Hongpoong.api.dto.response.common.SettingResponse;
 import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.Setting;
+import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.repository.SettingRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -22,14 +22,11 @@ class CommonServiceTest {
     @Autowired
     private CommonService service;
     @Autowired
-    private SettingRepository settingRepository;
-    @Autowired
     private MemberRepository memberRepository;
 
     @AfterEach
     void setUp() {
         memberRepository.deleteAll();
-        settingRepository.deleteAll();
     }
 
     @Test
@@ -40,19 +37,15 @@ class CommonServiceTest {
                 .email("dompoo@gmail.com")
                 .username("이창근")
                 .password("1234")
-                .club(Member.Club.SANTLE)
-                .build());
-
-        Setting setting = settingRepository.save(Setting.builder()
-                .member(member)
+                .club(Club.SANTLE)
                 .build());
 
         //when
         SettingResponse response = service.getSetting(member.getId());
 
         //then
-        assertEquals(setting.getId(), response.getId());
-        assertFalse(response.isPush());
+        assertEquals(member.getId(), response.getId());
+        assertTrue(response.isPushAlarm());
     }
 
     @Test
@@ -63,22 +56,14 @@ class CommonServiceTest {
                 .email("dompoo@gmail.com")
                 .username("이창근")
                 .password("1234")
-                .club(Member.Club.SANTLE)
-                .build());
-
-        Setting setting = settingRepository.save(Setting.builder()
-                .member(member)
+                .club(Club.SANTLE)
                 .build());
 
         SettingSaveRequest request = SettingSaveRequest.builder()
                 .push(true)
                 .build();
 
-        //when
-        service.saveSetting(member.getId(), request);
-
-        //then
-        Setting findSetting = member.getSetting();
-        assertTrue(findSetting.isPush());
+        //expected
+        service.saveSetting(member.getId(), request.toDto());
     }
 }

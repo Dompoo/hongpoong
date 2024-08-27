@@ -4,8 +4,11 @@ import Dompoo.Hongpoong.api.dto.request.chat.ChatRoomCreateRequest;
 import Dompoo.Hongpoong.config.WithMockMember;
 import Dompoo.Hongpoong.domain.ChatRoom;
 import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.MemberInChatRoom;
+import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.repository.ChatMessageRepository;
 import Dompoo.Hongpoong.repository.ChatRoomRepository;
+import Dompoo.Hongpoong.repository.MemberInChatRoomRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -33,8 +36,6 @@ class ChatControllerTest {
     @Autowired
     private ChatMessageRepository messageRepository;
     @Autowired
-    private ChatRoomRepository roomRepository;
-    @Autowired
     private MemberRepository memberRepository;
     @Autowired
     private MockMvc mockMvc;
@@ -42,12 +43,15 @@ class ChatControllerTest {
     private ObjectMapper objectMapper;
 	@Autowired
 	private ChatRoomRepository chatRoomRepository;
+	@Autowired
+	private MemberInChatRoomRepository memberInChatRoomRepository;
     
     @AfterEach
     void setUp() {
-        messageRepository.deleteAll();
-        roomRepository.deleteAll();
-        memberRepository.deleteAll();
+        messageRepository.deleteAllInBatch();
+        memberInChatRoomRepository.deleteAllInBatch();
+        chatRoomRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
     }
 
     @Test
@@ -60,13 +64,13 @@ class ChatControllerTest {
                 .email("user2@gmail.com")
                 .username("user2")
                 .password("1234")
-                .club(Member.Club.SANTLE)
+                .club(Club.SANTLE)
                 .build());
         Member member3 = memberRepository.save(Member.builder()
                 .email("user3@gmail.com")
                 .username("user3")
                 .password("1234")
-                .club(Member.Club.SANTLE)
+                .club(Club.SANTLE)
                 .build());
 
         ChatRoomCreateRequest request = ChatRoomCreateRequest.builder()
@@ -96,28 +100,42 @@ class ChatControllerTest {
                 .email("user2@gmail.com")
                 .username("user2")
                 .password("1234")
-                .club(Member.Club.SANTLE)
+                .club(Club.SANTLE)
                 .build());
         Member member3 = memberRepository.save(Member.builder()
                 .email("user3@gmail.com")
                 .username("user3")
                 .password("1234")
-                .club(Member.Club.SANTLE)
+                .club(Club.SANTLE)
                 .build());
-
-        ChatRoom room1 = ChatRoom.builder()
-                .roomName("채팅방1")
-                .build();
-        room1.addMember(me);
-        room1.addMember(member2);
-
-        ChatRoom room2 = ChatRoom.builder()
-                .roomName("채팅방2")
-                .build();
-        room2.addMember(member2);
-        room2.addMember(member3);
         
-        chatRoomRepository.saveAll(List.of(room1, room2));
+        ChatRoom chatroom1 = chatRoomRepository.save(ChatRoom.builder()
+                .roomName("채팅방1")
+                .memberCount(2)
+                .build());
+        ChatRoom chatroom2 = chatRoomRepository.save(ChatRoom.builder()
+                .roomName("채팅방2")
+                .memberCount(2)
+                .build());
+        
+        memberInChatRoomRepository.saveAll(List.of(
+                MemberInChatRoom.builder()
+                        .chatRoom(chatroom1)
+                        .member(me)
+                        .build(),
+                MemberInChatRoom.builder()
+                        .chatRoom(chatroom1)
+                        .member(member2)
+                        .build(),
+                MemberInChatRoom.builder()
+                        .chatRoom(chatroom2)
+                        .member(member2)
+                        .build(),
+                MemberInChatRoom.builder()
+                        .chatRoom(chatroom2)
+                        .member(member3)
+                        .build()
+        ));
 
         //expected
         mockMvc.perform(get("/chat"))
@@ -138,25 +156,37 @@ class ChatControllerTest {
                 .email("user2@gmail.com")
                 .username("user2")
                 .password("1234")
-                .club(Member.Club.SANTLE)
+                .club(Club.SANTLE)
                 .build());
         Member member3 = memberRepository.save(Member.builder()
                 .email("user3@gmail.com")
                 .username("user3")
                 .password("1234")
-                .club(Member.Club.SANTLE)
+                .club(Club.SANTLE)
                 .build());
 
-        ChatRoom room = ChatRoom.builder()
+        ChatRoom chatRoom = chatRoomRepository.save(ChatRoom.builder()
                 .roomName("채팅방1")
-                .build();
-        room.addMember(me);
-        room.addMember(member2);
-        room.addMember(member3);
-        roomRepository.save(room);
+                .build());
+        
+        memberInChatRoomRepository.saveAll(List.of(
+                MemberInChatRoom.builder()
+                        .chatRoom(chatRoom)
+                        .member(me)
+                        .build(),
+                MemberInChatRoom.builder()
+                        .chatRoom(chatRoom)
+                        .member(member2)
+                        .build(),
+                MemberInChatRoom.builder()
+                        .chatRoom(chatRoom)
+                        .member(member3)
+                        .build()
+        ));
+        
 
         //expected
-        mockMvc.perform(delete("/chat/{roomId}", room.getId()))
+        mockMvc.perform(delete("/chat/{roomId}", chatRoom.getId()))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

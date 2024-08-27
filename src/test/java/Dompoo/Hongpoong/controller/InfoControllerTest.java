@@ -6,6 +6,7 @@ import Dompoo.Hongpoong.config.WithMockMember;
 import Dompoo.Hongpoong.domain.Info;
 import Dompoo.Hongpoong.repository.InfoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,12 @@ class InfoControllerTest {
     private static final String CONTENT = "공지사항 내용";
     private static final String NEW_TITLE = "새로운 공지사항 제목";
     private static final String NEW_CONTENT = "새로운 공지사항 내용";
-
+    
+    @AfterEach
+    void tearDown() {
+        repository.deleteAllInBatch();
+    }
+    
     //공지사항 추가 테스트
     @Test
     @DisplayName("공지사항 추가")

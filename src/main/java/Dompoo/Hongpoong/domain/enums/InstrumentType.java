@@ -1,7 +1,18 @@
 package Dompoo.Hongpoong.domain.enums;
 
 public enum InstrumentType {
-	KKWANGGWARI, JANGGU, BUK, SOGO, JING;
+	KKWANGGWARI("꽹과리"),
+	JANGGU("장구"),
+	BUK("북"),
+	SOGO("소고"),
+	JING("징"),
+	;
+	
+	public final String korName;
+	
+	InstrumentType(String korName) {
+		this.korName = korName;
+	}
 	
 	public static InstrumentType fromInt(int number) {
 		return switch (number) {

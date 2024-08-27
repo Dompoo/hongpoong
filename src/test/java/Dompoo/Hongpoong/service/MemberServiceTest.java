@@ -1,13 +1,15 @@
 package Dompoo.Hongpoong.service;
 
-import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
-import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.api.dto.request.member.MemberEditRequest;
 import Dompoo.Hongpoong.api.dto.request.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.api.dto.response.member.MemberListResponse;
+import Dompoo.Hongpoong.api.dto.response.member.MemberResponse;
 import Dompoo.Hongpoong.api.dto.response.member.MemberStatusResponse;
+import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
+import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
+import Dompoo.Hongpoong.domain.Member;
+import Dompoo.Hongpoong.domain.enums.Role;
+import Dompoo.Hongpoong.repository.MemberRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static Dompoo.Hongpoong.domain.Member.Club.SANTLE;
+import static Dompoo.Hongpoong.domain.enums.Club.SANTLE;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -39,16 +41,20 @@ class MemberServiceTest {
     private static final String NEW_PASSWORD = "asdf";
 
     private Member member;
-
+    
     @BeforeEach
     void setUp() {
-        memberRepository.deleteAll();
         member = memberRepository.save(Member.builder()
                 .email(EMAIL)
                 .username(USERNAME)
                 .password(PASSWORD)
                 .club(SANTLE)
                 .build());
+    }
+    
+    @AfterEach
+    void tearDown() {
+        memberRepository.deleteAllInBatch();
     }
 
     @Test
@@ -101,7 +107,7 @@ class MemberServiceTest {
                 .build();
 
         //when
-        service.editMember(member.getId(), request);
+        service.editMember(member.getId(), request.toDto());
 
         //then
         assertEquals(memberRepository.findAll().getFirst().getEmail(), "dompoo@gmail.com");
@@ -119,7 +125,7 @@ class MemberServiceTest {
                 .build();
 
         //when
-        service.editMember(member.getId(), request);
+        service.editMember(member.getId(), request.toDto());
 
         //then
         assertEquals(memberRepository.findAll().getFirst().getEmail(), "dompoo@gmail.com");
@@ -138,7 +144,7 @@ class MemberServiceTest {
 
         //when
         PasswordNotSame e = assertThrows(PasswordNotSame.class,
-                () -> service.editMember(member.getId(), request));
+                () -> service.editMember(member.getId(), request.toDto()));
 
         //then
         assertEquals(e.getMessage(), "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
@@ -156,7 +162,7 @@ class MemberServiceTest {
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.editMember(member.getId() + 1, request));
+                () -> service.editMember(member.getId() + 1, request.toDto()));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
@@ -197,7 +203,7 @@ class MemberServiceTest {
                 .build());
 
         //when
-        List<MemberListResponse> list = service.getList();
+        List<MemberResponse> list = service.getList();
 
         //then
         assertEquals(2, list.size());
@@ -212,14 +218,14 @@ class MemberServiceTest {
         Member find = memberRepository.findAll().getFirst();
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Member.Role.ROLE_LEADER)
+                .role(Role.ROLE_LEADER)
                 .build();
 
         //when
         service.editRole(find.getId(), request);
 
         //then
-        assertEquals(memberRepository.findAll().getFirst().getRole(), "ROLE_LEADER");
+        assertEquals(memberRepository.findAll().getFirst().getRole().name(), "ROLE_LEADER");
     }
 
     @Test
@@ -229,7 +235,7 @@ class MemberServiceTest {
         Member find = memberRepository.findAll().getFirst();
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Member.Role.ROLE_LEADER)
+                .role(Role.ROLE_LEADER)
                 .build();
 
         //when

@@ -33,10 +33,6 @@ public class Instrument {
         this.type = type;
         this.available = true;
     }
-
-    public String getType() {
-        return type.name();
-    }
     
     public void edit(InstrumentEditDto dto) {
         if (dto.getType() != null) this.type = InstrumentType.fromInt(dto.getType());

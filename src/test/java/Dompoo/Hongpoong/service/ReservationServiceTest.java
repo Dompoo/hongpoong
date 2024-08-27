@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -214,9 +215,11 @@ class ReservationServiceTest {
                 .startTime(13)
                 .endTime(19)
                 .build();
+        
+        LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
 
         //when
-        service.editReservation(member.getId(), reservation.getId(), request);
+        service.editReservation(member.getId(), reservation.getId(), request.toDto(), now);
 
         //then
         Reservation find = assertDoesNotThrow(() -> reservationRepository.findById(reservation.getId())
@@ -249,10 +252,12 @@ class ReservationServiceTest {
                 .startTime(13)
                 .endTime(19)
                 .build();
+        
+        LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
 
         //when
         ReservationNotFound e = assertThrows(ReservationNotFound.class, () ->
-                service.editReservation(member.getId(), reservation.getId() + 1, request));
+                service.editReservation(member.getId(), reservation.getId() + 1, request.toDto(), now));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 예약입니다.");
@@ -281,10 +286,12 @@ class ReservationServiceTest {
                 .startTime(13)
                 .endTime(19)
                 .build();
+        
+        LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
 
         //when
         EditFailException e = assertThrows(EditFailException.class, () ->
-                service.editReservation(member.getId() + 1, reservation.getId(), request));
+                service.editReservation(member.getId() + 1, reservation.getId(), request.toDto(), now));
 
         //then
         assertEquals(e.getMessage(), "수정할 수 없습니다.");
@@ -389,9 +396,11 @@ class ReservationServiceTest {
                 .startTime(13)
                 .endTime(19)
                 .build();
+        
+        LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
 
         //when
-        service.edit(reservation.getId(), request);
+        service.edit(reservation.getId(), request.toDto(), now);
 
         //then
         Reservation find = assertDoesNotThrow(() -> reservationRepository.findById(reservation.getId())

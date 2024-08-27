@@ -3,9 +3,7 @@ package Dompoo.Hongpoong.controller;
 import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
 import Dompoo.Hongpoong.config.WithMockMember;
 import Dompoo.Hongpoong.domain.Member;
-import Dompoo.Hongpoong.domain.Setting;
 import Dompoo.Hongpoong.repository.MemberRepository;
-import Dompoo.Hongpoong.repository.SettingRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,8 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CommonControllerTest {
 
     @Autowired
-    private SettingRepository settingRepository;
-    @Autowired
     private MemberRepository memberRepository;
     @Autowired
     private MockMvc mockMvc;
@@ -40,7 +36,6 @@ class CommonControllerTest {
     @AfterEach
     void setUp() {
         memberRepository.deleteAll();
-        settingRepository.deleteAll();
     }
 
     @Test
@@ -50,15 +45,11 @@ class CommonControllerTest {
         //given
         Member member = memberRepository.findAll().getLast();
 
-        Setting setting = settingRepository.save(Setting.builder()
-                .member(member)
-                .build());
-
         //expected
         mockMvc.perform(get("/common/setting"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(setting.getId()))
-                .andExpect(jsonPath("$.push").value(false))
+                .andExpect(jsonPath("$.id").value(member.getId()))
+                .andExpect(jsonPath("$.pushAlarm").value(true))
                 .andDo(print());
     }
 
@@ -67,14 +58,10 @@ class CommonControllerTest {
     @WithMockMember
     void doSetting() throws Exception {
         //given
-        Member member = memberRepository.findAll().getLast();
-
-        Setting setting = settingRepository.save(Setting.builder()
-                .member(member)
-                .build());
+        memberRepository.findAll().getLast();
 
         SettingSaveRequest request = SettingSaveRequest.builder()
-                .push(true)
+                .push(false)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);

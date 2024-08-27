@@ -11,7 +11,7 @@ import Dompoo.Hongpoong.domain.Reservation;
 import Dompoo.Hongpoong.repository.InstrumentRepository;
 import Dompoo.Hongpoong.repository.MemberRepository;
 import Dompoo.Hongpoong.repository.ReservationRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +21,9 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDate;
 import java.util.List;
 
-import static Dompoo.Hongpoong.domain.Instrument.InstrumentType.*;
-import static Dompoo.Hongpoong.domain.Member.Club.HWARANG;
-import static Dompoo.Hongpoong.domain.Member.Club.SANTLE;
+import static Dompoo.Hongpoong.domain.enums.Club.HWARANG;
+import static Dompoo.Hongpoong.domain.enums.Club.SANTLE;
+import static Dompoo.Hongpoong.domain.enums.InstrumentType.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -39,11 +39,11 @@ class InstrumentServiceTest {
     @Autowired
     private ReservationRepository reservationRepository;
 
-    @BeforeEach
+    @AfterEach
     void setUp() {
-        memberRepository.deleteAll();
-        reservationRepository.deleteAll();
-        instrumentRepository.deleteAll();
+        instrumentRepository.deleteAllInBatch();
+        reservationRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
     }
 
     @Test
@@ -224,8 +224,9 @@ class InstrumentServiceTest {
         service.returnOne(instrument.getId());
 
         //then
-        assertEquals(instrument.getReservation(), null);
-        assertEquals(reservation.getInstruments().size(), 0);
+        Instrument inst = instrumentRepository.findAll().getFirst();
+        assertEquals(inst.isAvailable(), true);
+        assertEquals(inst.getReservation(), null);
     }
 
     @Test
@@ -274,10 +275,10 @@ class InstrumentServiceTest {
                 .build();
 
         //when
-        service.editOne(me.getId(), instrument.getId(), request);
+        service.editOne(me.getId(), instrument.getId(), request.toDto());
 
         //then
-        assertEquals("장구", instrumentRepository.findAll().getFirst().getType());
+        assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType().korName);
         assertFalse(instrumentRepository.findAll().getFirst().isAvailable());
     }
 
@@ -302,10 +303,10 @@ class InstrumentServiceTest {
                 .build();
 
         //when
-        service.editOne(me.getId(), instrument.getId(), request);
+        service.editOne(me.getId(), instrument.getId(), request.toDto());
 
         //then
-        assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType());
+        assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType().korName);
         assertFalse(instrumentRepository.findAll().getFirst().isAvailable());
     }
 
@@ -330,10 +331,10 @@ class InstrumentServiceTest {
                 .build();
 
         //when
-        service.editOne(me.getId(), instrument.getId(), request);
+        service.editOne(me.getId(), instrument.getId(), request.toDto());
 
         //then
-        assertEquals("장구", instrumentRepository.findAll().getFirst().getType());
+        assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType().korName);
         assertTrue(instrumentRepository.findAll().getFirst().isAvailable());
     }
 

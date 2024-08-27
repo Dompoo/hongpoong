@@ -1,12 +1,12 @@
 package Dompoo.Hongpoong.service;
 
-import Dompoo.Hongpoong.domain.Info;
-import Dompoo.Hongpoong.common.exception.impl.InfoNotFound;
-import Dompoo.Hongpoong.repository.InfoRepository;
 import Dompoo.Hongpoong.api.dto.request.info.InfoCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.info.InfoEditRequest;
 import Dompoo.Hongpoong.api.dto.response.info.InfoDetailResponse;
-import Dompoo.Hongpoong.api.dto.response.info.InfoListResponse;
+import Dompoo.Hongpoong.api.dto.response.info.InfoResponse;
+import Dompoo.Hongpoong.common.exception.impl.InfoNotFound;
+import Dompoo.Hongpoong.domain.Info;
+import Dompoo.Hongpoong.repository.InfoRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,9 +52,10 @@ class InfoServiceTest {
                 .title(TITLE)
                 .content(CONTENT)
                 .build();
-
+        LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
+        
         //when
-        service.addInfo(request);
+        service.addInfo(request, now);
 
         //then
         assertEquals(1, repository.count());
@@ -77,7 +79,7 @@ class InfoServiceTest {
                 .build());
 
         //when
-        List<InfoListResponse> list = service.getList();
+        List<InfoResponse> list = service.getList();
 
         //then
         assertEquals(2, list.size());
@@ -137,7 +139,7 @@ class InfoServiceTest {
                 .build();
 
         //when
-        service.editInfo(save.getId(), request);
+        service.editInfo(save.getId(), request.toDto());
 
         //then
         assertEquals(NEW_TITLE, repository.findAll().get(0).getTitle());
@@ -160,7 +162,7 @@ class InfoServiceTest {
                 .build();
 
         //when
-        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.editInfo(2L, request));
+        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.editInfo(2L, request.toDto()));
 
         //then
         assertEquals("존재하지 않는 공지사항입니다.", e.getMessage());

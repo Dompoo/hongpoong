@@ -22,8 +22,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
-import static Dompoo.Hongpoong.domain.Member.Club.HWARANG;
-import static Dompoo.Hongpoong.domain.Member.Club.SANTLE;
+import static Dompoo.Hongpoong.domain.enums.Club.HWARANG;
+import static Dompoo.Hongpoong.domain.enums.Club.SANTLE;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest

@@ -23,9 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.util.List;
 
-import static Dompoo.Hongpoong.domain.Instrument.InstrumentType.*;
-import static Dompoo.Hongpoong.domain.Member.Club.HWARANG;
-import static Dompoo.Hongpoong.domain.Member.Club.SANTLE;
+import static Dompoo.Hongpoong.domain.enums.Club.HWARANG;
+import static Dompoo.Hongpoong.domain.enums.Club.SANTLE;
+import static Dompoo.Hongpoong.domain.enums.InstrumentType.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -50,8 +50,9 @@ class InstrumentControllerTest {
 
     @AfterEach
     void setUp() {
-        memberRepository.deleteAll();
-        instrumentRepository.deleteAll();
+        instrumentRepository.deleteAllInBatch();
+        reservationRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
     }
 
     @Test

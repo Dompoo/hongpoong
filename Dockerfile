@@ -1,8 +1,17 @@
 FROM openjdk:21-slim
 
-ARG JAR_FILE=build/libs/Hongpoong-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} app.jar
+ARG PROFILE
+ARG DB_URL_PROD
+ARG DB_USERNAME_PROD
+ARG DB_PASSWORD_PROD
+
+COPY build/libs/Hongpoong-0.0.1-SNAPSHOT.jar app.jar
+
+ENV PROFILE=${PROFILE}
+ENV DB_URL_PROD=${DB_URL_PROD}
+ENV DB_USERNAME_PROD=${DB_USERNAME_PROD}
+ENV DB_PASSWORD_PROD=${DB_PASSWORD_PROD}
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=${PROFILE}", "/app.jar"]

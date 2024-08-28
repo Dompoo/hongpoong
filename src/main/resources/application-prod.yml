@@ -1,13 +1,10 @@
 spring:
   application:
     name: Hongpoong
-  config:
-    activate:
-      on-profile: prod
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_URL_PROD}:${DB_PORT_PROD}/${DB_NAME_PROD}
+    url: ${DB_URL_PROD}
     username: ${DB_USERNAME_PROD}
     password: ${DB_PASSWORD_PROD}
   session:
@@ -17,6 +14,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
     defer-datasource-initialization: true
     open-in-view: false

@@ -1,9 +1,6 @@
 spring:
   application:
     name: Hongpoong
-  config:
-    activate:
-      on-profile: local
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

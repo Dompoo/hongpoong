@@ -1,3 +1,6 @@
 spring:
+  application:
+    name: Hongpoong
+
   profiles:
     active: local

@@ -1,7 +1,4 @@
 spring:
-  application:
-    name: Hongpoong
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL_PROD}

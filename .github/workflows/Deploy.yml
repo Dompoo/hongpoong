@@ -9,7 +9,7 @@ env:
   SERVER_NAME: hongpoong-server
 
 jobs:
-  build:
+  Build-Push-Deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

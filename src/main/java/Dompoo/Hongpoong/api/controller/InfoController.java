@@ -20,12 +20,12 @@ public class InfoController {
     private final InfoService service;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("")
+    @PostMapping
     public void createInfo(@RequestBody InfoCreateRequest request) {
         service.addInfo(request, LocalDateTime.now());
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<InfoResponse> getInfoList() {
         return service.getList();
     }

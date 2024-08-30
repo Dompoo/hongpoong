@@ -3,8 +3,8 @@ package Dompoo.Hongpoong.api.controller;
 import Dompoo.Hongpoong.api.dto.request.chat.ChatRoomCreateRequest;
 import Dompoo.Hongpoong.api.dto.response.chat.ChatMessageDto;
 import Dompoo.Hongpoong.api.dto.response.chat.ChatRoomResponse;
-import Dompoo.Hongpoong.common.security.UserPrincipal;
 import Dompoo.Hongpoong.api.service.ChatService;
+import Dompoo.Hongpoong.common.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -21,12 +21,12 @@ public class ChatController {
 
     private final ChatService service;
 
-    @PostMapping("")
+    @PostMapping
     public ChatRoomResponse createRoom(@RequestBody ChatRoomCreateRequest request) {
         return service.createRoom(request);
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<ChatRoomResponse> findAllRoom(@AuthenticationPrincipal UserPrincipal principal) {
         return service.findAllRoom(principal.getMemberId());
     }

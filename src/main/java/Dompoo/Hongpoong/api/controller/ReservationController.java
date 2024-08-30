@@ -4,8 +4,8 @@ import Dompoo.Hongpoong.api.dto.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.api.dto.response.resevation.ReservationResponse;
-import Dompoo.Hongpoong.common.security.UserPrincipal;
 import Dompoo.Hongpoong.api.service.ReservationService;
+import Dompoo.Hongpoong.common.security.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +27,7 @@ public class ReservationController {
         return service.getList(request);
     }
 
-    @PostMapping("")
+    @PostMapping
     public void addReservation(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid ReservationCreateRequest request) {
         service.addReservation(principal.getMemberId(), request);
     }

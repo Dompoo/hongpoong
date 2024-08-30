@@ -4,8 +4,8 @@ import Dompoo.Hongpoong.api.dto.request.member.MemberEditRequest;
 import Dompoo.Hongpoong.api.dto.request.member.MemberRoleEditRequest;
 import Dompoo.Hongpoong.api.dto.response.member.MemberResponse;
 import Dompoo.Hongpoong.api.dto.response.member.MemberStatusResponse;
-import Dompoo.Hongpoong.common.security.UserPrincipal;
 import Dompoo.Hongpoong.api.service.MemberService;
+import Dompoo.Hongpoong.common.security.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,12 +26,12 @@ public class MemberController {
         return service.getStatus(principal.getMemberId());
     }
 
-    @PutMapping("")
+    @PutMapping
     public void editMember(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid MemberEditRequest request) {
         service.editMember(principal.getMemberId(), request.toDto());
     }
 
-    @DeleteMapping("")
+    @DeleteMapping
     public void deleteMember(@AuthenticationPrincipal UserPrincipal principal) {
         service.deleteMember(principal.getMemberId());
     }

@@ -5,8 +5,8 @@ import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditRequest;
 import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentBorrowResponse;
 import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentResponse;
-import Dompoo.Hongpoong.common.security.UserPrincipal;
 import Dompoo.Hongpoong.api.service.InstrumentService;
+import Dompoo.Hongpoong.common.security.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,13 +22,13 @@ public class InstrumentController {
 
     private final InstrumentService service;
 
-    @PostMapping("")
+    @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_LEADER')")
     public void addOne(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid InstrumentCreateRequest request) {
         service.addOne(principal.getMemberId(), request);
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<InstrumentResponse> getListFromOther(@AuthenticationPrincipal UserPrincipal principal) {
         return service.getListOther(principal.getMemberId());
     }

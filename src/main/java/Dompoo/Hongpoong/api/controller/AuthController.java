@@ -2,8 +2,10 @@ package Dompoo.Hongpoong.api.controller;
 
 import Dompoo.Hongpoong.api.dto.request.auth.AcceptSignUpRequest;
 import Dompoo.Hongpoong.api.dto.request.auth.EmailValidRequest;
+import Dompoo.Hongpoong.api.dto.request.auth.LoginRequest;
 import Dompoo.Hongpoong.api.dto.request.auth.SignUpRequest;
 import Dompoo.Hongpoong.api.dto.response.auth.EmailValidResponse;
+import Dompoo.Hongpoong.api.dto.response.auth.LoginResponse;
 import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
 import Dompoo.Hongpoong.api.service.AuthService;
 import jakarta.validation.Valid;
@@ -28,6 +30,11 @@ public class AuthController {
     @PostMapping("/signup")
     public void requestSignup(@RequestBody @Valid SignUpRequest request) {
         service.requestSignup(request);
+    }
+    
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest request) {
+        return service.login(request);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

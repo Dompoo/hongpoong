@@ -21,19 +21,29 @@ public class AuthInterceptor implements HandlerInterceptor {
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		if (request.getMethod().equals(OPTIONS)) return true;
+		if (isPreFlight(request)) return true;
 		if (!(handler instanceof HandlerMethod)) return HandlerInterceptor.super.preHandle(request, response, handler);
-		if (((HandlerMethod) handler).hasMethodAnnotation(Secured.class)) {
-			String baererToken = request.getHeader(AUTH_TOKEN_HEADER);
-			String token;
-			if (baererToken != null && baererToken.startsWith(AUTH_TOKEN_PREFIX)) {
-				token = baererToken.substring(AUTH_TOKEN_PREFIX.length());
-			} else {
-				token = null;
-			}
-			UserClaims userClaims = jwtProvider.resolveAccessToken(token);
-			request.setAttribute(ATTRIBUTE_KEY, userClaims);
-		}
+		if (isSecured(handler)) authenticate(request);
 		return HandlerInterceptor.super.preHandle(request, response, handler);
+	}
+	
+	private void authenticate(HttpServletRequest request) {
+		String baererToken = request.getHeader(AUTH_TOKEN_HEADER);
+		String token;
+		if (baererToken != null && baererToken.startsWith(AUTH_TOKEN_PREFIX)) {
+			token = baererToken.substring(AUTH_TOKEN_PREFIX.length());
+		} else {
+			token = null;
+		}
+		UserClaims userClaims = jwtProvider.resolveAccessToken(token);
+		request.setAttribute(ATTRIBUTE_KEY, userClaims);
+	}
+	
+	private static boolean isSecured(Object handler) {
+		return ((HandlerMethod) handler).hasMethodAnnotation(Secured.class);
+	}
+	
+	private static boolean isPreFlight(HttpServletRequest request) {
+		return request.getMethod().equals(OPTIONS);
 	}
 }

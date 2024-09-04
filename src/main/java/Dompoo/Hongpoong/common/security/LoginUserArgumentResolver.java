@@ -21,6 +21,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 	
 	@Override
 	public UserClaims resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-		return (UserClaims) webRequest.getAttribute("claims", RequestAttributes.SCOPE_REQUEST);
+		return (UserClaims) webRequest.getAttribute(AuthInterceptor.ATTRIBUTE_KEY, RequestAttributes.SCOPE_REQUEST);
 	}
 }

@@ -9,7 +9,7 @@ import Dompoo.Hongpoong.api.dto.response.auth.LoginResponse;
 import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
 import Dompoo.Hongpoong.api.service.AuthService;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
-import Dompoo.Hongpoong.common.security.Secured;
+import Dompoo.Hongpoong.common.security.annotation.Secured;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

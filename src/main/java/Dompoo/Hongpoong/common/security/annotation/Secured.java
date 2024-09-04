@@ -1,4 +1,6 @@
-package Dompoo.Hongpoong.common.security;
+package Dompoo.Hongpoong.common.security.annotation;
+
+import Dompoo.Hongpoong.common.security.SecurePolicy;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

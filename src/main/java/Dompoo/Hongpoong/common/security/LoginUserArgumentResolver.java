@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.common.security;
 
+import Dompoo.Hongpoong.common.security.annotation.LoginUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

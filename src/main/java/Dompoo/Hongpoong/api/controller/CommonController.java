@@ -3,9 +3,9 @@ package Dompoo.Hongpoong.api.controller;
 import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
 import Dompoo.Hongpoong.api.dto.response.common.SettingResponse;
 import Dompoo.Hongpoong.api.service.CommonService;
-import Dompoo.Hongpoong.common.security.LoginUser;
-import Dompoo.Hongpoong.common.security.Secured;
 import Dompoo.Hongpoong.common.security.UserClaims;
+import Dompoo.Hongpoong.common.security.annotation.LoginUser;
+import Dompoo.Hongpoong.common.security.annotation.Secured;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

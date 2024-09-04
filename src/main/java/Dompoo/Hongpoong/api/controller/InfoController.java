@@ -6,7 +6,7 @@ import Dompoo.Hongpoong.api.dto.response.info.InfoDetailResponse;
 import Dompoo.Hongpoong.api.dto.response.info.InfoResponse;
 import Dompoo.Hongpoong.api.service.InfoService;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
-import Dompoo.Hongpoong.common.security.Secured;
+import Dompoo.Hongpoong.common.security.annotation.Secured;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

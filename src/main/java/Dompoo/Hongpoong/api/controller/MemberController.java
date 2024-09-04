@@ -5,11 +5,11 @@ import Dompoo.Hongpoong.api.dto.request.member.MemberRoleEditRequest;
 import Dompoo.Hongpoong.api.dto.response.member.MemberResponse;
 import Dompoo.Hongpoong.api.dto.response.member.MemberStatusResponse;
 import Dompoo.Hongpoong.api.service.MemberService;
-import Dompoo.Hongpoong.common.security.UserPrincipal;
+import Dompoo.Hongpoong.common.security.LoginUser;
+import Dompoo.Hongpoong.common.security.UserClaims;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,18 +22,18 @@ public class MemberController {
     private final MemberService service;
 
     @GetMapping("/status")
-    public MemberStatusResponse getStatus(@AuthenticationPrincipal UserPrincipal principal) {
-        return service.getStatus(principal.getMemberId());
+    public MemberStatusResponse getStatus(@LoginUser UserClaims claims) {
+        return service.getStatus(claims.getId());
     }
 
     @PutMapping
-    public void editMember(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid MemberEditRequest request) {
-        service.editMember(principal.getMemberId(), request.toDto());
+    public void editMember(@LoginUser UserClaims claims, @RequestBody @Valid MemberEditRequest request) {
+        service.editMember(claims.getId(), request.toDto());
     }
 
     @DeleteMapping
-    public void deleteMember(@AuthenticationPrincipal UserPrincipal principal) {
-        service.deleteMember(principal.getMemberId());
+    public void deleteMember(@LoginUser UserClaims claims) {
+        service.deleteMember(claims.getId());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

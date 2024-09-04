@@ -6,11 +6,11 @@ import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditRequest;
 import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentBorrowResponse;
 import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentResponse;
 import Dompoo.Hongpoong.api.service.InstrumentService;
-import Dompoo.Hongpoong.common.security.UserPrincipal;
+import Dompoo.Hongpoong.common.security.LoginUser;
+import Dompoo.Hongpoong.common.security.UserClaims;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,23 +24,23 @@ public class InstrumentController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_LEADER')")
-    public void addOne(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid InstrumentCreateRequest request) {
-        service.addOne(principal.getMemberId(), request);
+    public void addOne(@LoginUser UserClaims claims, @RequestBody @Valid InstrumentCreateRequest request) {
+        service.addOne(claims.getId(), request);
     }
 
     @GetMapping
-    public List<InstrumentResponse> getListFromOther(@AuthenticationPrincipal UserPrincipal principal) {
-        return service.getListOther(principal.getMemberId());
+    public List<InstrumentResponse> getListFromOther(@LoginUser UserClaims claims) {
+        return service.getListOther(claims.getId());
     }
 
     @GetMapping("/list")
-    public List<InstrumentResponse> getList(@AuthenticationPrincipal UserPrincipal principal) {
-        return service.getList(principal.getMemberId());
+    public List<InstrumentResponse> getList(@LoginUser UserClaims claims) {
+        return service.getList(claims.getId());
     }
 
     @PostMapping("/borrow")
-    public InstrumentBorrowResponse borrowOne(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid InstrumentBorrowRequest request) {
-        return service.borrowOne(principal.getMemberId(), request);
+    public InstrumentBorrowResponse borrowOne(@LoginUser UserClaims claims, @RequestBody @Valid InstrumentBorrowRequest request) {
+        return service.borrowOne(claims.getId(), request);
     }
 
     @PostMapping("/return/{id}")
@@ -55,14 +55,14 @@ public class InstrumentController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_LEADER')")
-    public void edit(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody InstrumentEditRequest request) {
-        service.editOne(principal.getMemberId(), id, request.toDto());
+    public void edit(@LoginUser UserClaims claims, @PathVariable Long id, @RequestBody InstrumentEditRequest request) {
+        service.editOne(claims.getId(), id, request.toDto());
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_LEADER')")
-    public void delete(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id) {
-        service.deleteOne(principal.getMemberId(), id);
+    public void delete(@LoginUser UserClaims claims, @PathVariable Long id) {
+        service.deleteOne(claims.getId(), id);
 
     }
 }

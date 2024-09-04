@@ -4,12 +4,12 @@ import Dompoo.Hongpoong.api.dto.request.chat.ChatRoomCreateRequest;
 import Dompoo.Hongpoong.api.dto.response.chat.ChatMessageDto;
 import Dompoo.Hongpoong.api.dto.response.chat.ChatRoomResponse;
 import Dompoo.Hongpoong.api.service.ChatService;
-import Dompoo.Hongpoong.common.security.UserPrincipal;
+import Dompoo.Hongpoong.common.security.LoginUser;
+import Dompoo.Hongpoong.common.security.UserClaims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,13 +27,13 @@ public class ChatController {
     }
 
     @GetMapping
-    public List<ChatRoomResponse> findAllRoom(@AuthenticationPrincipal UserPrincipal principal) {
-        return service.findAllRoom(principal.getMemberId());
+    public List<ChatRoomResponse> findAllRoom(@LoginUser UserClaims claims) {
+        return service.findAllRoom(claims.getId());
     }
 
     @DeleteMapping("/{roomId}")
-    public void exitRoom(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long roomId){
-        service.exitRoom(principal.getMemberId(), roomId);
+    public void exitRoom(@LoginUser UserClaims claims, @PathVariable Long roomId){
+        service.exitRoom(claims.getId(), roomId);
     }
 
     @MessageMapping("/{roomId}") //여기로 전송되면 메서드 호출 -> WebSocketConfig prefixes 에서 적용한건 앞에 생략

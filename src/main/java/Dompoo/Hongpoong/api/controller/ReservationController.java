@@ -5,11 +5,11 @@ import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.api.dto.response.resevation.ReservationResponse;
 import Dompoo.Hongpoong.api.service.ReservationService;
-import Dompoo.Hongpoong.common.security.UserPrincipal;
+import Dompoo.Hongpoong.common.security.LoginUser;
+import Dompoo.Hongpoong.common.security.UserClaims;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -28,8 +28,8 @@ public class ReservationController {
     }
 
     @PostMapping
-    public void addReservation(@AuthenticationPrincipal UserPrincipal principal, @RequestBody @Valid ReservationCreateRequest request) {
-        service.addReservation(principal.getMemberId(), request);
+    public void addReservation(@LoginUser UserClaims claims, @RequestBody @Valid ReservationCreateRequest request) {
+        service.addReservation(claims.getId(), request);
     }
 
     @GetMapping("/{id}")
@@ -38,13 +38,13 @@ public class ReservationController {
     }
 
     @PatchMapping("/{id}")
-    public ReservationResponse editReservation(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
-        return service.editReservation(principal.getMemberId(), id, request.toDto(), LocalDateTime.now());
+    public ReservationResponse editReservation(@LoginUser UserClaims claims, @PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
+        return service.editReservation(claims.getId(), id, request.toDto(), LocalDateTime.now());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteReservation(@AuthenticationPrincipal UserPrincipal principal, @PathVariable Long id) {
-        service.deleteReservation(principal.getMemberId(), id);
+    public void deleteReservation(@LoginUser UserClaims claims, @PathVariable Long id) {
+        service.deleteReservation(claims.getId(), id);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

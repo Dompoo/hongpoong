@@ -9,20 +9,31 @@ import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.springframework.stereotype.Component;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.lang.reflect.Method;
+
 @Aspect
-@Component
 @RequiredArgsConstructor
 public class AccessLevelCheckAspect {
 	
 	private final MemberRepository memberRepository;
 	
-	@Before("@annotation(secured)")
-	public void checkAccessLevel(JoinPoint joinPoint, Secured secured) {
+	@Before("@annotation(Dompoo.Hongpoong.common.security.annotation.Secured)")
+	public void checkAccessLevel(JoinPoint joinPoint) {
+		MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+		Method method = methodSignature.getMethod();
+		Secured secured = method.getAnnotation(Secured.class);
+		if (secured == null) {
+			throw new IllegalStateException("Secured annotation is not present on the method");
+		}
+		
 		UserClaims userClaims = getUserClaimsFromRequest();
+		if (userClaims == null) {
+			throw new IllegalStateException("userClaims is not present on the method");
+		}
 		
 		Member member = memberRepository.findByIdAndEmail(userClaims.getId(), userClaims.getEmail())
 				.orElseThrow(MemberNotFound::new);

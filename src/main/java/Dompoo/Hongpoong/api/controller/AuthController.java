@@ -8,9 +8,10 @@ import Dompoo.Hongpoong.api.dto.response.auth.EmailValidResponse;
 import Dompoo.Hongpoong.api.dto.response.auth.LoginResponse;
 import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
 import Dompoo.Hongpoong.api.service.AuthService;
+import Dompoo.Hongpoong.common.security.SecurePolicy;
+import Dompoo.Hongpoong.common.security.Secured;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,13 +38,13 @@ public class AuthController {
         return service.login(request);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Secured(SecurePolicy.ADMIN_ONLY)
     @PostMapping("/signup/accept")
     public void acceptSignup(@RequestBody @Valid AcceptSignUpRequest request) {
         service.acceptSignUp(request);
     }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    
+    @Secured(SecurePolicy.ADMIN_ONLY)
     @GetMapping("/signup")
     public List<SignUpResponse> emailRequestList() {
         return service.getSignUp();

@@ -5,8 +5,9 @@ import Dompoo.Hongpoong.api.dto.request.info.InfoEditRequest;
 import Dompoo.Hongpoong.api.dto.response.info.InfoDetailResponse;
 import Dompoo.Hongpoong.api.dto.response.info.InfoResponse;
 import Dompoo.Hongpoong.api.service.InfoService;
+import Dompoo.Hongpoong.common.security.SecurePolicy;
+import Dompoo.Hongpoong.common.security.Secured;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -19,29 +20,31 @@ public class InfoController {
 
     private final InfoService service;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Secured(SecurePolicy.ADMIN_ONLY)
     @PostMapping
     public void createInfo(@RequestBody InfoCreateRequest request) {
         service.addInfo(request, LocalDateTime.now());
     }
 
+    @Secured
     @GetMapping
     public List<InfoResponse> getInfoList() {
         return service.getList();
     }
 
+    @Secured
     @GetMapping("/{infoId}")
     public InfoDetailResponse getInfoDetail(@PathVariable Long infoId) {
         return service.getDetail(infoId);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Secured(SecurePolicy.ADMIN_ONLY)
     @PutMapping("/{infoId}")
     public void editInfo(@PathVariable Long infoId, @RequestBody InfoEditRequest request) {
         service.editInfo(infoId, request.toDto());
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Secured(SecurePolicy.ADMIN_ONLY)
     @DeleteMapping("/{infoId}")
     public void deleteInfo(@PathVariable Long infoId) {
         service.deleteInfo(infoId);

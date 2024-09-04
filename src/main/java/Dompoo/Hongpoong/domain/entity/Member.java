@@ -3,6 +3,7 @@ package Dompoo.Hongpoong.domain.entity;
 import Dompoo.Hongpoong.api.dto.request.common.SettingSaveDto;
 import Dompoo.Hongpoong.api.dto.request.member.MemberEditDto;
 import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
+import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
 import jakarta.persistence.Entity;
@@ -61,5 +62,15 @@ public class Member {
     
     public void editSetting(SettingSaveDto dto) {
         if (dto.getPush() != null) this.pushAlarm = dto.getPush();
+    }
+    
+    public boolean hasAccessLevel(SecurePolicy policy) {
+        int accessLevel = this.getRole().getAccessLevel();
+        
+        return switch (policy) {
+            case ALL_MEMBER -> accessLevel > 0;
+            case ADMIN_AND_LEADER -> accessLevel > 1;
+            case ADMIN_ONLY -> accessLevel > 2;
+        };
     }
 }

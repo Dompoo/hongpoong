@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findAllByIdIn(List<Long> memberIds);
     Optional<Member> findByEmail(String email);
+    Optional<Member> findByIdAndEmail(Long id, String email);
     boolean existsByRole(Role role);
 }

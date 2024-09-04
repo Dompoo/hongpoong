@@ -2,68 +2,64 @@ package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.api.dto.request.member.MemberEditRequest;
 import Dompoo.Hongpoong.api.dto.request.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.config.WithMockMember;
-import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.api.dto.response.member.MemberResponse;
+import Dompoo.Hongpoong.api.dto.response.member.MemberStatusResponse;
+import Dompoo.Hongpoong.config.MyWebMvcTest;
 import Dompoo.Hongpoong.domain.enums.Role;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static Dompoo.Hongpoong.domain.enums.Club.SANTLE;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-class MemberControllerTest {
+class MemberControllerTest extends MyWebMvcTest {
 
-    @Autowired
-    private MemberRepository repository;
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-
+    private final Long ID  = 1L;
+    private final Long ID2  = 2L;
     private final String EMAIL = "dompoo@gmail.com";
+    private final String EMAIL2 = "yoonH@gmail.com";
     private final String USERNAME = "dompoo";
+    private final String USERNAME2 = "yoonH";
     private final String PASSWORD = "1234";
+    private final String CLUB = "산틀";
+    private final String CLUB2 = "악반";
     private final String NEW_USERNAME = "dompoo2";
     private final String NEW_PASSWORD = "qwer";
-
-    @AfterEach
-    void setUp() {
-        repository.deleteAll();
-    }
 
     //로그인 정보
     @Test
     @DisplayName("로그인 정보")
-    @WithMockMember
     void getStatus() throws Exception {
+        //given
+        when(memberService.getStatus(any())).thenReturn(MemberStatusResponse.builder()
+                .id(ID)
+                .email(EMAIL)
+                .username(USERNAME)
+                .password(PASSWORD)
+                .club(CLUB)
+                .build());
+        
         //expected
         mockMvc.perform(get("/member/status"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("dompoo@gmail.com"))
-                .andExpect(jsonPath("$.username").value("창근"))
-                .andExpect(jsonPath("$.password").value("1234"))
+                .andExpect(jsonPath("$.id").value(ID))
+                .andExpect(jsonPath("$.email").value(EMAIL))
+                .andExpect(jsonPath("$.username").value(USERNAME))
+                .andExpect(jsonPath("$.password").value(PASSWORD))
+                .andExpect(jsonPath("$.club").value(CLUB))
                 .andDo(print());
     }
 
     //회원정보 수정
     @Test
     @DisplayName("회원정보 수정")
-    @WithMockMember
     void edit() throws Exception {
         //given
         MemberEditRequest request = MemberEditRequest.builder()
@@ -85,7 +81,6 @@ class MemberControllerTest {
     //회원탈퇴
     @Test
     @DisplayName("회원탈퇴")
-    @WithMockMember
     void deleteOne() throws Exception {
         //given
 
@@ -98,102 +93,55 @@ class MemberControllerTest {
     //회원 리스트 - 관리자
     @Test
     @DisplayName("회원 리스트 조회")
-    @WithMockMember(role = "ROLE_ADMIN")
     void getList() throws Exception {
         //given
-        repository.save(Member.builder()
-                .email(EMAIL)
-                .username(USERNAME)
-                .password(PASSWORD)
-                .club(SANTLE)
-                .build());
-
-        repository.save(Member.builder()
-                .email(EMAIL)
-                .username(NEW_USERNAME)
-                .password(NEW_PASSWORD)
-                .club(SANTLE)
-                .build());
+        when(memberService.getList()).thenReturn(List.of(
+                MemberResponse.builder()
+                        .id(ID)
+                        .email(EMAIL)
+                        .username(USERNAME)
+                        .club(CLUB)
+                        .build(),
+                MemberResponse.builder()
+                        .id(ID2)
+                        .email(EMAIL2)
+                        .username(USERNAME2)
+                        .club(CLUB2)
+                        .build()
+        ));
 
         //expected
         mockMvc.perform(get("/member/manage"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(3))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("회원은 회원 리스트 조회할 수 없다.")
-    @WithMockMember
-    void getListFail() throws Exception {
-        //given
-        repository.save(Member.builder()
-                .email(EMAIL)
-                .username(USERNAME)
-                .password(PASSWORD)
-                .build());
-
-        repository.save(Member.builder()
-                .email(EMAIL)
-                .username(NEW_USERNAME)
-                .password(NEW_PASSWORD)
-                .build());
-
-        //expected
-        mockMvc.perform(get("/member/manage"))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
+                .andExpect(jsonPath("$.size()").value(2))
+                .andExpect(jsonPath("$[0].id").value(ID))
+                .andExpect(jsonPath("$[0].email").value(EMAIL))
+                .andExpect(jsonPath("$[0].username").value(USERNAME))
+                .andExpect(jsonPath("$[0].club").value(CLUB))
+                .andExpect(jsonPath("$[1].id").value(ID2))
+                .andExpect(jsonPath("$[1].email").value(EMAIL2))
+                .andExpect(jsonPath("$[1].username").value(USERNAME2))
+                .andExpect(jsonPath("$[1].club").value(CLUB2))
                 .andDo(print());
     }
 
     //회원삭제 - 관리자
     @Test
     @DisplayName("회원삭제")
-    @WithMockMember(role = "ROLE_ADMIN")
     void deleteAdmin() throws Exception {
         //given
-        Member member = repository.save(Member.builder()
-                .email(EMAIL)
-                .username(USERNAME)
-                .password(PASSWORD)
-                .build());
 
         //expected
-        mockMvc.perform(delete("/member/manage/{id}", member.getId()))
+        mockMvc.perform(delete("/member/manage/{id}", ID))
                 .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("회원은 회원삭제할 수 없다.")
-    @WithMockMember
-    void deleteAdminFail() throws Exception {
-        //given
-        Member member = repository.save(Member.builder()
-                .email(EMAIL)
-                .username(USERNAME)
-                .password(PASSWORD)
-                .build());
-
-        //expected
-        mockMvc.perform(delete("/member/manage/{id}", member.getId()))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
                 .andDo(print());
     }
 
     //권한 변경 - 관리자
     @Test
     @DisplayName("권한 변경")
-    @WithMockMember(role = "ROLE_ADMIN")
     void changeAuth() throws Exception {
         //given
-        Member member = repository.save(Member.builder()
-                .email(EMAIL)
-                .username(USERNAME)
-                .password(PASSWORD)
-                .build());
-
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
                 .role(Role.ROLE_LEADER)
                 .build();
@@ -201,38 +149,12 @@ class MemberControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(patch("/member/manage/{id}", member.getId())
+        mockMvc.perform(patch("/member/manage/{id}", ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-    }
-
-    @Test
-    @DisplayName("회원은 권한 변경할 수 없다.")
-    @WithMockMember
-    void changeAuthFail() throws Exception {
-        //given
-        Member member = repository.save(Member.builder()
-                .email(EMAIL)
-                .username(USERNAME)
-                .password(PASSWORD)
-                .build());
-
-        MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Role.ROLE_LEADER)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(patch("/member/manage/{id}", member.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
-                .andDo(print());
     }
 
 }

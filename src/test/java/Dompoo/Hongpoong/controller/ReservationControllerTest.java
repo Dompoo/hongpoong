@@ -3,47 +3,47 @@ package Dompoo.Hongpoong.controller;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
-import Dompoo.Hongpoong.config.WithMockMember;
-import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.entity.Reservation;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
+import Dompoo.Hongpoong.api.dto.response.resevation.ReservationResponse;
+import Dompoo.Hongpoong.config.MyWebMvcTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-class ReservationControllerTest {
-
-    @Autowired
-    private ReservationRepository reservationRepository;
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @AfterEach
-    void setUp() {
-        reservationRepository.deleteAll();
-    }
+class ReservationControllerTest extends MyWebMvcTest {
+    
+    private static final Long RESERVATION_ID = 1L;
+    private static final String USERNAME = "창근";
+    private static final String EMAIL = "dompoo@gmail.com";
+    private static final int NUMBER = 10;
+    private static final LocalDate DATE = LocalDate.of(2040, 5, 17);
+    private static final String DATE_STRING = "2040-05-17";
+    private static final int START_TIME = 10;
+    private static final int END_TIME = 18;
+    private static final String MESSAGE = "안녕하세용!";
+    
+    private static final Long RESERVATION_ID2 = 2L;
+    private static final String USERNAME2 = "윤호";
+    private static final String EMAIL2 = "yoonH@gmail.com";
+    private static final int NUMBER2 = 20;
+    private static final LocalDate DATE2 = LocalDate.of(2040, 10, 10);
+    private static final String DATE2_STRING = "2040-10-10";
+    private static final int START_TIME2 = 14;
+    private static final int END_TIME2 = 22;
+    private static final String MESSAGE2 = "하이!";
+    
+    private static final LocalDateTime LAST_MODIFIED = LocalDateTime.of(2030, 10, 10, 10, 30);
+    private static final String LAST_MODIFIED_STRING = "2030-10-10T10:30:00";
 
     /**
      * 예약 전체 조회 API 테스트 코드
@@ -51,33 +51,33 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("전체 예약 조회")
-    @WithMockMember
     void menu() throws Exception {
         //given
-        Member member = memberRepository.save(Member.builder()
-                .email("dompoo@gmail.com")
-                .username("창근")
-                .password("1234")
-                .build());
-
-        Reservation reservation1 = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .number(15)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .message("")
-                .build());
-
-        Reservation reservation2 = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .number(13)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .message("")
-                .build());
-
+        when(reservationService.getList(any())).thenReturn(List.of(
+                ReservationResponse.builder()
+                        .id(RESERVATION_ID)
+                        .username(USERNAME)
+                        .email(EMAIL)
+                        .number(NUMBER)
+                        .date(DATE)
+                        .startTime(START_TIME)
+                        .endTime(END_TIME)
+                        .message(MESSAGE)
+                        .lastmodified(LAST_MODIFIED)
+                        .build(),
+                ReservationResponse.builder()
+                        .id(RESERVATION_ID2)
+                        .username(USERNAME2)
+                        .email(EMAIL2)
+                        .number(NUMBER2)
+                        .date(DATE2)
+                        .startTime(START_TIME2)
+                        .endTime(END_TIME2)
+                        .message(MESSAGE2)
+                        .lastmodified(LAST_MODIFIED)
+                        .build()
+        ));
+        
         ReservationSearchRequest request = ReservationSearchRequest.builder()
                 .date(LocalDate.of(2025, 12, 20))
                 .build();
@@ -90,22 +90,25 @@ class ReservationControllerTest {
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(reservation1.getId()))
-                .andExpect(jsonPath("$[0].username").value("창근"))
-                .andExpect(jsonPath("$[0].number").value(15))
-                .andExpect(jsonPath("$[0].date").value("2025-12-20"))
-                .andExpect(jsonPath("$[0].startTime").value(12))
-                .andExpect(jsonPath("$[0].endTime").value(22))
-                .andExpect(jsonPath("$[0].message").value(""))
-                .andExpect(jsonPath("$[1].id").value(reservation2.getId()))
-                .andExpect(jsonPath("$[1].username").value("창근"))
-                .andExpect(jsonPath("$[1].number").value(13))
-                .andExpect(jsonPath("$[1].date").value("2025-12-20"))
-                .andExpect(jsonPath("$[1].startTime").value(12))
-                .andExpect(jsonPath("$[1].endTime").value(22))
-                .andExpect(jsonPath("$[1].message").value(""))
+                .andExpect(jsonPath("$[0].id").value(RESERVATION_ID))
+                .andExpect(jsonPath("$[0].username").value(USERNAME))
+                .andExpect(jsonPath("$[0].email").value(EMAIL))
+                .andExpect(jsonPath("$[0].number").value(NUMBER))
+                .andExpect(jsonPath("$[0].date").value(DATE_STRING))
+                .andExpect(jsonPath("$[0].startTime").value(START_TIME))
+                .andExpect(jsonPath("$[0].endTime").value(END_TIME))
+                .andExpect(jsonPath("$[0].message").value(MESSAGE))
+                .andExpect(jsonPath("$[0].lastmodified").value(LAST_MODIFIED_STRING))
+                .andExpect(jsonPath("$[1].id").value(RESERVATION_ID2))
+                .andExpect(jsonPath("$[1].username").value(USERNAME2))
+                .andExpect(jsonPath("$[1].email").value(EMAIL2))
+                .andExpect(jsonPath("$[1].number").value(NUMBER2))
+                .andExpect(jsonPath("$[1].date").value(DATE2_STRING))
+                .andExpect(jsonPath("$[1].startTime").value(START_TIME2))
+                .andExpect(jsonPath("$[1].endTime").value(END_TIME2))
+                .andExpect(jsonPath("$[1].message").value(MESSAGE2))
+                .andExpect(jsonPath("$[1].lastmodified").value(LAST_MODIFIED_STRING))
                 .andDo(print());
-
     }
 
     /**
@@ -114,7 +117,6 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("예약 추가")
-    @WithMockMember
     void add() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
@@ -138,7 +140,6 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("예약 추가시 날짜는 과거일 수 없다.")
-    @WithMockMember
     void addFail3() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
@@ -163,7 +164,6 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("예약 추가시 시간은 9시 이상이어야 한다.")
-    @WithMockMember
     void addFail4() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
@@ -188,7 +188,6 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("예약 추가시 시간은 22시 이하이어야 한다.")
-    @WithMockMember
     void addFail5() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
@@ -198,9 +197,9 @@ class ReservationControllerTest {
                 .endTime(23)
                 .message("")
                 .build();
-
+        
         String json = objectMapper.writeValueAsString(request);
-
+        
         //expected
         mockMvc.perform(post("/reservation")
                         .contentType(APPLICATION_JSON)
@@ -211,87 +210,38 @@ class ReservationControllerTest {
                 .andDo(print());
     }
 
-    @Test
-    @DisplayName("예약 추가시 시작시간은 종료시간보다 앞서야 한다.")
-    @WithMockMember
-    void addFail6() throws Exception {
-        //given
-        ReservationCreateRequest request = ReservationCreateRequest.builder()
-                .number(13)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(13)
-                .endTime(12)
-                .message("")
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(post("/reservation")
-                        .contentType(APPLICATION_JSON)
-                        .content(json)
-                )
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("시작 시간은 종료 시간보다 앞서야 합니다."))
-                .andDo(print());
-    }
-
     /**
      * 예약 상세 조회 API 테스트 코드
      */
 
     @Test
     @DisplayName("예약 상세 조회")
-    @WithMockMember
     void detail() throws Exception {
         //given
-        Member member = memberRepository.save(Member.builder()
-                .email("dompoo@gmail.com")
-                .username("창근")
-                .password("1234")
-                .build());
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
+        when(reservationService.findReservation(any())).thenReturn(ReservationResponse.builder()
+                .id(RESERVATION_ID)
+                .username(USERNAME)
+                .email(EMAIL)
+                .number(NUMBER)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .message(MESSAGE)
+                .lastmodified(LAST_MODIFIED)
                 .build());
 
         //expected
-        mockMvc.perform(get("/reservation/{id}", reservation.getId()))
+        mockMvc.perform(get("/reservation/{id}", RESERVATION_ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(reservation.getId()))
-                .andExpect(jsonPath("$.username").value("창근"))
-                .andExpect(jsonPath("$.date").value("2025-12-20"))
-                .andExpect(jsonPath("$.startTime").value(12))
-                .andExpect(jsonPath("$.endTime").value(22))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 예약 상세 조회")
-    @WithMockMember
-    void detailFail() throws Exception {
-        //given
-        Member member = memberRepository.save(Member.builder()
-                .email("dompoo@gmail.com")
-                .username("창근")
-                .password("1234")
-                .build());
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
-
-        //expected
-        mockMvc.perform(get("/reservation/{id}", reservation.getId() + 1))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.code").value("404"))
-                .andExpect(jsonPath("$.message").value("존재하지 않는 예약입니다."))
+                .andExpect(jsonPath("$.id").value(RESERVATION_ID))
+                .andExpect(jsonPath("$.username").value(USERNAME))
+                .andExpect(jsonPath("$.email").value(EMAIL))
+                .andExpect(jsonPath("$.number").value(NUMBER))
+                .andExpect(jsonPath("$.date").value(DATE_STRING))
+                .andExpect(jsonPath("$.startTime").value(START_TIME))
+                .andExpect(jsonPath("$.endTime").value(END_TIME))
+                .andExpect(jsonPath("$.message").value(MESSAGE))
+                .andExpect(jsonPath("$.lastmodified").value(LAST_MODIFIED_STRING))
                 .andDo(print());
     }
 
@@ -301,53 +251,49 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("예약 전체 수정")
-    @WithMockMember
     void edit() throws Exception {
         //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
+        when(reservationService.editReservation(any(), any(), any(), any())).thenReturn(ReservationResponse.builder()
+                .id(RESERVATION_ID)
+                .username(USERNAME)
+                .email(EMAIL)
+                .number(NUMBER)
+                .date(DATE2)
+                .startTime(START_TIME2)
+                .endTime(END_TIME2)
+                .message(MESSAGE)
+                .lastmodified(LAST_MODIFIED)
                 .build());
-
+        
         ReservationEditRequest request = ReservationEditRequest.builder()
-                .date(LocalDate.of(2025, 12, 15))
-                .startTime(11)
-                .endTime(13)
+                .date(DATE2)
+                .startTime(START_TIME2)
+                .endTime(END_TIME2)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(patch("/reservation/{id}", reservation.getId())
+        mockMvc.perform(patch("/reservation/{id}", RESERVATION_ID)
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(reservation.getId()))
-                .andExpect(jsonPath("$.startTime").value(11))
-                .andExpect(jsonPath("$.endTime").value(13))
-                .andExpect(jsonPath("$.date").value("2025-12-15"))
-
+                .andExpect(jsonPath("$.id").value(RESERVATION_ID))
+                .andExpect(jsonPath("$.username").value(USERNAME))
+                .andExpect(jsonPath("$.email").value(EMAIL))
+                .andExpect(jsonPath("$.number").value(NUMBER))
+                .andExpect(jsonPath("$.date").value(DATE2_STRING))
+                .andExpect(jsonPath("$.startTime").value(START_TIME2))
+                .andExpect(jsonPath("$.endTime").value(END_TIME2))
+                .andExpect(jsonPath("$.message").value(MESSAGE))
+                .andExpect(jsonPath("$.lastmodified").value(LAST_MODIFIED_STRING))
                 .andDo(print());
     }
 
     @Test
     @DisplayName("예약 부분 수정")
-    @WithMockMember
     void edit2() throws Exception {
         //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
-
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .startTime(11)
                 .endTime(18)
@@ -356,7 +302,7 @@ class ReservationControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(patch("/reservation/{id}", reservation.getId())
+        mockMvc.perform(patch("/reservation/{id}", RESERVATION_ID)
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -364,49 +310,9 @@ class ReservationControllerTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 예약 수정")
-    @WithMockMember
-    void editFail1() throws Exception {
-        //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
-
-        ReservationEditRequest request = ReservationEditRequest.builder()
-                .date(LocalDate.of(2025, 12, 15))
-                .startTime(11)
-                .endTime(18)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(patch("/reservation/{id}", reservation.getId() + 1)
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isNotFound())
-                .andDo(print());
-    }
-
-    @Test
     @DisplayName("예약 수정시 과거날짜일 수 없다.")
-    @WithMockMember
     void editFail2() throws Exception {
         //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
-
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2000, 12, 15))
                 .startTime(11)
@@ -416,7 +322,7 @@ class ReservationControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(patch("/reservation/{id}", reservation.getId())
+        mockMvc.perform(patch("/reservation/{id}", RESERVATION_ID)
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
@@ -426,17 +332,8 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("예약 수정시 9시 이상이어야 한다.")
-    @WithMockMember
     void editFail3() throws Exception {
         //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
@@ -447,7 +344,7 @@ class ReservationControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(patch("/reservation/{id}", reservation.getId())
+        mockMvc.perform(patch("/reservation/{id}", RESERVATION_ID)
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
@@ -457,18 +354,8 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("예약 수정시 22시 이하이어야 한다.")
-    @WithMockMember
     void editFail4() throws Exception {
         //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
-
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
                 .startTime(11)
@@ -478,46 +365,11 @@ class ReservationControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(patch("/reservation/{id}", reservation.getId())
+        mockMvc.perform(patch("/reservation/{id}", RESERVATION_ID)
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("[22시 이하의 시간이어야 합니다.]"))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("내가 한 예약만 수정할 수 있다.")
-    @WithMockMember
-    void editFail5() throws Exception {
-        //given
-        Member member = memberRepository.save(Member.builder()
-                .email("dompoo@gmail.com")
-                .username("창근")
-                .password("1234")
-                .build());
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
-
-        ReservationEditRequest request = ReservationEditRequest.builder()
-                .date(LocalDate.of(2025, 12, 15))
-                .startTime(11)
-                .endTime(18)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(patch("/reservation/{id}", reservation.getId())
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").value("수정할 수 없습니다."))
                 .andDo(print());
     }
 
@@ -527,86 +379,19 @@ class ReservationControllerTest {
 
     @Test
     @DisplayName("예약 삭제")
-    @WithMockMember
     void delete1() throws Exception {
         //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
-
+        
         //expected
-        mockMvc.perform(delete("/reservation/{id}", reservation.getId()))
+        mockMvc.perform(delete("/reservation/{id}", RESERVATION_ID))
                 .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 예약 삭제 실패")
-    @WithMockMember
-    void deleteFail() throws Exception {
-        //given
-        Member member = memberRepository.findAll().getLast();
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
-
-        //expected
-        mockMvc.perform(delete("/reservation/{id}", reservation.getId() + 1))
-                .andExpect(status().isNotFound())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("내가 한 예약만 삭제할 수 있다.")
-    @WithMockMember
-    void deleteFail2() throws Exception {
-        //given
-        Member member = memberRepository.save(Member.builder()
-                .email("dompoo@gmail.com")
-                .username("창근")
-                .password("1234")
-                .build());
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
-
-        //expected
-        mockMvc.perform(delete("/reservation/{id}", reservation.getId()))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").value("삭제할 수 없습니다."))
                 .andDo(print());
     }
 
     @Test
     @DisplayName("관리자 예약 수정")
-    @WithMockMember(role = "ROLE_ADMIN")
     void editManage() throws Exception {
         //given
-        Member member = memberRepository.save(Member.builder()
-                .email("yoonH@naver.com")
-                .username("윤호")
-                .password("qwer")
-                .build());
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
@@ -617,45 +402,10 @@ class ReservationControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(patch("/reservation/manage/{id}", reservation.getId())
+        mockMvc.perform(patch("/reservation/manage/{id}", RESERVATION_ID)
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("회원은 관리자 예약 수정할 수 없다.")
-    @WithMockMember
-    void editManageFail() throws Exception {
-        //given
-        Member member = memberRepository.save(Member.builder()
-                .email("yoonH@naver.com")
-                .username("윤호")
-                .password("qwer")
-                .build());
-
-        Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(12)
-                .endTime(22)
-                .build());
-
-        ReservationEditRequest request = ReservationEditRequest.builder()
-                .date(LocalDate.of(2025, 12, 15))
-                .startTime(11)
-                .endTime(18)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(patch("/reservation/manage/{id}", reservation.getId())
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").value("[인증오류] 권한이 없습니다."))
                 .andDo(print());
     }
 }

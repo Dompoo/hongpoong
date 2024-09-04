@@ -1,65 +1,48 @@
 package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
-import Dompoo.Hongpoong.config.WithMockMember;
-import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
+import Dompoo.Hongpoong.api.dto.response.common.SettingResponse;
+import Dompoo.Hongpoong.config.MyWebMvcTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@AutoConfigureMockMvc
-class CommonControllerTest {
-
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @AfterEach
-    void setUp() {
-        memberRepository.deleteAll();
-    }
+class CommonControllerTest extends MyWebMvcTest {
+    
+    private static final Long SETTING_ID = 1L;
+    private static final boolean PUSH_ALARM = false;
 
     @Test
     @DisplayName("세팅 정보 불러오기")
-    @WithMockMember
     void settingList() throws Exception {
         //given
-        Member member = memberRepository.findAll().getLast();
+        when(commonService.getSetting(any())).thenReturn(
+                SettingResponse.builder()
+                        .id(SETTING_ID)
+                        .pushAlarm(PUSH_ALARM)
+                        .build()
+        );
 
         //expected
         mockMvc.perform(get("/common/setting"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(member.getId()))
-                .andExpect(jsonPath("$.pushAlarm").value(true))
+                .andExpect(jsonPath("$.id").value(SETTING_ID))
+                .andExpect(jsonPath("$.pushAlarm").value(PUSH_ALARM))
                 .andDo(print());
     }
 
     @Test
     @DisplayName("세팅 하기")
-    @WithMockMember
     void doSetting() throws Exception {
         //given
-        memberRepository.findAll().getLast();
-
         SettingSaveRequest request = SettingSaveRequest.builder()
                 .push(false)
                 .build();

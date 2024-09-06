@@ -2,7 +2,6 @@ package Dompoo.Hongpoong.domain.entity;
 
 import Dompoo.Hongpoong.api.dto.request.common.SettingSaveDto;
 import Dompoo.Hongpoong.api.dto.request.member.MemberEditDto;
-import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
@@ -59,13 +58,8 @@ public class Member {
     }
     
     public void edit(MemberEditDto dto, PasswordEncoder encoder) {
-        if (dto.isPasswordSame()) {
-            this.password = encoder.encode(dto.getPassword1());
-        } else {
-            throw new PasswordNotSame();
-        }
-        
-        if (dto.getUsername() != null) this.name = dto.getUsername();
+        if (dto.getPassword() != null) this.password = encoder.encode(dto.getPassword());
+        if (dto.getName() != null) this.name = dto.getName();
     }
     
     public void editSetting(SettingSaveDto dto) {

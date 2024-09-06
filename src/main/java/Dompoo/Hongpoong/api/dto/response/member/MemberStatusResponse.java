@@ -37,7 +37,7 @@ public class MemberStatusResponse {
         return MemberStatusResponse.builder()
                 .id(member.getId())
                 .email(member.getEmail())
-                .username(member.getUsername())
+                .username(member.getName())
                 .password(member.getPassword())
                 .club(member.getClub().korName)
                 .build();

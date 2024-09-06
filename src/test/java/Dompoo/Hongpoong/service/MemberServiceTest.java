@@ -112,7 +112,7 @@ class MemberServiceTest {
 
         //then
         assertEquals(memberRepository.findAll().getFirst().getEmail(), "dompoo@gmail.com");
-        assertEquals(memberRepository.findAll().getFirst().getUsername(), NEW_USERNAME);
+        assertEquals(memberRepository.findAll().getFirst().getName(), NEW_USERNAME);
         assertTrue(encoder.matches(NEW_PASSWORD, memberRepository.findAll().getFirst().getPassword()));
     }
 
@@ -130,7 +130,7 @@ class MemberServiceTest {
 
         //then
         assertEquals(memberRepository.findAll().getFirst().getEmail(), "dompoo@gmail.com");
-        assertEquals(memberRepository.findAll().getFirst().getUsername(), "창근");
+        assertEquals(memberRepository.findAll().getFirst().getName(), "창근");
         assertTrue(encoder.matches(NEW_PASSWORD, memberRepository.findAll().getFirst().getPassword()));
     }
 
@@ -208,8 +208,8 @@ class MemberServiceTest {
 
         //then
         assertEquals(2, list.size());
-        assertEquals(USERNAME, list.get(0).getUsername());
-        assertEquals(NEW_USERNAME, list.get(1).getUsername());
+        assertEquals(USERNAME, list.get(0).getName());
+        assertEquals(NEW_USERNAME, list.get(1).getName());
     }
 
     @Test

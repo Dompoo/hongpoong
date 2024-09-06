@@ -108,7 +108,7 @@ class AuthServiceTest {
 
         //then
         assertEquals(signUpRepository.count(), 1);
-        assertEquals(signUpRepository.findAll().getFirst().getUsername(), USERNAME);
+        assertEquals(signUpRepository.findAll().getFirst().getName(), USERNAME);
         assertTrue(encoder.matches(PASSWORD, signUpRepository.findAll().getFirst().getPassword()));
     }
 

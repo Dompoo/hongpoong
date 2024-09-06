@@ -69,7 +69,7 @@ public class ReservationResponse {
     public static ReservationResponse from(Reservation reservation) {
         return ReservationResponse.builder()
                 .id(reservation.getId())
-                .username(reservation.getMember().getUsername())
+                .username(reservation.getMember().getName())
                 .email(reservation.getMember().getEmail())
                 .number(reservation.getNumber())
                 .date(reservation.getDate())

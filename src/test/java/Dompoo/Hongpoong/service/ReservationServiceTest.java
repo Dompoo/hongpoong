@@ -77,8 +77,8 @@ class ReservationServiceTest {
         assertEquals(2, list.size());
         assertEquals(list.get(0).getId(), reservation1.getId());
         assertEquals(list.get(1).getId(), reservation2.getId());
-        assertEquals(list.get(0).getUsername(), reservation1.getMember().getUsername());
-        assertEquals(list.get(1).getUsername(), reservation2.getMember().getUsername());
+        assertEquals(list.get(0).getUsername(), reservation1.getMember().getName());
+        assertEquals(list.get(1).getUsername(), reservation2.getMember().getName());
         assertEquals(list.get(0).getDate(), reservation1.getDate());
         assertEquals(list.get(1).getDate(), reservation2.getDate());
         assertEquals(list.get(0).getStartTime(), reservation1.getStartTime());

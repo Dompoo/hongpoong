@@ -81,7 +81,7 @@ public class ChatService {
         Member sender = memberRepository.findById(request.getSenderId())
                 .orElseThrow(MemberNotFound::new);
 
-        ChatMessage savedMessage = chatMessageRepository.save(request.toChatMessage(chatroom, sender.getUsername()));
+        ChatMessage savedMessage = chatMessageRepository.save(request.toChatMessage(chatroom, sender.getName()));
         
         return ChatMessageDto.of(savedMessage, sender.getId());
     }

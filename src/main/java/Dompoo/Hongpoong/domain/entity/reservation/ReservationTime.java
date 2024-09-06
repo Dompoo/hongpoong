@@ -1,7 +1,9 @@
 package Dompoo.Hongpoong.domain.entity.reservation;
 
 import Dompoo.Hongpoong.common.exception.impl.ReservationTimeException;
+import lombok.Getter;
 
+@Getter
 public enum ReservationTime {
 	TIME_0900("0900"),
 	TIME_0930("0930"),
@@ -33,15 +35,15 @@ public enum ReservationTime {
 	TIME_2230("2230"),
 	;
 	
-	private final String value;
+	private final String strValue;
 	
-	ReservationTime(String value) {
-		this.value = value;
+	ReservationTime(String strValue) {
+		this.strValue = strValue;
 	}
 	
 	public static ReservationTime from(String strTime) {
 		for (ReservationTime reservationTime : ReservationTime.values()) {
-			if (strTime.equals(reservationTime.value)) {
+			if (strTime.equals(reservationTime.strValue)) {
 				return reservationTime;
 			}
 		}

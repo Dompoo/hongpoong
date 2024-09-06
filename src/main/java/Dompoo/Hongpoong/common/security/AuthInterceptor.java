@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.common.security;
 
+import Dompoo.Hongpoong.common.exception.impl.NotLoginException;
 import Dompoo.Hongpoong.common.security.annotation.Secured;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -34,6 +35,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 			token = baererToken.substring(AUTH_TOKEN_PREFIX.length());
 		} else {
 			token = null;
+		}
+		if (token == null || token.isBlank()) {
+			throw new NotLoginException();
 		}
 		UserClaims userClaims = jwtProvider.resolveAccessToken(token);
 		request.setAttribute(ATTRIBUTE_KEY, userClaims);

@@ -9,7 +9,6 @@ import Dompoo.Hongpoong.api.dto.response.auth.LoginResponse;
 import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
 import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
 import Dompoo.Hongpoong.common.exception.impl.LoginFailException;
-import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
 import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
 import Dompoo.Hongpoong.common.security.JwtProvider;
 import Dompoo.Hongpoong.domain.entity.Member;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,24 +33,14 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public EmailValidResponse checkEmailValid(EmailValidRequest request) {
-        Optional<Member> findMember = memberRepository.findByEmail(request.getEmail());
-        Optional<SignUp> findSignUp = signUpRepository.findByEmail(request.getEmail());
-        
-        boolean valid = findMember.isEmpty() && findSignUp.isEmpty();
-
         return EmailValidResponse.builder()
-                .valid(valid)
+                .valid(isValidEmail(request.getEmail()))
                 .build();
     }
     
     @Transactional
     public void requestSignup(SignUpRequest request) {
-        if (!request.getPassword1().equals(request.getPassword2())) {
-            throw new PasswordNotSame();
-        }
-        
-        if (memberRepository.findByEmail(request.getEmail()).isPresent()
-                || signUpRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (!isValidEmail(request.getEmail())) {
             throw new AlreadyExistEmail();
         }
 
@@ -91,5 +79,10 @@ public class AuthService {
         return signUpRepository.findAll().stream()
                 .map(SignUpResponse::from)
                 .toList();
+    }
+    
+    private boolean isValidEmail(String email) {
+        return signUpRepository.existsByEmail(email)
+                && memberRepository.existsByEmail(email);
     }
 }

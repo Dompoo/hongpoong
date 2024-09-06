@@ -17,15 +17,19 @@ public class SignUp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
-    private String username;
+    private String name;
+    private String nickname;
     private String password;
     private Club club;
-
+    private Integer enrollmentNumber;
+    
     @Builder
-    public SignUp(String email, String username, String password, Club club) {
+    public SignUp(String email, String name, String nickname, String password, Club club, Integer enrollmentNumber) {
         this.email = email;
-        this.username = username;
+        this.name = name;
+        this.nickname = nickname;
         this.password = password;
         this.club = club;
+        this.enrollmentNumber = enrollmentNumber;
     }
 }

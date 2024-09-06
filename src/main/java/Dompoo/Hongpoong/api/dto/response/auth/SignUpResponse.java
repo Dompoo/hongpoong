@@ -5,39 +5,36 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-/*
-ResponseBody
-{
-    "email": "dompoo@gmail.com"
-    "username": "dompoo"
-    "password": "1234"
-    "club": "산틀"
-}
- */
 public class SignUpResponse {
-
+    
     private Long id;
     private String email;
-    private String username;
+    private String name;
+    private String nickname;
     private String password;
     private String club;
+    private Integer enrollmentNumber;
     
     @Builder
-    private SignUpResponse(Long id, String email, String username, String password, String club) {
+    private SignUpResponse(Long id, String email, String name, String nickname, String password, String club, Integer enrollmentNumber) {
         this.id = id;
         this.email = email;
-        this.username = username;
+        this.name = name;
+        this.nickname = nickname;
         this.password = password;
         this.club = club;
+        this.enrollmentNumber = enrollmentNumber;
     }
     
     public static SignUpResponse from(SignUp signUp) {
         return SignUpResponse.builder()
                 .id(signUp.getId())
                 .email(signUp.getEmail())
-                .username(signUp.getUsername())
+                .name(signUp.getName())
+                .nickname(signUp.getNickname())
                 .password(signUp.getPassword())
                 .club(signUp.getClub().korName)
+                .enrollmentNumber(signUp.getEnrollmentNumber())
                 .build();
     }
 }

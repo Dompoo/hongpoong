@@ -25,28 +25,36 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
-    private String username;
+    private String name;
+    private String nickname;
     private String password;
     private Role role;
     private Club club;
+    private Integer enrollmentNumber;
     private boolean pushAlarm;
-
+    
     @Builder
-    public Member(String email, String username, String password, Club club) {
+    private Member(String email, String name, String nickname, String password, Role role, Club club, Integer enrollmentNumber, boolean pushAlarm) {
         this.email = email;
-        this.username = username;
+        this.name = name;
+        this.nickname = nickname;
         this.password = password;
+        this.role = role;
         this.club = club;
-        this.pushAlarm = true;
-        this.role = ROLE_USER;
+        this.enrollmentNumber = enrollmentNumber;
+        this.pushAlarm = pushAlarm;
     }
-
+    
     public static Member from(SignUp signUp) {
         return Member.builder()
                 .email(signUp.getEmail())
-                .username(signUp.getEmail())
+                .name(signUp.getPassword())
+                .nickname(signUp.getNickname())
                 .password(signUp.getPassword())
+                .role(ROLE_USER)
                 .club(signUp.getClub())
+                .enrollmentNumber(signUp.getEnrollmentNumber())
+                .pushAlarm(false)
                 .build();
     }
     
@@ -57,7 +65,7 @@ public class Member {
             throw new PasswordNotSame();
         }
         
-        if (dto.getUsername() != null) this.username = dto.getUsername();
+        if (dto.getUsername() != null) this.name = dto.getUsername();
     }
     
     public void editSetting(SettingSaveDto dto) {

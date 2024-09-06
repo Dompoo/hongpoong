@@ -14,45 +14,39 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @Setter
 @NoArgsConstructor
-/*
-RequestBody
-{
-    "email" : "dompoo@gmail.com",
-    "username" : "창근",
-    "password1" : "1234",
-    "password2" : "1234"
-    "club" : 0
-}
- */
 public class SignUpRequest {
 
     @Email(message = "이메일 형식으로 입력해주세요.")
     @NotNull(message = "이메일은 비어있을 수 없습니다.")
     private String email;
     @NotBlank(message = "이름은 비어있을 수 없습니다.")
-    private String username;
+    private String name;
+    @NotBlank(message = "패명은 비어있을 수 없습니다.")
+    private String nickname;
     @NotBlank(message = "비밀번호는 비어있을 수 없습니다.")
-    private String password1;
-    @NotBlank(message = "비밀번호확인은 비어있을 수 없습니다.")
-    private String password2;
+    private String password;
     @NotNull(message = "동아리는 비어있을 수 없습니다.")
-    private Integer club;
-
+    private Club club;
+    @NotNull(message = "학번은 비어있을 수 없습니다.")
+    private Integer enrollmentNumber;
+    
     @Builder
-    private SignUpRequest(String email, String username, String password1, String password2, Integer club) {
+    private SignUpRequest(String email, String name, String nickname, String password, Club club, Integer enrollmentNumber) {
         this.email = email;
-        this.username = username;
-        this.password1 = password1;
-        this.password2 = password2;
+        this.name = name;
+        this.nickname = nickname;
+        this.password = password;
         this.club = club;
+        this.enrollmentNumber = enrollmentNumber;
     }
     
     public SignUp toSignUp(PasswordEncoder encoder) {
         return SignUp.builder()
                 .email(email)
-                .username(username)
-                .password(encoder.encode(password1))
-                .club(Club.fromInt(club))
+                .name(name)
+                .password(encoder.encode(password))
+                .club(club)
+                .enrollmentNumber(enrollmentNumber)
                 .build();
     }
 }

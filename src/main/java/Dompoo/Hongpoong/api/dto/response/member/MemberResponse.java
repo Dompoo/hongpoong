@@ -5,46 +5,32 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-/*
-ResponseBody
-
-<List조회시>
-[
-    {
-        "id": 1,
-        "email": "admin",
-        "username": "admin",
-        "club": "산틀"
-    },
-    {
-        "id": 2,
-        "email": "dompoo@gmail.com",
-        "username": "dompoo",
-        "club": "산틀"
-    },
-    . . .
-]
- */
 public class MemberResponse {
     private Long id;
     private String email;
-    private String username;
+    private String name;
+    private String nickname;
     private String club;
+    private Integer enrollmentNumber;
     
     @Builder
-    private MemberResponse(Long id, String email, String username, String club) {
+    public MemberResponse(Long id, String email, String name, String nickname, String club, Integer enrollmentNumber) {
         this.id = id;
         this.email = email;
-        this.username = username;
+        this.name = name;
+        this.nickname = nickname;
         this.club = club;
+        this.enrollmentNumber = enrollmentNumber;
     }
     
     public static MemberResponse from(Member member) {
         return MemberResponse.builder()
                 .id(member.getId())
                 .email(member.getEmail())
-                .username(member.getUsername())
+                .name(member.getName())
+                .nickname(member.getNickname())
                 .club(member.getClub().korName)
+                .enrollmentNumber(member.getEnrollmentNumber())
                 .build();
     }
 }

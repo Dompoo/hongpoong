@@ -37,8 +37,8 @@ public class ReservationResponse {
     public static ReservationResponse from(Reservation reservation) {
         return ReservationResponse.builder()
                 .id(reservation.getId())
-                .username(reservation.getMember().getName())
-                .email(reservation.getMember().getEmail())
+                .username(reservation.getCreator().getName())
+                .email(reservation.getCreator().getEmail())
                 .number(reservation.getNumber())
                 .date(reservation.getDate())
                 .startTime(reservation.getStartTime().getStrValue())

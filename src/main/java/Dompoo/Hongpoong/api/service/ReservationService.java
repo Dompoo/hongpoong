@@ -73,7 +73,7 @@ public class ReservationService {
     public ReservationResponse editReservation(Long memberId, Long reservationId, ReservationEditDto dto, LocalDateTime now) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
-        if (!reservation.getMember().getId().equals(memberId)) {
+        if (!reservation.getCreator().getId().equals(memberId)) {
             throw new EditFailException();
         }
         
@@ -88,7 +88,7 @@ public class ReservationService {
     public void deleteReservation(Long memberId, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
 
-        if (!reservation.getMember().getId().equals(memberId)) {
+        if (!reservation.getCreator().getId().equals(memberId)) {
             throw new DeleteFailException();
         }
 

@@ -12,6 +12,6 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     List<Reservation> findAllByDate(LocalDate date);
     List<Reservation> findAllByDateBetween(LocalDate startDate, LocalDate endDate);
-    @Query("SELECT r from Reservation r WHERE r.member.club = :club AND r.date = :date")
+    @Query("SELECT r from Reservation r WHERE r.creator.club = :club AND r.date = :date")
     List<Reservation> findAllByClubAndDate(@Param("club") Club club, @Param("date") LocalDate localDate);
 }

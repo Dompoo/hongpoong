@@ -20,8 +20,8 @@ public class Reservation {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "creator_id")
+    private Member creator;
     private Integer number;
     private LocalDate date;
     @Enumerated(EnumType.STRING)
@@ -33,8 +33,8 @@ public class Reservation {
     private String message;
     
     @Builder
-    private Reservation(Member member, Integer number, LocalDate date, ReservationTime startTime, ReservationTime endTime, LocalDateTime lastModified, String message) {
-        this.member = member;
+    private Reservation(Member creator, Integer number, LocalDate date, ReservationTime startTime, ReservationTime endTime, LocalDateTime lastModified, String message) {
+        this.creator = creator;
         this.number = number;
         this.date = date;
         this.startTime = startTime;

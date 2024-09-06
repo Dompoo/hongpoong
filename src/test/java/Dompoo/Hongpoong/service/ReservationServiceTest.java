@@ -71,7 +71,7 @@ class ReservationServiceTest {
                 .build();
 
         //when
-        List<ReservationResponse> list = service.getList(request);
+        List<ReservationResponse> list = service.getAllReservationOfDate(request);
 
         //then
         assertEquals(2, list.size());

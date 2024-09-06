@@ -2,7 +2,6 @@ package Dompoo.Hongpoong.api.controller;
 
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditRequest;
-import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.api.dto.response.resevation.ReservationResponse;
 import Dompoo.Hongpoong.api.service.ReservationService;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
@@ -13,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,21 +24,33 @@ public class ReservationController {
     public final ReservationService service;
 
     @Secured
-    @PostMapping("/search")
-    public List<ReservationResponse> reservationMenu(@RequestBody @Valid ReservationSearchRequest request) {
-        return service.getList(request);
+    @GetMapping("/year-month")
+    public List<ReservationResponse> getAllReservationOfYearAndMonth(@RequestParam("year") Integer year, @RequestParam("month") Integer month) {
+        return service.getAllReservationOfYearAndMonth(year, month);
+    }
+    
+    @Secured
+    @GetMapping("/day")
+    public List<ReservationResponse> getAllReservationOfDate(@RequestParam("date") LocalDate date) {
+        return service.getAllReservationOfDate(date);
+    }
+    
+    @Secured
+    @GetMapping("/todo")
+    public List<ReservationResponse> getAllTodoReservationOfToday(@LoginUser UserClaims claims) {
+        return service.getAllTodoReservationOfToday(claims.getId(), LocalDate.now());
+    }
+    
+    @Secured
+    @GetMapping("/{id}")
+    public ReservationResponse getReservationDetail(@PathVariable Long id) {
+        return service.findReservation(id);
     }
     
     @Secured
     @PostMapping
     public void addReservation(@LoginUser UserClaims claims, @RequestBody @Valid ReservationCreateRequest request) {
         service.addReservation(claims.getId(), request);
-    }
-    
-    @Secured
-    @GetMapping("/{id}")
-    public ReservationResponse reservationDetail(@PathVariable Long id) {
-        return service.findReservation(id);
     }
     
     @Secured

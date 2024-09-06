@@ -53,7 +53,7 @@ class ReservationControllerTest extends MyWebMvcTest {
     @DisplayName("전체 예약 조회")
     void menu() throws Exception {
         //given
-        when(reservationService.getList(any())).thenReturn(List.of(
+        when(reservationService.getAllReservationOfDate(any())).thenReturn(List.of(
                 ReservationResponse.builder()
                         .id(RESERVATION_ID)
                         .username(USERNAME)

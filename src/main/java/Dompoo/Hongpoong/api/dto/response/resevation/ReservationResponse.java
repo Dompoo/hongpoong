@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class ReservationResponse {
@@ -45,5 +46,9 @@ public class ReservationResponse {
                 .message(reservation.getMessage())
                 .lastmodified(reservation.getLastModified())
                 .build();
+    }
+    
+    public static List<ReservationResponse> fromList(List<Reservation> reservations) {
+        return reservations.stream().map(ReservationResponse::from).toList();
     }
 }

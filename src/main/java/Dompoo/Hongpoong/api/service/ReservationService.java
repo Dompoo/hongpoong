@@ -2,7 +2,6 @@ package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditDto;
-import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.api.dto.response.resevation.ReservationResponse;
 import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
 import Dompoo.Hongpoong.common.exception.impl.EditFailException;
@@ -17,9 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,36 +27,51 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
-
+    
     @Transactional(readOnly = true)
-    public List<ReservationResponse> getList(ReservationSearchRequest request) {
-        return reservationRepository.findAllByDate(request.getDate()).stream()
-                .map(ReservationResponse::from)
-                .collect(Collectors.toList());
+    public List<ReservationResponse> getAllReservationOfYearAndMonth(Integer year, Integer month) {
+        YearMonth yearMonth = YearMonth.of(year, month);
+        
+        List<Reservation> reservations = reservationRepository.findAllByDateBetween(yearMonth.atDay(1), yearMonth.atEndOfMonth());
+        
+        return ReservationResponse.fromList(reservations);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<ReservationResponse> getAllReservationOfDate(LocalDate date) {
+        List<Reservation> reservations = reservationRepository.findAllByDate(date);
+        
+        return ReservationResponse.fromList(reservations);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<ReservationResponse> getAllTodoReservationOfToday(Long memberId, LocalDate localDate) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        
+        List<Reservation> reservations = reservationRepository.findAllByClubAndDate(member.getClub(), localDate);
+        
+        return ReservationResponse.fromList(reservations);
     }
     
     @Transactional
     public void addReservation(Long memberId, ReservationCreateRequest request) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(MemberNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
 
         ReservationTime.validateStartTimeAndEndTime(request.getStartTime(), request.getEndTime());
 
         reservationRepository.save(request.toReservation(member));
     }
-
+    
     @Transactional(readOnly = true)
     public ReservationResponse findReservation(Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
 
         return ReservationResponse.from(reservation);
     }
-
+    
     @Transactional
     public ReservationResponse editReservation(Long memberId, Long reservationId, ReservationEditDto dto, LocalDateTime now) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
         if (!reservation.getMember().getId().equals(memberId)) {
             throw new EditFailException();
@@ -68,11 +83,10 @@ public class ReservationService {
         
         return ReservationResponse.from(reservation);
     }
-
+    
     @Transactional
     public void deleteReservation(Long memberId, Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
 
         if (!reservation.getMember().getId().equals(memberId)) {
             throw new DeleteFailException();
@@ -80,11 +94,10 @@ public class ReservationService {
 
         reservationRepository.delete(reservation);
     }
-
+    
     @Transactional
     public void edit(Long reservationId, ReservationEditDto dto, LocalDateTime now) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
 
         reservation.edit(dto, now);
     }

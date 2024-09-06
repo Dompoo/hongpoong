@@ -8,9 +8,11 @@ import Dompoo.Hongpoong.common.exception.impl.EditFailException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.common.exception.impl.ReservationNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
 import Dompoo.Hongpoong.domain.entity.reservation.ReservationTime;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final ReservationParticipateRepository reservationParticipateRepository;
     private final MemberRepository memberRepository;
     
     @Transactional(readOnly = true)
@@ -46,24 +49,24 @@ public class ReservationService {
     
     @Transactional(readOnly = true)
     public List<ReservationResponse> getAllTodoReservationOfToday(Long memberId, LocalDate localDate) {
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        List<ReservationParticipate> reservationParticipates = reservationParticipateRepository.findByMemberIdAndReservationDate(memberId, localDate);
         
-        List<Reservation> reservations = reservationRepository.findAllByClubAndDate(member.getClub(), localDate);
-        
-        return ReservationResponse.fromList(reservations);
+        return ReservationResponse.fromParticipateList(reservationParticipates);
     }
     
     @Transactional
     public void addReservation(Long memberId, ReservationCreateRequest request) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
-
+        List<Member> participaters = memberRepository.findAllByIdIn(request.getParticipaterIds());
+        
         ReservationTime.validateStartTimeAndEndTime(request.getStartTime(), request.getEndTime());
-
-        reservationRepository.save(request.toReservation(member));
+        
+        Reservation savedReservation = reservationRepository.save(request.toReservation(member));
+        reservationParticipateRepository.saveAll(ReservationParticipate.of(savedReservation, participaters));
     }
     
     @Transactional(readOnly = true)
-    public ReservationResponse findReservation(Long reservationId) {
+    public ReservationResponse getReservationDetail(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
 
         return ReservationResponse.from(reservation);

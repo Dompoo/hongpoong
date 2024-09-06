@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.api.dto.response.resevation;
 
+import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,5 +51,9 @@ public class ReservationResponse {
     
     public static List<ReservationResponse> fromList(List<Reservation> reservations) {
         return reservations.stream().map(ReservationResponse::from).toList();
+    }
+    
+    public static List<ReservationResponse> fromParticipateList(List<ReservationParticipate> reservations) {
+        return reservations.stream().map(rp -> ReservationResponse.from(rp.getReservation())).toList();
     }
 }

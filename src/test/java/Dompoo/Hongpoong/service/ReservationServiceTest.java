@@ -158,7 +158,7 @@ class ReservationServiceTest {
                 .build());
 
         //when
-        ReservationResponse response = service.findReservation(reservation.getId());
+        ReservationResponse response = service.getReservationDetail(reservation.getId());
 
         //then
         assertEquals(response.getId(), reservation.getId());
@@ -187,7 +187,7 @@ class ReservationServiceTest {
 
         //when
         ReservationNotFound e = assertThrows(ReservationNotFound.class,
-                () -> service.findReservation(reservation.getId() + 1));
+                () -> service.getReservationDetail(reservation.getId() + 1));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 예약입니다.");

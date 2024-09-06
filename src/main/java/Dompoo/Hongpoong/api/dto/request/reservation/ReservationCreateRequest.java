@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,21 +30,25 @@ public class ReservationCreateRequest {
 
     @NotBlank(message = "종료 시간을 입력하세요.")
     private String endTime;
+    
+    @NotNull(message = "참가자를 입력하세요.")
+    private List<Long> participaterIds;
 
     private String message = "";
     
     @Builder
-    private ReservationCreateRequest(Integer number, LocalDate date, String startTime, String endTime, String message) {
+    private ReservationCreateRequest(Integer number, LocalDate date, String startTime, String endTime, List<Long> participaterIds, String message) {
         this.number = number;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.participaterIds = participaterIds;
         this.message = message;
     }
     
-    public Reservation toReservation(Member member) {
+    public Reservation toReservation(Member creator) {
         return Reservation.builder()
-                .member(member)
+                .creator(creator)
                 .number(number)
                 .date(date)
                 .startTime(ReservationTime.from(startTime))

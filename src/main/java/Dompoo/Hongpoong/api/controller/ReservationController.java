@@ -22,7 +22,13 @@ import java.util.List;
 public class ReservationController {
 
     public final ReservationService service;
-
+    
+    @Secured
+    @PostMapping
+    public void addReservation(@LoginUser UserClaims claims, @RequestBody @Valid ReservationCreateRequest request) {
+        service.addReservation(claims.getId(), request);
+    }
+    
     @Secured
     @GetMapping("/year-month")
     public List<ReservationResponse> getAllReservationOfYearAndMonth(@RequestParam("year") Integer year, @RequestParam("month") Integer month) {
@@ -42,15 +48,9 @@ public class ReservationController {
     }
     
     @Secured
-    @GetMapping("/{id}")
-    public ReservationResponse getReservationDetail(@PathVariable Long id) {
-        return service.findReservation(id);
-    }
-    
-    @Secured
-    @PostMapping
-    public void addReservation(@LoginUser UserClaims claims, @RequestBody @Valid ReservationCreateRequest request) {
-        service.addReservation(claims.getId(), request);
+    @GetMapping("/{reservationId}")
+    public ReservationResponse getReservationDetail(@PathVariable Long reservationId) {
+        return service.getReservationDetail(reservationId);
     }
     
     @Secured

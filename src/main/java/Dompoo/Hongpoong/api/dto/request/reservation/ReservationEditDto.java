@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.api.dto.request.reservation;
 
+import Dompoo.Hongpoong.domain.entity.reservation.ReservationTime;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,12 +11,12 @@ public class ReservationEditDto {
     
     private Integer number;
     private LocalDate date;
-    private Integer startTime;
-    private Integer endTime;
+    private ReservationTime startTime;
+    private ReservationTime endTime;
     private String message;
-
+    
     @Builder
-    private ReservationEditDto(Integer number, LocalDate date, Integer startTime, Integer endTime, String message) {
+    private ReservationEditDto(Integer number, LocalDate date, ReservationTime startTime, ReservationTime endTime, String message) {
         this.number = number;
         this.date = date;
         this.startTime = startTime;

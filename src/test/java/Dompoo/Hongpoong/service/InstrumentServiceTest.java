@@ -8,7 +8,7 @@ import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentResponse;
 import Dompoo.Hongpoong.api.service.InstrumentService;
 import Dompoo.Hongpoong.domain.entity.Instrument;
 import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
 import Dompoo.Hongpoong.domain.repository.InstrumentRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;

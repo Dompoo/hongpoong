@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.domain.repository;
 
-import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;

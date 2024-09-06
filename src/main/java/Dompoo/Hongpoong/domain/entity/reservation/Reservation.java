@@ -1,7 +1,8 @@
-package Dompoo.Hongpoong.domain.entity;
+package Dompoo.Hongpoong.domain.entity.reservation;
 
 
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditDto;
+import Dompoo.Hongpoong.domain.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,29 +22,25 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
-
     private Integer number;
-
-//    @OneToMany(mappedBy = "reservation")
-//    private List<Instrument> instruments = new ArrayList<>();
-
     private LocalDate date;
-    private Integer startTime;
-    private Integer endTime;
+    @Enumerated(EnumType.STRING)
+    private ReservationTime startTime;
+    @Enumerated(EnumType.STRING)
+    private ReservationTime endTime;
     private LocalDateTime lastModified;
-
     @Lob
     private String message;
-
+    
     @Builder
-    public Reservation(Member member, Integer number, LocalDate date, Integer startTime, Integer endTime, String message) {
-        setMember(member);
+    private Reservation(Member member, Integer number, LocalDate date, ReservationTime startTime, ReservationTime endTime, LocalDateTime lastModified, String message) {
+        this.member = member;
         this.number = number;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.lastModified = lastModified;
         this.message = message;
-        lastModified = LocalDateTime.now();
     }
     
     public void edit(ReservationEditDto dto, LocalDateTime now) {

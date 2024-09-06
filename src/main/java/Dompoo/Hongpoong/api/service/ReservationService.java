@@ -4,9 +4,13 @@ import Dompoo.Hongpoong.api.dto.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditDto;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.api.dto.response.resevation.ReservationResponse;
-import Dompoo.Hongpoong.common.exception.impl.*;
+import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
+import Dompoo.Hongpoong.common.exception.impl.EditFailException;
+import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
+import Dompoo.Hongpoong.common.exception.impl.ReservationNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
+import Dompoo.Hongpoong.domain.entity.reservation.ReservationTime;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +40,7 @@ public class ReservationService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
 
-        if (request.getStartTime() > request.getEndTime()) {
-            throw new EndForwardStart();
-        }
+        ReservationTime.validateStartTimeAndEndTime(request.getStartTime(), request.getEndTime());
 
         reservationRepository.save(request.toReservation(member));
     }
@@ -55,14 +57,12 @@ public class ReservationService {
     public ReservationResponse editReservation(Long memberId, Long reservationId, ReservationEditDto dto, LocalDateTime now) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
-
+        
         if (!reservation.getMember().getId().equals(memberId)) {
             throw new EditFailException();
         }
-
-        if (dto.getStartTime() > dto.getEndTime()) {
-            throw new EndForwardStart();
-        }
+        
+        ReservationTime.validateStartTimeAndEndTime(dto.getStartTime(), dto.getEndTime());
         
         reservation.edit(dto, now);
         
@@ -82,8 +82,8 @@ public class ReservationService {
     }
 
     @Transactional
-    public void edit(Long id, ReservationEditDto dto, LocalDateTime now) {
-        Reservation reservation = reservationRepository.findById(id)
+    public void edit(Long reservationId, ReservationEditDto dto, LocalDateTime now) {
+        Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
 
         reservation.edit(dto, now);

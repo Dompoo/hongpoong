@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.domain.entity.reservation;
 
+import Dompoo.Hongpoong.common.exception.impl.EndForwardStart;
 import Dompoo.Hongpoong.common.exception.impl.ReservationTimeException;
 import lombok.Getter;
 
@@ -48,5 +49,18 @@ public enum ReservationTime {
 			}
 		}
 		throw new ReservationTimeException();
+	}
+	
+	public static void validateStartTimeAndEndTime(String startTime, String endTime) {
+		ReservationTime start = ReservationTime.from(startTime);
+		ReservationTime end = ReservationTime.from(endTime);
+		
+		validateStartTimeAndEndTime(start, end);
+	}
+	
+	public static void validateStartTimeAndEndTime(ReservationTime startTime, ReservationTime endTime) {
+		if (startTime.ordinal() < endTime.ordinal()) {
+			throw new EndForwardStart();
+		}
 	}
 }

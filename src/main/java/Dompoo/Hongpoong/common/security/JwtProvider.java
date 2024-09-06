@@ -36,7 +36,7 @@ public class JwtProvider {
 		Claims claims = getClaims(token, secretKey);
 		
 		return UserClaims.builder()
-				.id((Long) claims.get(CLAIMS_ID_PROPERTIES))
+				.id(((Integer) (claims.get(CLAIMS_ID_PROPERTIES))).longValue())
 				.email((String) claims.get(CLAIMS_EMAIL_PROPERTIES))
 				.build();
 	}

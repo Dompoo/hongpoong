@@ -25,13 +25,13 @@ public class SignUpRequest {
     private String nickname;
     @NotBlank(message = "비밀번호는 비어있을 수 없습니다.")
     private String password;
-    @NotNull(message = "동아리는 비어있을 수 없습니다.")
-    private Club club;
+    @NotBlank(message = "동아리는 비어있을 수 없습니다.")
+    private String club;
     @NotNull(message = "학번은 비어있을 수 없습니다.")
     private Integer enrollmentNumber;
     
     @Builder
-    private SignUpRequest(String email, String name, String nickname, String password, Club club, Integer enrollmentNumber) {
+    private SignUpRequest(String email, String name, String nickname, String password, String club, Integer enrollmentNumber) {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
@@ -45,7 +45,7 @@ public class SignUpRequest {
                 .email(email)
                 .name(name)
                 .password(encoder.encode(password))
-                .club(club)
+                .club(Club.from(club))
                 .enrollmentNumber(enrollmentNumber)
                 .build();
     }

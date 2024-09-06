@@ -13,13 +13,10 @@ public enum Club {
 		this.korName = korName;
 	}
 	
-	public static Club fromInt(int number) {
-		return switch (number) {
-			case 1 -> HWARANG;
-			case 2 -> SANTLE;
-			case 3 -> AKBAN;
-			case 4 -> DEULNEOK;
-			default -> ETC;
-		};
+	public static Club from(String clubname) {
+		for (Club club : Club.values()){
+			if (club.korName.equals(clubname)) return club;
+		}
+		return ETC;
 	}
 }

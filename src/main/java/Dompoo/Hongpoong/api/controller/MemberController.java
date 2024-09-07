@@ -21,13 +21,19 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService service;
-
+    
+    @Secured
+    @GetMapping
+    public List<MemberResponse> getAllMember() {
+        return service.getAllMember();
+    }
+    
     @Secured
     @GetMapping("/status")
     public MemberStatusResponse getMyDetail(@LoginUser UserClaims claims) {
         return service.getMyDetail(claims.getId());
     }
-
+    
     @Secured
     @PutMapping
     public void editMyMember(@LoginUser UserClaims claims, @RequestBody @Valid MemberEditRequest request) {
@@ -38,12 +44,6 @@ public class MemberController {
     @DeleteMapping
     public void withDraw(@LoginUser UserClaims claims) {
         service.deleteMember(claims.getId());
-    }
-
-    @Secured(SecurePolicy.ADMIN_ONLY)
-    @GetMapping("/manage")
-    public List<MemberResponse> getAllMember() {
-        return service.getAllMember();
     }
 
     @Secured(SecurePolicy.ADMIN_ONLY)

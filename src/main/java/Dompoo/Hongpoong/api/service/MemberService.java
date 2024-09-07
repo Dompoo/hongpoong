@@ -18,44 +18,40 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository repository;
+    private final MemberRepository memberRepository;
     private final PasswordEncoder encoder;
 
     @Transactional
     public void editMyMember(Long memberId, MemberEditDto dto) {
-        Member member = repository.findById(memberId)
-                .orElseThrow(MemberNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
         member.edit(dto, encoder);
     }
 
     @Transactional
     public void deleteMember(Long memberId) {
-        Member member = repository.findById(memberId)
-                .orElseThrow(MemberNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
 
-        repository.delete(member);
+        memberRepository.delete(member);
     }
 
     @Transactional(readOnly = true)
     public List<MemberResponse> getAllMember() {
-        return repository.findAll().stream()
+        return memberRepository.findAll().stream()
                 .map(MemberResponse::from)
                 .toList();
     }
 
     @Transactional
     public void editMemberAuth(Long id, MemberRoleEditRequest request) {
-        Member member = repository.findById(id)
-                .orElseThrow(MemberNotFound::new);
+        Member member = memberRepository.findById(id).orElseThrow(MemberNotFound::new);
 
         member.setRole(request.getRole());
     }
 
     @Transactional(readOnly = true)
     public MemberStatusResponse getMyDetail(Long memberId) {
-        Member member = repository.findById(memberId)
-                .orElseThrow(MemberNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
 
         return MemberStatusResponse.from(member);
     }

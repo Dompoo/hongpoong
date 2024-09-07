@@ -12,15 +12,17 @@ public class MemberResponse {
     private String nickname;
     private String club;
     private Integer enrollmentNumber;
+    private String profileImageUrl;
     
     @Builder
-    public MemberResponse(Long id, String email, String name, String nickname, String club, Integer enrollmentNumber) {
+    private MemberResponse(Long id, String email, String name, String nickname, String club, Integer enrollmentNumber, String profileImageUrl) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.nickname = nickname;
         this.club = club;
         this.enrollmentNumber = enrollmentNumber;
+        this.profileImageUrl = profileImageUrl;
     }
     
     public static MemberResponse from(Member member) {
@@ -31,6 +33,7 @@ public class MemberResponse {
                 .nickname(member.getNickname())
                 .club(member.getClub().korName)
                 .enrollmentNumber(member.getEnrollmentNumber())
+                .profileImageUrl(member.getProfileImageUrl())
                 .build();
     }
 }

@@ -16,6 +16,8 @@ public class ReservationParticipate {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	private Boolean attend;
+	
 	@ManyToOne
 	@JoinColumn(name = "reservation_id")
 	private Reservation reservation;
@@ -25,7 +27,8 @@ public class ReservationParticipate {
 	private Member member;
 	
 	@Builder
-	private ReservationParticipate(Reservation reservation, Member member) {
+	private ReservationParticipate(Boolean attend, Reservation reservation, Member member) {
+		this.attend = attend;
 		this.reservation = reservation;
 		this.member = member;
 	}
@@ -35,6 +38,7 @@ public class ReservationParticipate {
 				.map(member -> ReservationParticipate.builder()
 						.member(member)
 						.reservation(reservation)
+						.attend(false)
 						.build())
 				.toList();
 	}

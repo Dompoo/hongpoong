@@ -1,8 +1,11 @@
 package Dompoo.Hongpoong.api.dto.response.member;
 
 import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class MemberResponse {
@@ -35,5 +38,13 @@ public class MemberResponse {
                 .enrollmentNumber(member.getEnrollmentNumber())
                 .profileImageUrl(member.getProfileImageUrl())
                 .build();
+    }
+    
+    public static List<MemberResponse> fromList(List<Member> members) {
+        return members.stream().map(MemberResponse::from).toList();
+    }
+    
+    public static List<MemberResponse> fromParticipates(List<ReservationParticipate> participateList) {
+        return participateList.stream().map(participate -> MemberResponse.from(participate.getMember())).toList();
     }
 }

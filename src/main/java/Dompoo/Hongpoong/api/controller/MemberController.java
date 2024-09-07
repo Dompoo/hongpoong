@@ -24,37 +24,37 @@ public class MemberController {
 
     @Secured
     @GetMapping("/status")
-    public MemberStatusResponse getStatus(@LoginUser UserClaims claims) {
-        return service.getStatus(claims.getId());
+    public MemberStatusResponse getMyDetail(@LoginUser UserClaims claims) {
+        return service.getMyDetail(claims.getId());
     }
 
     @Secured
     @PutMapping
-    public void editMember(@LoginUser UserClaims claims, @RequestBody @Valid MemberEditRequest request) {
-        service.editMember(claims.getId(), request.toDto());
+    public void editMyMember(@LoginUser UserClaims claims, @RequestBody @Valid MemberEditRequest request) {
+        service.editMyMember(claims.getId(), request.toDto());
     }
 
     @Secured
     @DeleteMapping
-    public void deleteMember(@LoginUser UserClaims claims) {
+    public void withDraw(@LoginUser UserClaims claims) {
         service.deleteMember(claims.getId());
     }
 
     @Secured(SecurePolicy.ADMIN_ONLY)
     @GetMapping("/manage")
-    public List<MemberResponse> memberList() {
-        return service.getList();
+    public List<MemberResponse> getAllMember() {
+        return service.getAllMember();
     }
 
     @Secured(SecurePolicy.ADMIN_ONLY)
     @PatchMapping("/manage/{id}")
-    public void changeAuth(@PathVariable Long id, @RequestBody @Valid MemberRoleEditRequest request) {
-        service.editRole(id, request);
+    public void editMemberRole(@PathVariable Long id, @RequestBody @Valid MemberRoleEditRequest request) {
+        service.editMemberAuth(id, request);
     }
 
     @Secured(SecurePolicy.ADMIN_ONLY)
     @DeleteMapping("/manage/{id}")
-    public void memberdelete(@PathVariable Long id) {
+    public void deleteMember(@PathVariable Long id) {
         service.deleteMember(id);
     }
 }

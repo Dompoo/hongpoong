@@ -60,7 +60,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("로그인 정보")
-    void getStatus() {
+    void getMyDetail() {
         //given
         Member member = memberRepository.save(Member.builder()
                 .email(EMAIL)
@@ -70,7 +70,7 @@ class MemberServiceTest {
                 .build());
 
         //when
-        MemberStatusResponse response = service.getStatus(member.getId());
+        MemberStatusResponse response = service.getMyDetail(member.getId());
 
         //then
         assertEquals(response.getEmail(), EMAIL);
@@ -80,7 +80,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 회원의 로그인 정보")
-    void getStatusFail() {
+    void getMyDetailFail() {
         //given
         Member member = memberRepository.save(Member.builder()
                 .email(EMAIL)
@@ -90,7 +90,7 @@ class MemberServiceTest {
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class, () ->
-                service.getStatus(member.getId() + 1));
+                service.getMyDetail(member.getId() + 1));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
@@ -99,7 +99,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("멤버 정보 전체 수정")
-    void editMember1() {
+    void editMyMember1() {
         //given
         MemberEditRequest request = MemberEditRequest.builder()
                 .username(NEW_USERNAME)
@@ -108,7 +108,7 @@ class MemberServiceTest {
                 .build();
 
         //when
-        service.editMember(member.getId(), request.toDto());
+        service.editMyMember(member.getId(), request.toDto());
 
         //then
         assertEquals(memberRepository.findAll().getFirst().getEmail(), "dompoo@gmail.com");
@@ -118,7 +118,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("멤버 정보 일부 수정")
-    void editMember2() {
+    void editMyMember2() {
         //given
         MemberEditRequest request = MemberEditRequest.builder()
                 .password1(NEW_PASSWORD)
@@ -126,7 +126,7 @@ class MemberServiceTest {
                 .build();
 
         //when
-        service.editMember(member.getId(), request.toDto());
+        service.editMyMember(member.getId(), request.toDto());
 
         //then
         assertEquals(memberRepository.findAll().getFirst().getEmail(), "dompoo@gmail.com");
@@ -136,7 +136,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("멤버 정보 수정시 비밀번호와 비밀번호 확인은 일치해야 한다.")
-    void editMemberFail1() {
+    void editMyMemberFail1() {
         MemberEditRequest request = MemberEditRequest.builder()
                 .username(NEW_USERNAME)
                 .password1(NEW_PASSWORD)
@@ -145,7 +145,7 @@ class MemberServiceTest {
 
         //when
         PasswordNotSame e = assertThrows(PasswordNotSame.class,
-                () -> service.editMember(member.getId(), request.toDto()));
+                () -> service.editMyMember(member.getId(), request.toDto()));
 
         //then
         assertEquals(e.getMessage(), "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
@@ -154,7 +154,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("존재하는 아이디로 멤버 수정 시도")
-    void editMemberFail2() {
+    void editMyMemberFail2() {
         MemberEditRequest request = MemberEditRequest.builder()
                 .username(NEW_USERNAME)
                 .password1(NEW_PASSWORD)
@@ -163,7 +163,7 @@ class MemberServiceTest {
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.editMember(member.getId() + 1, request.toDto()));
+                () -> service.editMyMember(member.getId() + 1, request.toDto()));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
@@ -194,7 +194,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원 리스트 조회")
-    void getList() {
+    void getAllMember() {
         //given
         memberRepository.save(Member.builder()
                 .email(EMAIL)
@@ -204,7 +204,7 @@ class MemberServiceTest {
                 .build());
 
         //when
-        List<MemberResponse> list = service.getList();
+        List<MemberResponse> list = service.getAllMember();
 
         //then
         assertEquals(2, list.size());
@@ -214,7 +214,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원 권한 변경")
-    void editRole() {
+    void editMemberAuth() {
         //given
         Member find = memberRepository.findAll().getFirst();
 
@@ -223,7 +223,7 @@ class MemberServiceTest {
                 .build();
 
         //when
-        service.editRole(find.getId(), request);
+        service.editMemberAuth(find.getId(), request);
 
         //then
         assertEquals(memberRepository.findAll().getFirst().getRole().name(), "ROLE_LEADER");
@@ -231,7 +231,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 회원 권한 변경")
-    void editRoleFail() {
+    void editMemberAuthFail() {
         //given
         Member find = memberRepository.findAll().getFirst();
 
@@ -241,7 +241,7 @@ class MemberServiceTest {
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.editRole(find.getId() + 1, request));
+                () -> service.editMemberAuth(find.getId() + 1, request));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");

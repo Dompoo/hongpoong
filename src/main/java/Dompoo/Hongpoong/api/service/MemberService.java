@@ -22,7 +22,7 @@ public class MemberService {
     private final PasswordEncoder encoder;
 
     @Transactional
-    public void editMember(Long memberId, MemberEditDto dto) {
+    public void editMyMember(Long memberId, MemberEditDto dto) {
         Member member = repository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
         
@@ -38,14 +38,14 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<MemberResponse> getList() {
+    public List<MemberResponse> getAllMember() {
         return repository.findAll().stream()
                 .map(MemberResponse::from)
                 .toList();
     }
 
     @Transactional
-    public void editRole(Long id, MemberRoleEditRequest request) {
+    public void editMemberAuth(Long id, MemberRoleEditRequest request) {
         Member member = repository.findById(id)
                 .orElseThrow(MemberNotFound::new);
 
@@ -53,7 +53,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public MemberStatusResponse getStatus(Long memberId) {
+    public MemberStatusResponse getMyDetail(Long memberId) {
         Member member = repository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
 

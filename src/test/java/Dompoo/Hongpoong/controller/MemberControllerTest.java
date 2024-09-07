@@ -36,9 +36,9 @@ class MemberControllerTest extends MyWebMvcTest {
     //로그인 정보
     @Test
     @DisplayName("로그인 정보")
-    void getStatus() throws Exception {
+    void getMyDetail() throws Exception {
         //given
-        when(memberService.getStatus(any())).thenReturn(MemberStatusResponse.builder()
+        when(memberService.getMyDetail(any())).thenReturn(MemberStatusResponse.builder()
                 .id(ID)
                 .email(EMAIL)
                 .username(USERNAME)
@@ -95,7 +95,7 @@ class MemberControllerTest extends MyWebMvcTest {
     @DisplayName("회원 리스트 조회")
     void getList() throws Exception {
         //given
-        when(memberService.getList()).thenReturn(List.of(
+        when(memberService.getAllMember()).thenReturn(List.of(
                 MemberResponse.builder()
                         .id(ID)
                         .email(EMAIL)
@@ -140,7 +140,7 @@ class MemberControllerTest extends MyWebMvcTest {
     //권한 변경 - 관리자
     @Test
     @DisplayName("권한 변경")
-    void changeAuth() throws Exception {
+    void editMemberRole() throws Exception {
         //given
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
                 .role(Role.ROLE_LEADER)

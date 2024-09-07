@@ -30,10 +30,11 @@ public class Member {
     private Role role;
     private Club club;
     private Integer enrollmentNumber;
+    private String profileImageUrl;
     private boolean pushAlarm;
     
     @Builder
-    private Member(String email, String name, String nickname, String password, Role role, Club club, Integer enrollmentNumber, boolean pushAlarm) {
+    private Member(String email, String name, String nickname, String password, Role role, Club club, Integer enrollmentNumber, String profileImageUrl, boolean pushAlarm) {
         this.email = email;
         this.name = name;
         this.nickname = nickname;
@@ -41,6 +42,7 @@ public class Member {
         this.role = role;
         this.club = club;
         this.enrollmentNumber = enrollmentNumber;
+        this.profileImageUrl = profileImageUrl;
         this.pushAlarm = pushAlarm;
     }
     

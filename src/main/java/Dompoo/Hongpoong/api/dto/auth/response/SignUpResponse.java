@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.api.dto.auth.response;
 
 import Dompoo.Hongpoong.domain.entity.SignUp;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +12,25 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SignUpResponse {
     
+    @Schema(example = "1")
     private final Long id;
+    
+    @Schema(example = "email@gmail.com")
     private final String email;
+    
+    @Schema(example = "이창근")
     private final String name;
+    
+    @Schema(example = "불꽃남자")
     private final String nickname;
+    
+    @Schema(example = "0912md0m10102")
     private final String password;
+    
+    @Schema(example = "산틀")
     private final String club;
+    
+    @Schema(example = "19")
     private final Integer enrollmentNumber;
     
     public static SignUpResponse from(SignUp signUp) {

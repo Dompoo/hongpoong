@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.api.dto.auth.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -10,7 +12,11 @@ import lombok.*;
 public class LoginRequest {
 	
 	@NotBlank(message = "이메일을 입력해주세요.")
+	@Email(message = "이메일 형식으로 입력해주세요.")
+	@Schema(example = "email@gmail.com")
 	private final String email;
+	
 	@NotBlank(message = "비밀번호를 입력해주세요.")
+	@Schema(example = "1234")
 	private final String password;
 }

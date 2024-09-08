@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.service;
 
-import Dompoo.Hongpoong.api.dto.reservation.ReservationCreateRequest;
-import Dompoo.Hongpoong.api.dto.reservation.ReservationEditRequest;
+import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
+import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.api.service.ReservationService;
 import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;

@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.controller;
 
-import Dompoo.Hongpoong.api.dto.common.SettingEditRequest;
+import Dompoo.Hongpoong.api.dto.common.request.SettingEditRequest;
 import Dompoo.Hongpoong.api.dto.common.response.SettingResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import org.junit.jupiter.api.DisplayName;

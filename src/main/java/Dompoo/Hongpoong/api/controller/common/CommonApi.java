@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.controller.common;
 
-import Dompoo.Hongpoong.api.dto.common.SettingEditRequest;
+import Dompoo.Hongpoong.api.dto.common.request.SettingEditRequest;
 import Dompoo.Hongpoong.api.dto.common.response.SettingResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import io.swagger.v3.oas.annotations.Operation;

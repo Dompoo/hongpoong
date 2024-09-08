@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.controller.member;
 
-import Dompoo.Hongpoong.api.dto.member.MemberEditRequest;
-import Dompoo.Hongpoong.api.dto.member.MemberRoleEditRequest;
+import Dompoo.Hongpoong.api.dto.member.request.MemberEditRequest;
+import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditRequest;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;

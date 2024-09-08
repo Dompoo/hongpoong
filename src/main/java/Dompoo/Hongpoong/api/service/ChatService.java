@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.chat.ChatMessageDto;
-import Dompoo.Hongpoong.api.dto.chat.ChatRoomCreateRequest;
+import Dompoo.Hongpoong.api.dto.chat.request.ChatRoomCreateRequest;
 import Dompoo.Hongpoong.api.dto.chat.response.ChatRoomResponse;
 import Dompoo.Hongpoong.common.exception.impl.ChatRoomNotFound;
 import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;

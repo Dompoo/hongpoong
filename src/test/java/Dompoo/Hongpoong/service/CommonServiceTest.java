@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.service;
 
-import Dompoo.Hongpoong.api.dto.common.SettingEditRequest;
+import Dompoo.Hongpoong.api.dto.common.request.SettingEditRequest;
 import Dompoo.Hongpoong.api.dto.common.response.SettingResponse;
 import Dompoo.Hongpoong.api.service.CommonService;
 import Dompoo.Hongpoong.domain.entity.Member;

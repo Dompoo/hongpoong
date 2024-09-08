@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.service;
 
-import Dompoo.Hongpoong.api.dto.info.InfoCreateRequest;
 import Dompoo.Hongpoong.api.dto.info.InfoEditDto;
+import Dompoo.Hongpoong.api.dto.info.request.InfoCreateRequest;
 import Dompoo.Hongpoong.api.dto.info.response.InfoDetailResponse;
 import Dompoo.Hongpoong.api.dto.info.response.InfoResponse;
 import Dompoo.Hongpoong.common.exception.impl.InfoNotFound;

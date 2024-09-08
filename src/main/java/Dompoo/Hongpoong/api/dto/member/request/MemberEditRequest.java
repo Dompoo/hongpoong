@@ -1,26 +1,19 @@
-package Dompoo.Hongpoong.api.dto.member;
+package Dompoo.Hongpoong.api.dto.member.request;
 
+import Dompoo.Hongpoong.api.dto.member.MemberEditDto;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
-@Setter
-@NoArgsConstructor
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(force = true)
 public class MemberEditRequest {
 
     @NotBlank(message = "이름은 비어있을 수 없습니다.")
-    private String username;
+    private final String username;
     @NotBlank(message = "비밀번호는 비어있을 수 없습니다.")
-    private String password;
-    
-    @Builder
-    private MemberEditRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
+    private final String password;
     
     public MemberEditDto toDto() {
         return MemberEditDto.builder()

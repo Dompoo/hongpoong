@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.api.dto.chat.response;
 
 import Dompoo.Hongpoong.domain.entity.ChatRoom;
 import Dompoo.Hongpoong.domain.entity.MemberInChatRoom;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +14,14 @@ import java.util.List;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatRoomResponse {
-
+    
+    @Schema(example = "1")
     private final Long id;
+    
+    @Schema(example = "걸궁 답사")
     private final String roomName;
+    
+    @Schema(example = "10")
     private final Integer memberCount;
     
     public static ChatRoomResponse of(ChatRoom chatRoom) {

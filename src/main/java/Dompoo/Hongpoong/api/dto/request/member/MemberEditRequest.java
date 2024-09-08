@@ -9,35 +9,23 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-/*
-RequestBody
-{
-    "username": "memberA",
-    "password1": "1234",
-    "password2": "1234"
-}
- */
 public class MemberEditRequest {
 
     @NotBlank(message = "이름은 비어있을 수 없습니다.")
     private String username;
     @NotBlank(message = "비밀번호는 비어있을 수 없습니다.")
-    private String password1;
-    @NotBlank(message = "비밀번호확인은 비어있을 수 없습니다.")
-    private String password2;
-
+    private String password;
+    
     @Builder
-    private MemberEditRequest(String username, String password1, String password2) {
+    private MemberEditRequest(String username, String password) {
         this.username = username;
-        this.password1 = password1;
-        this.password2 = password2;
+        this.password = password;
     }
     
     public MemberEditDto toDto() {
         return MemberEditDto.builder()
-                .username(username)
-                .password1(password1)
-                .password2(password2)
+                .name(username)
+                .password(password)
                 .build();
     }
 }

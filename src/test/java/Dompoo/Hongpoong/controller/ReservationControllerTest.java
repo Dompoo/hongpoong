@@ -2,7 +2,7 @@ package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.api.dto.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.ReservationEditRequest;
-import Dompoo.Hongpoong.api.dto.reservation.ReservationResponse;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import Dompoo.Hongpoong.domain.entity.reservation.ReservationTime;
 import org.junit.jupiter.api.DisplayName;

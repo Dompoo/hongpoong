@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.api.dto.common.SettingEditRequest;
-import Dompoo.Hongpoong.api.dto.common.SettingResponse;
+import Dompoo.Hongpoong.api.dto.common.response.SettingResponse;
 import Dompoo.Hongpoong.api.service.CommonService;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Club;
@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 @ActiveProfiles("test")

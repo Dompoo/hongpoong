@@ -1,6 +1,12 @@
 package Dompoo.Hongpoong.api.controller.auth;
 
-import Dompoo.Hongpoong.api.dto.auth.*;
+import Dompoo.Hongpoong.api.dto.auth.request.AcceptSignUpRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.EmailValidRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.LoginRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.SignUpRequest;
+import Dompoo.Hongpoong.api.dto.auth.response.EmailValidResponse;
+import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
+import Dompoo.Hongpoong.api.dto.auth.response.SignUpResponse;
 import Dompoo.Hongpoong.api.service.AuthService;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.common.security.annotation.Secured;

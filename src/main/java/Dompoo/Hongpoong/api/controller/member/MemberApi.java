@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.api.controller.member;
 
 import Dompoo.Hongpoong.api.dto.member.MemberEditRequest;
-import Dompoo.Hongpoong.api.dto.member.MemberResponse;
 import Dompoo.Hongpoong.api.dto.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.api.dto.member.MemberStatusResponse;
+import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
+import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

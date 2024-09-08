@@ -2,7 +2,7 @@ package Dompoo.Hongpoong.api.controller.chat;
 
 import Dompoo.Hongpoong.api.dto.chat.ChatMessageDto;
 import Dompoo.Hongpoong.api.dto.chat.ChatRoomCreateRequest;
-import Dompoo.Hongpoong.api.dto.chat.ChatRoomResponse;
+import Dompoo.Hongpoong.api.dto.chat.response.ChatRoomResponse;
 import Dompoo.Hongpoong.api.service.ChatService;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import Dompoo.Hongpoong.common.security.annotation.LoginUser;

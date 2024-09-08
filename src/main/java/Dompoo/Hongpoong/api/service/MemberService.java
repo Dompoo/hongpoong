@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.member.MemberEditDto;
-import Dompoo.Hongpoong.api.dto.member.MemberResponse;
 import Dompoo.Hongpoong.api.dto.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.api.dto.member.MemberStatusResponse;
+import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
+import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
@@ -37,9 +37,9 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public List<MemberResponse> findAllMember() {
-        return memberRepository.findAll().stream()
-                .map(MemberResponse::from)
-                .toList();
+        List<Member> members = memberRepository.findAll();
+        
+        return MemberResponse.fromList(members);
     }
 
     @Transactional

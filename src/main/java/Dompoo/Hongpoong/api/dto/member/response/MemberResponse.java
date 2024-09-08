@@ -1,32 +1,26 @@
-package Dompoo.Hongpoong.api.dto.member;
+package Dompoo.Hongpoong.api.dto.member.response;
 
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberResponse {
-    private Long id;
-    private String email;
-    private String name;
-    private String nickname;
-    private String club;
-    private Integer enrollmentNumber;
-    private String profileImageUrl;
     
-    @Builder
-    private MemberResponse(Long id, String email, String name, String nickname, String club, Integer enrollmentNumber, String profileImageUrl) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.nickname = nickname;
-        this.club = club;
-        this.enrollmentNumber = enrollmentNumber;
-        this.profileImageUrl = profileImageUrl;
-    }
+    private final Long id;
+    private final String email;
+    private final String name;
+    private final String nickname;
+    private final String club;
+    private final Integer enrollmentNumber;
+    private final String profileImageUrl;
     
     public static MemberResponse from(Member member) {
         return MemberResponse.builder()

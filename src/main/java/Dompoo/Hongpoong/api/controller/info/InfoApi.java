@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.api.controller.info;
 
 import Dompoo.Hongpoong.api.dto.info.InfoCreateRequest;
-import Dompoo.Hongpoong.api.dto.info.InfoDetailResponse;
 import Dompoo.Hongpoong.api.dto.info.InfoEditRequest;
-import Dompoo.Hongpoong.api.dto.info.InfoResponse;
+import Dompoo.Hongpoong.api.dto.info.response.InfoDetailResponse;
+import Dompoo.Hongpoong.api.dto.info.response.InfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;

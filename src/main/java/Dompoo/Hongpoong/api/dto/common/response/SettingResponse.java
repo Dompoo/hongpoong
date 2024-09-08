@@ -1,28 +1,18 @@
-package Dompoo.Hongpoong.api.dto.common;
+package Dompoo.Hongpoong.api.dto.common.response;
 
 import Dompoo.Hongpoong.domain.entity.Member;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-/*
-ResponseBody
-
-<단건조회시>
-{
-    "pushAlarm": false
-}
- */
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SettingResponse {
 
-    private Long id;
-    private boolean pushAlarm;
-    
-    @Builder
-    private SettingResponse(Long id, boolean pushAlarm) {
-        this.id = id;
-        this.pushAlarm = pushAlarm;
-    }
+    private final Long id;
+    private final Boolean pushAlarm;
     
     public static SettingResponse from(Member member) {
         return SettingResponse.builder()

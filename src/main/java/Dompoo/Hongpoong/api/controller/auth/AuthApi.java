@@ -1,6 +1,12 @@
 package Dompoo.Hongpoong.api.controller.auth;
 
-import Dompoo.Hongpoong.api.dto.auth.*;
+import Dompoo.Hongpoong.api.dto.auth.request.AcceptSignUpRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.EmailValidRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.LoginRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.SignUpRequest;
+import Dompoo.Hongpoong.api.dto.auth.response.EmailValidResponse;
+import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
+import Dompoo.Hongpoong.api.dto.auth.response.SignUpResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;

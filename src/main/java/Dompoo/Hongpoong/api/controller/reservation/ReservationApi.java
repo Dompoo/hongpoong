@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.api.controller.reservation;
 
-import Dompoo.Hongpoong.api.dto.member.MemberResponse;
+import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.ReservationEditRequest;
-import Dompoo.Hongpoong.api.dto.reservation.ReservationResponse;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

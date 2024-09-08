@@ -1,7 +1,9 @@
-package Dompoo.Hongpoong.api.dto.reservation;
+package Dompoo.Hongpoong.api.dto.reservation.response;
 
 import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReservationResponse {
 
     private final Long id;
@@ -21,19 +25,6 @@ public class ReservationResponse {
     private final String endTime;
     private final String message;
     private final LocalDateTime lastmodified;
-    
-    @Builder
-    private ReservationResponse(Long id, String username, String email, Integer number, LocalDate date, String startTime, String endTime, String message, LocalDateTime lastmodified) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.number = number;
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.message = message;
-        this.lastmodified = lastmodified;
-    }
     
     public static ReservationResponse from(Reservation reservation) {
         return ReservationResponse.builder()

@@ -1,22 +1,16 @@
-package Dompoo.Hongpoong.api.dto.info;
+package Dompoo.Hongpoong.api.dto.info.response;
 
 import Dompoo.Hongpoong.domain.entity.Info;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-/*
-ResponseBody
-<단건조회시>
-{
-    "id": 1,
-    "title": "공지사항 제목",
-    "content": "공지사항 내용",
-    "date": "2024-05-01T14:49:58.836833"
-}
- */
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class InfoDetailResponse {
 
     private final Long id;
@@ -24,15 +18,6 @@ public class InfoDetailResponse {
     private final String content;
     private final LocalDateTime date;
     
-    @Builder
-    private InfoDetailResponse(Long id, String title, String content, LocalDateTime date) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.date = date;
-    }
-    
-    @Builder
     public static InfoDetailResponse from (Info info) {
         return InfoDetailResponse.builder()
                 .id(info.getId())

@@ -1,6 +1,10 @@
 package Dompoo.Hongpoong.controller;
 
-import Dompoo.Hongpoong.api.dto.Instrument.*;
+import Dompoo.Hongpoong.api.dto.Instrument.InstrumentBorrowRequest;
+import Dompoo.Hongpoong.api.dto.Instrument.InstrumentCreateRequest;
+import Dompoo.Hongpoong.api.dto.Instrument.InstrumentEditRequest;
+import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentBorrowResponse;
+import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

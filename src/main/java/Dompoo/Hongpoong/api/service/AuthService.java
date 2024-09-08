@@ -1,6 +1,12 @@
 package Dompoo.Hongpoong.api.service;
 
-import Dompoo.Hongpoong.api.dto.auth.*;
+import Dompoo.Hongpoong.api.dto.auth.request.AcceptSignUpRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.EmailValidRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.LoginRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.SignUpRequest;
+import Dompoo.Hongpoong.api.dto.auth.response.EmailValidResponse;
+import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
+import Dompoo.Hongpoong.api.dto.auth.response.SignUpResponse;
 import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
 import Dompoo.Hongpoong.common.exception.impl.LoginFailException;
 import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
@@ -58,10 +64,10 @@ public class AuthService {
     
     @Transactional
     public void acceptSignUp(AcceptSignUpRequest request) {
-        SignUp signUp = signUpRepository.findById(request.getEmailId())
+        SignUp signUp = signUpRepository.findById(request.getSignupId())
                 .orElseThrow(SignUpNotFound::new);
 
-        if (request.isAcceptResult()) {
+        if (request.getAcceptResult()) {
             memberRepository.save(Member.from(signUp));
         }
 

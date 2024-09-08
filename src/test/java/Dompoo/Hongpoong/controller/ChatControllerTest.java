@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.api.dto.chat.ChatRoomCreateRequest;
-import Dompoo.Hongpoong.api.dto.chat.ChatRoomResponse;
+import Dompoo.Hongpoong.api.dto.chat.response.ChatRoomResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.api.dto.member.MemberEditRequest;
-import Dompoo.Hongpoong.api.dto.member.MemberResponse;
 import Dompoo.Hongpoong.api.dto.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.api.dto.member.MemberStatusResponse;
+import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
+import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import Dompoo.Hongpoong.domain.enums.Role;
 import org.junit.jupiter.api.DisplayName;

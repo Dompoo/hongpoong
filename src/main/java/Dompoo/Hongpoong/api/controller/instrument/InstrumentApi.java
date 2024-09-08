@@ -1,6 +1,10 @@
 package Dompoo.Hongpoong.api.controller.instrument;
 
-import Dompoo.Hongpoong.api.dto.Instrument.*;
+import Dompoo.Hongpoong.api.dto.Instrument.InstrumentBorrowRequest;
+import Dompoo.Hongpoong.api.dto.Instrument.InstrumentCreateRequest;
+import Dompoo.Hongpoong.api.dto.Instrument.InstrumentEditRequest;
+import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentBorrowResponse;
+import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

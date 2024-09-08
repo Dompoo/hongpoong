@@ -47,14 +47,14 @@ public class MemberController implements MemberApi {
     }
 
     @Secured(SecurePolicy.ADMIN_ONLY)
-    @PatchMapping("/manage/{id}")
-    public void editMemberRole(@PathVariable Long id, @RequestBody @Valid MemberRoleEditRequest request) {
-        service.editMemberAuth(id, request);
+    @PatchMapping("/manage/{memberId}")
+    public void editMemberRole(@PathVariable Long memberId, @RequestBody @Valid MemberRoleEditRequest request) {
+        service.editMemberAuth(memberId, request);
     }
 
     @Secured(SecurePolicy.ADMIN_ONLY)
-    @DeleteMapping("/manage/{id}")
-    public void deleteMember(@PathVariable Long id) {
-        service.deleteMember(id);
+    @DeleteMapping("/manage/{memberId}")
+    public void deleteMember(@PathVariable Long memberId) {
+        service.deleteMember(memberId);
     }
 }

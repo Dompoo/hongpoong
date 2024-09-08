@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.domain.entity;
 
-import Dompoo.Hongpoong.api.dto.common.SettingSaveDto;
+import Dompoo.Hongpoong.api.dto.common.request.SettingEditDto;
 import Dompoo.Hongpoong.api.dto.member.MemberEditDto;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.domain.enums.Club;
@@ -64,7 +64,7 @@ public class Member {
         if (dto.getName() != null) this.name = dto.getName();
     }
     
-    public void editSetting(SettingSaveDto dto) {
+    public void editSetting(SettingEditDto dto) {
         if (dto.getPush() != null) this.pushAlarm = dto.getPush();
     }
     

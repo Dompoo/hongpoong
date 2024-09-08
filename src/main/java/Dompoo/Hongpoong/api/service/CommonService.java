@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.service;
 
-import Dompoo.Hongpoong.api.dto.common.SettingSaveDto;
+import Dompoo.Hongpoong.api.dto.common.request.SettingEditDto;
 import Dompoo.Hongpoong.api.dto.common.response.SettingResponse;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
@@ -24,7 +24,7 @@ public class CommonService {
     }
 
     @Transactional
-    public void editSetting(Long memberId, SettingSaveDto dto) {
+    public void editSetting(Long memberId, SettingEditDto dto) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
         

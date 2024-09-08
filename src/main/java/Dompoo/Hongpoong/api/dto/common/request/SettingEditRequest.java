@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.api.dto.common.request;
 
-import Dompoo.Hongpoong.api.dto.common.SettingSaveDto;
 import lombok.*;
 
 @Getter
@@ -11,8 +10,8 @@ public class SettingEditRequest {
 
     private final Boolean push;
     
-    public SettingSaveDto toDto() {
-        return SettingSaveDto.builder()
+    public SettingEditDto toDto() {
+        return SettingEditDto.builder()
                 .push(push)
                 .build();
     }

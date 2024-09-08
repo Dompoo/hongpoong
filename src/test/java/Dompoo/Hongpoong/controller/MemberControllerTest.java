@@ -36,9 +36,9 @@ class MemberControllerTest extends MyWebMvcTest {
     //로그인 정보
     @Test
     @DisplayName("로그인 정보")
-    void getMyDetail() throws Exception {
+    void findMyMemberDetail() throws Exception {
         //given
-        when(memberService.getMyDetail(any())).thenReturn(MemberStatusResponse.builder()
+        when(memberService.findMyMemberDetail(any())).thenReturn(MemberStatusResponse.builder()
                 .id(ID)
                 .email(EMAIL)
                 .username(NAME)
@@ -94,7 +94,7 @@ class MemberControllerTest extends MyWebMvcTest {
     @DisplayName("회원 리스트 조회")
     void getList() throws Exception {
         //given
-        when(memberService.getAllMember()).thenReturn(List.of(
+        when(memberService.findAllMember()).thenReturn(List.of(
                 MemberResponse.builder()
                         .id(ID)
                         .email(EMAIL)

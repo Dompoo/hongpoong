@@ -33,7 +33,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
 
     @Test
     @DisplayName("악기 추가")
-    void addOne() throws Exception {
+    void createInstrument() throws Exception {
         //given
         InstrumentCreateRequest request = InstrumentCreateRequest.builder()
                 .type(1)
@@ -51,7 +51,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
 
     @Test
     @DisplayName("악기 추가시 악기는 비어있을 수 없다.")
-    void addOneFail() throws Exception {
+    void createInstrumentFail() throws Exception {
         //given
         InstrumentCreateRequest request = InstrumentCreateRequest.builder()
                 .build();
@@ -71,7 +71,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
     @DisplayName("다른 동아리의 악기 조회")
     void listOther() throws Exception {
         //given
-        when(instrumentService.getListOther(any())).thenReturn(List.of(
+        when(instrumentService.findAllOtherClubInstrument(any())).thenReturn(List.of(
                 InstrumentResponse.builder()
                         .id(INSTRUMENT_ID)
                         .club(INSTRUMENT_CLUB)
@@ -101,7 +101,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
     @DisplayName("내 동아리의 악기 조회")
     void listMe() throws Exception {
         //given
-        when(instrumentService.getList(any())).thenReturn(List.of(
+        when(instrumentService.findAllMyClubInstrument(any())).thenReturn(List.of(
                 InstrumentResponse.builder()
                         .id(INSTRUMENT_ID)
                         .club(INSTRUMENT_CLUB)
@@ -131,7 +131,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
     @DisplayName("악기 빌리기")
     void borrow() throws Exception {
         //given
-        when(instrumentService.borrowOne(any(), any())).thenReturn(InstrumentBorrowResponse.builder()
+        when(instrumentService.borrowInstrument(any(), any())).thenReturn(InstrumentBorrowResponse.builder()
                 .instrumentId(INSTRUMENT_ID)
                 .returnDate(RETURN_DATE)
                 .returnTime(RETURN_TIME)
@@ -157,7 +157,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
     
     @Test
     @DisplayName("악기 반납하기")
-    void returnOne() throws Exception {
+    void returnInstrument() throws Exception {
         //given
 
         //expected
@@ -168,9 +168,9 @@ class InstrumentControllerTest extends MyWebMvcTest {
 
     @Test
     @DisplayName("악기 1개 조회")
-    void getOne() throws Exception {
+    void findInstrumentDetail() throws Exception {
         //given
-        when(instrumentService.getOne(any())).thenReturn(InstrumentResponse.builder()
+        when(instrumentService.findInstrumentDetail(any())).thenReturn(InstrumentResponse.builder()
                 .id(INSTRUMENT_ID)
                 .type(INSTRUMENT_TYPE)
                 .club(INSTRUMENT_CLUB)
@@ -187,7 +187,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
     
     @Test
     @DisplayName("악기 수정")
-    void editOne() throws Exception {
+    void editInstrumentOne() throws Exception {
         //given
         InstrumentEditRequest request = InstrumentEditRequest.builder()
                 .available(true)
@@ -206,7 +206,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
 
     @Test
     @DisplayName("악기 삭제")
-    void deleteOne() throws Exception {
+    void deleteInstrumentOne() throws Exception {
         //given
         
         //expected

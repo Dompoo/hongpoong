@@ -1,7 +1,7 @@
-package Dompoo.Hongpoong.api.controller;
+package Dompoo.Hongpoong.api.controller.common;
 
+import Dompoo.Hongpoong.api.dto.common.SettingEditRequest;
 import Dompoo.Hongpoong.api.dto.common.SettingResponse;
-import Dompoo.Hongpoong.api.dto.common.SettingSaveRequest;
 import Dompoo.Hongpoong.api.service.CommonService;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import Dompoo.Hongpoong.common.security.annotation.LoginUser;
@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/common")
-public class CommonController {
+public class CommonController implements CommonApi {
 
     private final CommonService service;
 
     @Secured
     @GetMapping("/setting")
-    public SettingResponse getSetting(@LoginUser UserClaims claims) {
-        return service.getSetting(claims.getId());
+    public SettingResponse findMySetting(@LoginUser UserClaims claims) {
+        return service.findMySetting(claims.getId());
     }
 
     @Secured
     @PostMapping("/setting")
-    public void saveSetting(@LoginUser UserClaims claims, @RequestBody SettingSaveRequest request) {
-        service.saveSetting(claims.getId(), request.toDto());
+    public void editSetting(@LoginUser UserClaims claims, @RequestBody SettingEditRequest request) {
+        service.editSetting(claims.getId(), request.toDto());
     }
 }

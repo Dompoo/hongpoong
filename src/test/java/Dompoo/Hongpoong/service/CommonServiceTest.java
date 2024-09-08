@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.service;
 
+import Dompoo.Hongpoong.api.dto.common.SettingEditRequest;
 import Dompoo.Hongpoong.api.dto.common.SettingResponse;
-import Dompoo.Hongpoong.api.dto.common.SettingSaveRequest;
 import Dompoo.Hongpoong.api.service.CommonService;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Club;
@@ -42,7 +42,7 @@ class CommonServiceTest {
                 .build());
 
         //when
-        SettingResponse response = service.getSetting(member.getId());
+        SettingResponse response = service.findMySetting(member.getId());
 
         //then
         assertEquals(member.getId(), response.getId());
@@ -60,11 +60,11 @@ class CommonServiceTest {
                 .club(Club.SANTLE)
                 .build());
 
-        SettingSaveRequest request = SettingSaveRequest.builder()
+        SettingEditRequest request = SettingEditRequest.builder()
                 .push(true)
                 .build();
 
         //expected
-        service.saveSetting(member.getId(), request.toDto());
+        service.editSetting(member.getId(), request.toDto());
     }
 }

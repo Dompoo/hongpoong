@@ -36,7 +36,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<MemberResponse> getAllMember() {
+    public List<MemberResponse> findAllMember() {
         return memberRepository.findAll().stream()
                 .map(MemberResponse::from)
                 .toList();
@@ -50,7 +50,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public MemberStatusResponse getMyDetail(Long memberId) {
+    public MemberStatusResponse findMyMemberDetail(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
 
         return MemberStatusResponse.from(member);

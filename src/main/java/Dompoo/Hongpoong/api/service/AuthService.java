@@ -69,7 +69,7 @@ public class AuthService {
     }
     
     @Transactional(readOnly = true)
-    public List<SignUpResponse> getSignUp() {
+    public List<SignUpResponse> findAllSignup() {
         return signUpRepository.findAll().stream()
                 .map(SignUpResponse::from)
                 .toList();

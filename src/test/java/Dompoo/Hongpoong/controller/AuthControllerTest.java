@@ -324,9 +324,9 @@ class AuthControllerTest extends MyWebMvcTest {
 
     @Test
     @DisplayName("회원가입 요청 리스트 조회")
-    void emailRequestList() throws Exception {
+    void findAllSignup() throws Exception {
         //given
-        when(authService.getSignUp()).thenReturn(List.of(
+        when(authService.findAllSignup()).thenReturn(List.of(
                 SignUpResponse.builder()
                         .email(EMAIL)
                         .build(),

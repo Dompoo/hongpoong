@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.api.controller;
+package Dompoo.Hongpoong.api.controller.member;
 
 import Dompoo.Hongpoong.api.dto.member.MemberEditRequest;
 import Dompoo.Hongpoong.api.dto.member.MemberResponse;
@@ -18,20 +18,20 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member")
-public class MemberController {
+public class MemberController implements MemberApi {
 
     private final MemberService service;
     
     @Secured
     @GetMapping
-    public List<MemberResponse> getAllMember() {
-        return service.getAllMember();
+    public List<MemberResponse> findAllMember() {
+        return service.findAllMember();
     }
     
     @Secured
     @GetMapping("/status")
-    public MemberStatusResponse getMyDetail(@LoginUser UserClaims claims) {
-        return service.getMyDetail(claims.getId());
+    public MemberStatusResponse findMyMemberDetail(@LoginUser UserClaims claims) {
+        return service.findMyMemberDetail(claims.getId());
     }
     
     @Secured

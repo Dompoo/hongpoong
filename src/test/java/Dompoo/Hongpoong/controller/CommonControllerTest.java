@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.controller;
 
+import Dompoo.Hongpoong.api.dto.common.SettingEditRequest;
 import Dompoo.Hongpoong.api.dto.common.SettingResponse;
-import Dompoo.Hongpoong.api.dto.common.SettingSaveRequest;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class CommonControllerTest extends MyWebMvcTest {
     @DisplayName("세팅 정보 불러오기")
     void settingList() throws Exception {
         //given
-        when(commonService.getSetting(any())).thenReturn(
+        when(commonService.findMySetting(any())).thenReturn(
                 SettingResponse.builder()
                         .id(SETTING_ID)
                         .pushAlarm(PUSH_ALARM)
@@ -43,7 +43,7 @@ class CommonControllerTest extends MyWebMvcTest {
     @DisplayName("세팅 하기")
     void doSetting() throws Exception {
         //given
-        SettingSaveRequest request = SettingSaveRequest.builder()
+        SettingEditRequest request = SettingEditRequest.builder()
                 .push(false)
                 .build();
 

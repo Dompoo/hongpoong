@@ -56,7 +56,7 @@ class InfoControllerTest extends MyWebMvcTest {
     @DisplayName("공지사항 전체 조회")
     void getAll() throws Exception {
         //given
-        when(infoService.getList()).thenReturn(List.of(
+        when(infoService.findAllInfo()).thenReturn(List.of(
                 InfoResponse.builder()
                         .id(ID)
                         .title(TITLE)
@@ -86,7 +86,7 @@ class InfoControllerTest extends MyWebMvcTest {
     @DisplayName("공지사항 상세 조회")
     void getOne() throws Exception {
         //given
-        when(infoService.getDetail(any())).thenReturn(InfoDetailResponse.builder()
+        when(infoService.findInfoDetail(any())).thenReturn(InfoDetailResponse.builder()
                 .id(ID)
                 .title(TITLE)
                 .content(CONTENT)

@@ -14,12 +14,12 @@ RequestBody
     "push": true
 }
  */
-public class SettingSaveRequest {
+public class SettingEditRequest {
 
     private Boolean push;
 
     @Builder
-    private SettingSaveRequest(Boolean push) {
+    private SettingEditRequest(Boolean push) {
         this.push = push;
     }
     

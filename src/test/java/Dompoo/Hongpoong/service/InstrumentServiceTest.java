@@ -49,7 +49,7 @@ class InstrumentServiceTest {
 
     @Test
     @DisplayName("악기 추가")
-    void addOne() {
+    void createInstrument() {
         //given
         Member me = memberRepository.save(Member.builder()
                 .name("창근")
@@ -63,7 +63,7 @@ class InstrumentServiceTest {
                 .build();
 
         //when
-        service.addOne(me.getId(), request);
+        service.createInstrument(me.getId(), request);
 
         //then
         assertEquals(1, instrumentRepository.findAll().size());
@@ -96,7 +96,7 @@ class InstrumentServiceTest {
         );
 
         //when
-        List<InstrumentResponse> response = service.getListOther(me.getId());
+        List<InstrumentResponse> response = service.findAllOtherClubInstrument(me.getId());
 
         //then
         assertEquals(3, response.size());
@@ -132,7 +132,7 @@ class InstrumentServiceTest {
         );
 
         //when
-        List<InstrumentResponse> response = service.getList(me.getId());
+        List<InstrumentResponse> response = service.findAllMyClubInstrument(me.getId());
 
         //then
         assertEquals(2, response.size());
@@ -178,7 +178,7 @@ class InstrumentServiceTest {
                 .build();
 
         //when
-        InstrumentBorrowResponse response = service.borrowOne(me.getId(), request);
+        InstrumentBorrowResponse response = service.borrowInstrument(me.getId(), request);
 
         //then
         assertEquals(instrumentRepository.findAll().getFirst().getReservation().getId(), reservation.getId());
@@ -189,7 +189,7 @@ class InstrumentServiceTest {
 
     @Test
     @DisplayName("악기 반납하기")
-    void returnOne() {
+    void returnInstrument() {
         //given
         Member me = memberRepository.save(Member.builder()
                 .name("창근")
@@ -222,7 +222,7 @@ class InstrumentServiceTest {
         instrument.setReservation(reservation);
 
         //when
-        service.returnOne(instrument.getId());
+        service.returnInstrument(instrument.getId());
 
         //then
         Instrument inst = instrumentRepository.findAll().getFirst();
@@ -232,7 +232,7 @@ class InstrumentServiceTest {
 
     @Test
     @DisplayName("악기 1개 조회")
-    void getOne() {
+    void findInstrumentDetail() {
         //given
         Member me = memberRepository.save(Member.builder()
                 .name("창근")
@@ -247,7 +247,7 @@ class InstrumentServiceTest {
                 .build());
 
         //when
-        InstrumentResponse response = service.getOne(instrument.getId());
+        InstrumentResponse response = service.findInstrumentDetail(instrument.getId());
 
         //then
         assertEquals("꽹과리", response.getType());
@@ -256,7 +256,7 @@ class InstrumentServiceTest {
 
     @Test
     @DisplayName("악기 전체 수정")
-    void editOne() {
+    void editInstrument() {
         //given
         Member me = memberRepository.save(Member.builder()
                 .name("창근")
@@ -276,7 +276,7 @@ class InstrumentServiceTest {
                 .build();
 
         //when
-        service.editOne(me.getId(), instrument.getId(), request.toDto());
+        service.editInstrument(me.getId(), instrument.getId(), request.toDto());
 
         //then
         assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType().korName);
@@ -285,7 +285,7 @@ class InstrumentServiceTest {
 
     @Test
     @DisplayName("악기 일부 수정1")
-    void editOne1() {
+    void editInstrument1() {
         //given
         Member me = memberRepository.save(Member.builder()
                 .name("창근")
@@ -304,7 +304,7 @@ class InstrumentServiceTest {
                 .build();
 
         //when
-        service.editOne(me.getId(), instrument.getId(), request.toDto());
+        service.editInstrument(me.getId(), instrument.getId(), request.toDto());
 
         //then
         assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType().korName);
@@ -313,7 +313,7 @@ class InstrumentServiceTest {
 
     @Test
     @DisplayName("악기 일부 수정2")
-    void editOne2() {
+    void editInstrument2() {
         //given
         Member me = memberRepository.save(Member.builder()
                 .name("창근")
@@ -332,7 +332,7 @@ class InstrumentServiceTest {
                 .build();
 
         //when
-        service.editOne(me.getId(), instrument.getId(), request.toDto());
+        service.editInstrument(me.getId(), instrument.getId(), request.toDto());
 
         //then
         assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType().korName);
@@ -341,7 +341,7 @@ class InstrumentServiceTest {
 
     @Test
     @DisplayName("악기 삭제")
-    void deleteOne() {
+    void deleteInstrument() {
         //given
         Member me = memberRepository.save(Member.builder()
                 .name("창근")
@@ -356,7 +356,7 @@ class InstrumentServiceTest {
                 .build());
 
         //when
-        service.deleteOne(me.getId(), instrument.getId());
+        service.deleteInstrument(me.getId(), instrument.getId());
 
         //then
         assertEquals(0, instrumentRepository.findAll().size());

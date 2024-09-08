@@ -111,7 +111,7 @@ class ReservationControllerTest extends MyWebMvcTest {
     @DisplayName("예약 상세 조회")
     void detail() throws Exception {
         //given
-        when(reservationService.getReservationDetail(any())).thenReturn(ReservationResponse.builder()
+        when(reservationService.findReservationDetail(any())).thenReturn(ReservationResponse.builder()
                 .id(RESERVATION_ID)
                 .username(NAME)
                 .email(EMAIL)

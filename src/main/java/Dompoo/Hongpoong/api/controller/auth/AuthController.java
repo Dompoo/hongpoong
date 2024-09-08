@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.api.controller;
+package Dompoo.Hongpoong.api.controller.auth;
 
 import Dompoo.Hongpoong.api.dto.auth.*;
 import Dompoo.Hongpoong.api.service.AuthService;
@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController implements AuthApi {
 
     private final AuthService service;
 
@@ -40,7 +40,7 @@ public class AuthController {
     
     @Secured(SecurePolicy.ADMIN_ONLY)
     @GetMapping("/signup")
-    public List<SignUpResponse> emailRequestList() {
-        return service.getSignUp();
+    public List<SignUpResponse> findAllSignup() {
+        return service.findAllSignup();
     }
 }

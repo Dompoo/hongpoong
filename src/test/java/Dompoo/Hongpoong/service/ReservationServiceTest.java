@@ -65,7 +65,7 @@ class ReservationServiceTest {
                 .build();
 
         //when
-        service.addReservation(member.getId(), request);
+        service.createReservation(member.getId(), request);
 
         //then
         assertEquals(1, reservationRepository.count());
@@ -91,7 +91,7 @@ class ReservationServiceTest {
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.addReservation(member.getId() + 1, request));
+                () -> service.createReservation(member.getId() + 1, request));
 
 
         //then
@@ -117,7 +117,7 @@ class ReservationServiceTest {
                 .build());
 
         //when
-        ReservationResponse response = service.getReservationDetail(reservation.getId());
+        ReservationResponse response = service.findReservationDetail(reservation.getId());
 
         //then
         assertEquals(response.getId(), reservation.getId());
@@ -146,7 +146,7 @@ class ReservationServiceTest {
 
         //when
         ReservationNotFound e = assertThrows(ReservationNotFound.class,
-                () -> service.getReservationDetail(reservation.getId() + 1));
+                () -> service.findReservationDetail(reservation.getId() + 1));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 예약입니다.");

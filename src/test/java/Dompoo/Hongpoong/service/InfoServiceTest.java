@@ -56,7 +56,7 @@ class InfoServiceTest {
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
         
         //when
-        service.addInfo(request, now);
+        service.createInfo(request, now);
 
         //then
         assertEquals(1, repository.count());
@@ -80,7 +80,7 @@ class InfoServiceTest {
                 .build());
 
         //when
-        List<InfoResponse> list = service.getList();
+        List<InfoResponse> list = service.findAllInfo();
 
         //then
         assertEquals(2, list.size());
@@ -99,7 +99,7 @@ class InfoServiceTest {
                 .build());
 
         //when
-        InfoDetailResponse info = service.getDetail(save.getId());
+        InfoDetailResponse info = service.findInfoDetail(save.getId());
 
         //then
         assertEquals(TITLE, info.getTitle());
@@ -117,7 +117,7 @@ class InfoServiceTest {
                 .build());
 
         //when
-        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.getDetail(save.getId() + 1));
+        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.findInfoDetail(save.getId() + 1));
 
         //then
         assertEquals("존재하지 않는 공지사항입니다.", e.getMessage());

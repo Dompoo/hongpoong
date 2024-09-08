@@ -59,7 +59,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("로그인 정보")
-    void getMyDetail() {
+    void findMyMemberDetail() {
         //given
         Member member = memberRepository.save(Member.builder()
                 .email(EMAIL)
@@ -69,7 +69,7 @@ class MemberServiceTest {
                 .build());
 
         //when
-        MemberStatusResponse response = service.getMyDetail(member.getId());
+        MemberStatusResponse response = service.findMyMemberDetail(member.getId());
 
         //then
         assertEquals(response.getEmail(), EMAIL);
@@ -79,7 +79,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 회원의 로그인 정보")
-    void getMyDetailFail() {
+    void findMyMemberDetailFail() {
         //given
         Member member = memberRepository.save(Member.builder()
                 .email(EMAIL)
@@ -89,7 +89,7 @@ class MemberServiceTest {
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class, () ->
-                service.getMyDetail(member.getId() + 1));
+                service.findMyMemberDetail(member.getId() + 1));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
@@ -172,7 +172,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원 리스트 조회")
-    void getAllMember() {
+    void findAllMember() {
         //given
         memberRepository.save(Member.builder()
                 .email(EMAIL)
@@ -182,7 +182,7 @@ class MemberServiceTest {
                 .build());
 
         //when
-        List<MemberResponse> list = service.getAllMember();
+        List<MemberResponse> list = service.findAllMember();
 
         //then
         assertEquals(2, list.size());

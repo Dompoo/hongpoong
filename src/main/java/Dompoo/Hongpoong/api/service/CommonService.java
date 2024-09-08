@@ -16,7 +16,7 @@ public class CommonService {
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public SettingResponse getSetting(Long memberId) {
+    public SettingResponse findMySetting(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
         
@@ -24,7 +24,7 @@ public class CommonService {
     }
 
     @Transactional
-    public void saveSetting(Long memberId, SettingSaveDto dto) {
+    public void editSetting(Long memberId, SettingSaveDto dto) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
         

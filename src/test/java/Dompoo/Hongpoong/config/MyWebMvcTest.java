@@ -1,7 +1,13 @@
 package Dompoo.Hongpoong.config;
 
 import Dompoo.Hongpoong.api.config.WebMvcConfig;
-import Dompoo.Hongpoong.api.controller.*;
+import Dompoo.Hongpoong.api.controller.auth.AuthController;
+import Dompoo.Hongpoong.api.controller.chat.ChatController;
+import Dompoo.Hongpoong.api.controller.common.CommonController;
+import Dompoo.Hongpoong.api.controller.info.InfoController;
+import Dompoo.Hongpoong.api.controller.instrument.InstrumentController;
+import Dompoo.Hongpoong.api.controller.member.MemberController;
+import Dompoo.Hongpoong.api.controller.reservation.ReservationController;
 import Dompoo.Hongpoong.api.service.*;
 import Dompoo.Hongpoong.common.security.AuthInterceptor;
 import Dompoo.Hongpoong.common.security.JwtProvider;

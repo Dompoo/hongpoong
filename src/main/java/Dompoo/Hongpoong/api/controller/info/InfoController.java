@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.api.controller;
+package Dompoo.Hongpoong.api.controller.info;
 
 import Dompoo.Hongpoong.api.dto.info.InfoCreateRequest;
 import Dompoo.Hongpoong.api.dto.info.InfoDetailResponse;
@@ -16,26 +16,26 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/info")
-public class InfoController {
+public class InfoController implements InfoApi {
 
     private final InfoService service;
 
     @Secured(SecurePolicy.ADMIN_ONLY)
     @PostMapping
     public void createInfo(@RequestBody InfoCreateRequest request) {
-        service.addInfo(request, LocalDateTime.now());
+        service.createInfo(request, LocalDateTime.now());
     }
 
     @Secured
     @GetMapping
-    public List<InfoResponse> getInfoList() {
-        return service.getList();
+    public List<InfoResponse> findAllInfo() {
+        return service.findAllInfo();
     }
 
     @Secured
     @GetMapping("/{infoId}")
-    public InfoDetailResponse getInfoDetail(@PathVariable Long infoId) {
-        return service.getDetail(infoId);
+    public InfoDetailResponse findInfoDetail(@PathVariable Long infoId) {
+        return service.findInfoDetail(infoId);
     }
 
     @Secured(SecurePolicy.ADMIN_ONLY)

@@ -208,7 +208,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("회원가입 요청 리스트 조회")
-    void getSignUpList() {
+    void findAllSignup() {
         //given
         signUpRepository.save(SignUp.builder()
                 .email(EMAIL)
@@ -225,7 +225,7 @@ class AuthServiceTest {
                 .build());
 
         //when
-        List<SignUpResponse> response = service.getSignUp();
+        List<SignUpResponse> response = service.findAllSignup();
 
         //then
         assertEquals(2, response.size());

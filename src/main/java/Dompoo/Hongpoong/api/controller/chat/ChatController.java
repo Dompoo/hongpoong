@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.api.controller;
+package Dompoo.Hongpoong.api.controller.chat;
 
 import Dompoo.Hongpoong.api.dto.chat.ChatMessageDto;
 import Dompoo.Hongpoong.api.dto.chat.ChatRoomCreateRequest;
@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/chat")
-public class ChatController {
+public class ChatController implements ChatApi {
 
     private final ChatService service;
     

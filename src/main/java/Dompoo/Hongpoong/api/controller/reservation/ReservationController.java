@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.api.controller;
+package Dompoo.Hongpoong.api.controller.reservation;
 
 import Dompoo.Hongpoong.api.dto.member.MemberResponse;
 import Dompoo.Hongpoong.api.dto.reservation.ReservationCreateRequest;
@@ -21,45 +21,45 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/reservation")
-public class ReservationController {
+public class ReservationController implements ReservationApi {
 
     private final ReservationService reservationService;
     private final AttendanceService attendanceService;
     
     @Secured
     @PostMapping
-    public void addReservation(@LoginUser UserClaims claims, @RequestBody @Valid ReservationCreateRequest request) {
-        reservationService.addReservation(claims.getId(), request);
+    public void createReservation(@LoginUser UserClaims claims, @RequestBody @Valid ReservationCreateRequest request) {
+        reservationService.createReservation(claims.getId(), request);
     }
     
     @Secured
     @GetMapping("/year-month")
-    public List<ReservationResponse> getAllReservationOfYearAndMonth(@RequestParam("year") Integer year, @RequestParam("month") Integer month) {
-        return reservationService.getAllReservationOfYearAndMonth(year, month);
+    public List<ReservationResponse> findAllReservationOfYearAndMonth(@RequestParam("year") Integer year, @RequestParam("month") Integer month) {
+        return reservationService.findAllReservationOfYearAndMonth(year, month);
     }
     
     @Secured
     @GetMapping("/day")
-    public List<ReservationResponse> getAllReservationOfDate(@RequestParam("date") LocalDate date) {
-        return reservationService.getAllReservationOfDate(date);
+    public List<ReservationResponse> findAllReservationOfDate(@RequestParam("date") LocalDate date) {
+        return reservationService.findAllReservationOfDate(date);
     }
     
     @Secured
     @GetMapping("/todo")
-    public List<ReservationResponse> getAllTodoReservationOfToday(@LoginUser UserClaims claims) {
-        return reservationService.getAllTodoReservationOfToday(claims.getId(), LocalDate.now());
+    public List<ReservationResponse> findAllTodoReservationOfToday(@LoginUser UserClaims claims) {
+        return reservationService.findAllTodoReservationOfToday(claims.getId(), LocalDate.now());
     }
     
     @Secured
     @GetMapping("/{reservationId}")
-    public ReservationResponse getReservationDetail(@PathVariable Long reservationId) {
-        return reservationService.getReservationDetail(reservationId);
+    public ReservationResponse findReservationDetail(@PathVariable Long reservationId) {
+        return reservationService.findReservationDetail(reservationId);
     }
     
     @Secured
     @GetMapping("/{reservationId}/attendance")
-    public List<MemberResponse> getAllNotAttendedMember(@PathVariable Long reservationId) {
-        return attendanceService.getAllNotAttendedMember(reservationId);
+    public List<MemberResponse> findAllNotAttendedMember(@PathVariable Long reservationId) {
+        return attendanceService.findAllNotAttendedMember(reservationId);
     }
     
     @Secured

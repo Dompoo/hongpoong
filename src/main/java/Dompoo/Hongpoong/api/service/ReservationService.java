@@ -32,7 +32,7 @@ public class ReservationService {
     private final MemberRepository memberRepository;
     
     @Transactional(readOnly = true)
-    public List<ReservationResponse> getAllReservationOfYearAndMonth(Integer year, Integer month) {
+    public List<ReservationResponse> findAllReservationOfYearAndMonth(Integer year, Integer month) {
         YearMonth yearMonth = YearMonth.of(year, month);
         
         List<Reservation> reservations = reservationRepository.findAllByDateBetween(yearMonth.atDay(1), yearMonth.atEndOfMonth());
@@ -41,21 +41,21 @@ public class ReservationService {
     }
     
     @Transactional(readOnly = true)
-    public List<ReservationResponse> getAllReservationOfDate(LocalDate date) {
+    public List<ReservationResponse> findAllReservationOfDate(LocalDate date) {
         List<Reservation> reservations = reservationRepository.findAllByDate(date);
         
         return ReservationResponse.fromList(reservations);
     }
     
     @Transactional(readOnly = true)
-    public List<ReservationResponse> getAllTodoReservationOfToday(Long memberId, LocalDate localDate) {
+    public List<ReservationResponse> findAllTodoReservationOfToday(Long memberId, LocalDate localDate) {
         List<ReservationParticipate> reservationParticipates = reservationParticipateRepository.findByMemberIdAndReservationDate(memberId, localDate);
         
         return ReservationResponse.fromParticipateList(reservationParticipates);
     }
     
     @Transactional
-    public void addReservation(Long memberId, ReservationCreateRequest request) {
+    public void createReservation(Long memberId, ReservationCreateRequest request) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         List<Member> participaters = memberRepository.findAllByIdIn(request.getParticipaterIds());
         
@@ -66,7 +66,7 @@ public class ReservationService {
     }
     
     @Transactional(readOnly = true)
-    public ReservationResponse getReservationDetail(Long reservationId) {
+    public ReservationResponse findReservationDetail(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
 
         return ReservationResponse.from(reservation);

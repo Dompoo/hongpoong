@@ -5,6 +5,8 @@ import Dompoo.Hongpoong.api.dto.info.InfoDetailResponse;
 import Dompoo.Hongpoong.api.dto.info.InfoEditRequest;
 import Dompoo.Hongpoong.api.dto.info.InfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
@@ -13,17 +15,26 @@ import java.util.List;
 public interface InfoApi {
 	
 	@Operation(summary = "공지사항 작성")
-	void createInfo(InfoCreateRequest request);
+	void createInfo(
+			@RequestBody InfoCreateRequest request
+	);
 	
 	@Operation(summary = "공지사항 전체 조회")
 	List<InfoResponse> findAllInfo();
 	
 	@Operation(summary = "공지사항 상세 조회")
-	InfoDetailResponse findInfoDetail(Long infoId);
+	InfoDetailResponse findInfoDetail(
+			@Parameter(description = "공지사항 id") Long infoId
+	);
 	
 	@Operation(summary = "공지사항 수정")
-	void editInfo(Long infoId, InfoEditRequest request);
+	void editInfo(
+			@Parameter(description = "공지사항 id") Long infoId,
+			@RequestBody InfoEditRequest request
+	);
 	
 	@Operation(summary = "공지사항 삭제")
-	void deleteInfo(Long infoId);
+	void deleteInfo(
+			@Parameter(description = "공지사항 id") Long infoId
+	);
 }

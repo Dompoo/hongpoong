@@ -12,29 +12,24 @@ public interface AuthApi {
 	
 	@Operation(summary = "이메일 유효성 체크")
 	EmailValidResponse checkEmailValid(
-			@RequestBody
-			EmailValidRequest request
+			@RequestBody EmailValidRequest request
 	);
 	
 	@Operation(summary = "회원가입 요청")
 	void requestSignup(
-			@RequestBody
-			SignUpRequest request
+			@RequestBody SignUpRequest request
 	);
 	
 	@Operation(summary = "로그인")
 	LoginResponse login(
-			@RequestBody
-			LoginRequest request
+			@RequestBody LoginRequest request
 	);
 	
 	@Operation(summary = "회원가입 요청 승인")
 	void acceptSignup(
-			@RequestBody
-			AcceptSignUpRequest request
+			@RequestBody AcceptSignUpRequest request
 	);
 	
 	@Operation(summary = "회원가입 요청 리스트 조회")
-	List<SignUpResponse> findAllSignup(
-	);
+	List<SignUpResponse> findAllSignup();
 }

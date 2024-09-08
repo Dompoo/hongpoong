@@ -6,6 +6,9 @@ import Dompoo.Hongpoong.api.dto.member.MemberRoleEditRequest;
 import Dompoo.Hongpoong.api.dto.member.MemberStatusResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
@@ -17,17 +20,29 @@ public interface MemberApi {
 	List<MemberResponse> findAllMember();
 	
 	@Operation(summary = "내 정보 조회")
-	MemberStatusResponse findMyMemberDetail(UserClaims claims);
+	MemberStatusResponse findMyMemberDetail(
+			@Schema(hidden = true) UserClaims claims
+	);
 	
 	@Operation(summary = "내 정보 수정")
-	void editMyMember(UserClaims claims, MemberEditRequest request);
+	void editMyMember(
+			@Schema(hidden = true) UserClaims claims,
+			@RequestBody MemberEditRequest request
+	);
 	
 	@Operation(summary = "회원 탈퇴")
-	void withDraw(UserClaims claims);
+	void withDraw(
+			@Schema(hidden = true) UserClaims claims
+	);
 	
 	@Operation(summary = "회원 권한 수정")
-	void editMemberRole(Long id, MemberRoleEditRequest request);
+	void editMemberRole(
+			@Parameter(description = "회원 id") Long memberId,
+			@RequestBody MemberRoleEditRequest request
+	);
 	
 	@Operation(summary = "회원 삭제")
-	void deleteMember(Long id);
+	void deleteMember(
+			@Parameter(description = "회원 id") Long memberId
+	);
 }

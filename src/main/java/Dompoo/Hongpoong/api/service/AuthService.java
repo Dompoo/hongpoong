@@ -82,7 +82,7 @@ public class AuthService {
     }
     
     private boolean isValidEmail(String email) {
-        return signUpRepository.existsByEmail(email)
-                && memberRepository.existsByEmail(email);
+        return !signUpRepository.existsByEmail(email)
+                && !memberRepository.existsByEmail(email);
     }
 }

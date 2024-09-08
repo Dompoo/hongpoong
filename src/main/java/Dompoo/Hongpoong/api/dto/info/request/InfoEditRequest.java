@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.api.dto.info.request;
 
-import Dompoo.Hongpoong.api.dto.info.InfoEditDto;
 import lombok.*;
 
 @Getter

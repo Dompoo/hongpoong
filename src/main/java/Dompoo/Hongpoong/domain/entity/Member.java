@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.domain.entity;
 
 import Dompoo.Hongpoong.api.dto.common.request.SettingEditDto;
-import Dompoo.Hongpoong.api.dto.member.MemberEditDto;
+import Dompoo.Hongpoong.api.dto.member.request.MemberEditDto;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;

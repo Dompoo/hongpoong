@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.api.dto.reservation.request;
 
-import Dompoo.Hongpoong.api.dto.reservation.ReservationEditDto;
 import Dompoo.Hongpoong.domain.entity.reservation.ReservationTime;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.api.dto.member.request;
 
-import Dompoo.Hongpoong.api.dto.member.MemberEditDto;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 

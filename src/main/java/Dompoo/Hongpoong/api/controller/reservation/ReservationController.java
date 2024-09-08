@@ -63,20 +63,20 @@ public class ReservationController implements ReservationApi {
     }
     
     @Secured
-    @PatchMapping("/{id}")
-    public ReservationResponse editReservation(@LoginUser UserClaims claims, @PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
-        return reservationService.editReservation(claims.getId(), id, request.toDto(), LocalDateTime.now());
+    @PatchMapping("/{reservationId}")
+    public ReservationResponse editReservation(@LoginUser UserClaims claims, @PathVariable Long reservationId, @RequestBody @Valid ReservationEditRequest request) {
+        return reservationService.editReservation(claims.getId(), reservationId, request.toDto(), LocalDateTime.now());
     }
     
     @Secured
-    @DeleteMapping("/{id}")
-    public void deleteReservation(@LoginUser UserClaims claims, @PathVariable Long id) {
-        reservationService.deleteReservation(claims.getId(), id);
+    @DeleteMapping("/{reservationId}")
+    public void deleteReservation(@LoginUser UserClaims claims, @PathVariable Long reservationId) {
+        reservationService.deleteReservation(claims.getId(), reservationId);
     }
 
     @Secured(SecurePolicy.ADMIN_ONLY)
-    @PatchMapping("/manage/{id}")
-    public void edit(@PathVariable Long id, @RequestBody @Valid ReservationEditRequest request) {
-        reservationService.edit(id, request.toDto(), LocalDateTime.now());
+    @PatchMapping("/manage/{reservationId}")
+    public void edit(@PathVariable Long reservationId, @RequestBody @Valid ReservationEditRequest request) {
+        reservationService.edit(reservationId, request.toDto(), LocalDateTime.now());
     }
 }

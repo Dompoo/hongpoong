@@ -1,7 +1,8 @@
 package Dompoo.Hongpoong.api.service;
 
-import Dompoo.Hongpoong.api.dto.chat.ChatMessageDto;
+import Dompoo.Hongpoong.api.dto.chat.request.ChatMessageRequest;
 import Dompoo.Hongpoong.api.dto.chat.request.ChatRoomCreateRequest;
+import Dompoo.Hongpoong.api.dto.chat.response.ChatMessageResponse;
 import Dompoo.Hongpoong.api.dto.chat.response.ChatRoomResponse;
 import Dompoo.Hongpoong.common.exception.impl.ChatRoomNotFound;
 import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
@@ -74,7 +75,7 @@ public class ChatService {
     }
     
     @Transactional
-    public ChatMessageDto createChat(Long roomId, ChatMessageDto request) {
+    public ChatMessageResponse createChat(Long roomId, ChatMessageRequest request) {
         ChatRoom chatroom = chatRoomRepository.findById(roomId)
                 .orElseThrow(ChatRoomNotFound::new);
 
@@ -83,6 +84,6 @@ public class ChatService {
 
         ChatMessage savedMessage = chatMessageRepository.save(request.toChatMessage(chatroom, sender.getName()));
         
-        return ChatMessageDto.of(savedMessage, sender.getId());
+        return ChatMessageResponse.of(savedMessage, sender.getId());
     }
 }

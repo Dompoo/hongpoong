@@ -1,7 +1,8 @@
 package Dompoo.Hongpoong.api.controller.chat;
 
-import Dompoo.Hongpoong.api.dto.chat.ChatMessageDto;
+import Dompoo.Hongpoong.api.dto.chat.request.ChatMessageRequest;
 import Dompoo.Hongpoong.api.dto.chat.request.ChatRoomCreateRequest;
+import Dompoo.Hongpoong.api.dto.chat.response.ChatMessageResponse;
 import Dompoo.Hongpoong.api.dto.chat.response.ChatRoomResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,8 +33,8 @@ public interface ChatApi {
 	);
 	
 	@Operation(summary = "채팅하기")
-	ChatMessageDto chat(
+	ChatMessageResponse chat(
 			@Parameter(description = "채팅방 id") Long roomId,
-			@RequestBody ChatMessageDto request
+			@RequestBody ChatMessageRequest request
 	);
 }

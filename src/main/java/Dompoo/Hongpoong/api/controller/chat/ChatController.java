@@ -1,7 +1,8 @@
 package Dompoo.Hongpoong.api.controller.chat;
 
-import Dompoo.Hongpoong.api.dto.chat.ChatMessageDto;
+import Dompoo.Hongpoong.api.dto.chat.request.ChatMessageRequest;
 import Dompoo.Hongpoong.api.dto.chat.request.ChatRoomCreateRequest;
+import Dompoo.Hongpoong.api.dto.chat.response.ChatMessageResponse;
 import Dompoo.Hongpoong.api.dto.chat.response.ChatRoomResponse;
 import Dompoo.Hongpoong.api.service.ChatService;
 import Dompoo.Hongpoong.common.security.UserClaims;
@@ -43,7 +44,7 @@ public class ChatController implements ChatApi {
     @Secured
     @MessageMapping("/{roomId}") //여기로 전송되면 메서드 호출 -> WebSocketConfig prefixes 에서 적용한건 앞에 생략
     @SendTo("/room/{roomId}")   //구독하고 있는 장소로 메시지 전송 (목적지)  -> WebSocketConfig Broker 에서 적용한건 앞에 붙어줘야됨
-    public ChatMessageDto chat(@DestinationVariable Long roomId, ChatMessageDto request) {
+    public ChatMessageResponse chat(@DestinationVariable Long roomId, ChatMessageRequest request) {
         //메시지 저장후 반환
         return service.createChat(roomId, request);
     }

@@ -5,23 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Getter
-/*
-ResponseBody
-{
-    "instrumentId": 1,
-    "returnDate": "24/04/18",
-    "returnTime": 14",
-}
- */
 public class InstrumentBorrowResponse {
-    private Long instrumentId;
-    private LocalDate returnDate;
-    private Integer returnTime;
+    private final Long instrumentId;
+    private final LocalDate returnDate;
+    private final LocalTime returnTime;
     
     @Builder
-    private InstrumentBorrowResponse(Long instrumentId, LocalDate returnDate, Integer returnTime) {
+    private InstrumentBorrowResponse(Long instrumentId, LocalDate returnDate, LocalTime returnTime) {
         this.instrumentId = instrumentId;
         this.returnDate = returnDate;
         this.returnTime = returnTime;
@@ -31,7 +24,7 @@ public class InstrumentBorrowResponse {
         return InstrumentBorrowResponse.builder()
                 .instrumentId(instrument.getId())
                 .returnDate(instrument.getReservation().getDate())
-                .returnTime(instrument.getReservation().getEndTime())
+                .returnTime(instrument.getReservation().getEndTime().localTime)
                 .build();
     }
 }

@@ -42,8 +42,8 @@ public class ReservationResponse {
                 .email(reservation.getCreator().getEmail())
                 .number(reservation.getNumber())
                 .date(reservation.getDate())
-                .startTime(reservation.getStartTime().getStrValue())
-                .endTime(reservation.getEndTime().getStrValue())
+                .startTime(reservation.getStartTime().strValue)
+                .endTime(reservation.getEndTime().strValue)
                 .message(reservation.getMessage())
                 .lastmodified(reservation.getLastModified())
                 .build();

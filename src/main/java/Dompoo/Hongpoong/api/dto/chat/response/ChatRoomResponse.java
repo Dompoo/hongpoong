@@ -16,7 +16,7 @@ import java.util.List;
 public class ChatRoomResponse {
     
     @Schema(example = "1")
-    private final Long id;
+    private final Long chatroomId;
     
     @Schema(example = "걸궁 답사")
     private final String roomName;
@@ -26,7 +26,7 @@ public class ChatRoomResponse {
     
     public static ChatRoomResponse of(ChatRoom chatRoom) {
         return ChatRoomResponse.builder()
-                .id(chatRoom.getId())
+                .chatroomId(chatRoom.getId())
                 .roomName(chatRoom.getRoomName())
                 .memberCount(chatRoom.getMemberCount())
                 .build();

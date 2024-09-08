@@ -26,7 +26,7 @@ class CommonControllerTest extends MyWebMvcTest {
         //given
         when(commonService.findMySetting(any())).thenReturn(
                 SettingResponse.builder()
-                        .id(SETTING_ID)
+                        .memberId(SETTING_ID)
                         .pushAlarm(PUSH_ALARM)
                         .build()
         );

@@ -28,14 +28,14 @@ class ChatControllerTest extends MyWebMvcTest {
     void createRoom() throws Exception {
         //given
         when(chatService.createRoom(any())).thenReturn(ChatRoomResponse.builder()
-                .id(CHATROOM_ID)
+                .chatroomId(CHATROOM_ID)
                 .roomName(CHATROOM_NAME)
                 .memberCount(CHATROOM_MEMBER_COUNT)
                 .build());
         
         ChatRoomCreateRequest request = ChatRoomCreateRequest.builder()
-                .members(List.of(MEMBER_ID))
-                .name(CHATROOM_NAME)
+                .memberIds(List.of(MEMBER_ID))
+                .chatroomName(CHATROOM_NAME)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -57,7 +57,7 @@ class ChatControllerTest extends MyWebMvcTest {
         //given
         when(chatService.findAllRoom(any())).thenReturn(List.of(
                 ChatRoomResponse.builder()
-                        .id(CHATROOM_ID)
+                        .chatroomId(CHATROOM_ID)
                         .roomName(CHATROOM_NAME)
                         .memberCount(CHATROOM_MEMBER_COUNT)
                         .build()

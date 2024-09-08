@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class InfoResponse {
     
     @Schema(example = "1")
-    private final Long id;
+    private final Long infoId;
     
     @Schema(example = "걸궁 답사")
     private final String title;
@@ -25,7 +25,7 @@ public class InfoResponse {
     
     public static InfoResponse from(Info info) {
         return InfoResponse.builder()
-                .id(info.getId())
+                .infoId(info.getId())
                 .title(info.getTitle())
                 .date(info.getDate())
                 .build();

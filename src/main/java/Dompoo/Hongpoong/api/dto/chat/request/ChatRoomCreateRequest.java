@@ -13,15 +13,15 @@ import java.util.List;
 public class ChatRoomCreateRequest {
     
     @Schema(example = "걸궁 답사")
-    private final String name;
+    private final String chatroomName;
     
     @Schema(example = "{1, 2, 3}")
-    private final List<Long> members;
+    private final List<Long> memberIds;
     
     public ChatRoom toChatRoom() {
         return ChatRoom.builder()
-                .roomName(name)
-                .memberCount(members.size())
+                .roomName(chatroomName)
+                .memberCount(memberIds.size())
                 .build();
     }
 }

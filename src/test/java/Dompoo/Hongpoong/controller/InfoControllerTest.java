@@ -58,12 +58,12 @@ class InfoControllerTest extends MyWebMvcTest {
         //given
         when(infoService.findAllInfo()).thenReturn(List.of(
                 InfoResponse.builder()
-                        .id(ID)
+                        .infoId(ID)
                         .title(TITLE)
                         .date(DATE)
                         .build(),
                 InfoResponse.builder()
-                        .id(ID2)
+                        .infoId(ID2)
                         .title(TITLE2)
                         .date(DATE2)
                         .build()
@@ -87,7 +87,7 @@ class InfoControllerTest extends MyWebMvcTest {
     void getOne() throws Exception {
         //given
         when(infoService.findInfoDetail(any())).thenReturn(InfoDetailResponse.builder()
-                .id(ID)
+                .infoId(ID)
                 .title(TITLE)
                 .content(CONTENT)
                 .date(DATE)

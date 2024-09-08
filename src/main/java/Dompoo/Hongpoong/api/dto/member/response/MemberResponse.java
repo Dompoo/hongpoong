@@ -16,7 +16,7 @@ import java.util.List;
 public class MemberResponse {
     
     @Schema(example = "1")
-    private final Long id;
+    private final Long memberId;
     
     @Schema(example = "email@gmail.com")
     private final String email;
@@ -38,7 +38,7 @@ public class MemberResponse {
     
     public static MemberResponse from(Member member) {
         return MemberResponse.builder()
-                .id(member.getId())
+                .memberId(member.getId())
                 .email(member.getEmail())
                 .name(member.getName())
                 .nickname(member.getNickname())

@@ -14,7 +14,7 @@ import lombok.Getter;
 public class InstrumentResponse {
     
     @Schema(example = "1")
-    private final Long id;
+    private final Long instrumentId;
     
     @Schema(example = "장구")
     private final String type;
@@ -24,7 +24,7 @@ public class InstrumentResponse {
     
     public static InstrumentResponse from(Instrument instrument, Club club) {
         return InstrumentResponse.builder()
-                .id(instrument.getId())
+                .instrumentId(instrument.getId())
                 .type(instrument.getType().korName)
                 .club(club.korName)
                 .build();

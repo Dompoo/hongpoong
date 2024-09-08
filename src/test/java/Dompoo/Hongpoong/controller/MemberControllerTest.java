@@ -39,9 +39,9 @@ class MemberControllerTest extends MyWebMvcTest {
     void findMyMemberDetail() throws Exception {
         //given
         when(memberService.findMyMemberDetail(any())).thenReturn(MemberStatusResponse.builder()
-                .id(ID)
+                .memberId(ID)
                 .email(EMAIL)
-                .username(NAME)
+                .name(NAME)
                 .password(PASSWORD)
                 .club(CLUB)
                 .build());
@@ -96,13 +96,13 @@ class MemberControllerTest extends MyWebMvcTest {
         //given
         when(memberService.findAllMember()).thenReturn(List.of(
                 MemberResponse.builder()
-                        .id(ID)
+                        .memberId(ID)
                         .email(EMAIL)
                         .name(NAME)
                         .club(CLUB)
                         .build(),
                 MemberResponse.builder()
-                        .id(ID2)
+                        .memberId(ID2)
                         .email(EMAIL2)
                         .name(NAME2)
                         .club(CLUB2)

@@ -73,7 +73,7 @@ class MemberServiceTest {
 
         //then
         assertEquals(response.getEmail(), EMAIL);
-        assertEquals(response.getUsername(), NEW_USERNAME);
+        assertEquals(response.getName(), NEW_USERNAME);
         assertEquals(response.getPassword(), NEW_PASSWORD);
     }
 

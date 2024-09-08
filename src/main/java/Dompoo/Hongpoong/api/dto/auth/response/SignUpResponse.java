@@ -13,7 +13,7 @@ import lombok.Getter;
 public class SignUpResponse {
     
     @Schema(example = "1")
-    private final Long id;
+    private final Long signupId;
     
     @Schema(example = "email@gmail.com")
     private final String email;
@@ -35,7 +35,7 @@ public class SignUpResponse {
     
     public static SignUpResponse from(SignUp signUp) {
         return SignUpResponse.builder()
-                .id(signUp.getId())
+                .signupId(signUp.getId())
                 .email(signUp.getEmail())
                 .name(signUp.getName())
                 .nickname(signUp.getNickname())

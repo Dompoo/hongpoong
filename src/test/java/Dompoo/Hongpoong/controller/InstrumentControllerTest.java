@@ -77,12 +77,12 @@ class InstrumentControllerTest extends MyWebMvcTest {
         //given
         when(instrumentService.findAllOtherClubInstrument(any())).thenReturn(List.of(
                 InstrumentResponse.builder()
-                        .id(INSTRUMENT_ID)
+                        .instrumentId(INSTRUMENT_ID)
                         .club(INSTRUMENT_CLUB)
                         .type(INSTRUMENT_TYPE)
                         .build(),
                 InstrumentResponse.builder()
-                        .id(INSTRUMENT2_ID)
+                        .instrumentId(INSTRUMENT2_ID)
                         .club(INSTRUMENT2_CLUB)
                         .type(INSTRUMENT2_TYPE)
                         .build()
@@ -107,12 +107,12 @@ class InstrumentControllerTest extends MyWebMvcTest {
         //given
         when(instrumentService.findAllMyClubInstrument(any())).thenReturn(List.of(
                 InstrumentResponse.builder()
-                        .id(INSTRUMENT_ID)
+                        .instrumentId(INSTRUMENT_ID)
                         .club(INSTRUMENT_CLUB)
                         .type(INSTRUMENT_TYPE)
                         .build(),
                 InstrumentResponse.builder()
-                        .id(INSTRUMENT2_ID)
+                        .instrumentId(INSTRUMENT2_ID)
                         .club(INSTRUMENT2_CLUB)
                         .type(INSTRUMENT2_TYPE)
                         .build()
@@ -175,7 +175,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
     void findInstrumentDetail() throws Exception {
         //given
         when(instrumentService.findInstrumentDetail(any())).thenReturn(InstrumentResponse.builder()
-                .id(INSTRUMENT_ID)
+                .instrumentId(INSTRUMENT_ID)
                 .type(INSTRUMENT_TYPE)
                 .club(INSTRUMENT_CLUB)
                 .build());

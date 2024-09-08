@@ -13,14 +13,14 @@ import lombok.Getter;
 public class SettingResponse {
     
     @Schema(example = "10")
-    private final Long id;
+    private final Long memberId;
     
     @Schema(example = "true")
     private final Boolean pushAlarm;
     
     public static SettingResponse from(Member member) {
         return SettingResponse.builder()
-                .id(member.getId())
+                .memberId(member.getId())
                 .pushAlarm(member.isPushAlarm())
                 .build();
     }

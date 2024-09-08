@@ -44,7 +44,7 @@ class CommonServiceTest {
         SettingResponse response = service.findMySetting(member.getId());
 
         //then
-        assertEquals(member.getId(), response.getId());
+        assertEquals(member.getId(), response.getMemberId());
         assertFalse(response.isPushAlarm());
     }
 

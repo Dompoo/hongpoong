@@ -78,7 +78,7 @@ public class Member {
     }
     
     public boolean hasAccessLevel(SecurePolicy policy) {
-        int accessLevel = this.getRole().getAccessLevel();
+        int accessLevel = this.getRole().accessLevel;
         
         return switch (policy) {
             case ALL_MEMBER -> accessLevel > 0;

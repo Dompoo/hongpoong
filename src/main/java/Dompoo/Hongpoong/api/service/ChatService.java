@@ -32,8 +32,8 @@ public class ChatService {
     
     @Transactional
     public ChatRoomResponse createRoom(ChatRoomCreateRequest request) {
-        List<Member> members = memberRepository.findAllByIdIn(request.getMembers());
-        if (members.size() != request.getMembers().size()) throw new MemberNotFound();
+        List<Member> members = memberRepository.findAllByIdIn(request.getMemberIds());
+        if (members.size() != request.getMemberIds().size()) throw new MemberNotFound();
         
         ChatRoom savedRoom = chatRoomRepository.save(request.toChatRoom());
         

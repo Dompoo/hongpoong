@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.api.dto.member.response;
 
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,12 +15,25 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberResponse {
     
+    @Schema(example = "1")
     private final Long id;
+    
+    @Schema(example = "email@gmail.com")
     private final String email;
+    
+    @Schema(example = "이창근")
     private final String name;
+    
+    @Schema(example = "불꽃남자")
     private final String nickname;
+    
+    @Schema(example = "산틀")
     private final String club;
+    
+    @Schema(example = "19")
     private final Integer enrollmentNumber;
+    
+    @Schema(example = "image.com/1")
     private final String profileImageUrl;
     
     public static MemberResponse from(Member member) {

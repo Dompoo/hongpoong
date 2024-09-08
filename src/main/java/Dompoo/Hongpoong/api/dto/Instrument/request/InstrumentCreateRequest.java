@@ -3,6 +3,7 @@ package Dompoo.Hongpoong.api.dto.Instrument.request;
 import Dompoo.Hongpoong.domain.entity.Instrument;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -13,11 +14,12 @@ import lombok.*;
 public class InstrumentCreateRequest {
 
     @NotNull(message = "악기는 비어있을 수 없습니다.")
-    private final Integer type;
+    @Schema(example = "장구")
+    private final String type;
     
     public Instrument toInstrument(Member member) {
         return Instrument.builder()
-                .type(InstrumentType.fromInt(type))
+                .type(InstrumentType.from(type))
                 .member(member)
                 .build();
     }

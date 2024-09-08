@@ -36,7 +36,7 @@ public class Instrument {
     }
     
     public void edit(InstrumentEditDto dto) {
-        if (dto.getType() != null) this.type = InstrumentType.fromInt(dto.getType());
+        if (dto.getType() != null) this.type = dto.getType();
         if (dto.getAvailable() != null) this.available = dto.getAvailable();
     }
 }

@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.api.dto.Instrument.request;
 
+import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import lombok.*;
 
 @Getter
@@ -8,12 +9,12 @@ import lombok.*;
 @NoArgsConstructor(force = true)
 public class InstrumentEditRequest {
 
-    private final Integer type;
+    private final String type;
     private final Boolean available;
     
     public InstrumentEditDto toDto() {
         return InstrumentEditDto.builder()
-                .type(type)
+                .type(InstrumentType.from(type))
                 .available(available)
                 .build();
     }

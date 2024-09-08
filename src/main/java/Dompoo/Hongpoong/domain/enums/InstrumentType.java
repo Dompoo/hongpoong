@@ -1,5 +1,7 @@
 package Dompoo.Hongpoong.domain.enums;
 
+import Dompoo.Hongpoong.common.exception.impl.InstrumentTypeException;
+
 public enum InstrumentType {
 	KKWANGGWARI("꽹과리"),
 	JANGGU("장구"),
@@ -14,14 +16,12 @@ public enum InstrumentType {
 		this.korName = korName;
 	}
 	
-	public static InstrumentType fromInt(int number) {
-		return switch (number) {
-			case 1 -> KKWANGGWARI;
-			case 2 -> JANGGU;
-			case 3 -> BUK;
-			case 4 -> SOGO;
-			case 5 -> JING;
-			default -> JANGGU;
-		};
+	public static InstrumentType from(String strInstrument) {
+		for (InstrumentType instrumentType : InstrumentType.values()) {
+			if (instrumentType.korName.equals(strInstrument)) {
+				return instrumentType;
+			}
+		}
+		throw new InstrumentTypeException();
 	}
 }

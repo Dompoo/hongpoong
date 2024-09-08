@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -27,7 +27,7 @@ class CommonServiceTest {
 
     @AfterEach
     void setUp() {
-        memberRepository.deleteAll();
+        memberRepository.deleteAllInBatch();
     }
 
     @Test
@@ -36,7 +36,7 @@ class CommonServiceTest {
         //given
         Member member = memberRepository.save(Member.builder()
                 .email("dompoo@gmail.com")
-                .username("이창근")
+                .name("이창근")
                 .password("1234")
                 .club(Club.SANTLE)
                 .build());
@@ -46,7 +46,7 @@ class CommonServiceTest {
 
         //then
         assertEquals(member.getId(), response.getId());
-        assertTrue(response.isPushAlarm());
+        assertFalse(response.isPushAlarm());
     }
 
     @Test
@@ -55,7 +55,7 @@ class CommonServiceTest {
         //given
         Member member = memberRepository.save(Member.builder()
                 .email("dompoo@gmail.com")
-                .username("이창근")
+                .name("이창근")
                 .password("1234")
                 .club(Club.SANTLE)
                 .build());

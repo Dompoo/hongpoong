@@ -6,6 +6,7 @@ import Dompoo.Hongpoong.api.dto.request.auth.SignUpRequest;
 import Dompoo.Hongpoong.api.dto.response.auth.EmailValidResponse;
 import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
+import Dompoo.Hongpoong.domain.enums.Club;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -22,12 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class AuthControllerTest extends MyWebMvcTest {
     
-    private static final String USERNAME = "창근";
+    private static final String NAME = "창근";
+    private static final String NICKNAME = "불꽃남자";
     private static final Long EMAIL_ID = 1L;
     private static final String EMAIL = "dompoo@gmail.com";
     private static final String EMAIL2 = "yoonH@gmail.com";
+    private static final Integer ENROLLMENT_NUMBER = 19;
     private static final String PASSWORD = "1234";
-    private static final Integer CLUB = 1;
+    private static final Club CLUB = Club.SANTLE;
 
     @Test
     @DisplayName("이메일 유효성 검사")
@@ -59,10 +62,11 @@ class AuthControllerTest extends MyWebMvcTest {
         //given
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
-                .username(USERNAME)
-                .password1(PASSWORD)
-                .password2(PASSWORD)
-                .club(CLUB)
+                .name(NAME)
+                .password(PASSWORD)
+                .club(CLUB.korName)
+                .nickname(NICKNAME)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -81,9 +85,10 @@ class AuthControllerTest extends MyWebMvcTest {
         //given
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
-                .password1(PASSWORD)
-                .password2(PASSWORD)
-                .club(CLUB)
+                .password(PASSWORD)
+                .club(CLUB.korName)
+                .nickname(NICKNAME)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -103,10 +108,10 @@ class AuthControllerTest extends MyWebMvcTest {
         //given
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
-                .username(" ")
-                .password1(PASSWORD)
-                .password2(PASSWORD)
-                .club(CLUB)
+                .password(PASSWORD)
+                .club(CLUB.korName)
+                .nickname(NICKNAME)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -126,9 +131,10 @@ class AuthControllerTest extends MyWebMvcTest {
         //given
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
-                .username(USERNAME)
-                .password2(PASSWORD)
-                .club(CLUB)
+                .name(NAME)
+                .club(CLUB.korName)
+                .nickname(NICKNAME)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -143,36 +149,15 @@ class AuthControllerTest extends MyWebMvcTest {
     }
 
     @Test
-    @DisplayName("회원가입 요청시 비밀번호확인은 비어있을 수 없다.")
-    void requestSignupFail4() throws Exception {
-        //given
-        SignUpRequest request = SignUpRequest.builder()
-                .email(EMAIL)
-                .username(USERNAME)
-                .password1(PASSWORD)
-                .club(CLUB)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(post("/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("[비밀번호확인은 비어있을 수 없습니다.]"))
-                .andDo(print());
-    }
-
-    @Test
     @DisplayName("회원가입 요청시 이메일은 비어있을 수 없다.")
     void requestSignupFail6() throws Exception {
         //given
         SignUpRequest request = SignUpRequest.builder()
-                .username(USERNAME)
-                .password1(PASSWORD)
-                .password2(PASSWORD)
-                .club(CLUB)
+                .name(NAME)
+                .password(PASSWORD)
+                .club(CLUB.korName)
+                .nickname(NICKNAME)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -192,10 +177,11 @@ class AuthControllerTest extends MyWebMvcTest {
         //given
         SignUpRequest request = SignUpRequest.builder()
                 .email("abc")
-                .username(USERNAME)
-                .password1(PASSWORD)
-                .password2(PASSWORD)
-                .club(CLUB)
+                .name(NAME)
+                .password(PASSWORD)
+                .club(CLUB.korName)
+                .nickname(NICKNAME)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -215,10 +201,11 @@ class AuthControllerTest extends MyWebMvcTest {
         //given
         SignUpRequest request = SignUpRequest.builder()
                 .email(" ")
-                .username(USERNAME)
-                .password1(PASSWORD)
-                .password2(PASSWORD)
-                .club(CLUB)
+                .name(NAME)
+                .password(PASSWORD)
+                .club(CLUB.korName)
+                .nickname(NICKNAME)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -238,9 +225,10 @@ class AuthControllerTest extends MyWebMvcTest {
         //given
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
-                .username(USERNAME)
-                .password1(PASSWORD)
-                .password2(PASSWORD)
+                .name(NAME)
+                .password(PASSWORD)
+                .nickname(NICKNAME)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -251,6 +239,52 @@ class AuthControllerTest extends MyWebMvcTest {
                         .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("[동아리는 비어있을 수 없습니다.]"))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("회원가입 요청시 학번이 비어있을 수 없다.")
+    void requestSignupFail12() throws Exception {
+        //given
+        SignUpRequest request = SignUpRequest.builder()
+                .email(EMAIL)
+                .name(NAME)
+                .password(PASSWORD)
+                .club(CLUB.korName)
+                .nickname(NICKNAME)
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[학번은 비어있을 수 없습니다.]"))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("회원가입 요청시 패명이 비어있을 수 없다.")
+    void requestSignupFail13() throws Exception {
+        //given
+        SignUpRequest request = SignUpRequest.builder()
+                .email(EMAIL)
+                .name(NAME)
+                .password(PASSWORD)
+                .club(CLUB.korName)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[패명은 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
 

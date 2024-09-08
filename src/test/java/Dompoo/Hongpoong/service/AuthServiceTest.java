@@ -7,13 +7,13 @@ import Dompoo.Hongpoong.api.dto.response.auth.EmailValidResponse;
 import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
 import Dompoo.Hongpoong.api.service.AuthService;
 import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
-import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
 import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.SignUp;
+import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.SignUpRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,15 +43,13 @@ class AuthServiceTest {
     private static final String EMAIL = "dompoo@gmail.com";
     private static final String USERNAME = "창근";
     private static final String PASSWORD = "1234";
-    private static final Integer CLUB = 1;
-    private static final String NOT_SAME_PASSWORD = "5678";
+    private static final Club CLUB = SANTLE;
     private static final String ALREADY_EXIST_EMAIL = "이미 존재하는 이메일입니다.";
-    private static final String PASSWORD_NOT_SAME = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
 
-    @BeforeEach
+    @AfterEach
     void setUp() {
-        memberRepository.deleteAll();
-        signUpRepository.deleteAll();
+        signUpRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
     }
 
     @Test
@@ -75,9 +73,9 @@ class AuthServiceTest {
         //given
         memberRepository.save(Member.builder()
                 .email(EMAIL)
-                .username(USERNAME)
+                .name(USERNAME)
                 .password(PASSWORD)
-                .club(SANTLE)
+                .club(CLUB)
                 .build());
 
         EmailValidRequest request = EmailValidRequest.builder()
@@ -97,10 +95,9 @@ class AuthServiceTest {
         //given
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
-                .username(USERNAME)
-                .password1(PASSWORD)
-                .password2(PASSWORD)
-                .club(CLUB)
+                .name(USERNAME)
+                .password(PASSWORD)
+                .club(CLUB.korName)
                 .build();
 
         //when
@@ -113,43 +110,21 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 요청시 비밀번호와 비밀번호확인은 일치해야 한다.")
-    void requestSignupFail3() {
-        //given
-        SignUpRequest request = SignUpRequest.builder()
-                .email(EMAIL)
-                .username(USERNAME)
-                .password1(PASSWORD)
-                .password2(NOT_SAME_PASSWORD)
-                .club(CLUB)
-                .build();
-
-        //when
-        PasswordNotSame e = assertThrows(PasswordNotSame.class, () ->
-                service.requestSignup(request));
-
-        //then
-        assertEquals(e.statusCode(), "400");
-        assertEquals(e.getMessage(), PASSWORD_NOT_SAME);
-    }
-
-    @Test
     @DisplayName("회원가입 요청시 이메일은 중복되면 안된다.")
     void requestSignupFail4() {
         //given
         memberRepository.save(Member.builder()
                 .email(EMAIL)
-                .username(USERNAME)
+                .name(USERNAME)
                 .password(PASSWORD)
                 .club(SANTLE)
                 .build());
 
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
-                .username(USERNAME)
-                .password1(PASSWORD)
-                .password2(PASSWORD)
-                .club(CLUB)
+                .name(USERNAME)
+                .password(PASSWORD)
+                .club(CLUB.korName)
                 .build();
 
         //when
@@ -167,7 +142,7 @@ class AuthServiceTest {
         //given
         SignUp signUp = signUpRepository.save(SignUp.builder()
                 .email(EMAIL)
-                .username(USERNAME)
+                .name(USERNAME)
                 .password(PASSWORD)
                 .club(SANTLE)
                 .build());
@@ -192,7 +167,7 @@ class AuthServiceTest {
         //given
         SignUp signUp = signUpRepository.save(SignUp.builder()
                 .email(EMAIL)
-                .username(USERNAME)
+                .name(USERNAME)
                 .password(PASSWORD)
                 .club(SANTLE)
                 .build());
@@ -216,7 +191,7 @@ class AuthServiceTest {
         //given
         SignUp signUp = signUpRepository.save(SignUp.builder()
                 .email(EMAIL)
-                .username(USERNAME)
+                .name(USERNAME)
                 .password(PASSWORD)
                 .club(SANTLE)
                 .build());
@@ -241,14 +216,14 @@ class AuthServiceTest {
         //given
         signUpRepository.save(SignUp.builder()
                 .email(EMAIL)
-                .username(USERNAME)
+                .name(USERNAME)
                 .password(PASSWORD)
                 .club(SANTLE)
                 .build());
 
         signUpRepository.save(SignUp.builder()
                 .email("yoonH@naver.com")
-                .username("윤호")
+                .name("윤호")
                 .password("qwer")
                 .club(HWARANG)
                 .build());

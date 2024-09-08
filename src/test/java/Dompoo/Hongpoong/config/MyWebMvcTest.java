@@ -57,4 +57,6 @@ public abstract class MyWebMvcTest {
 	protected MemberService memberService;
 	@MockBean
 	protected ReservationService reservationService;
+	@MockBean
+	protected AttendanceService attendanceService;
 }

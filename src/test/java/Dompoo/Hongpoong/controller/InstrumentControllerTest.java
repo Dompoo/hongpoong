@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -29,9 +30,10 @@ class InstrumentControllerTest extends MyWebMvcTest {
     private static final String INSTRUMENT2_CLUB = "악반";
     private static final String INSTRUMENT_TYPE = "소고";
     private static final String INSTRUMENT2_TYPE = "장구";
-    private static final LocalDate RETURN_DATE = LocalDate.of(2000, 5, 17);
-    private static final String RETURN_DATE_STRING = "2000-05-17";
-    private static final int RETURN_TIME = 10;
+    private static final LocalDate RETURN_DATE = LocalDate.now().plusDays(10);
+    private static final String RETURN_DATE_STRING = RETURN_DATE.toString();
+    private static final LocalTime RETURN_TIME = LocalTime.of(15, 0);
+    private static final String RETURN_TIME_STRING = RETURN_TIME.toString() + ":00";
 
     @Test
     @DisplayName("악기 추가")
@@ -153,7 +155,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.instrumentId").value(INSTRUMENT_ID))
                 .andExpect(jsonPath("$.returnDate").value(RETURN_DATE_STRING))
-                .andExpect(jsonPath("$.returnTime").value(RETURN_TIME))
+                .andExpect(jsonPath("$.returnTime").value(RETURN_TIME_STRING))
                 .andDo(print());
     }
     

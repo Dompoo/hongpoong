@@ -41,7 +41,7 @@ class InfoServiceTest {
 
     @AfterEach
     void setUp() {
-        repository.deleteAll();
+        repository.deleteAllInBatch();
     }
 
     //공지사항 추가 테스트

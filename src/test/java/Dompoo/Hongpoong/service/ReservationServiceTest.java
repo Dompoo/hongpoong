@@ -2,7 +2,6 @@ package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditRequest;
-import Dompoo.Hongpoong.api.dto.request.reservation.ReservationSearchRequest;
 import Dompoo.Hongpoong.api.dto.response.resevation.ReservationResponse;
 import Dompoo.Hongpoong.api.service.ReservationService;
 import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
@@ -11,6 +10,7 @@ import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.common.exception.impl.ReservationNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
+import Dompoo.Hongpoong.domain.entity.reservation.ReservationTime;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +22,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,55 +35,15 @@ class ReservationServiceTest {
     private ReservationRepository reservationRepository;
     @Autowired
     private MemberRepository memberRepository;
+    
+    private static final LocalDate DATE = LocalDate.now().plusDays(10);
+    private static final ReservationTime START_TIME = ReservationTime.TIME_0900;
+    private static final ReservationTime END_TIME = ReservationTime.TIME_1500;
 
     @BeforeEach
     void setUp() {
-        reservationRepository.deleteAll();
-    }
-
-    @Test
-    @DisplayName("예약 리스트 조회")
-    void list() {
-        //given
-        Member member = memberRepository.save(Member.builder()
-                .username("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
-                .build());
-
-        Reservation reservation1 = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
-                .build());
-
-        Reservation reservation2 = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
-                .build());
-
-        ReservationSearchRequest request = ReservationSearchRequest.builder()
-                .date(LocalDate.of(2025, 12, 20))
-                .build();
-
-        //when
-        List<ReservationResponse> list = service.getAllReservationOfDate(request);
-
-        //then
-        assertEquals(2, list.size());
-        assertEquals(list.get(0).getId(), reservation1.getId());
-        assertEquals(list.get(1).getId(), reservation2.getId());
-        assertEquals(list.get(0).getUsername(), reservation1.getCreator().getName());
-        assertEquals(list.get(1).getUsername(), reservation2.getCreator().getName());
-        assertEquals(list.get(0).getDate(), reservation1.getDate());
-        assertEquals(list.get(1).getDate(), reservation2.getDate());
-        assertEquals(list.get(0).getStartTime(), reservation1.getStartTime());
-        assertEquals(list.get(0).getEndTime(), reservation1.getEndTime());
-        assertEquals(list.get(1).getStartTime(), reservation2.getStartTime());
-        assertEquals(list.get(1).getEndTime(), reservation2.getEndTime());
+        reservationRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
     }
 
     @Test
@@ -92,16 +51,16 @@ class ReservationServiceTest {
     void add() {
         //given
         Member member = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .number(13)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(13)
-                .endTime(17)
+                .date(DATE)
+                .startTime(START_TIME.strValue)
+                .endTime(END_TIME.strValue)
                 .message("")
                 .build();
 
@@ -117,16 +76,16 @@ class ReservationServiceTest {
     void addFail() {
         //given
         Member member = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .number(13)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(13)
-                .endTime(17)
+                .date(DATE)
+                .startTime(START_TIME.strValue)
+                .endTime(END_TIME.strValue)
                 .message("")
                 .build();
 
@@ -145,16 +104,16 @@ class ReservationServiceTest {
     void detail() {
         //given
         Member member = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build());
 
         //when
@@ -163,9 +122,9 @@ class ReservationServiceTest {
         //then
         assertEquals(response.getId(), reservation.getId());
         assertEquals(response.getUsername(), "창근");
-        assertEquals(response.getDate(), LocalDate.of(2025, 12, 20));
-        assertEquals(response.getStartTime(), 11);
-        assertEquals(response.getEndTime(), 21);
+        assertEquals(response.getDate(), DATE);
+        assertEquals(response.getStartTime(), START_TIME.strValue);
+        assertEquals(response.getEndTime(), END_TIME.strValue);
     }
 
     @Test
@@ -173,16 +132,16 @@ class ReservationServiceTest {
     void detailFail() {
         //given
         Member member = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build());
 
         //when
@@ -199,22 +158,22 @@ class ReservationServiceTest {
     void edit() {
         //given
         Member member = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(13)
-                .endTime(19)
+                .startTime(START_TIME.strValue)
+                .endTime(END_TIME.strValue)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
@@ -227,8 +186,8 @@ class ReservationServiceTest {
                 .orElseThrow());
         assertEquals(find.getCreator().getId(), member.getId());
         assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
-        assertEquals(find.getStartTime(), 13);
-        assertEquals(find.getEndTime(), 19);
+        assertEquals(find.getStartTime(), START_TIME);
+        assertEquals(find.getEndTime(), END_TIME);
     }
 
     @Test
@@ -236,22 +195,22 @@ class ReservationServiceTest {
     void editFail() {
         //given
         Member member = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(13)
-                .endTime(19)
+                .startTime(START_TIME.strValue)
+                .endTime(END_TIME.strValue)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
@@ -270,22 +229,22 @@ class ReservationServiceTest {
     void editFai2() {
         //given
         Member member = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(13)
-                .endTime(19)
+                .startTime(START_TIME.strValue)
+                .endTime(END_TIME.strValue)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
@@ -304,16 +263,16 @@ class ReservationServiceTest {
     void delete() {
         //given
         Member member = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build());
 
         //when
@@ -328,16 +287,16 @@ class ReservationServiceTest {
     void deleteFail() {
         //given
         Member member = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build());
 
         //when
@@ -354,16 +313,16 @@ class ReservationServiceTest {
     void deleteFail2() {
         //given
         Member member = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build());
 
         //when
@@ -380,22 +339,22 @@ class ReservationServiceTest {
     void editAdmin() {
         //given
         Member member = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(member)
-                .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build());
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(13)
-                .endTime(19)
+                .startTime(START_TIME.strValue)
+                .endTime(END_TIME.strValue)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
@@ -408,7 +367,7 @@ class ReservationServiceTest {
                 .orElseThrow());
         assertEquals(find.getCreator().getId(), member.getId());
         assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
-        assertEquals(find.getStartTime(), 13);
-        assertEquals(find.getEndTime(), 19);
+        assertEquals(find.getStartTime(), START_TIME);
+        assertEquals(find.getEndTime(), END_TIME);
     }
 }

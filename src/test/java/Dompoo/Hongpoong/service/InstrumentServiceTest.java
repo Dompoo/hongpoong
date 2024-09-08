@@ -9,6 +9,7 @@ import Dompoo.Hongpoong.api.service.InstrumentService;
 import Dompoo.Hongpoong.domain.entity.Instrument;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
+import Dompoo.Hongpoong.domain.entity.reservation.ReservationTime;
 import Dompoo.Hongpoong.domain.repository.InstrumentRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
@@ -39,6 +40,9 @@ class InstrumentServiceTest {
     private MemberRepository memberRepository;
     @Autowired
     private ReservationRepository reservationRepository;
+    
+    private static final ReservationTime START_TIME = ReservationTime.TIME_0900;
+    private static final ReservationTime END_TIME = ReservationTime.TIME_1500;
 
     @AfterEach
     void setUp() {
@@ -52,7 +56,7 @@ class InstrumentServiceTest {
     void addOne() {
         //given
         Member me = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
@@ -74,14 +78,14 @@ class InstrumentServiceTest {
     void findOther() {
         //given
         Member me = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
 
         Member other = memberRepository.save(Member.builder()
-                .username("강윤호")
+                .name("윤호")
                 .email("yoonH@naver.com")
                 .password("qwer")
                 .club(HWARANG)
@@ -110,14 +114,14 @@ class InstrumentServiceTest {
     void findMyList() {
         //given
         Member me = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
 
         Member other = memberRepository.save(Member.builder()
-                .username("강윤호")
+                .name("윤호")
                 .email("yoonH@naver.com")
                 .password("qwer")
                 .club(HWARANG)
@@ -145,25 +149,25 @@ class InstrumentServiceTest {
     void borrow() {
         //given
         Member me = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
 
         Member other = memberRepository.save(Member.builder()
-                .username("강윤호")
+                .name("윤호")
                 .email("yoonH@naver.com")
                 .password("qwer")
                 .club(HWARANG)
                 .build());
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(me)
+                .creator(me)
                 .number(15)
                 .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .message("")
                 .build());
 
@@ -184,7 +188,7 @@ class InstrumentServiceTest {
         assertEquals(instrumentRepository.findAll().getFirst().getReservation().getId(), reservation.getId());
         assertEquals(instrument.getId(), response.getInstrumentId());
         assertEquals(LocalDate.of(2025, 12, 20), response.getReturnDate());
-        assertEquals(21, response.getReturnTime());
+        assertEquals(END_TIME.localTime, response.getReturnTime());
     }
 
     @Test
@@ -192,25 +196,25 @@ class InstrumentServiceTest {
     void returnOne() {
         //given
         Member me = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
 
         Member other = memberRepository.save(Member.builder()
-                .username("강윤호")
+                .name("윤호")
                 .email("yoonH@naver.com")
                 .password("qwer")
                 .club(HWARANG)
                 .build());
-
+        
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .member(me)
+                .creator(me)
                 .number(15)
                 .date(LocalDate.of(2025, 12, 20))
-                .startTime(11)
-                .endTime(21)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .message("")
                 .build());
 
@@ -235,7 +239,7 @@ class InstrumentServiceTest {
     void getOne() {
         //given
         Member me = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
@@ -259,7 +263,7 @@ class InstrumentServiceTest {
     void editOne() {
         //given
         Member me = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
@@ -288,7 +292,7 @@ class InstrumentServiceTest {
     void editOne1() {
         //given
         Member me = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
@@ -316,7 +320,7 @@ class InstrumentServiceTest {
     void editOne2() {
         //given
         Member me = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
@@ -344,7 +348,7 @@ class InstrumentServiceTest {
     void deleteOne() {
         //given
         Member me = memberRepository.save(Member.builder()
-                .username("창근")
+                .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)

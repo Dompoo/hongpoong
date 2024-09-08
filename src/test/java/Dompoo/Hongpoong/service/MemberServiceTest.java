@@ -6,7 +6,6 @@ import Dompoo.Hongpoong.api.dto.response.member.MemberResponse;
 import Dompoo.Hongpoong.api.dto.response.member.MemberStatusResponse;
 import Dompoo.Hongpoong.api.service.MemberService;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.common.exception.impl.PasswordNotSame;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
@@ -47,7 +46,7 @@ class MemberServiceTest {
     void setUp() {
         member = memberRepository.save(Member.builder()
                 .email(EMAIL)
-                .username(USERNAME)
+                .name(USERNAME)
                 .password(PASSWORD)
                 .club(SANTLE)
                 .build());
@@ -64,7 +63,7 @@ class MemberServiceTest {
         //given
         Member member = memberRepository.save(Member.builder()
                 .email(EMAIL)
-                .username(NEW_USERNAME)
+                .name(NEW_USERNAME)
                 .password(NEW_PASSWORD)
                 .club(SANTLE)
                 .build());
@@ -84,7 +83,7 @@ class MemberServiceTest {
         //given
         Member member = memberRepository.save(Member.builder()
                 .email(EMAIL)
-                .username(NEW_USERNAME)
+                .name(NEW_USERNAME)
                 .password(NEW_PASSWORD)
                 .build());
 
@@ -103,8 +102,7 @@ class MemberServiceTest {
         //given
         MemberEditRequest request = MemberEditRequest.builder()
                 .username(NEW_USERNAME)
-                .password1(NEW_PASSWORD)
-                .password2(NEW_PASSWORD)
+                .password(NEW_PASSWORD)
                 .build();
 
         //when
@@ -121,8 +119,7 @@ class MemberServiceTest {
     void editMyMember2() {
         //given
         MemberEditRequest request = MemberEditRequest.builder()
-                .password1(NEW_PASSWORD)
-                .password2(NEW_PASSWORD)
+                .password(NEW_PASSWORD)
                 .build();
 
         //when
@@ -135,30 +132,11 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("멤버 정보 수정시 비밀번호와 비밀번호 확인은 일치해야 한다.")
-    void editMyMemberFail1() {
-        MemberEditRequest request = MemberEditRequest.builder()
-                .username(NEW_USERNAME)
-                .password1(NEW_PASSWORD)
-                .password2("qwer")
-                .build();
-
-        //when
-        PasswordNotSame e = assertThrows(PasswordNotSame.class,
-                () -> service.editMyMember(member.getId(), request.toDto()));
-
-        //then
-        assertEquals(e.getMessage(), "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-        assertEquals(e.statusCode(), "400");
-    }
-
-    @Test
     @DisplayName("존재하는 아이디로 멤버 수정 시도")
     void editMyMemberFail2() {
         MemberEditRequest request = MemberEditRequest.builder()
                 .username(NEW_USERNAME)
-                .password1(NEW_PASSWORD)
-                .password2(NEW_PASSWORD)
+                .password(NEW_PASSWORD)
                 .build();
 
         //when
@@ -198,7 +176,7 @@ class MemberServiceTest {
         //given
         memberRepository.save(Member.builder()
                 .email(EMAIL)
-                .username(NEW_USERNAME)
+                .name(NEW_USERNAME)
                 .password(NEW_PASSWORD)
                 .club(SANTLE)
                 .build());

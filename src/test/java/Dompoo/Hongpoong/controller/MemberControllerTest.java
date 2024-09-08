@@ -25,8 +25,8 @@ class MemberControllerTest extends MyWebMvcTest {
     private final Long ID2  = 2L;
     private final String EMAIL = "dompoo@gmail.com";
     private final String EMAIL2 = "yoonH@gmail.com";
-    private final String USERNAME = "dompoo";
-    private final String USERNAME2 = "yoonH";
+    private final String NAME = "dompoo";
+    private final String NAME2 = "yoonH";
     private final String PASSWORD = "1234";
     private final String CLUB = "산틀";
     private final String CLUB2 = "악반";
@@ -41,7 +41,7 @@ class MemberControllerTest extends MyWebMvcTest {
         when(memberService.getMyDetail(any())).thenReturn(MemberStatusResponse.builder()
                 .id(ID)
                 .email(EMAIL)
-                .username(USERNAME)
+                .username(NAME)
                 .password(PASSWORD)
                 .club(CLUB)
                 .build());
@@ -51,7 +51,7 @@ class MemberControllerTest extends MyWebMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(ID))
                 .andExpect(jsonPath("$.email").value(EMAIL))
-                .andExpect(jsonPath("$.username").value(USERNAME))
+                .andExpect(jsonPath("$.username").value(NAME))
                 .andExpect(jsonPath("$.password").value(PASSWORD))
                 .andExpect(jsonPath("$.club").value(CLUB))
                 .andDo(print());
@@ -64,8 +64,7 @@ class MemberControllerTest extends MyWebMvcTest {
         //given
         MemberEditRequest request = MemberEditRequest.builder()
                 .username(NEW_USERNAME)
-                .password1(NEW_PASSWORD)
-                .password2(NEW_PASSWORD)
+                .password(NEW_PASSWORD)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -99,28 +98,28 @@ class MemberControllerTest extends MyWebMvcTest {
                 MemberResponse.builder()
                         .id(ID)
                         .email(EMAIL)
-                        .username(USERNAME)
+                        .name(NAME)
                         .club(CLUB)
                         .build(),
                 MemberResponse.builder()
                         .id(ID2)
                         .email(EMAIL2)
-                        .username(USERNAME2)
+                        .name(NAME2)
                         .club(CLUB2)
                         .build()
         ));
 
         //expected
-        mockMvc.perform(get("/member/manage"))
+        mockMvc.perform(get("/member"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
                 .andExpect(jsonPath("$[0].id").value(ID))
                 .andExpect(jsonPath("$[0].email").value(EMAIL))
-                .andExpect(jsonPath("$[0].username").value(USERNAME))
+                .andExpect(jsonPath("$[0].name").value(NAME))
                 .andExpect(jsonPath("$[0].club").value(CLUB))
                 .andExpect(jsonPath("$[1].id").value(ID2))
                 .andExpect(jsonPath("$[1].email").value(EMAIL2))
-                .andExpect(jsonPath("$[1].username").value(USERNAME2))
+                .andExpect(jsonPath("$[1].name").value(NAME2))
                 .andExpect(jsonPath("$[1].club").value(CLUB2))
                 .andDo(print());
     }

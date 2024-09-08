@@ -4,7 +4,7 @@ import Dompoo.Hongpoong.domain.entity.Instrument;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Getter
@@ -13,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor(force = true)
 public class InstrumentCreateRequest {
 
-    @NotNull(message = "악기는 비어있을 수 없습니다.")
+    @NotBlank(message = "악기는 비어있을 수 없습니다.")
     @Schema(example = "장구")
     private final String type;
     

@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.domain.entity;
 
-import Dompoo.Hongpoong.api.dto.request.info.InfoEditDto;
+import Dompoo.Hongpoong.api.dto.info.InfoEditDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

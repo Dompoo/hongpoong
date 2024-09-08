@@ -1,10 +1,6 @@
 package Dompoo.Hongpoong.api.controller;
 
-import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentBorrowRequest;
-import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentCreateRequest;
-import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditRequest;
-import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentBorrowResponse;
-import Dompoo.Hongpoong.api.dto.response.Instrument.InstrumentResponse;
+import Dompoo.Hongpoong.api.dto.Instrument.*;
 import Dompoo.Hongpoong.api.service.InstrumentService;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.common.security.UserClaims;

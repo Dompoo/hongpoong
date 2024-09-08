@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.controller;
 
-import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
-import Dompoo.Hongpoong.api.dto.response.common.SettingResponse;
+import Dompoo.Hongpoong.api.dto.common.SettingResponse;
+import Dompoo.Hongpoong.api.dto.common.SettingSaveRequest;
 import Dompoo.Hongpoong.api.service.CommonService;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import Dompoo.Hongpoong.common.security.annotation.LoginUser;

@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.service;
 
-import Dompoo.Hongpoong.api.dto.response.member.MemberResponse;
+import Dompoo.Hongpoong.api.dto.member.MemberResponse;
 import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
 import lombok.RequiredArgsConstructor;

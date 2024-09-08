@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.api.service;
 
-import Dompoo.Hongpoong.api.dto.request.member.MemberEditDto;
-import Dompoo.Hongpoong.api.dto.request.member.MemberRoleEditRequest;
-import Dompoo.Hongpoong.api.dto.response.member.MemberResponse;
-import Dompoo.Hongpoong.api.dto.response.member.MemberStatusResponse;
+import Dompoo.Hongpoong.api.dto.member.MemberEditDto;
+import Dompoo.Hongpoong.api.dto.member.MemberResponse;
+import Dompoo.Hongpoong.api.dto.member.MemberRoleEditRequest;
+import Dompoo.Hongpoong.api.dto.member.MemberStatusResponse;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;

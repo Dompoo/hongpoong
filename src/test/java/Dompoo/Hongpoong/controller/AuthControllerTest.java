@@ -1,10 +1,6 @@
 package Dompoo.Hongpoong.controller;
 
-import Dompoo.Hongpoong.api.dto.request.auth.AcceptSignUpRequest;
-import Dompoo.Hongpoong.api.dto.request.auth.EmailValidRequest;
-import Dompoo.Hongpoong.api.dto.request.auth.SignUpRequest;
-import Dompoo.Hongpoong.api.dto.response.auth.EmailValidResponse;
-import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
+import Dompoo.Hongpoong.api.dto.auth.*;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import Dompoo.Hongpoong.domain.enums.Club;
 import org.junit.jupiter.api.DisplayName;

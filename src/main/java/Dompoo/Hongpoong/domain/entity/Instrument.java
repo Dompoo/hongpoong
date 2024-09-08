@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.domain.entity;
 
-import Dompoo.Hongpoong.api.dto.request.Instrument.InstrumentEditDto;
+import Dompoo.Hongpoong.api.dto.Instrument.InstrumentEditDto;
 import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import jakarta.persistence.*;

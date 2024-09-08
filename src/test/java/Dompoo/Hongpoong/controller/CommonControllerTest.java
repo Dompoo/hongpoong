@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.controller;
 
-import Dompoo.Hongpoong.api.dto.request.common.SettingSaveRequest;
-import Dompoo.Hongpoong.api.dto.response.common.SettingResponse;
+import Dompoo.Hongpoong.api.dto.common.SettingResponse;
+import Dompoo.Hongpoong.api.dto.common.SettingSaveRequest;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

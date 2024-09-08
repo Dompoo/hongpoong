@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.controller;
 
-import Dompoo.Hongpoong.api.dto.request.info.InfoCreateRequest;
-import Dompoo.Hongpoong.api.dto.request.info.InfoEditRequest;
-import Dompoo.Hongpoong.api.dto.response.info.InfoDetailResponse;
-import Dompoo.Hongpoong.api.dto.response.info.InfoResponse;
+import Dompoo.Hongpoong.api.dto.info.InfoCreateRequest;
+import Dompoo.Hongpoong.api.dto.info.InfoDetailResponse;
+import Dompoo.Hongpoong.api.dto.info.InfoEditRequest;
+import Dompoo.Hongpoong.api.dto.info.InfoResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

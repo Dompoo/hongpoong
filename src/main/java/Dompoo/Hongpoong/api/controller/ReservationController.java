@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.api.controller;
 
-import Dompoo.Hongpoong.api.dto.request.reservation.ReservationCreateRequest;
-import Dompoo.Hongpoong.api.dto.request.reservation.ReservationEditRequest;
-import Dompoo.Hongpoong.api.dto.response.member.MemberResponse;
-import Dompoo.Hongpoong.api.dto.response.resevation.ReservationResponse;
+import Dompoo.Hongpoong.api.dto.member.MemberResponse;
+import Dompoo.Hongpoong.api.dto.reservation.ReservationCreateRequest;
+import Dompoo.Hongpoong.api.dto.reservation.ReservationEditRequest;
+import Dompoo.Hongpoong.api.dto.reservation.ReservationResponse;
 import Dompoo.Hongpoong.api.service.AttendanceService;
 import Dompoo.Hongpoong.api.service.ReservationService;
 import Dompoo.Hongpoong.common.security.SecurePolicy;

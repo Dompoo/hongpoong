@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.service;
 
-import Dompoo.Hongpoong.api.dto.request.common.SettingSaveDto;
-import Dompoo.Hongpoong.api.dto.response.common.SettingResponse;
+import Dompoo.Hongpoong.api.dto.common.SettingResponse;
+import Dompoo.Hongpoong.api.dto.common.SettingSaveDto;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;

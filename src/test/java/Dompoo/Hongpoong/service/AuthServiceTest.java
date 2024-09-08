@@ -1,10 +1,6 @@
 package Dompoo.Hongpoong.service;
 
-import Dompoo.Hongpoong.api.dto.request.auth.AcceptSignUpRequest;
-import Dompoo.Hongpoong.api.dto.request.auth.EmailValidRequest;
-import Dompoo.Hongpoong.api.dto.request.auth.SignUpRequest;
-import Dompoo.Hongpoong.api.dto.response.auth.EmailValidResponse;
-import Dompoo.Hongpoong.api.dto.response.auth.SignUpResponse;
+import Dompoo.Hongpoong.api.dto.auth.*;
 import Dompoo.Hongpoong.api.service.AuthService;
 import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
 import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;

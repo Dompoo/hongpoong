@@ -101,7 +101,7 @@ class MemberServiceTest {
     void editMyMember1() {
         //given
         MemberEditRequest request = MemberEditRequest.builder()
-                .username(NEW_USERNAME)
+                .name(NEW_USERNAME)
                 .password(NEW_PASSWORD)
                 .build();
 
@@ -135,7 +135,7 @@ class MemberServiceTest {
     @DisplayName("존재하는 아이디로 멤버 수정 시도")
     void editMyMemberFail2() {
         MemberEditRequest request = MemberEditRequest.builder()
-                .username(NEW_USERNAME)
+                .name(NEW_USERNAME)
                 .password(NEW_PASSWORD)
                 .build();
 

@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.domain.entity;
 
 import Dompoo.Hongpoong.api.dto.common.request.SettingEditDto;
 import Dompoo.Hongpoong.api.dto.member.request.MemberEditDto;
+import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditDto;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
@@ -60,12 +61,20 @@ public class Member {
     }
     
     public void edit(MemberEditDto dto, PasswordEncoder encoder) {
-        if (dto.getPassword() != null) this.password = encoder.encode(dto.getPassword());
         if (dto.getName() != null) this.name = dto.getName();
+        if (dto.getNickname() != null) this.nickname = dto.getNickname();
+        if (dto.getClub() != null) this.club = dto.getClub();
+        if (dto.getEnrollmentNumber() != null) this.enrollmentNumber = dto.getEnrollmentNumber();
+        if (dto.getProfileImageUrl() != null) this.profileImageUrl = dto.getProfileImageUrl();
+        if (dto.getNewPassword() != null) this.password = encoder.encode(dto.getNewPassword());
     }
     
     public void editSetting(SettingEditDto dto) {
         if (dto.getPush() != null) this.pushAlarm = dto.getPush();
+    }
+    
+    public void editRole(MemberRoleEditDto dto) {
+        if (dto.getRole() != null) this.role = dto.getRole();
     }
     
     public boolean hasAccessLevel(SecurePolicy policy) {

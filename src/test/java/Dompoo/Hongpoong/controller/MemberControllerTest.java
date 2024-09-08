@@ -63,7 +63,7 @@ class MemberControllerTest extends MyWebMvcTest {
     void edit() throws Exception {
         //given
         MemberEditRequest request = MemberEditRequest.builder()
-                .username(NEW_USERNAME)
+                .name(NEW_USERNAME)
                 .password(NEW_PASSWORD)
                 .build();
 

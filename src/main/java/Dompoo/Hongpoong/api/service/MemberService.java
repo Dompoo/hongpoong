@@ -1,9 +1,10 @@
 package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.member.request.MemberEditDto;
-import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditRequest;
+import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditDto;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
+import Dompoo.Hongpoong.common.exception.impl.EditFailException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
@@ -22,8 +23,12 @@ public class MemberService {
     private final PasswordEncoder encoder;
 
     @Transactional
-    public void editMyMember(Long memberId, MemberEditDto dto) {
+    public void editMyMember(Long memberId, MemberEditDto dto, String password) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        
+        if (!encoder.matches(password, member.getPassword())) {
+            throw new EditFailException();
+        }
         
         member.edit(dto, encoder);
     }
@@ -43,10 +48,10 @@ public class MemberService {
     }
 
     @Transactional
-    public void editMemberAuth(Long id, MemberRoleEditRequest request) {
+    public void editMemberAuth(Long id, MemberRoleEditDto dto) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFound::new);
 
-        member.setRole(request.getRole());
+        member.editRole(dto);
     }
 
     @Transactional(readOnly = true)

@@ -37,7 +37,7 @@ public class MemberController implements MemberApi {
     @Secured
     @PutMapping
     public void editMyMember(@LoginUser UserClaims claims, @RequestBody @Valid MemberEditRequest request) {
-        service.editMyMember(claims.getId(), request.toDto());
+        service.editMyMember(claims.getId(), request.toDto(), request.getPassword());
     }
 
     @Secured
@@ -49,7 +49,7 @@ public class MemberController implements MemberApi {
     @Secured(SecurePolicy.ADMIN_ONLY)
     @PatchMapping("/manage/{memberId}")
     public void editMemberRole(@PathVariable Long memberId, @RequestBody @Valid MemberRoleEditRequest request) {
-        service.editMemberAuth(memberId, request);
+        service.editMemberAuth(memberId, request.toDto());
     }
 
     @Secured(SecurePolicy.ADMIN_ONLY)

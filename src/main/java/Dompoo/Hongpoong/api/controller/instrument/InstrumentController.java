@@ -59,7 +59,7 @@ public class InstrumentController implements InstrumentApi {
     }
 
     @Secured
-    @PutMapping("/{instrumentId}")
+    @PatchMapping("/{instrumentId}")
     public void editInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId, @RequestBody InstrumentEditRequest request) {
         service.editInstrument(claims.getId(), instrumentId, request.toDto());
     }

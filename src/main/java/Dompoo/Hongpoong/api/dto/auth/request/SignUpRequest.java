@@ -44,6 +44,7 @@ public class SignUpRequest {
         return SignUp.builder()
                 .email(email)
                 .name(name)
+                .nickname(nickname)
                 .password(encoder.encode(password))
                 .club(Club.from(club))
                 .enrollmentNumber(enrollmentNumber)

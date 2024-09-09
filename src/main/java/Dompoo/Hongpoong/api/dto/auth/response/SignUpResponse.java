@@ -24,9 +24,6 @@ public class SignUpResponse {
     @Schema(example = "불꽃남자")
     private final String nickname;
     
-    @Schema(example = "0912md0m10102")
-    private final String password;
-    
     @Schema(example = "산틀")
     private final String club;
     
@@ -39,7 +36,6 @@ public class SignUpResponse {
                 .email(signUp.getEmail())
                 .name(signUp.getName())
                 .nickname(signUp.getNickname())
-                .password(signUp.getPassword())
                 .club(signUp.getClub().korName)
                 .enrollmentNumber(signUp.getEnrollmentNumber())
                 .build();

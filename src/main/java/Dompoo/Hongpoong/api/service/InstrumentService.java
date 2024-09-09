@@ -99,20 +99,20 @@ public class InstrumentService {
 
     @Transactional
     public void editInstrument(Long memberId, Long instrumentId, InstrumentEditDto dto) {
-        Instrument instrument = instrumentRepository.findById(instrumentId)
-                .orElseThrow(InstrumentNotFound::new);
-
-        if (!instrument.getMember().getId().equals(memberId)) throw new EditFailException();
+        Instrument instrument = instrumentRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        
+        if (!instrument.getMember().getClub().equals(member.getClub())) throw new EditFailException();
         
         instrument.edit(dto);
     }
 
     @Transactional
     public void deleteInstrument(Long memberId, Long instrumentId) {
-        Instrument instrument = instrumentRepository.findById(instrumentId)
-                .orElseThrow(InstrumentNotFound::new);
-
-        if (!instrument.getMember().getId().equals(memberId)) throw new DeleteFailException();
+        Instrument instrument = instrumentRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        
+        if (!instrument.getMember().getClub().equals(member.getClub())) throw new DeleteFailException();
 
         instrumentRepository.delete(instrument);
     }

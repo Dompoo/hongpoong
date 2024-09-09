@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Builder
@@ -17,4 +18,6 @@ public class ReservationEditDto {
     private final ReservationTime startTime;
     private final ReservationTime endTime;
     private final String message;
+    private final List<Long> addedParticipatorIds;
+    private final List<Long> removedParticipatorIds;
 }

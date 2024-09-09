@@ -3,6 +3,7 @@ package Dompoo.Hongpoong.api.controller.reservation;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +19,7 @@ import java.util.List;
 public interface ReservationApi {
 	
 	@Operation(summary = "예약 등록")
-	void createReservation(
+	ReservationDetailResponse createReservation(
 			@Schema(hidden = true) UserClaims claims,
 			@RequestBody ReservationCreateRequest request
 	);
@@ -40,7 +41,7 @@ public interface ReservationApi {
 	);
 	
 	@Operation(summary = "예약 상세 조회")
-	ReservationResponse findReservationDetail(
+	ReservationDetailResponse findReservationDetail(
 			@Parameter(description = "예약 id") Long reservationId
 	);
 	
@@ -50,7 +51,7 @@ public interface ReservationApi {
 	);
 	
 	@Operation(summary = "내가 등록한 예약 수정")
-	ReservationResponse editReservation(
+	ReservationDetailResponse editReservation(
 			@Schema(hidden = true) UserClaims claims,
 			@Parameter(description = "예약 id") Long reservationId,
 			@RequestBody ReservationEditRequest request

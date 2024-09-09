@@ -4,6 +4,7 @@ import Dompoo.Hongpoong.api.dto.member.request.MemberEditDto;
 import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditDto;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
+import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
 import Dompoo.Hongpoong.common.exception.impl.EditFailException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
@@ -57,6 +58,18 @@ public class MemberService {
         }
         
         targetMember.editRole(dto);
+    }
+    
+    @Transactional
+    public void deleteMember(Long myMemberId, Long memberId) {
+        Member targetMember = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Member me = memberRepository.findById(myMemberId).orElseThrow(MemberNotFound::new);
+        
+        if (me.getClub() != targetMember.getClub()) {
+            throw new DeleteFailException();
+        }
+        
+        memberRepository.delete(targetMember);
     }
     
     @Transactional

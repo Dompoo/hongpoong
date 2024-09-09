@@ -51,6 +51,12 @@ public class MemberController implements MemberApi {
     public void editMemberRole(@LoginUser UserClaims claims, @PathVariable Long memberId, @RequestBody @Valid MemberRoleEditRequest request) {
         service.editMemberAuth(claims.getId(), memberId, request.toDto());
     }
+    
+    @Secured(SecurePolicy.LEADER)
+    @DeleteMapping("/{memberId}")
+    public void deleteMemberByAdmin(@LoginUser UserClaims claims, @PathVariable Long memberId) {
+        service.deleteMember(claims.getId(), memberId);
+    }
 
     @Secured(SecurePolicy.ADMIN)
     @PatchMapping("/manage/{memberId}")

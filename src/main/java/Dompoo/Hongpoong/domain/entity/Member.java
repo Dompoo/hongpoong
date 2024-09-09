@@ -3,7 +3,6 @@ package Dompoo.Hongpoong.domain.entity;
 import Dompoo.Hongpoong.api.dto.common.request.SettingEditDto;
 import Dompoo.Hongpoong.api.dto.member.request.MemberEditDto;
 import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditDto;
-import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
 import jakarta.persistence.Entity;
@@ -75,16 +74,5 @@ public class Member {
     
     public void editRole(MemberRoleEditDto dto) {
         if (dto.getRole() != null) this.role = dto.getRole();
-    }
-    
-    public boolean hasAccessLevel(SecurePolicy policy) {
-        int accessLevel = this.getRole().accessLevel;
-        
-        return switch (policy) {
-            case ALL_MEMBER -> accessLevel > 0;
-            case LEADER_ONLY -> accessLevel == 2;
-            case ADMIN_LEADER -> accessLevel > 1;
-            case ADMIN_ONLY -> accessLevel > 2;
-        };
     }
 }

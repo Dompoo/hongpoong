@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.common.security;
 
 import Dompoo.Hongpoong.common.exception.impl.LoginExpiredException;
+import Dompoo.Hongpoong.domain.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -19,6 +20,7 @@ public class JwtProvider {
 	
 	private static final String CLAIMS_ID_PROPERTIES = "memberId";
 	private static final String CLAIMS_EMAIL_PROPERTIES = "email";
+	private static final String CLAIMS_ROLE_PROPERTIES = "role";
 	
 	private final String secret;
 	private final long accessTokenExpTime;
@@ -38,6 +40,7 @@ public class JwtProvider {
 		return UserClaims.builder()
 				.id(((Integer) (claims.get(CLAIMS_ID_PROPERTIES))).longValue())
 				.email((String) claims.get(CLAIMS_EMAIL_PROPERTIES))
+				.role(Role.valueOf((String) claims.get(CLAIMS_ROLE_PROPERTIES)))
 				.build();
 	}
 	
@@ -54,10 +57,11 @@ public class JwtProvider {
 		}
 	}
 	
-	public String generateAccessToken(Long id, String email) {
+	public String generateAccessToken(Long id, String email, Role role) {
 		Claims claims = Jwts.claims()
 				.add(CLAIMS_ID_PROPERTIES, id)
 				.add(CLAIMS_EMAIL_PROPERTIES, email)
+				.add(CLAIMS_ROLE_PROPERTIES, role)
 				.build();
 		
 		ZonedDateTime now = ZonedDateTime.now();

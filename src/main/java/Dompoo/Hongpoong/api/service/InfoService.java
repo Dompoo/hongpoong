@@ -53,8 +53,9 @@ public class InfoService {
     @Transactional
     public void editInfo(Long memberId, Long infoId, InfoEditDto dto) {
         Info info = infoRepository.findByIdFetchJoinMember(infoId).orElseThrow(InfoNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
-        if (!info.getMember().getId().equals(memberId)) {
+        if (!info.getMember().getClub().equals(member.getClub())) {
             throw new EditFailException();
         }
         
@@ -64,8 +65,9 @@ public class InfoService {
     @Transactional
     public void deleteInfo(Long memberId, Long infoId) {
         Info info = infoRepository.findByIdFetchJoinMember(infoId).orElseThrow(InfoNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
-        if (!info.getMember().getId().equals(memberId)) {
+        if (!info.getMember().getClub().equals(member.getClub())) {
             throw new DeleteFailException();
         }
         

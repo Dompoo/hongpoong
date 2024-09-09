@@ -62,7 +62,7 @@ public interface ReservationApi {
 			@Parameter(description = "예약 id") Long reservationId
 	);
 	
-	@Operation(summary = "예약 수정")
+	@Operation(summary = "[관리자] 예약 수정")
 	void edit(
 			@Parameter(description = "예약 id") Long reservationId,
 			@RequestBody ReservationEditRequest request

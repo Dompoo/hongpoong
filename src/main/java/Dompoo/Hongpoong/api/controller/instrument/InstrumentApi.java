@@ -17,7 +17,7 @@ import java.util.List;
 @Tag(name = "4. 악기")
 public interface InstrumentApi {
 	
-	@Operation(summary = "악기 추가")
+	@Operation(summary = "[관리자,패짱] 악기 추가")
 	void createInstrument(
 			@Schema(hidden = true) UserClaims claims,
 			@RequestBody InstrumentCreateRequest request
@@ -48,14 +48,14 @@ public interface InstrumentApi {
 			@Parameter(description = "악기 id") Long instrumentId
 	);
 	
-	@Operation(summary = "악기 수정")
+	@Operation(summary = "[관리자,패짱] 악기 수정")
 	void editInstrument(
 			@Schema(hidden = true) UserClaims claims,
 			@Parameter(description = "악기 id") Long instrumentId,
 			@RequestBody InstrumentEditRequest request
 	);
 	
-	@Operation(summary = "악기 삭제")
+	@Operation(summary = "[관리자,패짱] 악기 삭제")
 	void deleteInstrument(
 			@Schema(hidden = true) UserClaims claims,
 			@Parameter(description = "악기 id") Long instrumentId

@@ -14,7 +14,7 @@ import java.util.List;
 @Tag(name = "6. 공지사항")
 public interface InfoApi {
 	
-	@Operation(summary = "공지사항 작성")
+	@Operation(summary = "[관리자] 공지사항 작성")
 	void createInfo(
 			@RequestBody InfoCreateRequest request
 	);
@@ -27,13 +27,13 @@ public interface InfoApi {
 			@Parameter(description = "공지사항 id") Long infoId
 	);
 	
-	@Operation(summary = "공지사항 수정")
+	@Operation(summary = "[관리자] 공지사항 수정")
 	void editInfo(
 			@Parameter(description = "공지사항 id") Long infoId,
 			@RequestBody InfoEditRequest request
 	);
 	
-	@Operation(summary = "공지사항 삭제")
+	@Operation(summary = "[관리자] 공지사항 삭제")
 	void deleteInfo(
 			@Parameter(description = "공지사항 id") Long infoId
 	);

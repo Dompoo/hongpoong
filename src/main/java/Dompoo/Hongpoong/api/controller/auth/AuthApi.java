@@ -31,11 +31,11 @@ public interface AuthApi {
 			@RequestBody LoginRequest request
 	);
 	
-	@Operation(summary = "회원가입 요청 승인")
+	@Operation(summary = "[관리자] 회원가입 요청 승인")
 	void acceptSignup(
 			@RequestBody AcceptSignUpRequest request
 	);
 	
-	@Operation(summary = "회원가입 요청 리스트 조회")
+	@Operation(summary = "[관리자] 회원가입 요청 리스트 조회")
 	List<SignUpResponse> findAllSignup();
 }

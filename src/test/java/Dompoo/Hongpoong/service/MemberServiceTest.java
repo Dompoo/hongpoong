@@ -189,7 +189,7 @@ class MemberServiceTest {
         Member find = memberRepository.findAll().getFirst();
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Role.ROLE_LEADER.korName)
+                .role(Role.LEADER.korName)
                 .build();
 
         //when
@@ -206,7 +206,7 @@ class MemberServiceTest {
         Member find = memberRepository.findAll().getFirst();
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Role.ROLE_LEADER.korName)
+                .role(Role.LEADER.korName)
                 .build();
 
         //when

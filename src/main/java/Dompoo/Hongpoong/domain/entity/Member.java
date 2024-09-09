@@ -13,7 +13,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static Dompoo.Hongpoong.domain.enums.Role.ROLE_USER;
+import static Dompoo.Hongpoong.domain.enums.Role.USER;
 
 @Entity
 @Getter
@@ -53,7 +53,7 @@ public class Member {
                 .name(signUp.getPassword())
                 .nickname(signUp.getNickname())
                 .password(signUp.getPassword())
-                .role(ROLE_USER)
+                .role(USER)
                 .club(signUp.getClub())
                 .enrollmentNumber(signUp.getEnrollmentNumber())
                 .pushAlarm(false)
@@ -82,7 +82,8 @@ public class Member {
         
         return switch (policy) {
             case ALL_MEMBER -> accessLevel > 0;
-            case ADMIN_AND_LEADER -> accessLevel > 1;
+            case LEADER_ONLY -> accessLevel == 2;
+            case ADMIN_LEADER -> accessLevel > 1;
             case ADMIN_ONLY -> accessLevel > 2;
         };
     }

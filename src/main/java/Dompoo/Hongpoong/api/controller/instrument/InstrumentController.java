@@ -6,7 +6,6 @@ import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentEditRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentBorrowResponse;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.api.service.InstrumentService;
-import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import Dompoo.Hongpoong.common.security.annotation.LoginUser;
 import Dompoo.Hongpoong.common.security.annotation.Secured;
@@ -20,11 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/instrument")
 public class InstrumentController implements InstrumentApi {
-
+    
     private final InstrumentService service;
-
+    
+    @Secured
     @PostMapping
-    @Secured(SecurePolicy.ADMIN_AND_LEADER)
     public void createInstrument(@LoginUser UserClaims claims, @RequestBody @Valid InstrumentCreateRequest request) {
         service.createInstrument(claims.getId(), request);
     }
@@ -59,13 +58,13 @@ public class InstrumentController implements InstrumentApi {
         return service.findInstrumentDetail(instrumentId);
     }
 
-    @Secured(SecurePolicy.ADMIN_AND_LEADER)
+    @Secured
     @PutMapping("/{instrumentId}")
     public void editInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId, @RequestBody InstrumentEditRequest request) {
         service.editInstrument(claims.getId(), instrumentId, request.toDto());
     }
 
-    @Secured(SecurePolicy.ADMIN_AND_LEADER)
+    @Secured
     @DeleteMapping("/{instrumentId}")
     public void deleteInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId) {
         service.deleteInstrument(claims.getId(), instrumentId);

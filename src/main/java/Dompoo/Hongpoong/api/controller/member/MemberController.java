@@ -43,18 +43,24 @@ public class MemberController implements MemberApi {
     @Secured
     @DeleteMapping
     public void withDraw(@LoginUser UserClaims claims) {
-        service.deleteMember(claims.getId());
+        service.deleteMemberByAdmin(claims.getId());
+    }
+    
+    @Secured(SecurePolicy.LEADER_ONLY)
+    @PatchMapping("/{memberId}")
+    public void editMemberRole(@LoginUser UserClaims claims, @PathVariable Long memberId, @RequestBody @Valid MemberRoleEditRequest request) {
+        service.editMemberAuth(claims.getId(), memberId, request.toDto());
     }
 
     @Secured(SecurePolicy.ADMIN_ONLY)
     @PatchMapping("/manage/{memberId}")
-    public void editMemberRole(@PathVariable Long memberId, @RequestBody @Valid MemberRoleEditRequest request) {
-        service.editMemberAuth(memberId, request.toDto());
+    public void editMemberRoleByAdmin(@PathVariable Long memberId, @RequestBody @Valid MemberRoleEditRequest request) {
+        service.editMemberAuthByAdmin(memberId, request.toDto());
     }
 
     @Secured(SecurePolicy.ADMIN_ONLY)
     @DeleteMapping("/manage/{memberId}")
-    public void deleteMember(@PathVariable Long memberId) {
-        service.deleteMember(memberId);
+    public void deleteMemberByAdmin(@PathVariable Long memberId) {
+        service.deleteMemberByAdmin(memberId);
     }
 }

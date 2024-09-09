@@ -34,7 +34,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void deleteMember(Long memberId) {
+    public void deleteMemberByAdmin(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
 
         memberRepository.delete(member);
@@ -46,14 +46,26 @@ public class MemberService {
         
         return MemberResponse.fromList(members);
     }
-
+    
     @Transactional
-    public void editMemberAuth(Long id, MemberRoleEditDto dto) {
+    public void editMemberAuth(Long myMemberId, Long memberId, MemberRoleEditDto dto) {
+        Member targetMember = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Member me = memberRepository.findById(myMemberId).orElseThrow(MemberNotFound::new);
+        
+        if (me.getClub() != targetMember.getClub()) {
+            throw new EditFailException();
+        }
+        
+        targetMember.editRole(dto);
+    }
+    
+    @Transactional
+    public void editMemberAuthByAdmin(Long id, MemberRoleEditDto dto) {
         Member member = memberRepository.findById(id).orElseThrow(MemberNotFound::new);
 
         member.editRole(dto);
     }
-
+    
     @Transactional(readOnly = true)
     public MemberStatusResponse findMyMemberDetail(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);

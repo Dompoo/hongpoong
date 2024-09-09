@@ -142,9 +142,9 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원탈퇴")
-    void deleteMember() {
+    void deleteMemberByAdmin() {
         //when
-        service.deleteMember(member.getId());
+        service.deleteMemberByAdmin(member.getId());
 
         //then
         assertEquals(memberRepository.count(), 0);
@@ -152,10 +152,10 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("존재하지 않는 회원아이디로 회원탈퇴")
-    void deleteMemberFail1() {
+    void deleteMemberByAdminFail1() {
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.deleteMember(member.getId() + 1));
+                () -> service.deleteMemberByAdmin(member.getId() + 1));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
@@ -184,7 +184,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원 권한 변경")
-    void editMemberAuth() {
+    void editMemberAuthByAdmin() {
         //given
         Member find = memberRepository.findAll().getFirst();
 
@@ -193,15 +193,15 @@ class MemberServiceTest {
                 .build();
 
         //when
-        service.editMemberAuth(find.getId(), request.toDto());
+        service.editMemberAuthByAdmin(find.getId(), request.toDto());
 
         //then
-        assertEquals(memberRepository.findAll().getFirst().getRole().name(), "ROLE_LEADER");
+        assertEquals(memberRepository.findAll().getFirst().getRole().name(), "LEADER");
     }
 
     @Test
     @DisplayName("존재하지 않는 회원 권한 변경")
-    void editMemberAuthFail() {
+    void editMemberAuthByAdminFail() {
         //given
         Member find = memberRepository.findAll().getFirst();
 
@@ -211,7 +211,7 @@ class MemberServiceTest {
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.editMemberAuth(find.getId() + 1, request.toDto()));
+                () -> service.editMemberAuthByAdmin(find.getId() + 1, request.toDto()));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");

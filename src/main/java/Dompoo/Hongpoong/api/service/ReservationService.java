@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
 import Dompoo.Hongpoong.common.exception.impl.EditFailException;
@@ -31,6 +32,19 @@ public class ReservationService {
     private final ReservationParticipateRepository reservationParticipateRepository;
     private final MemberRepository memberRepository;
     
+    @Transactional
+    public ReservationDetailResponse createReservation(Long memberId, ReservationCreateRequest request) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        List<Member> participaters = memberRepository.findAllByIdIn(request.getParticipaterIds());
+        
+        ReservationTime.validateStartTimeAndEndTime(request.getStartTime(), request.getEndTime());
+        
+        Reservation savedReservation = reservationRepository.save(request.toReservation(member));
+        reservationParticipateRepository.saveAll(ReservationParticipate.of(savedReservation, participaters));
+        
+        return ReservationDetailResponse.of(savedReservation, participaters);
+    }
+    
     @Transactional(readOnly = true)
     public List<ReservationResponse> findAllReservationOfYearAndMonth(Integer year, Integer month) {
         YearMonth yearMonth = YearMonth.of(year, month);
@@ -54,26 +68,16 @@ public class ReservationService {
         return ReservationResponse.fromParticipateList(reservationParticipates);
     }
     
-    @Transactional
-    public void createReservation(Long memberId, ReservationCreateRequest request) {
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
-        List<Member> participaters = memberRepository.findAllByIdIn(request.getParticipaterIds());
-        
-        ReservationTime.validateStartTimeAndEndTime(request.getStartTime(), request.getEndTime());
-        
-        Reservation savedReservation = reservationRepository.save(request.toReservation(member));
-        reservationParticipateRepository.saveAll(ReservationParticipate.of(savedReservation, participaters));
-    }
-    
     @Transactional(readOnly = true)
-    public ReservationResponse findReservationDetail(Long reservationId) {
+    public ReservationDetailResponse findReservationDetail(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
-
-        return ReservationResponse.from(reservation);
+        List<Member> participators = reservationParticipateRepository.findAllMemberByReservation(reservation);
+        
+        return ReservationDetailResponse.of(reservation, participators);
     }
     
     @Transactional
-    public ReservationResponse editReservation(Long memberId, Long reservationId, ReservationEditDto dto, LocalDateTime now) {
+    public ReservationDetailResponse editReservation(Long memberId, Long reservationId, ReservationEditDto dto, LocalDateTime now) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
         if (!reservation.getCreator().getId().equals(memberId)) {
@@ -82,9 +86,13 @@ public class ReservationService {
         
         ReservationTime.validateStartTimeAndEndTime(dto.getStartTime(), dto.getEndTime());
         
+        updateAddedParticipators(dto, reservation);
+        updateDeletedParticipators(dto, reservation);
         reservation.edit(dto, now);
         
-        return ReservationResponse.from(reservation);
+        List<Member> members = reservationParticipateRepository.findAllMemberByReservation(reservation);
+        
+        return ReservationDetailResponse.of(reservation, members);
     }
     
     @Transactional
@@ -103,5 +111,19 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
 
         reservation.edit(dto, now);
+    }
+    
+    private void updateAddedParticipators(ReservationEditDto dto, Reservation reservation) {
+        if (dto.getAddedParticipatorIds() != null) {
+            List<Member> addedParticipators = memberRepository.findAllByIdIn(dto.getAddedParticipatorIds());
+            reservationParticipateRepository.saveAll(ReservationParticipate.of(reservation, addedParticipators));
+        }
+    }
+    
+    private void updateDeletedParticipators(ReservationEditDto dto, Reservation reservation) {
+        if (dto.getRemovedParticipatorIds() != null) {
+            List<Member> removedParticipators = memberRepository.findAllByIdIn(dto.getRemovedParticipatorIds());
+            reservationParticipateRepository.deleteAllByReservationAndMemberIn(reservation, removedParticipators);
+        }
     }
 }

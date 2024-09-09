@@ -17,7 +17,7 @@ public class AttendanceService {
     
     @Transactional(readOnly = true)
     public List<MemberResponse> findAllNotAttendedMember(Long reservationId) {
-        List<ReservationParticipate> reservationParticipates = reservationParticipateRepository.findAllByIdReservationIdAndNotAttend(reservationId);
+        List<ReservationParticipate> reservationParticipates = reservationParticipateRepository.findAllByReservationIdAndNotAttend(reservationId);
         
         return MemberResponse.fromParticipates(reservationParticipates);
     }

@@ -3,6 +3,7 @@ package Dompoo.Hongpoong.api.controller.reservation;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.api.service.AttendanceService;
 import Dompoo.Hongpoong.api.service.ReservationService;
@@ -28,8 +29,8 @@ public class ReservationController implements ReservationApi {
     
     @Secured
     @PostMapping
-    public void createReservation(@LoginUser UserClaims claims, @RequestBody @Valid ReservationCreateRequest request) {
-        reservationService.createReservation(claims.getId(), request);
+    public ReservationDetailResponse createReservation(@LoginUser UserClaims claims, @RequestBody @Valid ReservationCreateRequest request) {
+        return reservationService.createReservation(claims.getId(), request);
     }
     
     @Secured
@@ -52,7 +53,7 @@ public class ReservationController implements ReservationApi {
     
     @Secured
     @GetMapping("/{reservationId}")
-    public ReservationResponse findReservationDetail(@PathVariable Long reservationId) {
+    public ReservationDetailResponse findReservationDetail(@PathVariable Long reservationId) {
         return reservationService.findReservationDetail(reservationId);
     }
     
@@ -64,7 +65,7 @@ public class ReservationController implements ReservationApi {
     
     @Secured
     @PatchMapping("/{reservationId}")
-    public ReservationResponse editReservation(@LoginUser UserClaims claims, @PathVariable Long reservationId, @RequestBody @Valid ReservationEditRequest request) {
+    public ReservationDetailResponse editReservation(@LoginUser UserClaims claims, @PathVariable Long reservationId, @RequestBody @Valid ReservationEditRequest request) {
         return reservationService.editReservation(claims.getId(), reservationId, request.toDto(), LocalDateTime.now());
     }
     

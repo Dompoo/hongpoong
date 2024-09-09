@@ -6,6 +6,7 @@ import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentEditRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentBorrowResponse;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.api.service.InstrumentService;
+import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import Dompoo.Hongpoong.common.security.annotation.LoginUser;
 import Dompoo.Hongpoong.common.security.annotation.Secured;
@@ -63,10 +64,22 @@ public class InstrumentController implements InstrumentApi {
     public void editInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId, @RequestBody InstrumentEditRequest request) {
         service.editInstrument(claims.getId(), instrumentId, request.toDto());
     }
-
+    
     @Secured
     @DeleteMapping("/{instrumentId}")
     public void deleteInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId) {
         service.deleteInstrument(claims.getId(), instrumentId);
+    }
+    
+    @Secured(SecurePolicy.ADMIN_ONLY)
+    @PatchMapping("/manage/{instrumentId}")
+    public void editInstrumentByAdmin(@PathVariable Long instrumentId, @RequestBody InstrumentEditRequest request) {
+        service.editInstrumentByAdmin(instrumentId, request.toDto());
+    }
+    
+    @Secured(SecurePolicy.ADMIN_ONLY)
+    @DeleteMapping("/manage/{instrumentId}")
+    public void deleteInstrumentByAdmin(@PathVariable Long instrumentId) {
+        service.deleteInstrumentByAdmin(instrumentId);
     }
 }

@@ -98,8 +98,8 @@ public class InstrumentService {
     }
 
     @Transactional
-    public void editInstrument(Long memberId, Long id, InstrumentEditDto dto) {
-        Instrument instrument = instrumentRepository.findById(id)
+    public void editInstrument(Long memberId, Long instrumentId, InstrumentEditDto dto) {
+        Instrument instrument = instrumentRepository.findById(instrumentId)
                 .orElseThrow(InstrumentNotFound::new);
 
         if (!instrument.getMember().getId().equals(memberId)) throw new EditFailException();
@@ -108,12 +108,28 @@ public class InstrumentService {
     }
 
     @Transactional
-    public void deleteInstrument(Long memberId, Long id) {
-        Instrument instrument = instrumentRepository.findById(id)
+    public void deleteInstrument(Long memberId, Long instrumentId) {
+        Instrument instrument = instrumentRepository.findById(instrumentId)
                 .orElseThrow(InstrumentNotFound::new);
 
         if (!instrument.getMember().getId().equals(memberId)) throw new DeleteFailException();
 
+        instrumentRepository.delete(instrument);
+    }
+    
+    @Transactional
+    public void editInstrumentByAdmin(Long instrumentId, InstrumentEditDto dto) {
+        Instrument instrument = instrumentRepository.findById(instrumentId)
+                .orElseThrow(InstrumentNotFound::new);
+        
+        instrument.edit(dto);
+    }
+    
+    @Transactional
+    public void deleteInstrumentByAdmin(Long instrumentId) {
+        Instrument instrument = instrumentRepository.findById(instrumentId)
+                .orElseThrow(InstrumentNotFound::new);
+        
         instrumentRepository.delete(instrument);
     }
 }

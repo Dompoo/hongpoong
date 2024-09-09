@@ -13,9 +13,6 @@ import java.time.LocalTime;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(force = true)
 public class ReservationEditRequest {
-    
-    @Schema(example = "10")
-    private final Integer number;
 
     @FutureOrPresent(message = "과거 날짜일 수 없습니다.")
     @Schema(example = "2024-04-17")
@@ -32,7 +29,6 @@ public class ReservationEditRequest {
     
     public ReservationEditDto toDto() {
         return ReservationEditDto.builder()
-                .number(number)
                 .date(date)
                 .startTime(ReservationTime.from(startTime))
                 .endTime(ReservationTime.from(endTime))

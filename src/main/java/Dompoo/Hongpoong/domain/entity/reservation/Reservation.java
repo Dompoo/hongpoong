@@ -22,7 +22,6 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private Member creator;
-    private Integer number;
     private LocalDate date;
     @Enumerated(EnumType.STRING)
     private ReservationTime startTime;
@@ -33,9 +32,8 @@ public class Reservation {
     private String message;
     
     @Builder
-    private Reservation(Member creator, Integer number, LocalDate date, ReservationTime startTime, ReservationTime endTime, LocalDateTime lastModified, String message) {
+    private Reservation(Member creator, LocalDate date, ReservationTime startTime, ReservationTime endTime, LocalDateTime lastModified, String message) {
         this.creator = creator;
-        this.number = number;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -44,7 +42,6 @@ public class Reservation {
     }
     
     public void edit(ReservationEditDto dto, LocalDateTime now) {
-        if (dto.getNumber() != null) this.number = dto.getNumber();
         if (dto.getDate() != null) this.date = dto.getDate();
         if (dto.getStartTime() != null) this.startTime = dto.getStartTime();
         if (dto.getEndTime() != null) this.endTime = dto.getEndTime();

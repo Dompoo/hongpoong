@@ -27,9 +27,6 @@ public class ReservationResponse {
     @Schema(example = "email@gmail.com")
     private final String email;
     
-    @Schema(example = "10")
-    private final Integer number;
-    
     @Schema(example = "2024-04-17")
     private final LocalDate date;
     
@@ -50,7 +47,6 @@ public class ReservationResponse {
                 .reservationId(reservation.getId())
                 .username(reservation.getCreator().getName())
                 .email(reservation.getCreator().getEmail())
-                .number(reservation.getNumber())
                 .date(reservation.getDate())
                 .startTime(reservation.getStartTime().localTime)
                 .endTime(reservation.getEndTime().localTime)

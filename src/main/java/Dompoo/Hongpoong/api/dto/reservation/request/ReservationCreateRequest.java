@@ -18,10 +18,6 @@ import java.util.List;
 @NoArgsConstructor(force = true)
 public class ReservationCreateRequest {
 
-    @NotNull(message = "인원수를 입력하세요.")
-    @Schema(example = "10")
-    private final Integer number;
-
     @NotNull(message = "예약 날짜를 입력하세요.")
     @FutureOrPresent(message = "과거 날짜일 수 없습니다.")
     @Schema(example = "2024-04-17")
@@ -45,7 +41,6 @@ public class ReservationCreateRequest {
     public Reservation toReservation(Member creator) {
         return Reservation.builder()
                 .creator(creator)
-                .number(number)
                 .date(date)
                 .startTime(ReservationTime.from(startTime))
                 .endTime(ReservationTime.from(endTime))

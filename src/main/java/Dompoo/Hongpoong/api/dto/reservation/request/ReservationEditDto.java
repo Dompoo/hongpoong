@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReservationEditDto {
     
-    private final Integer number;
     private final LocalDate date;
     private final ReservationTime startTime;
     private final ReservationTime endTime;

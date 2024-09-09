@@ -19,7 +19,7 @@ import java.util.List;
 public class ReservationResponse {
     
     @Schema(example = "1")
-    private final Long id;
+    private final Long reservationId;
     
     @Schema(example = "이창근")
     private final String username;
@@ -47,7 +47,7 @@ public class ReservationResponse {
     
     public static ReservationResponse from(Reservation reservation) {
         return ReservationResponse.builder()
-                .id(reservation.getId())
+                .reservationId(reservation.getId())
                 .username(reservation.getCreator().getName())
                 .email(reservation.getCreator().getEmail())
                 .number(reservation.getNumber())

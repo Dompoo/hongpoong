@@ -3,7 +3,6 @@ package Dompoo.Hongpoong.api.dto.reservation.request;
 import Dompoo.Hongpoong.domain.entity.reservation.ReservationTime;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -22,16 +21,14 @@ public class ReservationEditRequest {
     @Schema(example = "2024-04-17")
     private final LocalDate date;
     
-    @NotBlank(message = "시작 시간을 입력하세요.")
     @Schema(example = "10:00:00")
     private final LocalTime startTime;
     
-    @NotBlank(message = "종료 시간을 입력하세요.")
     @Schema(example = "21:00:00")
     private final LocalTime endTime;
     
     @Schema(example = "산틀 정공 연습")
-    private final String message = ""; //
+    private final String message;
     
     public ReservationEditDto toDto() {
         return ReservationEditDto.builder()

@@ -148,7 +148,7 @@ class AuthServiceTest {
                 .build());
 
         AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .emailId(signUp.getId())
+                .signupId(signUp.getId())
                 .acceptResult(true)
                 .build();
 
@@ -173,7 +173,7 @@ class AuthServiceTest {
                 .build());
 
         AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .emailId(signUp.getId())
+                .signupId(signUp.getId())
                 .acceptResult(false)
                 .build();
 
@@ -197,7 +197,7 @@ class AuthServiceTest {
                 .build());
 
         AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .emailId(signUp.getId() + 1)
+                .signupId(signUp.getId() + 1)
                 .acceptResult(true)
                 .build();
 

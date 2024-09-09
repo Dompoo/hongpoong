@@ -45,7 +45,7 @@ class ChatControllerTest extends MyWebMvcTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(CHATROOM_ID))
+                .andExpect(jsonPath("$.chatroomId").value(CHATROOM_ID))
                 .andExpect(jsonPath("$.roomName").value(CHATROOM_NAME))
                 .andExpect(jsonPath("$.memberCount").value(CHATROOM_MEMBER_COUNT))
                 .andDo(print());
@@ -67,7 +67,7 @@ class ChatControllerTest extends MyWebMvcTest {
         mockMvc.perform(get("/chat"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
-                .andExpect(jsonPath("$[0].id").value(CHATROOM_ID))
+                .andExpect(jsonPath("$[0].chatroomId").value(CHATROOM_ID))
                 .andExpect(jsonPath("$[0].roomName").value(CHATROOM_NAME))
                 .andExpect(jsonPath("$[0].memberCount").value(CHATROOM_MEMBER_COUNT))
                 .andDo(print());

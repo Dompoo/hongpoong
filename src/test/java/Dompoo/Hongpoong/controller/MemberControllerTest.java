@@ -5,7 +5,6 @@ import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditRequest;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
-import Dompoo.Hongpoong.domain.enums.Role;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -25,13 +24,19 @@ class MemberControllerTest extends MyWebMvcTest {
     private final Long ID2  = 2L;
     private final String EMAIL = "dompoo@gmail.com";
     private final String EMAIL2 = "yoonH@gmail.com";
-    private final String NAME = "dompoo";
-    private final String NAME2 = "yoonH";
-    private final String PASSWORD = "1234";
+    private final String NAME = "이창근";
+    private final String NAME2 = "강윤호";
+    private final String NICKNAME = "불꽃남자";
+    private final String NICKNAME2 = "물남자";
     private final String CLUB = "산틀";
     private final String CLUB2 = "악반";
     private final String NEW_USERNAME = "dompoo2";
     private final String NEW_PASSWORD = "qwer";
+    private final Integer ENROLLMENT_NUMBER = 19;
+    private final Integer ENROLLMENT_NUMBER2 = 18;
+    private final String PROFILE_IMAGE_URL = "image.com/1";
+    private final String PROFILE_IMAGE_URL2 = "image.com/2";
+    private final Boolean PUSH_ALARM = true;
 
     //로그인 정보
     @Test
@@ -42,18 +47,24 @@ class MemberControllerTest extends MyWebMvcTest {
                 .memberId(ID)
                 .email(EMAIL)
                 .name(NAME)
-                .password(PASSWORD)
+                .nickname(NICKNAME)
                 .club(CLUB)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
+                .profileImageUrl(PROFILE_IMAGE_URL)
+                .push(PUSH_ALARM)
                 .build());
         
         //expected
         mockMvc.perform(get("/member/status"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(ID))
+                .andExpect(jsonPath("$.memberId").value(ID))
                 .andExpect(jsonPath("$.email").value(EMAIL))
-                .andExpect(jsonPath("$.username").value(NAME))
-                .andExpect(jsonPath("$.password").value(PASSWORD))
+                .andExpect(jsonPath("$.name").value(NAME))
+                .andExpect(jsonPath("$.nickname").value(NICKNAME))
                 .andExpect(jsonPath("$.club").value(CLUB))
+                .andExpect(jsonPath("$.enrollmentNumber").value(ENROLLMENT_NUMBER))
+                .andExpect(jsonPath("$.profileImageUrl").value(PROFILE_IMAGE_URL))
+                .andExpect(jsonPath("$.push").value(PUSH_ALARM))
                 .andDo(print());
     }
 
@@ -99,13 +110,19 @@ class MemberControllerTest extends MyWebMvcTest {
                         .memberId(ID)
                         .email(EMAIL)
                         .name(NAME)
+                        .nickname(NICKNAME)
                         .club(CLUB)
+                        .enrollmentNumber(ENROLLMENT_NUMBER)
+                        .profileImageUrl(PROFILE_IMAGE_URL)
                         .build(),
                 MemberResponse.builder()
                         .memberId(ID2)
                         .email(EMAIL2)
                         .name(NAME2)
+                        .nickname(NICKNAME2)
                         .club(CLUB2)
+                        .enrollmentNumber(ENROLLMENT_NUMBER2)
+                        .profileImageUrl(PROFILE_IMAGE_URL2)
                         .build()
         ));
 
@@ -113,14 +130,20 @@ class MemberControllerTest extends MyWebMvcTest {
         mockMvc.perform(get("/member"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
-                .andExpect(jsonPath("$[0].id").value(ID))
+                .andExpect(jsonPath("$[0].memberId").value(ID))
                 .andExpect(jsonPath("$[0].email").value(EMAIL))
                 .andExpect(jsonPath("$[0].name").value(NAME))
+                .andExpect(jsonPath("$[0].nickname").value(NICKNAME))
                 .andExpect(jsonPath("$[0].club").value(CLUB))
-                .andExpect(jsonPath("$[1].id").value(ID2))
+                .andExpect(jsonPath("$[0].enrollmentNumber").value(ENROLLMENT_NUMBER))
+                .andExpect(jsonPath("$[0].profileImageUrl").value(PROFILE_IMAGE_URL))
+                .andExpect(jsonPath("$[1].memberId").value(ID2))
                 .andExpect(jsonPath("$[1].email").value(EMAIL2))
                 .andExpect(jsonPath("$[1].name").value(NAME2))
+                .andExpect(jsonPath("$[1].nickname").value(NICKNAME2))
                 .andExpect(jsonPath("$[1].club").value(CLUB2))
+                .andExpect(jsonPath("$[1].enrollmentNumber").value(ENROLLMENT_NUMBER2))
+                .andExpect(jsonPath("$[1].profileImageUrl").value(PROFILE_IMAGE_URL2))
                 .andDo(print());
     }
 
@@ -142,7 +165,7 @@ class MemberControllerTest extends MyWebMvcTest {
     void editMemberRole() throws Exception {
         //given
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Role.ROLE_LEADER)
+                .role("패짱")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);

@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class CommonControllerTest extends MyWebMvcTest {
     
-    private static final Long SETTING_ID = 1L;
+    private static final Long MEMBER_ID = 1L;
     private static final boolean PUSH_ALARM = false;
 
     @Test
@@ -26,7 +26,7 @@ class CommonControllerTest extends MyWebMvcTest {
         //given
         when(commonService.findMySetting(any())).thenReturn(
                 SettingResponse.builder()
-                        .memberId(SETTING_ID)
+                        .memberId(MEMBER_ID)
                         .pushAlarm(PUSH_ALARM)
                         .build()
         );
@@ -34,7 +34,7 @@ class CommonControllerTest extends MyWebMvcTest {
         //expected
         mockMvc.perform(get("/common/setting"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(SETTING_ID))
+                .andExpect(jsonPath("$.memberId").value(MEMBER_ID))
                 .andExpect(jsonPath("$.pushAlarm").value(PUSH_ALARM))
                 .andDo(print());
     }

@@ -26,7 +26,8 @@ import java.util.List;
 import static Dompoo.Hongpoong.domain.enums.Club.HWARANG;
 import static Dompoo.Hongpoong.domain.enums.Club.SANTLE;
 import static Dompoo.Hongpoong.domain.enums.InstrumentType.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -41,6 +42,7 @@ class InstrumentServiceTest {
     @Autowired
     private ReservationRepository reservationRepository;
     
+    private static final String INSTRUMENT_TYPE = "장구";
     private static final ReservationTime START_TIME = ReservationTime.TIME_0900;
     private static final ReservationTime END_TIME = ReservationTime.TIME_1500;
 
@@ -63,7 +65,7 @@ class InstrumentServiceTest {
                 .build());
 
         InstrumentCreateRequest request = InstrumentCreateRequest.builder()
-                .type(1)
+                .type(INSTRUMENT_TYPE)
                 .build();
 
         //when
@@ -275,7 +277,7 @@ class InstrumentServiceTest {
                 .build());
 
         InstrumentEditRequest request = InstrumentEditRequest.builder()
-                .type(1)
+                .type(INSTRUMENT_TYPE)
                 .available(false)
                 .build();
 
@@ -283,64 +285,8 @@ class InstrumentServiceTest {
         service.editInstrument(me.getId(), instrument.getId(), request.toDto());
 
         //then
-        assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType().korName);
+        assertEquals(INSTRUMENT_TYPE, instrumentRepository.findAll().getFirst().getType().korName);
         assertFalse(instrumentRepository.findAll().getFirst().isAvailable());
-    }
-
-    @Test
-    @DisplayName("악기 일부 수정1")
-    void editInstrument1() {
-        //given
-        Member me = memberRepository.save(Member.builder()
-                .name("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
-                .club(SANTLE)
-                .build());
-
-        Instrument instrument = instrumentRepository.save(Instrument.builder()
-                .member(me)
-                .type(KKWANGGWARI)
-                .build());
-
-        InstrumentEditRequest request = InstrumentEditRequest.builder()
-                .available(false)
-                .build();
-
-        //when
-        service.editInstrument(me.getId(), instrument.getId(), request.toDto());
-
-        //then
-        assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType().korName);
-        assertFalse(instrumentRepository.findAll().getFirst().isAvailable());
-    }
-
-    @Test
-    @DisplayName("악기 일부 수정2")
-    void editInstrument2() {
-        //given
-        Member me = memberRepository.save(Member.builder()
-                .name("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
-                .club(SANTLE)
-                .build());
-
-        Instrument instrument = instrumentRepository.save(Instrument.builder()
-                .member(me)
-                .type(KKWANGGWARI)
-                .build());
-
-        InstrumentEditRequest request = InstrumentEditRequest.builder()
-                .type(1)
-                .build();
-
-        //when
-        service.editInstrument(me.getId(), instrument.getId(), request.toDto());
-
-        //then
-        assertEquals("꽹과리", instrumentRepository.findAll().getFirst().getType().korName);
-        assertTrue(instrumentRepository.findAll().getFirst().isAvailable());
     }
 
     @Test

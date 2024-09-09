@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -45,7 +46,7 @@ class CommonServiceTest {
 
         //then
         assertEquals(member.getId(), response.getMemberId());
-        assertFalse(response.isPushAlarm());
+        assertFalse(response.getPushAlarm());
     }
 
     @Test

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -29,7 +30,9 @@ class ReservationControllerTest extends MyWebMvcTest {
     private static final LocalDate DATE = LocalDate.of(2040, 5, 17);
     private static final String DATE_STRING = "2040-05-17";
     private static final ReservationTime START_TIME = ReservationTime.TIME_0900;
+    private static final LocalTime START_TIME_LOCALTIME = START_TIME.localTime;
     private static final ReservationTime END_TIME = ReservationTime.TIME_1130;
+    private static final LocalTime END_TIME_LOCALTIME = END_TIME.localTime;
     private static final String MESSAGE = "안녕하세용!";
     
     private static final Long RESERVATION_ID2 = 2L;
@@ -39,7 +42,9 @@ class ReservationControllerTest extends MyWebMvcTest {
     private static final LocalDate DATE2 = LocalDate.of(2040, 10, 10);
     private static final String DATE2_STRING = "2040-10-10";
     private static final ReservationTime START_TIME2 = ReservationTime.TIME_0900;
+    private static final LocalTime START_TIME2_LOCALTIME = START_TIME2.localTime;
     private static final ReservationTime END_TIME2 = ReservationTime.TIME_1130;
+    private static final LocalTime END_TIME2_LOCALTIME = END_TIME2.localTime;
     private static final String MESSAGE2 = "하이!";
     
     private static final LocalDateTime LAST_MODIFIED = LocalDateTime.of(2030, 10, 10, 10, 30);
@@ -64,8 +69,8 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .number(NUMBER)
                 .participaterIds(PARTICIPATER_IDS)
                 .date(DATE)
-                .startTime(START_TIME.strValue)
-                .endTime(END_TIME.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -87,8 +92,8 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .number(NUMBER)
                 .participaterIds(PARTICIPATER_IDS)
                 .date(LocalDate.now().minusDays(1))
-                .startTime(START_TIME.strValue)
-                .endTime(END_TIME.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -112,13 +117,13 @@ class ReservationControllerTest extends MyWebMvcTest {
     void detail() throws Exception {
         //given
         when(reservationService.findReservationDetail(any())).thenReturn(ReservationResponse.builder()
-                .id(RESERVATION_ID)
+                .reservationId(RESERVATION_ID)
                 .username(NAME)
                 .email(EMAIL)
                 .number(NUMBER)
                 .date(DATE)
-                .startTime(START_TIME.strValue)
-                .endTime(END_TIME.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .message(MESSAGE)
                 .lastmodified(LAST_MODIFIED)
                 .build());
@@ -126,13 +131,13 @@ class ReservationControllerTest extends MyWebMvcTest {
         //expected
         mockMvc.perform(get("/reservation/{id}", RESERVATION_ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(RESERVATION_ID))
+                .andExpect(jsonPath("$.reservationId").value(RESERVATION_ID))
                 .andExpect(jsonPath("$.username").value(NAME))
                 .andExpect(jsonPath("$.email").value(EMAIL))
                 .andExpect(jsonPath("$.number").value(NUMBER))
                 .andExpect(jsonPath("$.date").value(DATE_STRING))
-                .andExpect(jsonPath("$.startTime").value(START_TIME.strValue))
-                .andExpect(jsonPath("$.endTime").value(END_TIME.strValue))
+                .andExpect(jsonPath("$.startTime").value(START_TIME_LOCALTIME + ":00"))
+                .andExpect(jsonPath("$.endTime").value(END_TIME_LOCALTIME + ":00"))
                 .andExpect(jsonPath("$.message").value(MESSAGE))
                 .andExpect(jsonPath("$.lastmodified").value(LAST_MODIFIED_STRING))
                 .andDo(print());
@@ -147,21 +152,21 @@ class ReservationControllerTest extends MyWebMvcTest {
     void edit() throws Exception {
         //given
         when(reservationService.editReservation(any(), any(), any(), any())).thenReturn(ReservationResponse.builder()
-                .id(RESERVATION_ID)
+                .reservationId(RESERVATION_ID)
                 .username(NAME)
                 .email(EMAIL)
                 .number(NUMBER)
                 .date(DATE2)
-                .startTime(START_TIME2.strValue)
-                .endTime(END_TIME2.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .message(MESSAGE)
                 .lastmodified(LAST_MODIFIED)
                 .build());
         
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(DATE2)
-                .startTime(START_TIME2.strValue)
-                .endTime(END_TIME2.strValue)
+                .startTime(START_TIME2_LOCALTIME)
+                .endTime(END_TIME2_LOCALTIME)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -171,34 +176,15 @@ class ReservationControllerTest extends MyWebMvcTest {
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(RESERVATION_ID))
+                .andExpect(jsonPath("$.reservationId").value(RESERVATION_ID))
                 .andExpect(jsonPath("$.username").value(NAME))
                 .andExpect(jsonPath("$.email").value(EMAIL))
                 .andExpect(jsonPath("$.number").value(NUMBER))
                 .andExpect(jsonPath("$.date").value(DATE2_STRING))
-                .andExpect(jsonPath("$.startTime").value(START_TIME2.strValue))
-                .andExpect(jsonPath("$.endTime").value(END_TIME2.strValue))
+                .andExpect(jsonPath("$.startTime").value(START_TIME2_LOCALTIME + ":00"))
+                .andExpect(jsonPath("$.endTime").value(END_TIME2_LOCALTIME + ":00"))
                 .andExpect(jsonPath("$.message").value(MESSAGE))
                 .andExpect(jsonPath("$.lastmodified").value(LAST_MODIFIED_STRING))
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("예약 부분 수정")
-    void edit2() throws Exception {
-        //given
-        ReservationEditRequest request = ReservationEditRequest.builder()
-                .startTime(START_TIME.strValue)
-                .endTime(END_TIME.strValue)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(patch("/reservation/{id}", RESERVATION_ID)
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
                 .andDo(print());
     }
 
@@ -208,8 +194,8 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.now().minusDays(1))
-                .startTime(START_TIME.strValue)
-                .endTime(START_TIME.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -245,8 +231,8 @@ class ReservationControllerTest extends MyWebMvcTest {
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(DATE)
-                .startTime(START_TIME.strValue)
-                .endTime(END_TIME.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);

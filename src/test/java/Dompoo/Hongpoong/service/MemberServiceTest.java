@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.service;
 
+import Dompoo.Hongpoong.api.dto.member.request.MemberEditDto;
 import Dompoo.Hongpoong.api.dto.member.request.MemberEditRequest;
 import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditRequest;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
@@ -7,6 +8,7 @@ import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
 import Dompoo.Hongpoong.api.service.MemberService;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -35,10 +37,14 @@ class MemberServiceTest {
     private PasswordEncoder encoder;
 
     private static final String EMAIL = "dompoo@gmail.com";
-    private static final String USERNAME = "창근";
+    private static final String NAME = "이창근";
+    private static final String NICKNAME = "불꽃남자";
     private static final String PASSWORD = "1234";
     private static final String NEW_USERNAME = "새로운이름";
     private static final String NEW_PASSWORD = "asdf";
+    private static final Club CLUB = SANTLE;
+    private static final Integer ENROLLMENT_NUMBER = 19;
+    private static final String PROFILE_IMAGE_URL = "image.com/1";
 
     private Member member;
     
@@ -46,8 +52,8 @@ class MemberServiceTest {
     void setUp() {
         member = memberRepository.save(Member.builder()
                 .email(EMAIL)
-                .name(USERNAME)
-                .password(PASSWORD)
+                .name(NAME)
+                .password(encoder.encode(PASSWORD))
                 .club(SANTLE)
                 .build());
     }
@@ -74,7 +80,6 @@ class MemberServiceTest {
         //then
         assertEquals(response.getEmail(), EMAIL);
         assertEquals(response.getName(), NEW_USERNAME);
-        assertEquals(response.getPassword(), NEW_PASSWORD);
     }
 
     @Test
@@ -100,34 +105,21 @@ class MemberServiceTest {
     @DisplayName("멤버 정보 전체 수정")
     void editMyMember1() {
         //given
-        MemberEditRequest request = MemberEditRequest.builder()
+        MemberEditDto dto = MemberEditDto.builder()
                 .name(NEW_USERNAME)
-                .password(NEW_PASSWORD)
+                .newPassword(NEW_PASSWORD)
+                .profileImageUrl(PROFILE_IMAGE_URL)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
+                .club(CLUB)
+                .nickname(NICKNAME)
                 .build();
 
         //when
-        service.editMyMember(member.getId(), request.toDto());
+        service.editMyMember(member.getId(), dto, PASSWORD);
 
         //then
         assertEquals(memberRepository.findAll().getFirst().getEmail(), "dompoo@gmail.com");
         assertEquals(memberRepository.findAll().getFirst().getName(), NEW_USERNAME);
-        assertTrue(encoder.matches(NEW_PASSWORD, memberRepository.findAll().getFirst().getPassword()));
-    }
-
-    @Test
-    @DisplayName("멤버 정보 일부 수정")
-    void editMyMember2() {
-        //given
-        MemberEditRequest request = MemberEditRequest.builder()
-                .password(NEW_PASSWORD)
-                .build();
-
-        //when
-        service.editMyMember(member.getId(), request.toDto());
-
-        //then
-        assertEquals(memberRepository.findAll().getFirst().getEmail(), "dompoo@gmail.com");
-        assertEquals(memberRepository.findAll().getFirst().getName(), "창근");
         assertTrue(encoder.matches(NEW_PASSWORD, memberRepository.findAll().getFirst().getPassword()));
     }
 
@@ -141,7 +133,7 @@ class MemberServiceTest {
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.editMyMember(member.getId() + 1, request.toDto()));
+                () -> service.editMyMember(member.getId() + 1, request.toDto(), PASSWORD));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
@@ -186,7 +178,7 @@ class MemberServiceTest {
 
         //then
         assertEquals(2, list.size());
-        assertEquals(USERNAME, list.get(0).getName());
+        assertEquals(NAME, list.get(0).getName());
         assertEquals(NEW_USERNAME, list.get(1).getName());
     }
 
@@ -197,11 +189,11 @@ class MemberServiceTest {
         Member find = memberRepository.findAll().getFirst();
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Role.ROLE_LEADER)
+                .role(Role.ROLE_LEADER.korName)
                 .build();
 
         //when
-        service.editMemberAuth(find.getId(), request);
+        service.editMemberAuth(find.getId(), request.toDto());
 
         //then
         assertEquals(memberRepository.findAll().getFirst().getRole().name(), "ROLE_LEADER");
@@ -214,12 +206,12 @@ class MemberServiceTest {
         Member find = memberRepository.findAll().getFirst();
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Role.ROLE_LEADER)
+                .role(Role.ROLE_LEADER.korName)
                 .build();
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.editMemberAuth(find.getId() + 1, request));
+                () -> service.editMemberAuth(find.getId() + 1, request.toDto()));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");

@@ -40,7 +40,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
     void createInstrument() throws Exception {
         //given
         InstrumentCreateRequest request = InstrumentCreateRequest.builder()
-                .type(1)
+                .type(INSTRUMENT_TYPE)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -92,10 +92,10 @@ class InstrumentControllerTest extends MyWebMvcTest {
         mockMvc.perform(get("/instrument"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
-                .andExpect(jsonPath("$[0].id").value(INSTRUMENT_ID))
+                .andExpect(jsonPath("$[0].instrumentId").value(INSTRUMENT_ID))
                 .andExpect(jsonPath("$[0].club").value(INSTRUMENT_CLUB))
                 .andExpect(jsonPath("$[0].type").value(INSTRUMENT_TYPE))
-                .andExpect(jsonPath("$[1].id").value(INSTRUMENT2_ID))
+                .andExpect(jsonPath("$[1].instrumentId").value(INSTRUMENT2_ID))
                 .andExpect(jsonPath("$[1].club").value(INSTRUMENT2_CLUB))
                 .andExpect(jsonPath("$[1].type").value(INSTRUMENT2_TYPE))
                 .andDo(print());
@@ -122,10 +122,10 @@ class InstrumentControllerTest extends MyWebMvcTest {
         mockMvc.perform(get("/instrument/list"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
-                .andExpect(jsonPath("$[0].id").value(INSTRUMENT_ID))
+                .andExpect(jsonPath("$[0].instrumentId").value(INSTRUMENT_ID))
                 .andExpect(jsonPath("$[0].club").value(INSTRUMENT_CLUB))
                 .andExpect(jsonPath("$[0].type").value(INSTRUMENT_TYPE))
-                .andExpect(jsonPath("$[1].id").value(INSTRUMENT2_ID))
+                .andExpect(jsonPath("$[1].instrumentId").value(INSTRUMENT2_ID))
                 .andExpect(jsonPath("$[1].club").value(INSTRUMENT2_CLUB))
                 .andExpect(jsonPath("$[1].type").value(INSTRUMENT2_TYPE))
                 .andDo(print());
@@ -183,7 +183,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
         //expected
         mockMvc.perform(get("/instrument/{id}", INSTRUMENT_ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(INSTRUMENT_ID))
+                .andExpect(jsonPath("$.instrumentId").value(INSTRUMENT_ID))
                 .andExpect(jsonPath("$.type").value(INSTRUMENT_TYPE))
                 .andExpect(jsonPath("$.club").value(INSTRUMENT_CLUB))
                 .andDo(print());
@@ -195,7 +195,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
         //given
         InstrumentEditRequest request = InstrumentEditRequest.builder()
                 .available(true)
-                .type(1)
+                .type(INSTRUMENT_TYPE)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);

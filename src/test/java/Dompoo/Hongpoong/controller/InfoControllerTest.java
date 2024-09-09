@@ -73,10 +73,10 @@ class InfoControllerTest extends MyWebMvcTest {
         mockMvc.perform(get("/info"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
-                .andExpect(jsonPath("$.[0].id").value(ID))
+                .andExpect(jsonPath("$.[0].infoId").value(ID))
                 .andExpect(jsonPath("$.[0].title").value(TITLE))
                 .andExpect(jsonPath("$.[0].date").value(DATE_STRING))
-                .andExpect(jsonPath("$.[1].id").value(ID2))
+                .andExpect(jsonPath("$.[1].infoId").value(ID2))
                 .andExpect(jsonPath("$.[1].title").value(TITLE2))
                 .andExpect(jsonPath("$.[1].date").value(DATE2_STRING))
                 .andDo(print());
@@ -96,7 +96,7 @@ class InfoControllerTest extends MyWebMvcTest {
         //expected
         mockMvc.perform(get("/info/{id}", ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(ID))
+                .andExpect(jsonPath("$.infoId").value(ID))
                 .andExpect(jsonPath("$.title").value(TITLE))
                 .andExpect(jsonPath("$.content").value(CONTENT))
                 .andExpect(jsonPath("$.date").value(DATE_STRING))

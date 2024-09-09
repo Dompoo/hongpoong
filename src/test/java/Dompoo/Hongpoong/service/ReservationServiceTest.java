@@ -22,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,7 +39,9 @@ class ReservationServiceTest {
     
     private static final LocalDate DATE = LocalDate.now().plusDays(10);
     private static final ReservationTime START_TIME = ReservationTime.TIME_0900;
+    private static final LocalTime START_TIME_LOCALTIME = START_TIME.localTime;
     private static final ReservationTime END_TIME = ReservationTime.TIME_1500;
+    private static final LocalTime END_TIME_LOCALTIME = END_TIME.localTime;
 
     @BeforeEach
     void setUp() {
@@ -59,8 +62,8 @@ class ReservationServiceTest {
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .number(13)
                 .date(DATE)
-                .startTime(START_TIME.strValue)
-                .endTime(END_TIME.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .message("")
                 .build();
 
@@ -84,8 +87,8 @@ class ReservationServiceTest {
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .number(13)
                 .date(DATE)
-                .startTime(START_TIME.strValue)
-                .endTime(END_TIME.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .message("")
                 .build();
 
@@ -120,11 +123,11 @@ class ReservationServiceTest {
         ReservationResponse response = service.findReservationDetail(reservation.getId());
 
         //then
-        assertEquals(response.getId(), reservation.getId());
+        assertEquals(response.getReservationId(), reservation.getId());
         assertEquals(response.getUsername(), "창근");
         assertEquals(response.getDate(), DATE);
-        assertEquals(response.getStartTime(), START_TIME.strValue);
-        assertEquals(response.getEndTime(), END_TIME.strValue);
+        assertEquals(response.getStartTime(), START_TIME_LOCALTIME);
+        assertEquals(response.getEndTime(), END_TIME_LOCALTIME);
     }
 
     @Test
@@ -172,8 +175,8 @@ class ReservationServiceTest {
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(START_TIME.strValue)
-                .endTime(END_TIME.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
@@ -209,8 +212,8 @@ class ReservationServiceTest {
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(START_TIME.strValue)
-                .endTime(END_TIME.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
@@ -243,8 +246,8 @@ class ReservationServiceTest {
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(START_TIME.strValue)
-                .endTime(END_TIME.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
@@ -353,8 +356,8 @@ class ReservationServiceTest {
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(START_TIME.strValue)
-                .endTime(END_TIME.strValue)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);

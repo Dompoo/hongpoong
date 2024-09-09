@@ -25,7 +25,7 @@ class AuthControllerTest extends MyWebMvcTest {
     
     private static final String NAME = "창근";
     private static final String NICKNAME = "불꽃남자";
-    private static final Long EMAIL_ID = 1L;
+    private static final Long SIGNUP_ID = 1L;
     private static final String EMAIL = "dompoo@gmail.com";
     private static final String EMAIL2 = "yoonH@gmail.com";
     private static final Integer ENROLLMENT_NUMBER = 19;
@@ -293,7 +293,7 @@ class AuthControllerTest extends MyWebMvcTest {
     void acceptSignup() throws Exception {
         //given
         AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .emailId(EMAIL_ID)
+                .signupId(SIGNUP_ID)
                 .acceptResult(true)
                 .build();
 
@@ -312,7 +312,7 @@ class AuthControllerTest extends MyWebMvcTest {
     void acceptSignup1() throws Exception {
         //given
         AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .emailId(EMAIL_ID)
+                .signupId(SIGNUP_ID)
                 .acceptResult(false)
                 .build();
 

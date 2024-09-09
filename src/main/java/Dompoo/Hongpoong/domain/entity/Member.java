@@ -9,8 +9,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static Dompoo.Hongpoong.domain.enums.Role.USER;
-
 @Entity
 @Getter
 @Setter
@@ -51,7 +49,7 @@ public class Member {
                 .name(signUp.getPassword())
                 .nickname(signUp.getNickname())
                 .password(signUp.getPassword())
-                .role(USER)
+                .role(Role.MEMBER)
                 .club(signUp.getClub())
                 .enrollmentNumber(signUp.getEnrollmentNumber())
                 .pushAlarm(false)

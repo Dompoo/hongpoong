@@ -35,20 +35,20 @@ public interface MemberApi {
 			@Schema(hidden = true) UserClaims claims
 	);
 	
-	@Operation(summary = "[패짱] 회원 권한 수정")
+	@Operation(summary = "[패짱상쇠] 내 패원의 회원 권한 수정")
 	void editMemberRole(
 			@Schema(hidden = true) UserClaims claims,
 			@Parameter(description = "회원 id") Long memberId,
 			@RequestBody MemberRoleEditRequest request
 	);
 	
-	@Operation(summary = "[관리자] 회원 권한 수정")
+	@Operation(summary = "[의장] 회원 권한 수정")
 	void editMemberRoleByAdmin(
 			@Parameter(description = "회원 id") Long memberId,
 			@RequestBody MemberRoleEditRequest request
 	);
 	
-	@Operation(summary = "[관리자] 회원 삭제")
+	@Operation(summary = "[의장] 회원 삭제")
 	void deleteMemberByAdmin(
 			@Parameter(description = "회원 id") Long memberId
 	);

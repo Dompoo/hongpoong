@@ -16,7 +16,7 @@ public interface CommonApi {
 			@Schema(hidden = true) UserClaims claims
 	);
 	
-	@Operation(summary = "내 설정 저장")
+	@Operation(summary = "내 설정 수정")
 	void editSetting(
 			@Schema(hidden = true) UserClaims claims,
 			@RequestBody SettingEditRequest request

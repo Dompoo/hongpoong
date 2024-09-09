@@ -49,14 +49,14 @@ public interface ReservationApi {
 			@Parameter(description = "예약 id") Long reservationId
 	);
 	
-	@Operation(summary = "예약 수정")
+	@Operation(summary = "내가 등록한 예약 수정")
 	ReservationResponse editReservation(
 			@Schema(hidden = true) UserClaims claims,
 			@Parameter(description = "예약 id") Long reservationId,
 			@RequestBody ReservationEditRequest request
 	);
 	
-	@Operation(summary = "예약 삭제")
+	@Operation(summary = "내가 등록한 예약 삭제")
 	void deleteReservation(
 			@Schema(hidden = true) UserClaims claims,
 			@Parameter(description = "예약 id") Long reservationId

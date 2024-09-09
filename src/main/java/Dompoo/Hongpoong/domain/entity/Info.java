@@ -1,10 +1,7 @@
 package Dompoo.Hongpoong.domain.entity;
 
 import Dompoo.Hongpoong.api.dto.info.request.InfoEditDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -23,12 +20,17 @@ public class Info {
     private String title;
     private String content;
     private LocalDateTime date;
-
+    
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+    
     @Builder
-    private Info(String title, String content, LocalDateTime date) {
+    public Info(String title, String content, LocalDateTime date, Member member) {
         this.title = title;
         this.content = content;
         this.date = date;
+        this.member = member;
     }
     
     public void edit(InfoEditDto dto) {

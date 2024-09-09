@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.api.dto.info.request;
 
 import Dompoo.Hongpoong.domain.entity.Info;
+import Dompoo.Hongpoong.domain.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -21,11 +22,12 @@ public class InfoCreateRequest {
     @Schema(example = "안합니다.")
     private final String content;
     
-    public Info toInfo(LocalDateTime now) {
+    public Info toInfo(Member member, LocalDateTime now) {
         return Info.builder()
                 .title(title)
                 .content(content)
                 .date(now)
+                .member(member)
                 .build();
     }
 }

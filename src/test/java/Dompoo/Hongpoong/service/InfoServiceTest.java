@@ -7,7 +7,10 @@ import Dompoo.Hongpoong.api.dto.info.response.InfoResponse;
 import Dompoo.Hongpoong.api.service.InfoService;
 import Dompoo.Hongpoong.common.exception.impl.InfoNotFound;
 import Dompoo.Hongpoong.domain.entity.Info;
+import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.repository.InfoRepository;
+import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,13 +27,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @ActiveProfiles("test")
 class InfoServiceTest {
-
-
+    
     @Autowired
     private InfoService service;
 
     @Autowired
-    private InfoRepository repository;
+    private InfoRepository infoRepository;
+    
+    @Autowired
+    private MemberRepository memberRepository;
 
     //info 서비스의 여러 메서드를 테스트하는 코드 작성
 
@@ -38,10 +43,11 @@ class InfoServiceTest {
     private static final String CONTENT = "공지사항 내용";
     private static final String NEW_TITLE = "새로운 공지사항 제목";
     private static final String NEW_CONTENT = "새로운 공지사항 내용";
-
+    
     @AfterEach
-    void setUp() {
-        repository.deleteAllInBatch();
+    void tearDown() {
+        infoRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
     }
 
     //공지사항 추가 테스트
@@ -49,19 +55,27 @@ class InfoServiceTest {
     @DisplayName("공지사항 추가")
     void addOne() {
         //given
+        Member member = memberRepository.save(Member.builder()
+                .name("이창근")
+                .nickname("불꽃남자")
+                .role(Role.LEADER)
+                .enrollmentNumber(19)
+                .build());
+        
         InfoCreateRequest request = InfoCreateRequest.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build();
+        
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
         
         //when
-        service.createInfo(request, now);
+        service.createInfo(member.getId(), request, now);
 
         //then
-        assertEquals(1, repository.count());
-        assertEquals(TITLE, repository.findAll().get(0).getTitle());
-        assertEquals(CONTENT, repository.findAll().get(0).getContent());
+        assertEquals(1, infoRepository.count());
+        assertEquals(TITLE, infoRepository.findAll().get(0).getTitle());
+        assertEquals(CONTENT, infoRepository.findAll().get(0).getContent());
     }
 
     //공지사항 전체 조회 테스트
@@ -69,12 +83,12 @@ class InfoServiceTest {
     @DisplayName("공지사항 전체 조회")
     void findAll() {
         //given
-        repository.save(Info.builder()
+        infoRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
 
-        repository.save(Info.builder()
+        infoRepository.save(Info.builder()
                 .title(NEW_TITLE)
                 .content(NEW_CONTENT)
                 .build());
@@ -93,7 +107,7 @@ class InfoServiceTest {
     @DisplayName("공지사항 상세 조회")
     void findOne() {
         //given
-        Info save = repository.save(Info.builder()
+        Info save = infoRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
@@ -111,7 +125,7 @@ class InfoServiceTest {
     @DisplayName("존재하지 않는 공지사항 상세 조회")
     void findOneFail() {
         //given
-        Info save = repository.save(Info.builder()
+        Info save = infoRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
@@ -129,9 +143,17 @@ class InfoServiceTest {
     @DisplayName("공지사항 수정")
     void edit() {
         //given
-        Info save = repository.save(Info.builder()
+        Member member = memberRepository.save(Member.builder()
+                .name("이창근")
+                .nickname("불꽃남자")
+                .role(Role.LEADER)
+                .enrollmentNumber(19)
+                .build());
+        
+        Info info = infoRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
+                .member(member)
                 .build());
 
         InfoEditRequest request = InfoEditRequest.builder()
@@ -140,11 +162,11 @@ class InfoServiceTest {
                 .build();
 
         //when
-        service.editInfo(save.getId(), request.toDto());
+        service.editInfo(member.getId(), info.getId(), request.toDto());
 
         //then
-        assertEquals(NEW_TITLE, repository.findAll().get(0).getTitle());
-        assertEquals(NEW_CONTENT, repository.findAll().get(0).getContent());
+        assertEquals(NEW_TITLE, infoRepository.findById(info.getId()).get().getTitle());
+        assertEquals(NEW_CONTENT, infoRepository.findById(info.getId()).get().getContent());
     }
 
     //공지사항 수정 실패 테스트
@@ -152,18 +174,18 @@ class InfoServiceTest {
     @DisplayName("존재하지 않는 공지사항 수정")
     void editFail1() {
         //given
-        repository.save(Info.builder()
+        Info info = infoRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
-
+        
         InfoEditRequest request = InfoEditRequest.builder()
                 .title(NEW_TITLE)
                 .content(NEW_CONTENT)
                 .build();
 
         //when
-        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.editInfo(2L, request.toDto()));
+        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.editInfo(1L, 2L, request.toDto()));
 
         //then
         assertEquals("존재하지 않는 공지사항입니다.", e.getMessage());
@@ -175,16 +197,24 @@ class InfoServiceTest {
     @DisplayName("공지사항 삭제")
     void delete() {
         //given
-        Info info = repository.save(Info.builder()
+        Member member = memberRepository.save(Member.builder()
+                .name("이창근")
+                .nickname("불꽃남자")
+                .role(Role.LEADER)
+                .enrollmentNumber(19)
+                .build());
+        
+        Info info = infoRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
+                .member(member)
                 .build());
 
         //when
-        service.deleteInfo(info.getId());
+        service.deleteInfo(member.getId(), info.getId());
 
         //then
-        assertEquals(0, repository.count());
+        assertEquals(0, infoRepository.count());
     }
 
     //공지사항 삭제 실패 테스트
@@ -192,13 +222,20 @@ class InfoServiceTest {
     @DisplayName("존재하지 않는 공지사항 삭제")
     void deleteFail() {
         //given
-        repository.save(Info.builder()
+        Member member = memberRepository.save(Member.builder()
+                .name("이창근")
+                .nickname("불꽃남자")
+                .role(Role.LEADER)
+                .enrollmentNumber(19)
+                .build());
+        
+        infoRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
 
         //when
-        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.deleteInfo(2L));
+        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.deleteInfo(member.getId(), 2L));
 
         //then
         assertEquals("존재하지 않는 공지사항입니다.", e.getMessage());

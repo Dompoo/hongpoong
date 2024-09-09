@@ -5,10 +5,7 @@ import Dompoo.Hongpoong.api.dto.member.request.MemberEditDto;
 import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditDto;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -27,7 +24,9 @@ public class Member {
     private String name;
     private String nickname;
     private String password;
+    @Enumerated(EnumType.STRING)
     private Role role;
+    @Enumerated(EnumType.STRING)
     private Club club;
     private Integer enrollmentNumber;
     private String profileImageUrl;

@@ -15,7 +15,6 @@ public class ReservationParticipate {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
 	private Boolean attend;
 	
 	@ManyToOne

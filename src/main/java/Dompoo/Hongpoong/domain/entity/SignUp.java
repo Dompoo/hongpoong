@@ -1,10 +1,7 @@
 package Dompoo.Hongpoong.domain.entity;
 
 import Dompoo.Hongpoong.domain.enums.Club;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -20,6 +17,7 @@ public class SignUp {
     private String name;
     private String nickname;
     private String password;
+    @Enumerated(EnumType.STRING)
     private Club club;
     private Integer enrollmentNumber;
     

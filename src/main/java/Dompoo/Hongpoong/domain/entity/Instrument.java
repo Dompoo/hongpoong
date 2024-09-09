@@ -15,9 +15,8 @@ public class Instrument {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Enumerated(EnumType.STRING)
     private InstrumentType type;
-
     private boolean available;
 
     @ManyToOne

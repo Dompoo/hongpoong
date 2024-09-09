@@ -1,9 +1,11 @@
 package Dompoo.Hongpoong.common.security;
 
 public enum SecurePolicy {
-	ALL_MEMBER,
+	MEMBER,
+	LEADER_PRIMARY,
+	LEADER,
+	ADMIN_LEADER_PRIMARY,
 	ADMIN_LEADER,
-	LEADER_ONLY,
-	ADMIN_ONLY,
+	ADMIN,
 	;
 }

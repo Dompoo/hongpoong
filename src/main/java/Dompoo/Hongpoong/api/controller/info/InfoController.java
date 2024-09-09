@@ -40,25 +40,25 @@ public class InfoController implements InfoApi {
         return service.findInfoDetail(infoId);
     }
 
-    @Secured(SecurePolicy.LEADER_ONLY)
+    @Secured(SecurePolicy.LEADER)
     @PutMapping("/{infoId}")
     public void editInfo(@LoginUser UserClaims claims, @PathVariable Long infoId, @RequestBody InfoEditRequest request) {
         service.editInfo(claims.getId(), infoId, request.toDto());
     }
 
-    @Secured(SecurePolicy.LEADER_ONLY)
+    @Secured(SecurePolicy.LEADER)
     @DeleteMapping("/{infoId}")
     public void deleteInfo(@LoginUser UserClaims claims, @PathVariable Long infoId) {
         service.deleteInfo(claims.getId(), infoId);
     }
     
-    @Secured(SecurePolicy.ADMIN_ONLY)
+    @Secured(SecurePolicy.ADMIN)
     @PutMapping("/manage/{infoId}")
     public void editInfoByAdmin(@PathVariable Long infoId, @RequestBody InfoEditRequest request) {
         service.editInfoByAdmin(infoId, request.toDto());
     }
     
-    @Secured(SecurePolicy.ADMIN_ONLY)
+    @Secured(SecurePolicy.ADMIN)
     @DeleteMapping("/manage/{infoId}")
     public void deleteInfoByAdmin(@PathVariable Long infoId) {
         service.deleteInfoByAdmin(infoId);

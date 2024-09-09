@@ -74,7 +74,7 @@ public class ReservationController implements ReservationApi {
         reservationService.deleteReservation(claims.getId(), reservationId);
     }
 
-    @Secured(SecurePolicy.ADMIN_ONLY)
+    @Secured(SecurePolicy.ADMIN)
     @PatchMapping("/manage/{reservationId}")
     public void edit(@PathVariable Long reservationId, @RequestBody @Valid ReservationEditRequest request) {
         reservationService.edit(reservationId, request.toDto(), LocalDateTime.now());

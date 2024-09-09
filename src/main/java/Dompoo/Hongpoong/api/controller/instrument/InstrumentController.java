@@ -23,7 +23,7 @@ public class InstrumentController implements InstrumentApi {
     
     private final InstrumentService service;
     
-    @Secured
+    @Secured(SecurePolicy.ADMIN_LEADER_PRIMARY)
     @PostMapping
     public void createInstrument(@LoginUser UserClaims claims, @RequestBody @Valid InstrumentCreateRequest request) {
         service.createInstrument(claims.getId(), request);
@@ -59,25 +59,25 @@ public class InstrumentController implements InstrumentApi {
         return service.findInstrumentDetail(instrumentId);
     }
 
-    @Secured
+    @Secured(SecurePolicy.LEADER_PRIMARY)
     @PatchMapping("/{instrumentId}")
     public void editInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId, @RequestBody InstrumentEditRequest request) {
         service.editInstrument(claims.getId(), instrumentId, request.toDto());
     }
     
-    @Secured
+    @Secured(SecurePolicy.LEADER_PRIMARY)
     @DeleteMapping("/{instrumentId}")
     public void deleteInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId) {
         service.deleteInstrument(claims.getId(), instrumentId);
     }
     
-    @Secured(SecurePolicy.ADMIN_ONLY)
+    @Secured(SecurePolicy.ADMIN)
     @PatchMapping("/manage/{instrumentId}")
     public void editInstrumentByAdmin(@PathVariable Long instrumentId, @RequestBody InstrumentEditRequest request) {
         service.editInstrumentByAdmin(instrumentId, request.toDto());
     }
     
-    @Secured(SecurePolicy.ADMIN_ONLY)
+    @Secured(SecurePolicy.ADMIN)
     @DeleteMapping("/manage/{instrumentId}")
     public void deleteInstrumentByAdmin(@PathVariable Long instrumentId) {
         service.deleteInstrumentByAdmin(instrumentId);

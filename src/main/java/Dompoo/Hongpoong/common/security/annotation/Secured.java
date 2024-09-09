@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Secured {
-	SecurePolicy value() default SecurePolicy.ALL_MEMBER;
+	SecurePolicy value() default SecurePolicy.MEMBER;
 }

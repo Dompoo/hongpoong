@@ -8,6 +8,7 @@ import Dompoo.Hongpoong.api.service.InfoService;
 import Dompoo.Hongpoong.common.exception.impl.InfoNotFound;
 import Dompoo.Hongpoong.domain.entity.Info;
 import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.repository.InfoRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
@@ -148,6 +149,7 @@ class InfoServiceTest {
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
                 .enrollmentNumber(19)
+                .club(Club.SANTLE)
                 .build());
         
         Info info = infoRepository.save(Info.builder()
@@ -202,6 +204,7 @@ class InfoServiceTest {
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
                 .enrollmentNumber(19)
+                .club(Club.SANTLE)
                 .build());
         
         Info info = infoRepository.save(Info.builder()

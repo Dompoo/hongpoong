@@ -201,7 +201,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(put("/instrument/{id}", INSTRUMENT_ID)
+        mockMvc.perform(patch("/instrument/{id}", INSTRUMENT_ID)
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())

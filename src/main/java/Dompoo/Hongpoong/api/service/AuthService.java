@@ -63,8 +63,8 @@ public class AuthService {
     }
     
     @Transactional
-    public void acceptSignUp(AcceptSignUpRequest request) {
-        SignUp signUp = signUpRepository.findById(request.getSignupId())
+    public void acceptSignUp(Long signupId, AcceptSignUpRequest request) {
+        SignUp signUp = signUpRepository.findById(signupId)
                 .orElseThrow(SignUpNotFound::new);
 
         if (request.getAcceptResult()) {

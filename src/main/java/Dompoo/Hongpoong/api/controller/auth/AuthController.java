@@ -39,14 +39,14 @@ public class AuthController implements AuthApi {
     }
 
     @Secured(SecurePolicy.ADMIN)
-    @PostMapping("/signup/accept")
-    public void acceptSignup(@RequestBody @Valid AcceptSignUpRequest request) {
-        service.acceptSignUp(request);
-    }
-    
-    @Secured(SecurePolicy.ADMIN)
     @GetMapping("/signup")
     public List<SignUpResponse> findAllSignup() {
         return service.findAllSignup();
+    }
+    
+    @Secured(SecurePolicy.ADMIN)
+    @PostMapping("/signup/{signupId}")
+    public void acceptSignup(@PathVariable Long signupId, @RequestBody @Valid AcceptSignUpRequest request) {
+        service.acceptSignUp(signupId, request);
     }
 }

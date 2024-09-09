@@ -8,6 +8,7 @@ import Dompoo.Hongpoong.api.dto.auth.response.EmailValidResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.SignUpResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -31,11 +32,12 @@ public interface AuthApi {
 			@RequestBody LoginRequest request
 	);
 	
-	@Operation(summary = "[관리자] 회원가입 요청 승인")
-	void acceptSignup(
-			@RequestBody AcceptSignUpRequest request
-	);
-	
 	@Operation(summary = "[관리자] 회원가입 요청 리스트 조회")
 	List<SignUpResponse> findAllSignup();
+	
+	@Operation(summary = "[관리자] 회원가입 요청 승인")
+	void acceptSignup(
+			@Parameter(description = "회원가입 요청 id") Long signupId,
+			@RequestBody AcceptSignUpRequest request
+	);
 }

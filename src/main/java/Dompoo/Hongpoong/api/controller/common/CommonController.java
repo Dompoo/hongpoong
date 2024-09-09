@@ -23,7 +23,7 @@ public class CommonController implements CommonApi {
     }
 
     @Secured
-    @PostMapping("/setting")
+    @PatchMapping("/setting")
     public void editSetting(@LoginUser UserClaims claims, @RequestBody SettingEditRequest request) {
         service.editSetting(claims.getId(), request.toDto());
     }

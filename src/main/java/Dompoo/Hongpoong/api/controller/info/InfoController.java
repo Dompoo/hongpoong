@@ -41,7 +41,7 @@ public class InfoController implements InfoApi {
     }
 
     @Secured(SecurePolicy.LEADER)
-    @PutMapping("/{infoId}")
+    @PatchMapping("/{infoId}")
     public void editInfo(@LoginUser UserClaims claims, @PathVariable Long infoId, @RequestBody InfoEditRequest request) {
         service.editInfo(claims.getId(), infoId, request.toDto());
     }
@@ -53,7 +53,7 @@ public class InfoController implements InfoApi {
     }
     
     @Secured(SecurePolicy.ADMIN)
-    @PutMapping("/manage/{infoId}")
+    @PatchMapping("/manage/{infoId}")
     public void editInfoByAdmin(@PathVariable Long infoId, @RequestBody InfoEditRequest request) {
         service.editInfoByAdmin(infoId, request.toDto());
     }

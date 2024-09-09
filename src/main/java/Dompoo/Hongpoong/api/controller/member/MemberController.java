@@ -35,7 +35,7 @@ public class MemberController implements MemberApi {
     }
     
     @Secured
-    @PutMapping
+    @PatchMapping
     public void editMyMember(@LoginUser UserClaims claims, @RequestBody @Valid MemberEditRequest request) {
         service.editMyMember(claims.getId(), request.toDto(), request.getPassword());
     }

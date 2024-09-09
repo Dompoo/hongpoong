@@ -33,6 +33,9 @@ public class MemberResponse {
     @Schema(example = "19")
     private final Integer enrollmentNumber;
     
+    @Schema(example = "패짱")
+    private final String role;
+    
     @Schema(example = "image.com/1")
     private final String profileImageUrl;
     
@@ -44,6 +47,7 @@ public class MemberResponse {
                 .nickname(member.getNickname())
                 .club(member.getClub().korName)
                 .enrollmentNumber(member.getEnrollmentNumber())
+                .club(member.getClub().korName)
                 .profileImageUrl(member.getProfileImageUrl())
                 .build();
     }

@@ -30,6 +30,9 @@ public class MemberStatusResponse {
     @Schema(example = "19")
     private final Integer enrollmentNumber;
     
+    @Schema(example = "패짱")
+    private final String role;
+    
     @Schema(example = "image.com/1")
     private final String profileImageUrl;
     
@@ -44,6 +47,7 @@ public class MemberStatusResponse {
                 .nickname(member.getNickname())
                 .club(member.getClub().korName)
                 .enrollmentNumber(member.getEnrollmentNumber())
+                .role(member.getRole().korName)
                 .profileImageUrl(member.getProfileImageUrl())
                 .push(member.isPushAlarm())
                 .build();

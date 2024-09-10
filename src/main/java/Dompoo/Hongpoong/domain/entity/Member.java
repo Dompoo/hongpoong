@@ -11,37 +11,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Member {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String email;
+    
     private String name;
+    
     private String nickname;
+    
     private String password;
+    
     @Enumerated(EnumType.STRING)
     private Role role;
+    
     @Enumerated(EnumType.STRING)
     private Club club;
-    private Integer enrollmentNumber;
-    private String profileImageUrl;
-    private boolean pushAlarm;
     
-    @Builder
-    private Member(String email, String name, String nickname, String password, Role role, Club club, Integer enrollmentNumber, String profileImageUrl, boolean pushAlarm) {
-        this.email = email;
-        this.name = name;
-        this.nickname = nickname;
-        this.password = password;
-        this.role = role;
-        this.club = club;
-        this.enrollmentNumber = enrollmentNumber;
-        this.profileImageUrl = profileImageUrl;
-        this.pushAlarm = pushAlarm;
-    }
+    private Integer enrollmentNumber;
+    
+    private String profileImageUrl;
+    
+    private boolean pushAlarm;
     
     public static Member from(SignUp signUp) {
         return Member.builder()

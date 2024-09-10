@@ -7,34 +7,37 @@ import lombok.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Instrument {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     @Enumerated(EnumType.STRING)
     private InstrumentType type;
+    
     private boolean available;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
+    @ManyToOne @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne
-    @JoinColumn(name = "reservation_id")
+    @ManyToOne @JoinColumn(name = "reservation_id")
     private Reservation reservation;
-
-    @Builder
-    private Instrument(InstrumentType type, Member member, boolean available) {
-        setMember(member);
-        this.type = type;
-        this.available = available;
-    }
     
     public void edit(InstrumentEditDto dto) {
         if (dto.getType() != null) this.type = dto.getType();
         if (dto.getAvailable() != null) this.available = dto.getAvailable();
+    }
+    
+    public void borrowInstrument(Reservation reservation) {
+        this.reservation = reservation;
+        this.available = false;
+    }
+    
+    public void returnInstrument() {
+        this.reservation = null;
+        this.available = true;
     }
 }

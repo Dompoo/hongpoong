@@ -38,7 +38,10 @@ public class ChatService {
         ChatRoom savedRoom = chatRoomRepository.save(request.toChatRoom());
         
         memberInChatRoomRepository.saveAll(members.stream()
-                .map(member -> new MemberInChatRoom(member, savedRoom))
+                .map(member -> MemberInChatRoom.builder()
+                        .member(member)
+                        .chatRoom(savedRoom)
+                        .build())
                 .toList());
         
         return ChatRoomResponse.of(savedRoom);

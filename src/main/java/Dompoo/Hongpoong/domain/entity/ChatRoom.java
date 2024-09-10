@@ -4,27 +4,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatRoom {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String roomName;
-    private int memberCount;
     
-    @Builder
-    private ChatRoom(String roomName, int memberCount) {
-        this.roomName = roomName;
-        this.memberCount = memberCount;
-    }
+    private String roomName;
+    
+    private int memberCount;
     
     public void reduceMemberCount() {
         this.memberCount--;

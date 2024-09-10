@@ -309,14 +309,13 @@ class InstrumentServiceTest {
                 .endTime(END_TIME)
                 .message("")
                 .build());
-
+        
         Instrument instrument = instrumentRepository.save(Instrument.builder()
                 .member(other)
                 .type(KKWANGGWARI)
+                .reservation(reservation)
                 .build());
-
-        instrument.setReservation(reservation);
-
+        
         //when
         service.returnInstrument(instrument.getId());
 

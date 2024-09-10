@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.domain.entity;
 
-
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import jakarta.persistence.*;
@@ -11,35 +10,29 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Reservation {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "creator_id")
-    private Member creator;
+    
     private LocalDate date;
+    
     @Enumerated(EnumType.STRING)
     private ReservationTime startTime;
+    
     @Enumerated(EnumType.STRING)
     private ReservationTime endTime;
+    
     private LocalDateTime lastModified;
+    
     @Lob
     private String message;
     
-    @Builder
-    private Reservation(Member creator, LocalDate date, ReservationTime startTime, ReservationTime endTime, LocalDateTime lastModified, String message) {
-        this.creator = creator;
-        this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.lastModified = lastModified;
-        this.message = message;
-    }
+    @ManyToOne @JoinColumn(name = "creator_id")
+    private Member creator;
     
     public void edit(ReservationEditDto dto, LocalDateTime now) {
         if (dto.getDate() != null) this.date = dto.getDate();

@@ -74,8 +74,7 @@ public class InstrumentService {
         // 악기가 이미 대여중이면 throw
         if (!instrument.isAvailable()) throw new InstrumentNotAvailable();
 
-        instrument.setReservation(reservation);
-        instrument.setAvailable(false);
+        instrument.borrowInstrument(reservation);
 
         return InstrumentBorrowResponse.from(instrument);
     }
@@ -85,8 +84,7 @@ public class InstrumentService {
         Instrument instrument = instrumentRepository.findById(id)
                 .orElseThrow(InstrumentNotFound::new);
 
-        instrument.setReservation(null);
-        instrument.setAvailable(true);
+        instrument.returnInstrument();
     }
 
     @Transactional(readOnly = true)

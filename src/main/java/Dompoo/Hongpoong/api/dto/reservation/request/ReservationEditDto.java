@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.reservation.request;
 
-import Dompoo.Hongpoong.domain.entity.reservation.ReservationTime;
+import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

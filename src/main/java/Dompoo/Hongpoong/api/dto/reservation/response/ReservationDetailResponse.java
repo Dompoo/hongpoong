@@ -2,7 +2,7 @@ package Dompoo.Hongpoong.api.dto.reservation.response;
 
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
+import Dompoo.Hongpoong.domain.entity.Reservation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

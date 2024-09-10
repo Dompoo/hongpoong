@@ -1,8 +1,8 @@
-package Dompoo.Hongpoong.domain.entity.reservation;
+package Dompoo.Hongpoong.domain.entity;
 
 
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
-import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import jakarta.persistence.*;
 import lombok.*;
 

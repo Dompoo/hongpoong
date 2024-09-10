@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.domain.entity;
 
-import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
 import jakarta.persistence.*;
 import lombok.*;
 

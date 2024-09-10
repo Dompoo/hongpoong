@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.domain.entity.reservation;
+package Dompoo.Hongpoong.domain.enums;
 
 import Dompoo.Hongpoong.common.exception.impl.EndForwardStart;
 import Dompoo.Hongpoong.common.exception.impl.ReservationTimeException;

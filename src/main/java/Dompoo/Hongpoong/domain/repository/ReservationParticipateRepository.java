@@ -1,8 +1,8 @@
 package Dompoo.Hongpoong.domain.repository;
 
 import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
-import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

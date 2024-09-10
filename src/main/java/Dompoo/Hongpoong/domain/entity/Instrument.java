@@ -19,6 +19,8 @@ public class Instrument {
     private InstrumentType type;
     
     private boolean available;
+    
+    private String imageUrl;
 
     @ManyToOne @JoinColumn(name = "member_id")
     private Member member;
@@ -29,6 +31,7 @@ public class Instrument {
     public void edit(InstrumentEditDto dto) {
         if (dto.getType() != null) this.type = dto.getType();
         if (dto.getAvailable() != null) this.available = dto.getAvailable();
+        if (dto.getImageUrl() != null) this.imageUrl = dto.getImageUrl();
     }
     
     public void borrowInstrument(Reservation reservation) {

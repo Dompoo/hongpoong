@@ -16,10 +16,14 @@ public class InstrumentEditRequest {
     @Schema(example = "true")
     private final Boolean available;
     
+    @Schema(example = "image.com/1")
+    private final String imageUrl;
+    
     public InstrumentEditDto toDto() {
         return InstrumentEditDto.builder()
                 .type(InstrumentType.from(type))
                 .available(available)
+                .imageUrl(imageUrl)
                 .build();
     }
 }

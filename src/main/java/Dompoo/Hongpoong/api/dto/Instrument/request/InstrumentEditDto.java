@@ -13,4 +13,5 @@ public class InstrumentEditDto {
 
     private final InstrumentType type;
     private final Boolean available;
+    private final String imageUrl;
 }

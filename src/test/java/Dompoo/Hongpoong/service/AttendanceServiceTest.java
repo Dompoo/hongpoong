@@ -9,6 +9,7 @@ import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,13 @@ class AttendanceServiceTest {
 	private MemberRepository memberRepository;
 	@Autowired
 	private ReservationRepository reservationRepository;
+	
+	@AfterEach
+	void tearDown() {
+		reservationParticipateRepository.deleteAllInBatch();
+		reservationRepository.deleteAllInBatch();
+		memberRepository.deleteAllInBatch();
+	}
 	
 	@Test
 	@DisplayName("한 예약의 참가자 조회")

@@ -9,7 +9,9 @@ import Dompoo.Hongpoong.common.exception.impl.*;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
 import Dompoo.Hongpoong.domain.entity.reservation.ReservationTime;
+import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +37,8 @@ class ReservationServiceTest {
     private ReservationRepository reservationRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private ReservationParticipateRepository reservationParticipateRepository;
     
     private static final LocalDate DATE = LocalDate.now().plusDays(10);
     private static final LocalDate DATE2 = DATE.plusMonths(1);
@@ -42,9 +46,10 @@ class ReservationServiceTest {
     private static final LocalTime START_TIME_LOCALTIME = START_TIME.localTime;
     private static final ReservationTime END_TIME = ReservationTime.TIME_1500;
     private static final LocalTime END_TIME_LOCALTIME = END_TIME.localTime;
-
+    
     @BeforeEach
     void setUp() {
+        reservationParticipateRepository.deleteAllInBatch();
         reservationRepository.deleteAllInBatch();
         memberRepository.deleteAllInBatch();
     }
@@ -57,6 +62,7 @@ class ReservationServiceTest {
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
+                .club(Club.SANTLE)
                 .build());
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()

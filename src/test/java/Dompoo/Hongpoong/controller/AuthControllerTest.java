@@ -2,8 +2,10 @@ package Dompoo.Hongpoong.controller;
 
 import Dompoo.Hongpoong.api.dto.auth.request.AcceptSignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.EmailValidRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.LoginRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.SignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.response.EmailValidResponse;
+import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.SignUpResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import Dompoo.Hongpoong.domain.enums.Club;
@@ -309,6 +311,72 @@ class AuthControllerTest extends MyWebMvcTest {
                         .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("[학번은 비어있을 수 없습니다.]"))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("로그인")
+    void login() throws Exception {
+        //given
+        when(authService.login(any())).thenReturn(LoginResponse.builder().token("token").build());
+        
+        LoginRequest request = LoginRequest.builder()
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").value("token"))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("로그인 요청시 email은 필수값이다.")
+    void loginFail1() throws Exception {
+        //given
+        when(authService.login(any())).thenReturn(LoginResponse.builder().token("token").build());
+        
+        LoginRequest request = LoginRequest.builder()
+                .password(PASSWORD)
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("[이메일을 입력해주세요.]"))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("로그인 요청시 password는 필수값이다.")
+    void loginFail2() throws Exception {
+        //given
+        when(authService.login(any())).thenReturn(LoginResponse.builder().token("token").build());
+        
+        LoginRequest request = LoginRequest.builder()
+                .email(EMAIL)
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("[비밀번호를 입력해주세요.]"))
                 .andDo(print());
     }
     

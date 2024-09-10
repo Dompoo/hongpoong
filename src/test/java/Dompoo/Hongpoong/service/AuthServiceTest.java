@@ -2,11 +2,14 @@ package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.api.dto.auth.request.AcceptSignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.EmailValidRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.LoginRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.SignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.response.EmailValidResponse;
+import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.SignUpResponse;
 import Dompoo.Hongpoong.api.service.AuthService;
 import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
+import Dompoo.Hongpoong.common.exception.impl.LoginFailException;
 import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.SignUp;
@@ -161,6 +164,49 @@ class AuthServiceTest {
         //then
         assertEquals(e.statusCode(), "400");
         assertEquals(e.getMessage(), ALREADY_EXIST_EMAIL);
+    }
+    
+    @Test
+    @DisplayName("로그인")
+    void login() {
+        //given
+        memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .password(encoder.encode(PASSWORD))
+                .build());
+        
+        LoginRequest request = LoginRequest.builder()
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
+        
+        //when
+        LoginResponse response = service.login(request);
+        
+        //then
+        assertNotNull(response.getToken());
+    }
+    
+    @Test
+    @DisplayName("존재하지 않는 회원 로그인")
+    void loginFail() {
+        //given
+        memberRepository.save(Member.builder()
+                .email(EMAIL)
+                .password(encoder.encode(PASSWORD))
+                .build());
+        
+        LoginRequest request = LoginRequest.builder()
+                .email("잘못된 이메일")
+                .password(PASSWORD)
+                .build();
+        
+        //when
+        LoginFailException e = assertThrows(LoginFailException.class, () -> service.login(request));
+        
+        //then
+        assertEquals("400", e.statusCode());
+        assertEquals("이메일 또는 비밀번호가 잘못되었습니다.", e.getMessage());
     }
 
     @Test

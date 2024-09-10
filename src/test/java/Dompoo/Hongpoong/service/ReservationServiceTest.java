@@ -292,6 +292,120 @@ class ReservationServiceTest {
         assertEquals(e.getMessage(), "존재하지 않는 예약입니다.");
         assertEquals(e.statusCode(), "404");
     }
+    
+    @Test
+    @DisplayName("예약 시간 연장")
+    void extend() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .name("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .build());
+        
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .build());
+        
+        LocalTime now = END_TIME_LOCALTIME.minusMinutes(25);
+        
+        //when
+        service.extendReservationTime(member.getId(), reservation.getId(), now);
+        
+        //then
+        Reservation editedReservation = reservationRepository.findById(reservation.getId()).get();
+        assertEquals(ReservationTime.from(END_TIME.localTime.plusMinutes(30)), editedReservation.getEndTime());
+    }
+    
+    @Test
+    @DisplayName("예약 시간 연장은 예약자만 가능하다.")
+    void extendFail3() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .name("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .build());
+        
+        Member anotherMember = memberRepository.save(Member.builder()
+                .name("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .build());
+        
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .build());
+        
+        LocalTime now = END_TIME_LOCALTIME.minusMinutes(35);
+        
+        //when
+        EditFailException e = assertThrows(EditFailException.class, () -> service.extendReservationTime(anotherMember.getId(), reservation.getId(), now));
+        
+        //then
+        assertEquals("403", e.statusCode());
+        assertEquals("수정할 수 없습니다.", e.getMessage());
+    }
+    
+    @Test
+    @DisplayName("예약 시간 연장은 종료 30분 전에만 가능하다.")
+    void extendFail1() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .name("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .build());
+        
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .build());
+        
+        LocalTime now = END_TIME_LOCALTIME.minusMinutes(35);
+        
+        //when
+        TimeExtendNotAvailableException e = assertThrows(TimeExtendNotAvailableException.class, () -> service.extendReservationTime(member.getId(), reservation.getId(), now));
+        
+        //then
+        assertEquals("400", e.statusCode());
+        assertEquals("시간 연장은 연습 종료 30분 전에만 가능합니다.", e.getMessage());
+    }
+    
+    @Test
+    @DisplayName("예약 시간 연장은 연습 종료 후에 불가능하다.")
+    void extendFail2() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .name("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .build());
+        
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .build());
+        
+        LocalTime now = END_TIME_LOCALTIME.plusMinutes(1);
+        
+        //when
+        TimeExtendNotAvailableException e = assertThrows(TimeExtendNotAvailableException.class, () -> service.extendReservationTime(member.getId(), reservation.getId(), now));
+        
+        //then
+        assertEquals("400", e.statusCode());
+        assertEquals("시간 연장은 연습 종료 30분 전에만 가능합니다.", e.getMessage());
+    }
 
     @Test
     @DisplayName("예약 수정")

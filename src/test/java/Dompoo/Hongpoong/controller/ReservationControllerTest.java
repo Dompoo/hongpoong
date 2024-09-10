@@ -301,7 +301,18 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .andExpect(jsonPath("$[1].isAttended").value(false))
                 .andDo(print());
     }
-
+    
+    @Test
+    @DisplayName("예약 시간 연장")
+    void extendReservationTime() throws Exception {
+        //given
+        
+        //expected
+        mockMvc.perform(patch("/reservation/{id}/extend", RESERVATION_ID))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    
     @Test
     @DisplayName("예약 수정")
     void editReservation() throws Exception {

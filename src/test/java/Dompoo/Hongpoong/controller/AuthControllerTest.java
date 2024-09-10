@@ -63,6 +63,7 @@ class AuthControllerTest extends MyWebMvcTest {
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
                 .name(NAME)
+                .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
                 .nickname(NICKNAME)
@@ -85,6 +86,7 @@ class AuthControllerTest extends MyWebMvcTest {
         //given
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
+                .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
                 .nickname(NICKNAME)
@@ -108,6 +110,7 @@ class AuthControllerTest extends MyWebMvcTest {
         //given
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
+                .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
                 .nickname(NICKNAME)
@@ -124,6 +127,55 @@ class AuthControllerTest extends MyWebMvcTest {
                 .andExpect(jsonPath("$.message").value("[이름은 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
+    
+    @Test
+    @DisplayName("회원가입 요청시 패명은 비어있을 수 없다.")
+    void requestSignupFail9() throws Exception {
+        //given
+        SignUpRequest request = SignUpRequest.builder()
+                .email(EMAIL)
+                .name(NAME)
+                .password(PASSWORD)
+                .club(CLUB.korName)
+                .nickname(NICKNAME)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[패명은 비어있을 수 없습니다.]"))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("회원가입 요청시 패명은 공백일 수 없다.")
+    void requestSignupFail10() throws Exception {
+        //given
+        SignUpRequest request = SignUpRequest.builder()
+                .email(EMAIL)
+                .name(NAME)
+                .nickname(" ")
+                .password(PASSWORD)
+                .club(CLUB.korName)
+                .nickname(NICKNAME)
+                .enrollmentNumber(ENROLLMENT_NUMBER)
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[패명은 비어있을 수 없습니다.]"))
+                .andDo(print());
+    }
 
     @Test
     @DisplayName("회원가입 요청시 비밀번호는 비어있을 수 없다.")
@@ -132,6 +184,7 @@ class AuthControllerTest extends MyWebMvcTest {
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
                 .name(NAME)
+                .nickname(NICKNAME)
                 .club(CLUB.korName)
                 .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
@@ -154,6 +207,7 @@ class AuthControllerTest extends MyWebMvcTest {
         //given
         SignUpRequest request = SignUpRequest.builder()
                 .name(NAME)
+                .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
                 .nickname(NICKNAME)
@@ -178,6 +232,7 @@ class AuthControllerTest extends MyWebMvcTest {
         SignUpRequest request = SignUpRequest.builder()
                 .email("abc")
                 .name(NAME)
+                .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
                 .nickname(NICKNAME)
@@ -202,6 +257,7 @@ class AuthControllerTest extends MyWebMvcTest {
         SignUpRequest request = SignUpRequest.builder()
                 .email(" ")
                 .name(NAME)
+                .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
                 .nickname(NICKNAME)
@@ -226,6 +282,7 @@ class AuthControllerTest extends MyWebMvcTest {
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
                 .name(NAME)
+                .nickname(NICKNAME)
                 .password(PASSWORD)
                 .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
@@ -249,6 +306,7 @@ class AuthControllerTest extends MyWebMvcTest {
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
                 .name(NAME)
+                .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
                 .nickname(NICKNAME)
@@ -272,6 +330,7 @@ class AuthControllerTest extends MyWebMvcTest {
         SignUpRequest request = SignUpRequest.builder()
                 .email(EMAIL)
                 .name(NAME)
+                .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
@@ -287,45 +346,7 @@ class AuthControllerTest extends MyWebMvcTest {
                 .andExpect(jsonPath("$.message").value("[패명은 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
-
-    @Test
-    @DisplayName("회원가입 요청 승인")
-    void acceptSignup() throws Exception {
-        //given
-        AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .signupId(SIGNUP_ID)
-                .acceptResult(true)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(post("/auth/signup/accept")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("회원가입 요청 거절")
-    void acceptSignup1() throws Exception {
-        //given
-        AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .signupId(SIGNUP_ID)
-                .acceptResult(false)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        //expected
-        mockMvc.perform(post("/auth/signup/accept")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
+    
     @Test
     @DisplayName("회원가입 요청 리스트 조회")
     void findAllSignup() throws Exception {
@@ -344,6 +365,42 @@ class AuthControllerTest extends MyWebMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].email").value(EMAIL))
                 .andExpect(jsonPath("$[1].email").value(EMAIL2))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("회원가입 요청 승인")
+    void acceptSignup() throws Exception {
+        //given
+        AcceptSignUpRequest request = AcceptSignUpRequest.builder()
+                .acceptResult(true)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/auth/signup/{id}", SIGNUP_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원가입 요청 거절")
+    void acceptSignup1() throws Exception {
+        //given
+        AcceptSignUpRequest request = AcceptSignUpRequest.builder()
+                .acceptResult(false)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(post("/auth/signup/{id}", SIGNUP_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }

@@ -110,7 +110,7 @@ class AuthServiceTest {
     }
 
     @Test
-    @DisplayName("회원가입 요청시 이메일은 중복되면 안된다.")
+    @DisplayName("회원가입 요청시 이메일은 기존 회원과 중복되면 안된다.")
     void requestSignupFail4() {
         //given
         memberRepository.save(Member.builder()
@@ -135,6 +135,33 @@ class AuthServiceTest {
         assertEquals(e.statusCode(), "400");
         assertEquals(e.getMessage(), ALREADY_EXIST_EMAIL);
     }
+    
+    @Test
+    @DisplayName("회원가입 요청시 이메일은 기존 회원가입 요청과 중복되면 안된다.")
+    void requestSignupFail5() {
+        //given
+        signUpRepository.save(SignUp.builder()
+                .email(EMAIL)
+                .name(USERNAME)
+                .password(PASSWORD)
+                .club(SANTLE)
+                .build());
+        
+        SignUpRequest request = SignUpRequest.builder()
+                .email(EMAIL)
+                .name(USERNAME)
+                .password(PASSWORD)
+                .club(CLUB.korName)
+                .build();
+        
+        //when
+        AlreadyExistEmail e = assertThrows(AlreadyExistEmail.class, () ->
+                service.requestSignup(request));
+        
+        //then
+        assertEquals(e.statusCode(), "400");
+        assertEquals(e.getMessage(), ALREADY_EXIST_EMAIL);
+    }
 
     @Test
     @DisplayName("회원가입 요청 승인")
@@ -148,12 +175,11 @@ class AuthServiceTest {
                 .build());
 
         AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .signupId(signUp.getId())
                 .acceptResult(true)
                 .build();
 
         //when
-        service.acceptSignUp(request);
+        service.acceptSignUp(signUp.getId(), request);
 
         //then
         assertEquals(0, signUpRepository.findAll().size());
@@ -173,12 +199,11 @@ class AuthServiceTest {
                 .build());
 
         AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .signupId(signUp.getId())
                 .acceptResult(false)
                 .build();
 
         //when
-        service.acceptSignUp(request);
+        service.acceptSignUp(signUp.getId(), request);
 
         //then
         assertEquals(0, signUpRepository.findAll().size());
@@ -197,13 +222,12 @@ class AuthServiceTest {
                 .build());
 
         AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .signupId(signUp.getId() + 1)
                 .acceptResult(true)
                 .build();
 
         //when
         SignUpNotFound e = assertThrows(SignUpNotFound.class, () ->
-                service.acceptSignUp(request));
+                service.acceptSignUp(signUp.getId() + 1, request));
 
         //then
         assertEquals("존재하지 않는 회원가입 요청입니다.", e.getMessage());

@@ -28,10 +28,10 @@ public class Instrument {
     private Reservation reservation;
 
     @Builder
-    public Instrument(InstrumentType type, Member member) {
+    private Instrument(InstrumentType type, Member member, boolean available) {
         setMember(member);
         this.type = type;
-        this.available = true;
+        this.available = available;
     }
     
     public void edit(InstrumentEditDto dto) {

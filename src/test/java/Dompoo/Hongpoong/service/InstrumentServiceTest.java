@@ -6,6 +6,8 @@ import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentEditRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentBorrowResponse;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.api.service.InstrumentService;
+import Dompoo.Hongpoong.common.exception.impl.InstrumentNotAvailable;
+import Dompoo.Hongpoong.common.exception.impl.InstrumentNotFound;
 import Dompoo.Hongpoong.domain.entity.Instrument;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
@@ -14,6 +16,7 @@ import Dompoo.Hongpoong.domain.repository.InstrumentRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,9 +174,10 @@ class InstrumentServiceTest {
                 .endTime(END_TIME)
                 .message("")
                 .build());
-
+        
         Instrument instrument = instrumentRepository.save(Instrument.builder()
                 .member(other)
+                .available(true)
                 .type(KKWANGGWARI)
                 .build());
 
@@ -190,6 +194,94 @@ class InstrumentServiceTest {
         assertEquals(instrument.getId(), response.getInstrumentId());
         assertEquals(LocalDate.of(2025, 12, 20), response.getReturnDate());
         assertEquals(END_TIME.localTime, response.getReturnTime());
+    }
+    
+    @Test
+    @DisplayName("존재하지 않는 악기 빌리기")
+    void borrowFail1() {
+        //given
+        Member me = memberRepository.save(Member.builder()
+                .name("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .club(SANTLE)
+                .build());
+        
+        Member other = memberRepository.save(Member.builder()
+                .name("윤호")
+                .email("yoonH@naver.com")
+                .password("qwer")
+                .club(HWARANG)
+                .build());
+        
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .creator(me)
+                .date(LocalDate.of(2025, 12, 20))
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .message("")
+                .build());
+        
+        Instrument instrument = instrumentRepository.save(Instrument.builder()
+                .member(other)
+                .type(KKWANGGWARI)
+                .build());
+        
+        InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
+                .reservationId(reservation.getId())
+                .instrumentId(instrument.getId() + 1)
+                .build();
+        
+        //when
+        InstrumentNotFound e = Assertions.assertThrows(InstrumentNotFound.class, () -> service.borrowInstrument(me.getId(), request));
+        
+        //then
+        assertEquals(e.statusCode(), "404");
+        assertEquals(e.getMessage(), "존재하지 않는 악기입니다.");
+    }
+    
+    @Test
+    @DisplayName("빌릴 수 없는 악기 빌리기")
+    void borrowFail2() {
+        //given
+        Member me = memberRepository.save(Member.builder()
+                .name("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .club(SANTLE)
+                .build());
+        
+        Member other = memberRepository.save(Member.builder()
+                .name("윤호")
+                .email("yoonH@naver.com")
+                .password("qwer")
+                .club(HWARANG)
+                .build());
+        
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .creator(me)
+                .date(LocalDate.of(2025, 12, 20))
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .message("")
+                .build());
+        
+        Instrument instrument = instrumentRepository.save(Instrument.builder()
+                .member(other)
+                .type(KKWANGGWARI)
+                .build());
+        
+        InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
+                .reservationId(reservation.getId())
+                .instrumentId(instrument.getId())
+                .build();
+        
+        //when
+        InstrumentNotAvailable e = Assertions.assertThrows(InstrumentNotAvailable.class, () -> service.borrowInstrument(me.getId(), request));
+        
+        //then
+        assertEquals(e.statusCode(), "400");
+        assertEquals(e.getMessage(), "빌릴 수 없는 악기입니다.");
     }
 
     @Test

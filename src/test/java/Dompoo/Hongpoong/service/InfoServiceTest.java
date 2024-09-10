@@ -117,6 +117,7 @@ class InfoServiceTest {
         InfoDetailResponse info = service.findInfoDetail(save.getId());
 
         //then
+        assertEquals(save.getId(), info.getInfoId());
         assertEquals(TITLE, info.getTitle());
         assertEquals(CONTENT, info.getContent());
     }
@@ -240,6 +241,70 @@ class InfoServiceTest {
         //when
         InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.deleteInfo(member.getId(), 2L));
 
+        //then
+        assertEquals("존재하지 않는 공지사항입니다.", e.getMessage());
+        assertEquals("404", e.statusCode());
+    }
+    
+    //어드민 공지사항 수정 테스트
+    @Test
+    @DisplayName("어드민 공지사항 수정")
+    void editByAdmin() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .name("이창근")
+                .nickname("불꽃남자")
+                .role(Role.LEADER)
+                .enrollmentNumber(19)
+                .club(Club.SANTLE)
+                .build());
+        
+        Info info = infoRepository.save(Info.builder()
+                .title(TITLE)
+                .content(CONTENT)
+                .member(member)
+                .build());
+        
+        InfoEditRequest request = InfoEditRequest.builder()
+                .title(NEW_TITLE)
+                .content(NEW_CONTENT)
+                .build();
+        
+        //when
+        service.editInfoByAdmin(info.getId(), request.toDto());
+        
+        //then
+        assertEquals(NEW_TITLE, infoRepository.findById(info.getId()).get().getTitle());
+        assertEquals(NEW_CONTENT, infoRepository.findById(info.getId()).get().getContent());
+    }
+    
+    //어드민 공지사항 수정 실패 테스트
+    @Test
+    @DisplayName("어드민 존재하지 않는 공지사항 수정")
+    void editByAdminFail1() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .name("이창근")
+                .nickname("불꽃남자")
+                .role(Role.LEADER)
+                .enrollmentNumber(19)
+                .club(Club.SANTLE)
+                .build());
+        
+        Info info = infoRepository.save(Info.builder()
+                .title(TITLE)
+                .content(CONTENT)
+                .member(member)
+                .build());
+        
+        InfoEditRequest request = InfoEditRequest.builder()
+                .title(NEW_TITLE)
+                .content(NEW_CONTENT)
+                .build();
+        
+        //when
+        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.editInfoByAdmin(info.getId(), request.toDto()));
+        
         //then
         assertEquals("존재하지 않는 공지사항입니다.", e.getMessage());
         assertEquals("404", e.statusCode());

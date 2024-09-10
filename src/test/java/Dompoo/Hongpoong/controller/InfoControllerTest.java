@@ -104,8 +104,8 @@ class InfoControllerTest extends MyWebMvcTest {
     }
 
     @Test
-    @DisplayName("공지사항 전체 수정")
-    void editOne() throws Exception {
+    @DisplayName("리더의 공지사항 수정")
+    void editInfo() throws Exception {
         //given
         InfoEditRequest request = InfoEditRequest.builder()
                 .title(NEW_TITLE)
@@ -123,31 +123,42 @@ class InfoControllerTest extends MyWebMvcTest {
     }
 
     @Test
-    @DisplayName("공지사항 일부 수정")
-    void editOne1() throws Exception {
+    @DisplayName("리더의 공지사항 삭제")
+    void deleteInfo() throws Exception {
         //given
-        InfoEditRequest request = InfoEditRequest.builder()
-                .content(NEW_CONTENT)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(put("/info/{id}", ID)
+        mockMvc.perform(delete("/info/{id}", ID))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("공지사항 수정")
+    void editInfoByAdmin() throws Exception {
+        //given
+        InfoEditRequest request = InfoEditRequest.builder()
+                .title(NEW_TITLE)
+                .content(NEW_CONTENT)
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(put("/info/manage/{id}", ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
-
-    //공지사항 삭제 테스트 추가
+    
     @Test
     @DisplayName("공지사항 삭제")
-    void deleteOne() throws Exception {
+    void deleteInfoByAdmin() throws Exception {
         //given
-
+        
         //expected
-        mockMvc.perform(delete("/info/{id}", ID))
+        mockMvc.perform(delete("/info/manage/{id}", ID))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

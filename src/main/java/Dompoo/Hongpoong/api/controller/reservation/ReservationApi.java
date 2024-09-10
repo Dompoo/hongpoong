@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.controller.reservation;
 
-import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
+import Dompoo.Hongpoong.api.dto.attendance.AttendanceResponse;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
@@ -45,8 +45,8 @@ public interface ReservationApi {
 			@Parameter(description = "예약 id") Long reservationId
 	);
 	
-	@Operation(summary = "특정 예약에 참석하지 않은 회원 조회")
-	List<MemberResponse> findAllNotAttendedMember(
+	@Operation(summary = "특정 예약의 회원 참석여부 전체 조회")
+	List<AttendanceResponse> findAttendance(
 			@Parameter(description = "예약 id") Long reservationId
 	);
 	

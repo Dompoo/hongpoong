@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.controller.reservation;
 
-import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
+import Dompoo.Hongpoong.api.dto.attendance.AttendanceResponse;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
@@ -59,8 +59,8 @@ public class ReservationController implements ReservationApi {
     
     @Secured
     @GetMapping("/{reservationId}/attendance")
-    public List<MemberResponse> findAllNotAttendedMember(@PathVariable Long reservationId) {
-        return attendanceService.findAllNotAttendedMember(reservationId);
+    public List<AttendanceResponse> findAttendance(@PathVariable Long reservationId) {
+        return attendanceService.findAttendance(reservationId);
     }
     
     @Secured

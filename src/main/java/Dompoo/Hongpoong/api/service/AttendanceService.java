@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.service;
 
-import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
+import Dompoo.Hongpoong.api.dto.attendance.AttendanceResponse;
 import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,9 @@ public class AttendanceService {
     private final ReservationParticipateRepository reservationParticipateRepository;
     
     @Transactional(readOnly = true)
-    public List<MemberResponse> findAllNotAttendedMember(Long reservationId) {
-        List<ReservationParticipate> reservationParticipates = reservationParticipateRepository.findAllByReservationIdAndNotAttend(reservationId);
+    public List<AttendanceResponse> findAttendance(Long reservationId) {
+        List<ReservationParticipate> reservationParticipates = reservationParticipateRepository.findAllByReservationIdJoinFetchMember(reservationId);
         
-        return MemberResponse.fromParticipates(reservationParticipates);
+        return AttendanceResponse.fromList(reservationParticipates);
     }
 }

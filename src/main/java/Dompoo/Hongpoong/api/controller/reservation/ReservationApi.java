@@ -64,8 +64,13 @@ public interface ReservationApi {
 	);
 	
 	@Operation(summary = "[관리자] 예약 수정")
-	void edit(
+	void editReservationByAdmin(
 			@Parameter(description = "예약 id") Long reservationId,
 			@RequestBody ReservationEditRequest request
+	);
+	
+	@Operation(summary = "[관리자] 예약 삭제")
+	void deleteReservationByAdmin(
+			@Parameter(description = "예약 id") Long reservationId
 	);
 }

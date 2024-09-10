@@ -107,10 +107,17 @@ public class ReservationService {
     }
     
     @Transactional
-    public void edit(Long reservationId, ReservationEditDto dto, LocalDateTime now) {
+    public void editReservationByAdmin(Long reservationId, ReservationEditDto dto, LocalDateTime now) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
 
         reservation.edit(dto, now);
+    }
+    
+    @Transactional
+    public void deleteReservationByAdmin(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        
+        reservationRepository.delete(reservation);
     }
     
     private void updateAddedParticipators(ReservationEditDto dto, Reservation reservation) {

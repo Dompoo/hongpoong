@@ -77,7 +77,13 @@ public class ReservationController implements ReservationApi {
 
     @Secured(SecurePolicy.ADMIN)
     @PatchMapping("/manage/{reservationId}")
-    public void edit(@PathVariable Long reservationId, @RequestBody @Valid ReservationEditRequest request) {
-        reservationService.edit(reservationId, request.toDto(), LocalDateTime.now());
+    public void editReservationByAdmin(@PathVariable Long reservationId, @RequestBody @Valid ReservationEditRequest request) {
+        reservationService.editReservationByAdmin(reservationId, request.toDto(), LocalDateTime.now());
+    }
+    
+    @Secured(SecurePolicy.ADMIN)
+    @DeleteMapping("/manage/{reservationId}")
+    public void deleteReservationByAdmin(@PathVariable Long reservationId) {
+        reservationService.deleteReservationByAdmin(reservationId);
     }
 }

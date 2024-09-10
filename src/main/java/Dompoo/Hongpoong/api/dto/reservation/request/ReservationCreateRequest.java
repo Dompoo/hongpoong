@@ -18,20 +18,20 @@ import java.util.List;
 @NoArgsConstructor(force = true)
 public class ReservationCreateRequest {
 
-    @NotNull(message = "예약 날짜를 입력하세요.")
+    @NotNull(message = "예약 날짜는 비어있을 수 없습니다.")
     @FutureOrPresent(message = "과거 날짜일 수 없습니다.")
     @Schema(example = "2024-04-17")
     private final LocalDate date;
 
-    @NotNull(message = "시작 시간을 입력하세요.")
+    @NotNull(message = "시작 시간은 비어있을 수 없습니다.")
     @Schema(example = "10:00:00")
     private final LocalTime startTime;
 
-    @NotNull(message = "종료 시간을 입력하세요.")
+    @NotNull(message = "종료 시간은 비어있을 수 없습니다.")
     @Schema(example = "21:00:00")
     private final LocalTime endTime;
     
-    @NotNull(message = "참가자를 입력하세요.")
+    @NotNull(message = "참가자는 비어있을 수 없습니다.")
     @Schema(example = "{1, 2, 3}")
     private final List<Long> participaterIds;
     

@@ -134,7 +134,7 @@ class MemberControllerTest extends MyWebMvcTest {
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(put("/member")
+        mockMvc.perform(patch("/member")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())

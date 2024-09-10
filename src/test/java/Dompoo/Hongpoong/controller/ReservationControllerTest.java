@@ -30,6 +30,8 @@ class ReservationControllerTest extends MyWebMvcTest {
     private static final String NAME = "창근";
     private static final String EMAIL = "dompoo@gmail.com";
     private static final LocalDate DATE = LocalDate.of(2040, 5, 17);
+    private static final String DATE_YEAR = "2040";
+    private static final String DATE_MONTH = "5";
     private static final String DATE_STRING = "2040-05-17";
     private static final ReservationTime START_TIME = ReservationTime.TIME_0900;
     private static final LocalTime START_TIME_LOCALTIME = START_TIME.localTime;
@@ -42,9 +44,9 @@ class ReservationControllerTest extends MyWebMvcTest {
     private static final String EMAIL2 = "yoonH@gmail.com";
     private static final LocalDate DATE2 = LocalDate.of(2040, 10, 10);
     private static final String DATE2_STRING = "2040-10-10";
-    private static final ReservationTime START_TIME2 = ReservationTime.TIME_0900;
+    private static final ReservationTime START_TIME2 = ReservationTime.TIME_1000;
     private static final LocalTime START_TIME2_LOCALTIME = START_TIME2.localTime;
-    private static final ReservationTime END_TIME2 = ReservationTime.TIME_1130;
+    private static final ReservationTime END_TIME2 = ReservationTime.TIME_1200;
     private static final LocalTime END_TIME2_LOCALTIME = END_TIME2.localTime;
     private static final String MESSAGE2 = "하이!";
     
@@ -165,7 +167,7 @@ class ReservationControllerTest extends MyWebMvcTest {
                         .content(json)
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("[예약날짜는 비어있을 수 없습니다.]"))
+                .andExpect(jsonPath("$.message").value("[예약 날짜는 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
     
@@ -200,14 +202,13 @@ class ReservationControllerTest extends MyWebMvcTest {
 
         //expected
         mockMvc.perform(get("/reservation/year-month")
-                        .queryParam("year", String.valueOf(DATE.getYear()))
-                        .queryParam("month", String.valueOf(DATE.getMonth()))
+                        .queryParam("year", DATE_YEAR)
+                        .queryParam("month", DATE_MONTH)
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].reservationId").value(RESERVATION_ID))
-                .andExpect(jsonPath("$[0].username").value(NAME))
-                .andExpect(jsonPath("$[0].email").value(EMAIL))
+                .andExpect(jsonPath("$[0].creatorName").value(NAME))
                 .andExpect(jsonPath("$[0].date").value(DATE_STRING))
                 .andExpect(jsonPath("$[0].startTime").value(START_TIME_LOCALTIME + ":00"))
                 .andExpect(jsonPath("$[0].endTime").value(END_TIME_LOCALTIME + ":00"))
@@ -229,8 +230,7 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].reservationId").value(RESERVATION_ID))
-                .andExpect(jsonPath("$[0].username").value(NAME))
-                .andExpect(jsonPath("$[0].email").value(EMAIL))
+                .andExpect(jsonPath("$[0].creatorName").value(NAME))
                 .andExpect(jsonPath("$[0].date").value(DATE_STRING))
                 .andExpect(jsonPath("$[0].startTime").value(START_TIME_LOCALTIME + ":00"))
                 .andExpect(jsonPath("$[0].endTime").value(END_TIME_LOCALTIME + ":00"))
@@ -250,8 +250,7 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(1))
                 .andExpect(jsonPath("$[0].reservationId").value(RESERVATION_ID))
-                .andExpect(jsonPath("$[0].username").value(NAME))
-                .andExpect(jsonPath("$[0].email").value(EMAIL))
+                .andExpect(jsonPath("$[0].creatorName").value(NAME))
                 .andExpect(jsonPath("$[0].date").value(DATE_STRING))
                 .andExpect(jsonPath("$[0].startTime").value(START_TIME_LOCALTIME + ":00"))
                 .andExpect(jsonPath("$[0].endTime").value(END_TIME_LOCALTIME + ":00"))
@@ -269,16 +268,15 @@ class ReservationControllerTest extends MyWebMvcTest {
         //expected
         mockMvc.perform(get("/reservation/{id}", RESERVATION_ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(1))
-                .andExpect(jsonPath("$[0].reservationId").value(RESERVATION_ID))
-                .andExpect(jsonPath("$[0].username").value(NAME))
-                .andExpect(jsonPath("$[0].email").value(EMAIL))
-                .andExpect(jsonPath("$[0].date").value(DATE_STRING))
-                .andExpect(jsonPath("$[0].startTime").value(START_TIME_LOCALTIME + ":00"))
-                .andExpect(jsonPath("$[0].endTime").value(END_TIME_LOCALTIME + ":00"))
-                .andExpect(jsonPath("$[0].message").value(MESSAGE))
-                .andExpect(jsonPath("$[0].lastmodified").value(LAST_MODIFIED_STRING))
-                .andExpect(jsonPath("$[0].participators.size()").value(2))
+                .andExpect(jsonPath("$.reservationId").value(RESERVATION_ID))
+                .andExpect(jsonPath("$.creatorName").value(NAME))
+                .andExpect(jsonPath("$.email").value(EMAIL))
+                .andExpect(jsonPath("$.date").value(DATE_STRING))
+                .andExpect(jsonPath("$.startTime").value(START_TIME_LOCALTIME + ":00"))
+                .andExpect(jsonPath("$.endTime").value(END_TIME_LOCALTIME + ":00"))
+                .andExpect(jsonPath("$.message").value(MESSAGE))
+                .andExpect(jsonPath("$.lastmodified").value(LAST_MODIFIED_STRING))
+                .andExpect(jsonPath("$.participators.size()").value(2))
                 .andDo(print());
     }
     
@@ -308,7 +306,7 @@ class ReservationControllerTest extends MyWebMvcTest {
     @DisplayName("예약 수정")
     void editReservation() throws Exception {
         //given
-        when(reservationService.editReservation(any(), any(), any(), any())).thenReturn(getReservationDetailResponse());
+        when(reservationService.editReservation(any(), any(), any(), any())).thenReturn(getReservationEditedDetailResponse());
         
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(DATE2)
@@ -324,7 +322,7 @@ class ReservationControllerTest extends MyWebMvcTest {
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.reservationId").value(RESERVATION_ID))
-                .andExpect(jsonPath("$.username").value(NAME))
+                .andExpect(jsonPath("$.creatorName").value(NAME))
                 .andExpect(jsonPath("$.email").value(EMAIL))
                 .andExpect(jsonPath("$.date").value(DATE2_STRING))
                 .andExpect(jsonPath("$.startTime").value(START_TIME2_LOCALTIME + ":00"))
@@ -415,9 +413,31 @@ class ReservationControllerTest extends MyWebMvcTest {
         return ReservationDetailResponse.builder()
                 .reservationId(RESERVATION_ID)
                 .creatorName(NAME)
+                .email(EMAIL)
                 .date(DATE)
                 .startTime(START_TIME_LOCALTIME)
                 .endTime(END_TIME_LOCALTIME)
+                .message(MESSAGE)
+                .lastmodified(LAST_MODIFIED)
+                .participators(List.of(
+                        MemberResponse.builder()
+                                .name(NAME)
+                                .build(),
+                        MemberResponse.builder()
+                                .name("윤호")
+                                .build()
+                ))
+                .build();
+    }
+    
+    private static ReservationDetailResponse getReservationEditedDetailResponse() {
+        return ReservationDetailResponse.builder()
+                .reservationId(RESERVATION_ID)
+                .creatorName(NAME)
+                .email(EMAIL)
+                .date(DATE2)
+                .startTime(START_TIME2_LOCALTIME)
+                .endTime(END_TIME2_LOCALTIME)
                 .message(MESSAGE)
                 .lastmodified(LAST_MODIFIED)
                 .participators(List.of(

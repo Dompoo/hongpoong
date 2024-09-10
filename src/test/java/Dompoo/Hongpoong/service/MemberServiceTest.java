@@ -200,7 +200,7 @@ class MemberServiceTest {
         service.editMemberAuth(me.getId(), target.getId(), request.toDto());
         
         //then
-        assertEquals(memberRepository.findAll().getFirst().getRole().name(), "LEADER");
+        assertEquals(memberRepository.findById(target.getId()).get().getRole(), Role.LEADER);
     }
     
     @Test
@@ -246,7 +246,7 @@ class MemberServiceTest {
         
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.deleteMember(me.getId(), target.getId()));
+                () -> service.deleteMember(me.getId(), target.getId() + 1));
         
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
@@ -257,7 +257,7 @@ class MemberServiceTest {
     @DisplayName("어드민 회원 권한 변경")
     void editMemberAuthByAdmin() {
         //given
-        Member find = memberRepository.findAll().getFirst();
+        Member find = memberRepository.save(buildMember());
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
                 .role(Role.LEADER.korName)
@@ -274,7 +274,7 @@ class MemberServiceTest {
     @DisplayName("어드민 존재하지 않는 회원 권한 변경")
     void editMemberAuthByAdminFail() {
         //given
-        Member find = memberRepository.findAll().getFirst();
+        Member find = memberRepository.save(buildMember());
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
                 .role(Role.LEADER.korName)
@@ -299,7 +299,7 @@ class MemberServiceTest {
         service.deleteMemberByAdmin(target.getId());
         
         //then
-        assertEquals(memberRepository.findAll().size(), 1);
+        assertEquals(memberRepository.findAll().size(), 0);
     }
     
     @Test
@@ -310,7 +310,7 @@ class MemberServiceTest {
         
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.deleteMemberByAdmin(target.getId()));
+                () -> service.deleteMemberByAdmin(target.getId() + 1));
         
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");

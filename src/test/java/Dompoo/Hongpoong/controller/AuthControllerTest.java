@@ -66,7 +66,6 @@ class AuthControllerTest extends MyWebMvcTest {
                 .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
-                .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -89,7 +88,6 @@ class AuthControllerTest extends MyWebMvcTest {
                 .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
-                .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -113,7 +111,6 @@ class AuthControllerTest extends MyWebMvcTest {
                 .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
-                .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -137,7 +134,6 @@ class AuthControllerTest extends MyWebMvcTest {
                 .name(NAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
-                .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
         
@@ -162,7 +158,6 @@ class AuthControllerTest extends MyWebMvcTest {
                 .nickname(" ")
                 .password(PASSWORD)
                 .club(CLUB.korName)
-                .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
         
@@ -186,7 +181,6 @@ class AuthControllerTest extends MyWebMvcTest {
                 .name(NAME)
                 .nickname(NICKNAME)
                 .club(CLUB.korName)
-                .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -210,7 +204,6 @@ class AuthControllerTest extends MyWebMvcTest {
                 .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
-                .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -235,7 +228,6 @@ class AuthControllerTest extends MyWebMvcTest {
                 .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
-                .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -260,7 +252,6 @@ class AuthControllerTest extends MyWebMvcTest {
                 .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
-                .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -284,7 +275,6 @@ class AuthControllerTest extends MyWebMvcTest {
                 .name(NAME)
                 .nickname(NICKNAME)
                 .password(PASSWORD)
-                .nickname(NICKNAME)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -309,7 +299,6 @@ class AuthControllerTest extends MyWebMvcTest {
                 .nickname(NICKNAME)
                 .password(PASSWORD)
                 .club(CLUB.korName)
-                .nickname(NICKNAME)
                 .build();
         
         String json = objectMapper.writeValueAsString(request);
@@ -320,30 +309,6 @@ class AuthControllerTest extends MyWebMvcTest {
                         .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("[학번은 비어있을 수 없습니다.]"))
-                .andDo(print());
-    }
-    
-    @Test
-    @DisplayName("회원가입 요청시 패명이 비어있을 수 없다.")
-    void requestSignupFail13() throws Exception {
-        //given
-        SignUpRequest request = SignUpRequest.builder()
-                .email(EMAIL)
-                .name(NAME)
-                .nickname(NICKNAME)
-                .password(PASSWORD)
-                .club(CLUB.korName)
-                .enrollmentNumber(ENROLLMENT_NUMBER)
-                .build();
-        
-        String json = objectMapper.writeValueAsString(request);
-        
-        //expected
-        mockMvc.perform(post("/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("[패명은 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
     

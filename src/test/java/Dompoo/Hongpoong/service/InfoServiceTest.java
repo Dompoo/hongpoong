@@ -303,7 +303,7 @@ class InfoServiceTest {
                 .build();
         
         //when
-        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.editInfoByAdmin(info.getId(), request.toDto()));
+        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.editInfoByAdmin(info.getId() + 1, request.toDto()));
         
         //then
         assertEquals("존재하지 않는 공지사항입니다.", e.getMessage());

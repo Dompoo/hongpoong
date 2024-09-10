@@ -199,9 +199,8 @@ class InstrumentControllerTest extends MyWebMvcTest {
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.instrumentId").value(INSTRUMENT_ID))
-                .andExpect(jsonPath("$.returnDate").value(RETURN_DATE_STRING))
-                .andExpect(jsonPath("$.returnTime").value(RETURN_TIME_STRING))
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("[악기 대여할 예약은 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
     
@@ -226,9 +225,8 @@ class InstrumentControllerTest extends MyWebMvcTest {
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.instrumentId").value(INSTRUMENT_ID))
-                .andExpect(jsonPath("$.returnDate").value(RETURN_DATE_STRING))
-                .andExpect(jsonPath("$.returnTime").value(RETURN_TIME_STRING))
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("[악기는 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
     

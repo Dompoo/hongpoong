@@ -115,7 +115,7 @@ class InfoControllerTest extends MyWebMvcTest {
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(put("/info/{id}", ID)
+        mockMvc.perform(patch("/info/{id}", ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -145,7 +145,7 @@ class InfoControllerTest extends MyWebMvcTest {
         String json = objectMapper.writeValueAsString(request);
         
         //expected
-        mockMvc.perform(put("/info/manage/{id}", ID)
+        mockMvc.perform(patch("/info/manage/{id}", ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())

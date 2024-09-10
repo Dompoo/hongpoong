@@ -9,6 +9,7 @@ public enum InstrumentType {
 	BUK("북"),
 	SOGO("소고"),
 	JING("징"),
+	ETC("기타 장비"),
 	;
 	
 	public final String korName;

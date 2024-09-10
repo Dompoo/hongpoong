@@ -21,7 +21,7 @@ class CommonControllerTest extends MyWebMvcTest {
     private static final boolean PUSH_ALARM = false;
 
     @Test
-    @DisplayName("세팅 정보 불러오기")
+    @DisplayName("설정 불러오기")
     void settingList() throws Exception {
         //given
         when(commonService.findMySetting(any())).thenReturn(
@@ -40,7 +40,7 @@ class CommonControllerTest extends MyWebMvcTest {
     }
 
     @Test
-    @DisplayName("세팅 하기")
+    @DisplayName("설정 저장")
     void doSetting() throws Exception {
         //given
         SettingEditRequest request = SettingEditRequest.builder()

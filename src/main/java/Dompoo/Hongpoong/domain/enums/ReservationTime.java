@@ -2,9 +2,11 @@ package Dompoo.Hongpoong.domain.enums;
 
 import Dompoo.Hongpoong.common.exception.impl.EndForwardStart;
 import Dompoo.Hongpoong.common.exception.impl.ReservationTimeException;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalTime;
 
+@RequiredArgsConstructor
 public enum ReservationTime {
 	TIME_0900(LocalTime.of(9, 0)),
 	TIME_0930(LocalTime.of(9, 30)),
@@ -37,10 +39,6 @@ public enum ReservationTime {
 	;
 	
 	public final LocalTime localTime;
-	
-	ReservationTime(LocalTime localTime) {
-		this.localTime = localTime;
-	}
 	
 	public static ReservationTime from(LocalTime value) {
 		for (ReservationTime reservationTime : ReservationTime.values()) {

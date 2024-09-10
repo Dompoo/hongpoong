@@ -1,7 +1,8 @@
 package Dompoo.Hongpoong.domain.enums;
 
-import Dompoo.Hongpoong.common.exception.impl.InstrumentTypeException;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public enum InstrumentType {
 	KKWANGGWARI("꽹과리"),
 	JANGGU("장구"),
@@ -11,17 +12,4 @@ public enum InstrumentType {
 	;
 	
 	public final String korName;
-	
-	InstrumentType(String korName) {
-		this.korName = korName;
-	}
-	
-	public static InstrumentType from(String strInstrument) {
-		for (InstrumentType instrumentType : InstrumentType.values()) {
-			if (instrumentType.korName.equals(strInstrument)) {
-				return instrumentType;
-			}
-		}
-		throw new InstrumentTypeException();
-	}
 }

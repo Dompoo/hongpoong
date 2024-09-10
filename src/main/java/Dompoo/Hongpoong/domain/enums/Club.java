@@ -1,5 +1,8 @@
 package Dompoo.Hongpoong.domain.enums;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public enum Club {
 	HWARANG("화랑"),
 	SANTLE("산틀"),
@@ -8,15 +11,4 @@ public enum Club {
 	ETC("개인");
 	
 	public final String korName;
-	
-	Club(String korName) {
-		this.korName = korName;
-	}
-	
-	public static Club from(String clubname) {
-		for (Club club : Club.values()){
-			if (club.korName.equals(clubname)) return club;
-		}
-		return ETC;
-	}
 }

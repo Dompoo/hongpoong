@@ -2,7 +2,9 @@ package Dompoo.Hongpoong.domain.enums;
 
 import Dompoo.Hongpoong.common.exception.impl.RoleException;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public enum Role {
 	MEMBER("패원"),
 	PRIMARY_JING("수징"),
@@ -15,10 +17,6 @@ public enum Role {
 	;
 	
 	public final String korName;
-	
-	Role(String korName) {
-		this.korName = korName;
-	}
 	
 	public static Role from(String value) {
 		for (Role role : Role.values()) {

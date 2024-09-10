@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.domain.enums;
 
-import Dompoo.Hongpoong.common.exception.impl.RoleException;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
 import lombok.RequiredArgsConstructor;
 
@@ -17,15 +16,6 @@ public enum Role {
 	;
 	
 	public final String korName;
-	
-	public static Role from(String value) {
-		for (Role role : Role.values()) {
-			if (role.korName.equals(value)) {
-				return role;
-			}
-		}
-		throw new RoleException();
-	}
 	
 	public boolean hasAccessLevelOf(SecurePolicy policy) {
 		return policy.acceptedRole.contains(this);

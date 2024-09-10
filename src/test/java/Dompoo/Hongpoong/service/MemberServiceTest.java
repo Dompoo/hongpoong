@@ -246,7 +246,7 @@ class MemberServiceTest {
         
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.deleteMember(me.getId(), target.getId());
+                () -> service.deleteMember(me.getId(), target.getId()));
         
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
@@ -310,7 +310,7 @@ class MemberServiceTest {
         
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.deleteMemberByAdmin(target.getId());
+                () -> service.deleteMemberByAdmin(target.getId()));
         
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");

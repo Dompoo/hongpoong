@@ -40,6 +40,8 @@ public class ReservationService {
             throw new ReservationOverlapException();
         }
         
+        if (!participaters.contains(member)) participaters.add(member);
+        
         Reservation savedReservation = reservationRepository.save(request.toReservation(member));
         reservationParticipateRepository.saveAll(ReservationParticipate.of(savedReservation, participaters));
         

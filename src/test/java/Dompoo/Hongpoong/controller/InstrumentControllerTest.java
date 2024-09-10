@@ -55,13 +55,32 @@ class InstrumentControllerTest extends MyWebMvcTest {
 
     @Test
     @DisplayName("악기 추가시 악기는 비어있을 수 없다.")
-    void createInstrumentFail() throws Exception {
+    void createInstrumentFail1() throws Exception {
         //given
         InstrumentCreateRequest request = InstrumentCreateRequest.builder()
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
 
+        //expected
+        mockMvc.perform(post("/instrument")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[악기는 비어있을 수 없습니다.]"))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("악기 추가시 악기는 공백일 수 없다.")
+    void createInstrumentFail2() throws Exception {
+        //given
+        InstrumentCreateRequest request = InstrumentCreateRequest.builder()
+                .type(" ")
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
         //expected
         mockMvc.perform(post("/instrument")
                         .contentType(APPLICATION_JSON)
@@ -160,6 +179,60 @@ class InstrumentControllerTest extends MyWebMvcTest {
     }
     
     @Test
+    @DisplayName("악기를 빌릴 때 예약 id는 비어있을 수 없다.")
+    void borrowFail() throws Exception {
+        //given
+        when(instrumentService.borrowInstrument(any(), any())).thenReturn(InstrumentBorrowResponse.builder()
+                .instrumentId(INSTRUMENT_ID)
+                .returnDate(RETURN_DATE)
+                .returnTime(RETURN_TIME)
+                .build());
+        
+        InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
+                .instrumentId(INSTRUMENT_ID)
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/instrument/borrow")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.instrumentId").value(INSTRUMENT_ID))
+                .andExpect(jsonPath("$.returnDate").value(RETURN_DATE_STRING))
+                .andExpect(jsonPath("$.returnTime").value(RETURN_TIME_STRING))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("악기를 빌릴 때 악기 id는 비어있을 수 없다.")
+    void borrowFail2() throws Exception {
+        //given
+        when(instrumentService.borrowInstrument(any(), any())).thenReturn(InstrumentBorrowResponse.builder()
+                .instrumentId(INSTRUMENT_ID)
+                .returnDate(RETURN_DATE)
+                .returnTime(RETURN_TIME)
+                .build());
+        
+        InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
+                .reservationId(RESERVATION_ID)
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/instrument/borrow")
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.instrumentId").value(INSTRUMENT_ID))
+                .andExpect(jsonPath("$.returnDate").value(RETURN_DATE_STRING))
+                .andExpect(jsonPath("$.returnTime").value(RETURN_TIME_STRING))
+                .andDo(print());
+    }
+    
+    @Test
     @DisplayName("악기 반납하기")
     void returnInstrument() throws Exception {
         //given
@@ -171,7 +244,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
     }
 
     @Test
-    @DisplayName("악기 1개 조회")
+    @DisplayName("악기 상세 조회")
     void findInstrumentDetail() throws Exception {
         //given
         when(instrumentService.findInstrumentDetail(any())).thenReturn(InstrumentResponse.builder()
@@ -215,6 +288,36 @@ class InstrumentControllerTest extends MyWebMvcTest {
         
         //expected
         mockMvc.perform(delete("/instrument/{id}", INSTRUMENT_ID))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("어드민 악기 수정")
+    void editInstrumentByAdmin() throws Exception {
+        //given
+        InstrumentEditRequest request = InstrumentEditRequest.builder()
+                .available(true)
+                .type(INSTRUMENT_TYPE)
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(patch("/instrument/manage/{id}", INSTRUMENT_ID)
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("어드민 악기 삭제")
+    void deleteInstrumentByAdmin() throws Exception {
+        //given
+        
+        //expected
+        mockMvc.perform(delete("/instrument/manage/{id}", INSTRUMENT_ID))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

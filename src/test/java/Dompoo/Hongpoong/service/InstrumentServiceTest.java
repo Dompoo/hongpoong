@@ -166,7 +166,6 @@ class InstrumentServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(me)
-                .number(15)
                 .date(LocalDate.of(2025, 12, 20))
                 .startTime(START_TIME)
                 .endTime(END_TIME)
@@ -213,7 +212,6 @@ class InstrumentServiceTest {
         
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(me)
-                .number(15)
                 .date(LocalDate.of(2025, 12, 20))
                 .startTime(START_TIME)
                 .endTime(END_TIME)
@@ -261,7 +259,7 @@ class InstrumentServiceTest {
     }
 
     @Test
-    @DisplayName("악기 전체 수정")
+    @DisplayName("악기 수정")
     void editInstrument() {
         //given
         Member me = memberRepository.save(Member.builder()
@@ -308,6 +306,58 @@ class InstrumentServiceTest {
         //when
         service.deleteInstrument(me.getId(), instrument.getId());
 
+        //then
+        assertEquals(0, instrumentRepository.findAll().size());
+    }
+    
+    @Test
+    @DisplayName("어드민 악기 수정")
+    void editInstrumentByAdmin() {
+        //given
+        Member me = memberRepository.save(Member.builder()
+                .name("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .club(SANTLE)
+                .build());
+        
+        Instrument instrument = instrumentRepository.save(Instrument.builder()
+                .member(me)
+                .type(KKWANGGWARI)
+                .build());
+        
+        InstrumentEditRequest request = InstrumentEditRequest.builder()
+                .type(INSTRUMENT_TYPE)
+                .available(false)
+                .build();
+        
+        //when
+        service.editInstrumentByAdmin(instrument.getId(), request.toDto());
+        
+        //then
+        assertEquals(INSTRUMENT_TYPE, instrumentRepository.findAll().getFirst().getType().korName);
+        assertFalse(instrumentRepository.findAll().getFirst().isAvailable());
+    }
+    
+    @Test
+    @DisplayName("어드민 악기 삭제")
+    void deleteInstrumentByAdmin() {
+        //given
+        Member me = memberRepository.save(Member.builder()
+                .name("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .club(SANTLE)
+                .build());
+        
+        Instrument instrument = instrumentRepository.save(Instrument.builder()
+                .member(me)
+                .type(KKWANGGWARI)
+                .build());
+        
+        //when
+        service.deleteInstrumentByAdmin(instrument.getId());
+        
         //then
         assertEquals(0, instrumentRepository.findAll().size());
     }

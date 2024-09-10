@@ -53,6 +53,7 @@ public class InstrumentController implements InstrumentApi {
         service.returnInstrument(instrumentId);
     }
 
+    //TODO : Detail Response 등 필요
     @Secured
     @GetMapping("/{instrumentId}")
     public InstrumentResponse findInstrumentDetail(@PathVariable Long instrumentId) {

@@ -4,10 +4,7 @@ import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
-import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
-import Dompoo.Hongpoong.common.exception.impl.EditFailException;
-import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.common.exception.impl.ReservationNotFound;
+import Dompoo.Hongpoong.common.exception.impl.*;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import Dompoo.Hongpoong.domain.entity.reservation.Reservation;
@@ -38,6 +35,10 @@ public class ReservationService {
         List<Member> participaters = memberRepository.findAllByIdIn(request.getParticipaterIds());
         
         ReservationTime.validateStartTimeAndEndTime(request.getStartTime(), request.getEndTime());
+        
+        if (isOverlapReservationExist(request)) {
+            throw new ReservationOverlapException();
+        }
         
         Reservation savedReservation = reservationRepository.save(request.toReservation(member));
         reservationParticipateRepository.saveAll(ReservationParticipate.of(savedReservation, participaters));
@@ -118,6 +119,19 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
         reservationRepository.delete(reservation);
+    }
+    
+    private boolean isOverlapReservationExist(ReservationCreateRequest request) {
+        List<Reservation> reservations = reservationRepository.findAllByDate(request.getDate());
+        
+        for (Reservation reservation : reservations) {
+            if (reservation.getStartTime().isBetween(request.getStartTime(), request.getEndTime())
+                    || reservation.getEndTime().isBetween(request.getStartTime(), request.getEndTime())) {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     private void updateAddedParticipators(ReservationEditDto dto, Reservation reservation) {

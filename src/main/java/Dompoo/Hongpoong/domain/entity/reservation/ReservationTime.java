@@ -60,4 +60,8 @@ public enum ReservationTime {
 			throw new EndForwardStart();
 		}
 	}
+	
+	public boolean isBetween(LocalTime startTime, LocalTime endTime) {
+		return startTime.isBefore(this.localTime) && this.localTime.isBefore(endTime);
+	}
 }

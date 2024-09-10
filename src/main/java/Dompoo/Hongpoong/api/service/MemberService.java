@@ -6,8 +6,10 @@ import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
 import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
 import Dompoo.Hongpoong.common.exception.impl.EditFailException;
+import Dompoo.Hongpoong.common.exception.impl.EditRoleToAdminException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,6 +57,10 @@ public class MemberService {
         
         if (me.getClub() != targetMember.getClub()) {
             throw new EditFailException();
+        }
+        
+        if (dto.getRole() == Role.ADMIN) {
+            throw new EditRoleToAdminException();
         }
         
         targetMember.editRole(dto);

@@ -6,6 +6,7 @@ import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditRequest;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
 import Dompoo.Hongpoong.api.service.MemberService;
+import Dompoo.Hongpoong.common.exception.impl.EditRoleToAdminException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Club;
@@ -221,6 +222,26 @@ class MemberServiceTest {
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
         assertEquals(e.statusCode(), "404");
+    }
+    
+    @Test
+    @DisplayName("의장으로 권한 변경할 수는 없다.")
+    void editMemberAuthFail2() {
+        //given
+        Member me = memberRepository.save(buildMember());
+        Member target = memberRepository.save(buildMember2());
+        
+        MemberRoleEditRequest request = MemberRoleEditRequest.builder()
+                .role(Role.ADMIN)
+                .build();
+        
+        //when
+        EditRoleToAdminException e = assertThrows(EditRoleToAdminException.class,
+                () -> service.editMemberAuth(me.getId(), target.getId(), request.toDto()));
+        
+        //then
+        assertEquals(e.getMessage(), "의장으로 권한을 변경할 수 없습니다.");
+        assertEquals(e.statusCode(), "400");
     }
     
     @Test

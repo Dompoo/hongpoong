@@ -32,9 +32,9 @@ public class SignUpRequest {
     @Schema(example = "1234")
     private final String password;
     
-    @NotBlank(message = "동아리는 비어있을 수 없습니다.")
-    @Schema(example = "산틀")
-    private final String club;
+    @NotNull(message = "동아리는 비어있을 수 없습니다.")
+    @Schema(enumAsRef = true)
+    private final Club club;
     
     @NotNull(message = "학번은 비어있을 수 없습니다.")
     @Schema(example = "19")
@@ -46,7 +46,7 @@ public class SignUpRequest {
                 .name(name)
                 .nickname(nickname)
                 .password(encoder.encode(password))
-                .club(Club.from(club))
+                .club(club)
                 .enrollmentNumber(enrollmentNumber)
                 .build();
     }

@@ -141,8 +141,8 @@ public class ReservationService {
         List<Reservation> reservations = reservationRepository.findAllByDate(request.getDate());
         
         for (Reservation reservation : reservations) {
-            if (reservation.getStartTime().isBetween(request.getStartTime(), request.getEndTime())
-                    || reservation.getEndTime().isBetween(request.getStartTime(), request.getEndTime())) {
+            if (reservation.getStartTime().isBetween(request.getStartTime().localTime, request.getEndTime().localTime)
+                    || reservation.getEndTime().isBetween(request.getStartTime().localTime, request.getEndTime().localTime)) {
                 return true;
             }
         }

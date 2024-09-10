@@ -10,8 +10,8 @@ import lombok.*;
 @NoArgsConstructor(force = true)
 public class InstrumentEditRequest {
     
-    @Schema(example = "장구")
-    private final String type;
+    @Schema(enumAsRef = true)
+    private final InstrumentType type;
     
     @Schema(example = "true")
     private final Boolean available;
@@ -21,7 +21,7 @@ public class InstrumentEditRequest {
     
     public InstrumentEditDto toDto() {
         return InstrumentEditDto.builder()
-                .type(InstrumentType.from(type))
+                .type(type)
                 .available(available)
                 .imageUrl(imageUrl)
                 .build();

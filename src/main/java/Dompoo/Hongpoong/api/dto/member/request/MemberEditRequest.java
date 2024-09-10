@@ -21,8 +21,8 @@ public class MemberEditRequest {
     @Schema(example = "불꽃남자")
     private final String nickname;
     
-    @Schema(example = "산틀")
-    private final String club;
+    @Schema(enumAsRef = true)
+    private final Club club;
     
     @Schema(example = "19")
     private final Integer enrollmentNumber;
@@ -37,7 +37,7 @@ public class MemberEditRequest {
         return MemberEditDto.builder()
                 .name(name)
                 .nickname(nickname)
-                .club(Club.from(club))
+                .club(club)
                 .enrollmentNumber(enrollmentNumber)
                 .profileImageUrl(profileImageUrl)
                 .newPassword(newPassword)

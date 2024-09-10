@@ -12,12 +12,12 @@ import lombok.*;
 public class MemberRoleEditRequest {
 
     @NotNull(message = "역할은 비어있을 수 없습니다.")
-    @Schema(example = "패짱")
-    private final String role;
+    @Schema(enumAsRef = true)
+    private final Role role;
     
     public MemberRoleEditDto toDto() {
         return MemberRoleEditDto.builder()
-                .role(Role.from(role))
+                .role(role)
                 .build();
     }
 }

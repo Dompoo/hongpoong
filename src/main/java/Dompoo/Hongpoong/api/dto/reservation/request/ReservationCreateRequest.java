@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -24,15 +23,15 @@ public class ReservationCreateRequest {
     private final LocalDate date;
 
     @NotNull(message = "시작 시간은 비어있을 수 없습니다.")
-    @Schema(example = "10:00:00")
-    private final LocalTime startTime;
+    @Schema(enumAsRef = true)
+    private final ReservationTime startTime;
 
     @NotNull(message = "종료 시간은 비어있을 수 없습니다.")
-    @Schema(example = "21:00:00")
-    private final LocalTime endTime;
+    @Schema(enumAsRef = true)
+    private final ReservationTime endTime;
     
     @NotNull(message = "참가자는 비어있을 수 없습니다.")
-    @Schema(example = "{1, 2, 3}")
+    @Schema(example = "[1, 2, 3]")
     private final List<Long> participaterIds;
     
     @Schema(example = "산틀 정공 연습")
@@ -42,8 +41,8 @@ public class ReservationCreateRequest {
         return Reservation.builder()
                 .creator(creator)
                 .date(date)
-                .startTime(ReservationTime.from(startTime))
-                .endTime(ReservationTime.from(endTime))
+                .startTime(startTime)
+                .endTime(endTime)
                 .message(message)
                 .build();
     }

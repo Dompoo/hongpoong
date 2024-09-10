@@ -6,7 +6,6 @@ import jakarta.validation.constraints.FutureOrPresent;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -19,11 +18,11 @@ public class ReservationEditRequest {
     @Schema(example = "2024-04-17")
     private final LocalDate date;
     
-    @Schema(example = "10:00:00")
-    private final LocalTime startTime;
+    @Schema(enumAsRef = true)
+    private final ReservationTime startTime;
     
-    @Schema(example = "21:00:00")
-    private final LocalTime endTime;
+    @Schema(enumAsRef = true)
+    private final ReservationTime endTime;
     
     @Schema(example = "산틀 정공 연습")
     private final String message;
@@ -37,8 +36,8 @@ public class ReservationEditRequest {
     public ReservationEditDto toDto() {
         return ReservationEditDto.builder()
                 .date(date)
-                .startTime(ReservationTime.from(startTime))
-                .endTime(ReservationTime.from(endTime))
+                .startTime(startTime)
+                .endTime(endTime)
                 .message(message)
                 .addedParticipatorIds(addedParticipatorIds)
                 .removedParticipatorIds(removedParticipatorIds)

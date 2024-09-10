@@ -193,7 +193,7 @@ class MemberServiceTest {
         Member target = memberRepository.save(buildMember2());
         
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Role.LEADER.korName)
+                .role(Role.LEADER)
                 .build();
         
         //when
@@ -211,7 +211,7 @@ class MemberServiceTest {
         Member target = memberRepository.save(buildMember2());
         
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Role.LEADER.korName)
+                .role(Role.LEADER)
                 .build();
         
         //when
@@ -260,7 +260,7 @@ class MemberServiceTest {
         Member find = memberRepository.save(buildMember());
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Role.LEADER.korName)
+                .role(Role.LEADER)
                 .build();
 
         //when
@@ -277,7 +277,7 @@ class MemberServiceTest {
         Member find = memberRepository.save(buildMember());
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role(Role.LEADER.korName)
+                .role(Role.LEADER)
                 .build();
 
         //when

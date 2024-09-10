@@ -61,8 +61,8 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
                 .build();
@@ -84,7 +84,7 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
-                .endTime(END_TIME_LOCALTIME)
+                .endTime(END_TIME)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
                 .build();
@@ -107,7 +107,7 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
-                .startTime(START_TIME_LOCALTIME)
+                .startTime(START_TIME)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
                 .build();
@@ -130,8 +130,8 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(LocalDate.now().minusDays(1))
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
                 .build();
@@ -153,8 +153,8 @@ class ReservationControllerTest extends MyWebMvcTest {
     void addFail4() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
                 .build();
@@ -177,8 +177,8 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .message("")
                 .build();
         
@@ -321,8 +321,8 @@ class ReservationControllerTest extends MyWebMvcTest {
         
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(DATE2)
-                .startTime(START_TIME2_LOCALTIME)
-                .endTime(END_TIME2_LOCALTIME)
+                .startTime(START_TIME2)
+                .endTime(END_TIME2)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -350,8 +350,8 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.now().minusDays(1))
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -383,8 +383,8 @@ class ReservationControllerTest extends MyWebMvcTest {
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(DATE)
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);

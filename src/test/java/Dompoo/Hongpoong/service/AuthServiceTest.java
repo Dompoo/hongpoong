@@ -100,7 +100,7 @@ class AuthServiceTest {
                 .email(EMAIL)
                 .name(USERNAME)
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .build();
 
         //when
@@ -127,7 +127,7 @@ class AuthServiceTest {
                 .email(EMAIL)
                 .name(USERNAME)
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .build();
 
         //when
@@ -154,7 +154,7 @@ class AuthServiceTest {
                 .email(EMAIL)
                 .name(USERNAME)
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .build();
         
         //when

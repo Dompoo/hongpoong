@@ -67,8 +67,8 @@ class ReservationServiceTest {
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .message("")
                 .build();
 
@@ -91,8 +91,8 @@ class ReservationServiceTest {
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .message("")
                 .build();
 
@@ -118,8 +118,8 @@ class ReservationServiceTest {
         
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
-                .startTime(ReservationTime.TIME_1400.localTime)
-                .endTime(ReservationTime.TIME_0900.localTime)
+                .startTime(END_TIME)
+                .endTime(START_TIME)
                 .message("")
                 .build();
         
@@ -426,8 +426,8 @@ class ReservationServiceTest {
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
@@ -463,8 +463,8 @@ class ReservationServiceTest {
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
@@ -497,8 +497,8 @@ class ReservationServiceTest {
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
@@ -607,8 +607,8 @@ class ReservationServiceTest {
 
         ReservationEditRequest request = ReservationEditRequest.builder()
                 .date(LocalDate.of(2025, 12, 15))
-                .startTime(START_TIME_LOCALTIME)
-                .endTime(END_TIME_LOCALTIME)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
                 .build();
         
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);

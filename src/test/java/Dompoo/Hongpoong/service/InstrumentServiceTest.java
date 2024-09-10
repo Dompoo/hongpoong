@@ -11,6 +11,7 @@ import Dompoo.Hongpoong.common.exception.impl.InstrumentNotFound;
 import Dompoo.Hongpoong.domain.entity.Instrument;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.repository.InstrumentRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
@@ -45,7 +46,7 @@ class InstrumentServiceTest {
     @Autowired
     private ReservationRepository reservationRepository;
     
-    private static final String INSTRUMENT_TYPE = "장구";
+    private static final InstrumentType INSTRUMENT_TYPE = JANGGU;
     private static final ReservationTime START_TIME = ReservationTime.TIME_0900;
     private static final ReservationTime END_TIME = ReservationTime.TIME_1500;
 
@@ -374,7 +375,7 @@ class InstrumentServiceTest {
         service.editInstrument(me.getId(), instrument.getId(), request.toDto());
 
         //then
-        assertEquals(INSTRUMENT_TYPE, instrumentRepository.findAll().getFirst().getType().korName);
+        assertEquals(INSTRUMENT_TYPE.korName, instrumentRepository.findAll().getFirst().getType().korName);
         assertFalse(instrumentRepository.findAll().getFirst().isAvailable());
     }
 
@@ -426,7 +427,7 @@ class InstrumentServiceTest {
         service.editInstrumentByAdmin(instrument.getId(), request.toDto());
         
         //then
-        assertEquals(INSTRUMENT_TYPE, instrumentRepository.findAll().getFirst().getType().korName);
+        assertEquals(INSTRUMENT_TYPE.korName, instrumentRepository.findAll().getFirst().getType().korName);
         assertFalse(instrumentRepository.findAll().getFirst().isAvailable());
     }
     

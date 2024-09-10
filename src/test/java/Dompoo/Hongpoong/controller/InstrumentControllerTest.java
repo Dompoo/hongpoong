@@ -6,6 +6,7 @@ import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentEditRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentBorrowResponse;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
+import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -28,8 +29,8 @@ class InstrumentControllerTest extends MyWebMvcTest {
     private static final Long INSTRUMENT2_ID = 2L;
     private static final String INSTRUMENT_CLUB = "산틀";
     private static final String INSTRUMENT2_CLUB = "악반";
-    private static final String INSTRUMENT_TYPE = "소고";
-    private static final String INSTRUMENT2_TYPE = "장구";
+    private static final InstrumentType INSTRUMENT_TYPE = InstrumentType.SOGO;
+    private static final InstrumentType INSTRUMENT2_TYPE = InstrumentType.JANGGU;
     private static final LocalDate RETURN_DATE = LocalDate.now().plusDays(10);
     private static final String RETURN_DATE_STRING = RETURN_DATE.toString();
     private static final LocalTime RETURN_TIME = LocalTime.of(15, 0);
@@ -70,25 +71,6 @@ class InstrumentControllerTest extends MyWebMvcTest {
                 .andExpect(jsonPath("$.message").value("[악기는 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
-    
-    @Test
-    @DisplayName("악기 추가시 악기는 공백일 수 없다.")
-    void createInstrumentFail2() throws Exception {
-        //given
-        InstrumentCreateRequest request = InstrumentCreateRequest.builder()
-                .type(" ")
-                .build();
-        
-        String json = objectMapper.writeValueAsString(request);
-        
-        //expected
-        mockMvc.perform(post("/instrument")
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("[악기는 비어있을 수 없습니다.]"))
-                .andDo(print());
-    }
 
     @Test
     @DisplayName("다른 동아리의 악기 조회")
@@ -98,12 +80,12 @@ class InstrumentControllerTest extends MyWebMvcTest {
                 InstrumentResponse.builder()
                         .instrumentId(INSTRUMENT_ID)
                         .club(INSTRUMENT_CLUB)
-                        .type(INSTRUMENT_TYPE)
+                        .type(INSTRUMENT_TYPE.korName)
                         .build(),
                 InstrumentResponse.builder()
                         .instrumentId(INSTRUMENT2_ID)
                         .club(INSTRUMENT2_CLUB)
-                        .type(INSTRUMENT2_TYPE)
+                        .type(INSTRUMENT2_TYPE.korName)
                         .build()
         ));
 
@@ -113,10 +95,10 @@ class InstrumentControllerTest extends MyWebMvcTest {
                 .andExpect(jsonPath("$.size()").value(2))
                 .andExpect(jsonPath("$[0].instrumentId").value(INSTRUMENT_ID))
                 .andExpect(jsonPath("$[0].club").value(INSTRUMENT_CLUB))
-                .andExpect(jsonPath("$[0].type").value(INSTRUMENT_TYPE))
+                .andExpect(jsonPath("$[0].type").value(INSTRUMENT_TYPE.korName))
                 .andExpect(jsonPath("$[1].instrumentId").value(INSTRUMENT2_ID))
                 .andExpect(jsonPath("$[1].club").value(INSTRUMENT2_CLUB))
-                .andExpect(jsonPath("$[1].type").value(INSTRUMENT2_TYPE))
+                .andExpect(jsonPath("$[1].type").value(INSTRUMENT2_TYPE.korName))
                 .andDo(print());
     }
 
@@ -128,12 +110,12 @@ class InstrumentControllerTest extends MyWebMvcTest {
                 InstrumentResponse.builder()
                         .instrumentId(INSTRUMENT_ID)
                         .club(INSTRUMENT_CLUB)
-                        .type(INSTRUMENT_TYPE)
+                        .type(INSTRUMENT_TYPE.korName)
                         .build(),
                 InstrumentResponse.builder()
                         .instrumentId(INSTRUMENT2_ID)
                         .club(INSTRUMENT2_CLUB)
-                        .type(INSTRUMENT2_TYPE)
+                        .type(INSTRUMENT2_TYPE.korName)
                         .build()
         ));
         
@@ -143,10 +125,10 @@ class InstrumentControllerTest extends MyWebMvcTest {
                 .andExpect(jsonPath("$.size()").value(2))
                 .andExpect(jsonPath("$[0].instrumentId").value(INSTRUMENT_ID))
                 .andExpect(jsonPath("$[0].club").value(INSTRUMENT_CLUB))
-                .andExpect(jsonPath("$[0].type").value(INSTRUMENT_TYPE))
+                .andExpect(jsonPath("$[0].type").value(INSTRUMENT_TYPE.korName))
                 .andExpect(jsonPath("$[1].instrumentId").value(INSTRUMENT2_ID))
                 .andExpect(jsonPath("$[1].club").value(INSTRUMENT2_CLUB))
-                .andExpect(jsonPath("$[1].type").value(INSTRUMENT2_TYPE))
+                .andExpect(jsonPath("$[1].type").value(INSTRUMENT2_TYPE.korName))
                 .andDo(print());
     }
 
@@ -247,7 +229,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
         //given
         when(instrumentService.findInstrumentDetail(any())).thenReturn(InstrumentResponse.builder()
                 .instrumentId(INSTRUMENT_ID)
-                .type(INSTRUMENT_TYPE)
+                .type(INSTRUMENT_TYPE.korName)
                 .club(INSTRUMENT_CLUB)
                 .build());
         
@@ -255,7 +237,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
         mockMvc.perform(get("/instrument/{id}", INSTRUMENT_ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.instrumentId").value(INSTRUMENT_ID))
-                .andExpect(jsonPath("$.type").value(INSTRUMENT_TYPE))
+                .andExpect(jsonPath("$.type").value(INSTRUMENT_TYPE.korName))
                 .andExpect(jsonPath("$.club").value(INSTRUMENT_CLUB))
                 .andDo(print());
     }

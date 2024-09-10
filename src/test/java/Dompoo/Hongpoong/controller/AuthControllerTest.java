@@ -67,7 +67,7 @@ class AuthControllerTest extends MyWebMvcTest {
                 .name(NAME)
                 .nickname(NICKNAME)
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -89,7 +89,7 @@ class AuthControllerTest extends MyWebMvcTest {
                 .email(EMAIL)
                 .nickname(NICKNAME)
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -112,7 +112,7 @@ class AuthControllerTest extends MyWebMvcTest {
                 .email(EMAIL)
                 .nickname(NICKNAME)
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -135,7 +135,7 @@ class AuthControllerTest extends MyWebMvcTest {
                 .email(EMAIL)
                 .name(NAME)
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
         
@@ -159,7 +159,7 @@ class AuthControllerTest extends MyWebMvcTest {
                 .name(NAME)
                 .nickname(" ")
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
         
@@ -182,7 +182,7 @@ class AuthControllerTest extends MyWebMvcTest {
                 .email(EMAIL)
                 .name(NAME)
                 .nickname(NICKNAME)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -205,7 +205,7 @@ class AuthControllerTest extends MyWebMvcTest {
                 .name(NAME)
                 .nickname(NICKNAME)
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -229,7 +229,7 @@ class AuthControllerTest extends MyWebMvcTest {
                 .name(NAME)
                 .nickname(NICKNAME)
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -253,7 +253,7 @@ class AuthControllerTest extends MyWebMvcTest {
                 .name(NAME)
                 .nickname(NICKNAME)
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .enrollmentNumber(ENROLLMENT_NUMBER)
                 .build();
 
@@ -300,7 +300,7 @@ class AuthControllerTest extends MyWebMvcTest {
                 .name(NAME)
                 .nickname(NICKNAME)
                 .password(PASSWORD)
-                .club(CLUB.korName)
+                .club(CLUB)
                 .build();
         
         String json = objectMapper.writeValueAsString(request);

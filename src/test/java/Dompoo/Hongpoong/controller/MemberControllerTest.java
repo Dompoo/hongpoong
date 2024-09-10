@@ -38,8 +38,8 @@ class MemberControllerTest extends MyWebMvcTest {
     private static final String PROFILE_IMAGE_URL = "image.com/1";
     private static final String PROFILE_IMAGE_URL2 = "image.com/2";
     private static final Boolean PUSH_ALARM = true;
-    private static final String ROLE = Role.MEMBER.korName;
-    private static final String ROLE2 = Role.LEADER.korName;
+    private static final Role ROLE = Role.MEMBER;
+    private static final Role ROLE2 = Role.LEADER;
     
     //회원 전체 조회
     @Test
@@ -55,7 +55,7 @@ class MemberControllerTest extends MyWebMvcTest {
                         .club(CLUB)
                         .enrollmentNumber(ENROLLMENT_NUMBER)
                         .profileImageUrl(PROFILE_IMAGE_URL)
-                        .role(ROLE)
+                        .role(ROLE.korName)
                         .build(),
                 MemberResponse.builder()
                         .memberId(ID2)
@@ -65,7 +65,7 @@ class MemberControllerTest extends MyWebMvcTest {
                         .club(CLUB2)
                         .enrollmentNumber(ENROLLMENT_NUMBER2)
                         .profileImageUrl(PROFILE_IMAGE_URL2)
-                        .role(ROLE2)
+                        .role(ROLE2.korName)
                         .build()
         ));
         
@@ -80,7 +80,7 @@ class MemberControllerTest extends MyWebMvcTest {
                 .andExpect(jsonPath("$[0].club").value(CLUB))
                 .andExpect(jsonPath("$[0].enrollmentNumber").value(ENROLLMENT_NUMBER))
                 .andExpect(jsonPath("$[0].profileImageUrl").value(PROFILE_IMAGE_URL))
-                .andExpect(jsonPath("$[0].role").value(ROLE))
+                .andExpect(jsonPath("$[0].role").value(ROLE.korName))
                 .andExpect(jsonPath("$[1].memberId").value(ID2))
                 .andExpect(jsonPath("$[1].email").value(EMAIL2))
                 .andExpect(jsonPath("$[1].name").value(NAME2))
@@ -88,7 +88,7 @@ class MemberControllerTest extends MyWebMvcTest {
                 .andExpect(jsonPath("$[1].club").value(CLUB2))
                 .andExpect(jsonPath("$[1].enrollmentNumber").value(ENROLLMENT_NUMBER2))
                 .andExpect(jsonPath("$[1].profileImageUrl").value(PROFILE_IMAGE_URL2))
-                .andExpect(jsonPath("$[1].role").value(ROLE2));
+                .andExpect(jsonPath("$[1].role").value(ROLE2.korName));
     }
 
     //로그인 정보
@@ -159,7 +159,7 @@ class MemberControllerTest extends MyWebMvcTest {
     void editMemberRole() throws Exception {
         //given
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role("패짱")
+                .role(ROLE)
                 .build();
         
         String json = objectMapper.writeValueAsString(request);
@@ -191,7 +191,7 @@ class MemberControllerTest extends MyWebMvcTest {
     void editMemberRoleByAdmin() throws Exception {
         //given
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
-                .role("패짱")
+                .role(ROLE)
                 .build();
         
         String json = objectMapper.writeValueAsString(request);

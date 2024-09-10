@@ -64,4 +64,8 @@ public enum ReservationTime {
 	public boolean isBetween(LocalTime startTime, LocalTime endTime) {
 		return startTime.isBefore(this.localTime) && this.localTime.isBefore(endTime);
 	}
+	
+	public ReservationTime nextReservationTime() {
+		return from(this.localTime.plusMinutes(30));
+	}
 }

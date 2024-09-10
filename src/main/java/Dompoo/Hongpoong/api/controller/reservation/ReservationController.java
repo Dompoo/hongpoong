@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -61,6 +62,12 @@ public class ReservationController implements ReservationApi {
     @GetMapping("/{reservationId}/attendance")
     public List<AttendanceResponse> findAttendance(@PathVariable Long reservationId) {
         return attendanceService.findAttendance(reservationId);
+    }
+    
+    @Secured
+    @PatchMapping("/{reservationId}/extend")
+    public void extendReservationTime(@LoginUser UserClaims claims, @PathVariable Long reservationId) {
+        reservationService.extendReservationTime(claims.getId(), reservationId, LocalTime.now());
     }
     
     @Secured

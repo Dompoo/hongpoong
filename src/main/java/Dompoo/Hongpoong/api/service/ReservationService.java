@@ -16,9 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.YearMonth;
+import java.time.*;
 import java.util.List;
 
 @Service
@@ -77,6 +75,22 @@ public class ReservationService {
         List<Member> participators = reservationParticipateRepository.findAllMemberByReservation(reservation);
         
         return ReservationDetailResponse.of(reservation, participators);
+    }
+    
+    @Transactional
+    public void extendReservationTime(Long memberId, Long reservationId, LocalTime now) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        
+        if (!reservation.getCreator().getId().equals(memberId)) {
+            throw new EditFailException();
+        }
+        
+        long minutes = Duration.between(now, reservation.getEndTime().localTime).toMinutes();
+        if (0 > minutes || minutes > 30) { // 연습이 끝난 후거나 아직 30분 전이 되지 않았을 경우
+            throw new TimeExtendNotAvailableException();
+        }
+        
+        reservation.extendEndTime();
     }
     
     @Transactional

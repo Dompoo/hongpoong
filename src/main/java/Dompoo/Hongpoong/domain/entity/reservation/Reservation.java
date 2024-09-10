@@ -48,4 +48,8 @@ public class Reservation {
         if (dto.getMessage() != null) this.message = dto.getMessage();
         this.lastModified = now;
     }
+    
+    public void extendEndTime() {
+        endTime = endTime.nextReservationTime();
+    }
 }

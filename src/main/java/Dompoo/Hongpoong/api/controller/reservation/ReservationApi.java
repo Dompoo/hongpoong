@@ -50,6 +50,12 @@ public interface ReservationApi {
 			@Parameter(description = "예약 id") Long reservationId
 	);
 	
+	@Operation(summary = "내가 등록한 예약 시간 30분 연장")
+	void extendReservationTime(
+			@Schema(hidden = true) UserClaims claims,
+			@Parameter(description = "예약 id") Long reservationId
+	);
+	
 	@Operation(summary = "내가 등록한 예약 수정")
 	ReservationDetailResponse editReservation(
 			@Schema(hidden = true) UserClaims claims,

@@ -21,11 +21,15 @@ public class InstrumentResponse {
     @Schema(example = "산틀")
     private final String club;
     
+    @Schema(example = "false")
+    private final Boolean available;
+    
     public static InstrumentResponse from(Instrument instrument) {
         return InstrumentResponse.builder()
                 .instrumentId(instrument.getId())
                 .type(instrument.getType().korName)
                 .club(instrument.getClub().korName)
+                .available(instrument.isAvailable())
                 .build();
     }
 }

@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
+import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.exception.impl.*;
@@ -10,6 +11,7 @@ import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.repository.ReservationEndImageRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
     private final ReservationParticipateRepository reservationParticipateRepository;
+    private final ReservationEndImageRepository reservationEndImageRepository;
     private final MemberRepository memberRepository;
     
     @Transactional
@@ -91,6 +94,17 @@ public class ReservationService {
         }
         
         reservation.extendEndTime();
+    }
+    
+    @Transactional
+    public void endReservation(Long memberId, Long reservationId, ReservationEndRequest request) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        
+        if (!reservation.getCreator().getId().equals(memberId)) {
+            throw new EditFailException();
+        }
+        
+        reservationEndImageRepository.saveAll(request.toReservationEndImages(reservation));
     }
     
     @Transactional

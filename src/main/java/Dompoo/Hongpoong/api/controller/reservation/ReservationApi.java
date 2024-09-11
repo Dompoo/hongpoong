@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.api.controller.reservation;
 
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
+import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
@@ -48,6 +49,13 @@ public interface ReservationApi {
 	void extendReservationTime(
 			@Schema(hidden = true) UserClaims claims,
 			@Parameter(description = "예약 id") Long reservationId
+	);
+	
+	@Operation(summary = "내가 등록한 예약 종료")
+	void endReservation(
+			@Schema(hidden = true) UserClaims claims,
+			@Parameter(description = "예약 id") Long reservationId,
+			@RequestBody ReservationEndRequest request
 	);
 	
 	@Operation(summary = "내가 등록한 예약 수정")

@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.api.controller.reservation;
 
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
+import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.api.service.ReservationService;
@@ -59,6 +60,12 @@ public class ReservationController implements ReservationApi {
     @PatchMapping("/{reservationId}/extend")
     public void extendReservationTime(@LoginUser UserClaims claims, @PathVariable Long reservationId) {
         reservationService.extendReservationTime(claims.getId(), reservationId, LocalTime.now());
+    }
+    
+    @Secured
+    @PostMapping("/{reservationId}/end")
+    public void endReservation(@LoginUser UserClaims claims, @PathVariable Long reservationId, @RequestBody ReservationEndRequest request) {
+        reservationService.endReservation(claims.getId(), reservationId, request);
     }
     
     @Secured

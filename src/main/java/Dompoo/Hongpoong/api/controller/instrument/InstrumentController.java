@@ -42,13 +42,13 @@ public class InstrumentController implements InstrumentApi {
     }
 
     @Secured
-    @PostMapping("/borrow")
-    public InstrumentDetailResponse borrowInstrument(@LoginUser UserClaims claims, @RequestBody @Valid InstrumentBorrowRequest request) {
-        return service.borrowInstrument(claims.getId(), request);
+    @PostMapping("/{instrumentId}/borrow")
+    public InstrumentDetailResponse borrowInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId, @RequestBody @Valid InstrumentBorrowRequest request) {
+        return service.borrowInstrument(claims.getId(), instrumentId, request);
     }
 
     @Secured
-    @PostMapping("/return/{instrumentId}")
+    @PostMapping("/{instrumentId}/return")
     public void returnInstrument(@PathVariable Long instrumentId) {
         service.returnInstrument(instrumentId);
     }

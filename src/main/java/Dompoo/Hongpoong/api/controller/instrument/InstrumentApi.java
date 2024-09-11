@@ -36,7 +36,9 @@ public interface InstrumentApi {
 	@Operation(summary = "악기 대여")
 	InstrumentDetailResponse borrowInstrument(
 			@Schema(hidden = true) UserClaims claims,
-			@RequestBody InstrumentBorrowRequest request);
+			@Parameter(description = "악기 id") Long instrumentId,
+			@RequestBody InstrumentBorrowRequest request
+	);
 	
 	@Operation(summary = "악기 반납")
 	void returnInstrument(

@@ -4,6 +4,7 @@ import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.api.service.ReservationService;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
@@ -79,7 +80,13 @@ public class ReservationController implements ReservationApi {
     public void deleteReservation(@LoginUser UserClaims claims, @PathVariable Long reservationId) {
         reservationService.deleteReservation(claims.getId(), reservationId);
     }
-
+    
+    @Secured(SecurePolicy.ADMIN)
+    @GetMapping("/manage/{reservationId}")
+    public ReservationEndResponse findReservationEndDetail(@PathVariable Long reservationId) {
+        return reservationService.findReservationEndDetail(reservationId);
+    }
+    
     @Secured(SecurePolicy.ADMIN)
     @PatchMapping("/manage/{reservationId}")
     public void editReservationByAdmin(@PathVariable Long reservationId, @RequestBody @Valid ReservationEditRequest request) {

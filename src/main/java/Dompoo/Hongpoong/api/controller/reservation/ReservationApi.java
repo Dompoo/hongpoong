@@ -4,6 +4,7 @@ import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,6 +69,11 @@ public interface ReservationApi {
 	@Operation(summary = "내가 등록한 예약 삭제")
 	void deleteReservation(
 			@Schema(hidden = true) UserClaims claims,
+			@Parameter(description = "예약 id") Long reservationId
+	);
+	
+	@Operation(summary = "[관리자] 예약 종료 후 상세 조회")
+	ReservationEndResponse findReservationEndDetail(
 			@Parameter(description = "예약 id") Long reservationId
 	);
 	

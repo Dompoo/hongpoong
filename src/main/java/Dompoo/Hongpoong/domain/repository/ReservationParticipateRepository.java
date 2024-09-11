@@ -28,6 +28,8 @@ public interface ReservationParticipateRepository extends JpaRepository<Reservat
 	@Query("SELECT rp FROM ReservationParticipate rp WHERE rp.reservation.id = :reservationId AND rp.attendance = 'NOT_YET_ATTEND'")
 	List<ReservationParticipate> findByReservationIdAndNotAttend(@Param("reservationId") Long reservationId);
 	
+	List<ReservationParticipate> findAllByReservation(Reservation reservation);
+	
 	void deleteAllByReservationAndMemberIn(Reservation reservation, List<Member> members);
 	
 	void deleteAllByReservation(Reservation reservation);

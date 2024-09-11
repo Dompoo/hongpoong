@@ -4,10 +4,12 @@ import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.exception.impl.*;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
 import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
@@ -105,6 +107,17 @@ public class ReservationService {
         }
         
         reservationEndImageRepository.saveAll(request.toReservationEndImages(reservation));
+    }
+    
+    @Transactional(readOnly = true)
+    public ReservationEndResponse findReservationEndDetail(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        
+        List<ReservationParticipate> participates = reservationParticipateRepository.findAllByReservation(reservation);
+        
+        List<ReservationEndImage> images = reservationEndImageRepository.findAllByReservation(reservation);
+        
+        return ReservationEndResponse.of(reservation, participates, images);
     }
     
     @Transactional

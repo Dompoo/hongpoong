@@ -33,4 +33,8 @@ public class ReservationParticipate {
 						.build())
 				.toList();
 	}
+	
+	public void editAttendance(Attendance attendance) {
+		this.attendance = attendance;
+	}
 }

@@ -45,4 +45,8 @@ public class Reservation {
     public void extendEndTime() {
         endTime = endTime.nextReservationTime();
     }
+    
+    public LocalDateTime getEndLocalDateTime() {
+        return LocalDateTime.of(date, endTime.localTime);
+    }
 }

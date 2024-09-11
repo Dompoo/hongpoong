@@ -1,7 +1,6 @@
 package Dompoo.Hongpoong.api.dto.Instrument.response;
 
 import Dompoo.Hongpoong.domain.entity.Instrument;
-import Dompoo.Hongpoong.domain.enums.Club;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,11 +21,11 @@ public class InstrumentResponse {
     @Schema(example = "산틀")
     private final String club;
     
-    public static InstrumentResponse from(Instrument instrument, Club club) {
+    public static InstrumentResponse from(Instrument instrument) {
         return InstrumentResponse.builder()
                 .instrumentId(instrument.getId())
                 .type(instrument.getType().korName)
-                .club(club.korName)
+                .club(instrument.getClub().korName)
                 .build();
     }
 }

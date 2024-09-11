@@ -3,7 +3,7 @@ package Dompoo.Hongpoong.api.controller.instrument;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentBorrowRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentCreateRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentEditRequest;
-import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentBorrowResponse;
+import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentDetailResponse;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +34,7 @@ public interface InstrumentApi {
 	);
 	
 	@Operation(summary = "악기 대여")
-	InstrumentBorrowResponse borrowInstrument(
+	InstrumentDetailResponse borrowInstrument(
 			@Schema(hidden = true) UserClaims claims,
 			@RequestBody InstrumentBorrowRequest request);
 	
@@ -44,7 +44,7 @@ public interface InstrumentApi {
 	);
 	
 	@Operation(summary = "악기 조회")
-	InstrumentResponse findInstrumentDetail(
+	InstrumentDetailResponse findInstrumentDetail(
 			@Parameter(description = "악기 id") Long instrumentId
 	);
 	

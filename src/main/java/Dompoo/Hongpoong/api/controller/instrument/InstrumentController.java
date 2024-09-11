@@ -3,7 +3,7 @@ package Dompoo.Hongpoong.api.controller.instrument;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentBorrowRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentCreateRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentEditRequest;
-import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentBorrowResponse;
+import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentDetailResponse;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.api.service.InstrumentService;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
@@ -26,24 +26,24 @@ public class InstrumentController implements InstrumentApi {
     @Secured(SecurePolicy.ADMIN_LEADER_PRIMARY)
     @PostMapping
     public void createInstrument(@LoginUser UserClaims claims, @RequestBody @Valid InstrumentCreateRequest request) {
-        service.createInstrument(claims.getId(), request);
+        service.createInstrument(claims.getClub(), request);
     }
 
     @Secured
     @GetMapping
     public List<InstrumentResponse> findAllOtherClubInstrument(@LoginUser UserClaims claims) {
-        return service.findAllOtherClubInstrument(claims.getId());
+        return service.findAllOtherClubInstrument(claims.getClub());
     }
 
     @Secured
     @GetMapping("/list")
     public List<InstrumentResponse> findAllMyClubInstrument(@LoginUser UserClaims claims) {
-        return service.findAllMyClubInstrument(claims.getId());
+        return service.findAllMyClubInstrument(claims.getClub());
     }
 
     @Secured
     @PostMapping("/borrow")
-    public InstrumentBorrowResponse borrowInstrument(@LoginUser UserClaims claims, @RequestBody @Valid InstrumentBorrowRequest request) {
+    public InstrumentDetailResponse borrowInstrument(@LoginUser UserClaims claims, @RequestBody @Valid InstrumentBorrowRequest request) {
         return service.borrowInstrument(claims.getId(), request);
     }
 
@@ -53,23 +53,22 @@ public class InstrumentController implements InstrumentApi {
         service.returnInstrument(instrumentId);
     }
 
-    //TODO : Detail Response 등 필요
     @Secured
     @GetMapping("/{instrumentId}")
-    public InstrumentResponse findInstrumentDetail(@PathVariable Long instrumentId) {
+    public InstrumentDetailResponse findInstrumentDetail(@PathVariable Long instrumentId) {
         return service.findInstrumentDetail(instrumentId);
     }
 
     @Secured(SecurePolicy.LEADER_PRIMARY)
     @PatchMapping("/{instrumentId}")
     public void editInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId, @RequestBody InstrumentEditRequest request) {
-        service.editInstrument(claims.getId(), instrumentId, request.toDto());
+        service.editInstrument(claims.getClub(), instrumentId, request.toDto());
     }
     
     @Secured(SecurePolicy.LEADER_PRIMARY)
     @DeleteMapping("/{instrumentId}")
     public void deleteInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId) {
-        service.deleteInstrument(claims.getId(), instrumentId);
+        service.deleteInstrument(claims.getClub(), instrumentId);
     }
     
     @Secured(SecurePolicy.ADMIN)

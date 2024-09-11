@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.Instrument.request;
 
 import Dompoo.Hongpoong.domain.entity.Instrument;
-import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -17,10 +17,11 @@ public class InstrumentCreateRequest {
     @Schema(enumAsRef = true)
     private final InstrumentType type;
     
-    public Instrument toInstrument(Member member) {
+    public Instrument toInstrument(Club club) {
         return Instrument.builder()
                 .type(type)
-                .member(member)
+                .club(club)
+                .available(true)
                 .build();
     }
 }

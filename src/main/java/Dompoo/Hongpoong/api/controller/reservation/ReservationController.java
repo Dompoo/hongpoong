@@ -1,11 +1,9 @@
 package Dompoo.Hongpoong.api.controller.reservation;
 
-import Dompoo.Hongpoong.api.dto.attendance.AttendanceResponse;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
-import Dompoo.Hongpoong.api.service.AttendanceService;
 import Dompoo.Hongpoong.api.service.ReservationService;
 import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.common.security.UserClaims;
@@ -26,7 +24,6 @@ import java.util.List;
 public class ReservationController implements ReservationApi {
 
     private final ReservationService reservationService;
-    private final AttendanceService attendanceService;
     
     @Secured
     @PostMapping
@@ -56,12 +53,6 @@ public class ReservationController implements ReservationApi {
     @GetMapping("/{reservationId}")
     public ReservationDetailResponse findReservationDetail(@PathVariable Long reservationId) {
         return reservationService.findReservationDetail(reservationId);
-    }
-    
-    @Secured
-    @GetMapping("/{reservationId}/attendance")
-    public List<AttendanceResponse> findAttendance(@PathVariable Long reservationId) {
-        return attendanceService.findAttendance(reservationId);
     }
     
     @Secured

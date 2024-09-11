@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.domain.entity;
 
+import Dompoo.Hongpoong.domain.enums.Attendance;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +16,7 @@ public class ReservationParticipate {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private Boolean attend;
+	private Attendance attendance;
 	
 	@ManyToOne @JoinColumn(name = "reservation_id")
 	private Reservation reservation;
@@ -28,7 +29,7 @@ public class ReservationParticipate {
 				.map(member -> ReservationParticipate.builder()
 						.member(member)
 						.reservation(reservation)
-						.attend(false)
+						.attendance(Attendance.NOT_YET_ATTEND)
 						.build())
 				.toList();
 	}

@@ -18,4 +18,5 @@ public interface ReservationParticipateRepository extends JpaRepository<Reservat
 	@Query("SELECT rp.member FROM ReservationParticipate rp JOIN rp.member WHERE rp.reservation = :reservation")
 	List<Member> findAllMemberByReservation(@Param("reservation") Reservation reservation);
 	void deleteAllByReservationAndMemberIn(Reservation reservation, List<Member> members);
+	void deleteAllByReservation(Reservation reservation);
 }

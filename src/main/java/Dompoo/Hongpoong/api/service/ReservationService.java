@@ -119,7 +119,8 @@ public class ReservationService {
         if (!reservation.getCreator().getId().equals(memberId)) {
             throw new DeleteFailException();
         }
-
+        
+        reservationParticipateRepository.deleteAllByReservation(reservation);
         reservationRepository.delete(reservation);
     }
     
@@ -134,6 +135,7 @@ public class ReservationService {
     public void deleteReservationByAdmin(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
+        reservationParticipateRepository.deleteAllByReservation(reservation);
         reservationRepository.delete(reservation);
     }
     

@@ -16,6 +16,7 @@ public class ReservationParticipate {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Enumerated(EnumType.STRING)
 	private Attendance attendance;
 	
 	@ManyToOne @JoinColumn(name = "reservation_id")

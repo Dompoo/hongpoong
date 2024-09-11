@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static Dompoo.Hongpoong.domain.enums.Attendance.NO_SHOW;
+
 @Service
 @RequiredArgsConstructor
 public class AttendanceService {
@@ -34,5 +36,14 @@ public class AttendanceService {
         reservationParticipate.editAttendance(isLate ? Attendance.LATE : Attendance.ATTEND);
         
         return AttendanceResponse.from(reservationParticipate);
+    }
+    
+    @Transactional
+    public List<AttendanceResponse> closeAttendance(Long reservationId) {
+        List<ReservationParticipate> reservationParticipates = reservationParticipateRepository.findByReservationIdAndNotAttend(reservationId);
+        
+        reservationParticipates.forEach(rp -> rp.editAttendance(NO_SHOW));
+        
+        return AttendanceResponse.fromList(reservationParticipates);
     }
 }

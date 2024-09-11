@@ -55,7 +55,7 @@ public class AuthService {
         if (!encoder.matches(request.getPassword(), member.getPassword()))
             throw new LoginFailException();
         
-        String token = jwtProvider.generateAccessToken(member.getId(), member.getEmail(), member.getRole());
+        String token = jwtProvider.generateAccessToken(member.getId(), member.getEmail(), member.getRole(), member.getClub());
         
         return LoginResponse.builder()
                 .token(token)

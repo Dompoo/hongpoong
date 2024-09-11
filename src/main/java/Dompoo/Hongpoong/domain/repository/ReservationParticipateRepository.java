@@ -25,8 +25,8 @@ public interface ReservationParticipateRepository extends JpaRepository<Reservat
 	@Query("SELECT rp FROM ReservationParticipate rp JOIN FETCH rp.reservation JOIN FETCH rp.member WHERE rp.member.id = :memberId AND rp.reservation.id = :reservationId")
 	Optional<ReservationParticipate> findByMemberIdAndReservationId(@Param("memberId") Long memberId, @Param("reservationId") Long reservationId);
 	
-	@Query("SELECT rp FROM ReservationParticipate rp WHERE rp.reservation.id = :reservationId AND rp.attendance = 'NO_SHOW'")
-	List<ReservationParticipate> findByReservationIdAndNotAttend(Long reservationId);
+	@Query("SELECT rp FROM ReservationParticipate rp WHERE rp.reservation.id = :reservationId AND rp.attendance = 'NOT_YET_ATTEND'")
+	List<ReservationParticipate> findByReservationIdAndNotAttend(@Param("reservationId") Long reservationId);
 	
 	void deleteAllByReservationAndMemberIn(Reservation reservation, List<Member> members);
 	

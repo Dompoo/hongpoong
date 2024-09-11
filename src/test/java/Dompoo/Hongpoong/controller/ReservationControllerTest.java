@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.controller;
 
-import Dompoo.Hongpoong.api.dto.attendance.AttendanceResponse;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
@@ -277,28 +276,6 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .andExpect(jsonPath("$.message").value(MESSAGE))
                 .andExpect(jsonPath("$.lastmodified").value(LAST_MODIFIED_STRING))
                 .andExpect(jsonPath("$.participators.size()").value(2))
-                .andDo(print());
-    }
-    
-    @Test
-    @DisplayName("해당 예약의 참석여부 조회")
-    void findAllMemberNotAttended() throws Exception {
-        //given
-        when(attendanceService.findAttendance(any())).thenReturn(List.of(
-                AttendanceResponse.builder().name(NAME).email(EMAIL).isAttended(true).build(),
-                AttendanceResponse.builder().name(NAME2).email(EMAIL2).isAttended(false).build()
-        ));
-        
-        //expected
-        mockMvc.perform(get("/reservation/{id}/attendance", RESERVATION_ID))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()").value(2))
-                .andExpect(jsonPath("$[0].name").value(NAME))
-                .andExpect(jsonPath("$[0].email").value(EMAIL))
-                .andExpect(jsonPath("$[0].isAttended").value(true))
-                .andExpect(jsonPath("$[1].name").value(NAME2))
-                .andExpect(jsonPath("$[1].email").value(EMAIL2))
-                .andExpect(jsonPath("$[1].isAttended").value(false))
                 .andDo(print());
     }
     

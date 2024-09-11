@@ -45,7 +45,7 @@ public class AttendanceService {
     
     @Transactional
     public List<AttendanceResponse> closeAttendance(Long memberId, Long reservationId) {
-        Reservation reservation = reservationRepository.findByIdJoinFetchCreator(reservationId).orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
         if (!reservation.getCreator().getId().equals(memberId)) {
             throw new EditFailException();

@@ -52,7 +52,7 @@ public class InstrumentService {
     public InstrumentDetailResponse borrowInstrument(Long memberId, Long instrumentId, InstrumentBorrowRequest request) {
         Reservation reservation = reservationRepository.findById(request.getReservationId()).orElseThrow(ReservationNotFound::new);
 
-        Instrument instrument = instrumentRepository.findByInstrumentIdFetchJoinBorrowerAndReservation(instrumentId).orElseThrow(InstrumentNotFound::new);
+        Instrument instrument = instrumentRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
         
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
@@ -78,8 +78,7 @@ public class InstrumentService {
 
     @Transactional(readOnly = true)
     public InstrumentDetailResponse findInstrumentDetail(Long instrumentId) {
-        Instrument instrument = instrumentRepository.findByInstrumentIdFetchJoinBorrowerAndReservation(instrumentId)
-                .orElseThrow(InstrumentNotFound::new);
+        Instrument instrument = instrumentRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
         
         return InstrumentDetailResponse.from(instrument);
     }

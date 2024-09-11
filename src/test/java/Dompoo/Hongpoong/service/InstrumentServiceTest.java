@@ -3,7 +3,7 @@ package Dompoo.Hongpoong.service;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentBorrowRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentCreateRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentEditRequest;
-import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentBorrowResponse;
+import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentDetailResponse;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.api.service.InstrumentService;
 import Dompoo.Hongpoong.common.exception.impl.InstrumentNotAvailable;
@@ -11,6 +11,7 @@ import Dompoo.Hongpoong.common.exception.impl.InstrumentNotFound;
 import Dompoo.Hongpoong.domain.entity.Instrument;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.repository.InstrumentRepository;
@@ -46,6 +47,8 @@ class InstrumentServiceTest {
     @Autowired
     private ReservationRepository reservationRepository;
     
+    private static final Club CLUB1 = HWARANG;
+    private static final Club CLUB2 = SANTLE;
     private static final InstrumentType INSTRUMENT_TYPE = JANGGU;
     private static final ReservationTime START_TIME = ReservationTime.TIME_0900;
     private static final ReservationTime END_TIME = ReservationTime.TIME_1500;
@@ -73,7 +76,7 @@ class InstrumentServiceTest {
                 .build();
 
         //when
-        service.createInstrument(me.getId(), request);
+        service.createInstrument(me.getClub(), request);
 
         //then
         assertEquals(1, instrumentRepository.findAll().size());
@@ -83,30 +86,16 @@ class InstrumentServiceTest {
     @DisplayName("다른 동아리의 악기 조회")
     void findOther() {
         //given
-        Member me = memberRepository.save(Member.builder()
-                .name("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
-                .club(SANTLE)
-                .build());
-
-        Member other = memberRepository.save(Member.builder()
-                .name("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
-                .club(HWARANG)
-                .build());
-
         instrumentRepository.saveAll(List.of(
-                Instrument.builder().member(me).type(KKWANGGWARI).build(),
-                Instrument.builder().member(me).type(JANGGU).build(),
-                Instrument.builder().member(other).type(BUK).build(),
-                Instrument.builder().member(other).type(SOGO).build(),
-                Instrument.builder().member(other).type(JING).build())
+                Instrument.builder().club(CLUB1).type(KKWANGGWARI).build(),
+                Instrument.builder().club(CLUB1).type(JANGGU).build(),
+                Instrument.builder().club(CLUB2).type(BUK).build(),
+                Instrument.builder().club(CLUB2).type(SOGO).build(),
+                Instrument.builder().club(CLUB2).type(JING).build())
         );
 
         //when
-        List<InstrumentResponse> response = service.findAllOtherClubInstrument(me.getId());
+        List<InstrumentResponse> response = service.findAllOtherClubInstrument(CLUB1);
 
         //then
         assertEquals(3, response.size());
@@ -116,33 +105,19 @@ class InstrumentServiceTest {
     }
 
     @Test
-    @DisplayName("다른 동아리의 악기 조회")
+    @DisplayName("내 동아리의 악기 조회")
     void findMyList() {
         //given
-        Member me = memberRepository.save(Member.builder()
-                .name("창근")
-                .email("dompoo@gmail.com")
-                .password("1234")
-                .club(SANTLE)
-                .build());
-
-        Member other = memberRepository.save(Member.builder()
-                .name("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
-                .club(HWARANG)
-                .build());
-
         instrumentRepository.saveAll(List.of(
-                Instrument.builder().member(me).type(KKWANGGWARI).build(),
-                Instrument.builder().member(me).type(JANGGU).build(),
-                Instrument.builder().member(other).type(BUK).build(),
-                Instrument.builder().member(other).type(SOGO).build(),
-                Instrument.builder().member(other).type(JING).build())
+                Instrument.builder().club(CLUB1).type(KKWANGGWARI).build(),
+                Instrument.builder().club(CLUB1).type(JANGGU).build(),
+                Instrument.builder().club(CLUB2).type(BUK).build(),
+                Instrument.builder().club(CLUB2).type(SOGO).build(),
+                Instrument.builder().club(CLUB2).type(JING).build())
         );
 
         //when
-        List<InstrumentResponse> response = service.findAllMyClubInstrument(me.getId());
+        List<InstrumentResponse> response = service.findAllMyClubInstrument(CLUB1);
 
         //then
         assertEquals(2, response.size());
@@ -161,13 +136,6 @@ class InstrumentServiceTest {
                 .club(SANTLE)
                 .build());
 
-        Member other = memberRepository.save(Member.builder()
-                .name("윤호")
-                .email("yoonH@naver.com")
-                .password("qwer")
-                .club(HWARANG)
-                .build());
-
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(me)
                 .date(LocalDate.of(2025, 12, 20))
@@ -177,21 +145,22 @@ class InstrumentServiceTest {
                 .build());
         
         Instrument instrument = instrumentRepository.save(Instrument.builder()
-                .member(other)
+                .club(HWARANG)
                 .available(true)
                 .type(KKWANGGWARI)
                 .build());
 
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId())
-                .instrumentId(instrument.getId())
                 .build();
 
         //when
-        InstrumentBorrowResponse response = service.borrowInstrument(me.getId(), request);
+        InstrumentDetailResponse response = service.borrowInstrument(me.getId(), instrument.getId(), request);
 
         //then
-        assertEquals(instrumentRepository.findAll().getFirst().getReservation().getId(), reservation.getId());
+        assertEquals(instrumentRepository.findById(instrument.getId()).get().getReservation().getId(), reservation.getId());
+        assertEquals(instrumentRepository.findById(instrument.getId()).get().isAvailable(), false);
+        assertEquals(instrumentRepository.findById(instrument.getId()).get().getBorrower().getId(), me.getId());
         assertEquals(instrument.getId(), response.getInstrumentId());
         assertEquals(LocalDate.of(2025, 12, 20), response.getReturnDate());
         assertEquals(END_TIME.localTime, response.getReturnTime());
@@ -224,17 +193,16 @@ class InstrumentServiceTest {
                 .build());
         
         Instrument instrument = instrumentRepository.save(Instrument.builder()
-                .member(other)
+                .club(other.getClub())
                 .type(KKWANGGWARI)
                 .build());
         
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId())
-                .instrumentId(instrument.getId() + 1)
                 .build();
         
         //when
-        InstrumentNotFound e = Assertions.assertThrows(InstrumentNotFound.class, () -> service.borrowInstrument(me.getId(), request));
+        InstrumentNotFound e = Assertions.assertThrows(InstrumentNotFound.class, () -> service.borrowInstrument(me.getId(), instrument.getId() + 1, request));
         
         //then
         assertEquals(e.statusCode(), "404");
@@ -268,17 +236,16 @@ class InstrumentServiceTest {
                 .build());
         
         Instrument instrument = instrumentRepository.save(Instrument.builder()
-                .member(other)
+                .club(other.getClub())
                 .type(KKWANGGWARI)
                 .build());
         
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(reservation.getId())
-                .instrumentId(instrument.getId())
                 .build();
         
         //when
-        InstrumentNotAvailable e = Assertions.assertThrows(InstrumentNotAvailable.class, () -> service.borrowInstrument(me.getId(), request));
+        InstrumentNotAvailable e = Assertions.assertThrows(InstrumentNotAvailable.class, () -> service.borrowInstrument(me.getId(), instrument.getId(), request));
         
         //then
         assertEquals(e.statusCode(), "400");
@@ -312,7 +279,7 @@ class InstrumentServiceTest {
                 .build());
         
         Instrument instrument = instrumentRepository.save(Instrument.builder()
-                .member(other)
+                .club(other.getClub())
                 .type(KKWANGGWARI)
                 .reservation(reservation)
                 .build());
@@ -338,12 +305,12 @@ class InstrumentServiceTest {
                 .build());
 
         Instrument instrument = instrumentRepository.save(Instrument.builder()
-                .member(me)
+                .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
 
         //when
-        InstrumentResponse response = service.findInstrumentDetail(instrument.getId());
+        InstrumentDetailResponse response = service.findInstrumentDetail(instrument.getId());
 
         //then
         assertEquals("꽹과리", response.getType());
@@ -362,7 +329,7 @@ class InstrumentServiceTest {
                 .build());
 
         Instrument instrument = instrumentRepository.save(Instrument.builder()
-                .member(me)
+                .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
 
@@ -372,7 +339,7 @@ class InstrumentServiceTest {
                 .build();
 
         //when
-        service.editInstrument(me.getId(), instrument.getId(), request.toDto());
+        service.editInstrument(me.getClub(), instrument.getId(), request.toDto());
 
         //then
         assertEquals(INSTRUMENT_TYPE.korName, instrumentRepository.findAll().getFirst().getType().korName);
@@ -391,12 +358,12 @@ class InstrumentServiceTest {
                 .build());
 
         Instrument instrument = instrumentRepository.save(Instrument.builder()
-                .member(me)
+                .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
 
         //when
-        service.deleteInstrument(me.getId(), instrument.getId());
+        service.deleteInstrument(me.getClub(), instrument.getId());
 
         //then
         assertEquals(0, instrumentRepository.findAll().size());
@@ -414,7 +381,7 @@ class InstrumentServiceTest {
                 .build());
         
         Instrument instrument = instrumentRepository.save(Instrument.builder()
-                .member(me)
+                .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
         
@@ -443,7 +410,7 @@ class InstrumentServiceTest {
                 .build());
         
         Instrument instrument = instrumentRepository.save(Instrument.builder()
-                .member(me)
+                .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
         

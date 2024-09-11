@@ -3,7 +3,7 @@ package Dompoo.Hongpoong.controller;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentBorrowRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentCreateRequest;
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentEditRequest;
-import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentBorrowResponse;
+import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentDetailResponse;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
@@ -136,7 +136,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
     @DisplayName("악기 빌리기")
     void borrow() throws Exception {
         //given
-        when(instrumentService.borrowInstrument(any(), any())).thenReturn(InstrumentBorrowResponse.builder()
+        when(instrumentService.borrowInstrument(any(), any(), any())).thenReturn(InstrumentDetailResponse.builder()
                 .instrumentId(INSTRUMENT_ID)
                 .returnDate(RETURN_DATE)
                 .returnTime(RETURN_TIME)
@@ -144,13 +144,12 @@ class InstrumentControllerTest extends MyWebMvcTest {
 
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(RESERVATION_ID)
-                .instrumentId(INSTRUMENT_ID)
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(post("/instrument/borrow")
+        mockMvc.perform(post("/instrument/{id}/borrow", INSTRUMENT_ID)
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -164,20 +163,19 @@ class InstrumentControllerTest extends MyWebMvcTest {
     @DisplayName("악기를 빌릴 때 예약 id는 비어있을 수 없다.")
     void borrowFail() throws Exception {
         //given
-        when(instrumentService.borrowInstrument(any(), any())).thenReturn(InstrumentBorrowResponse.builder()
+        when(instrumentService.borrowInstrument(any(), any(), any())).thenReturn(InstrumentDetailResponse.builder()
                 .instrumentId(INSTRUMENT_ID)
                 .returnDate(RETURN_DATE)
                 .returnTime(RETURN_TIME)
                 .build());
         
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
-                .instrumentId(INSTRUMENT_ID)
                 .build();
         
         String json = objectMapper.writeValueAsString(request);
         
         //expected
-        mockMvc.perform(post("/instrument/borrow")
+        mockMvc.perform(post("/instrument/{id}/borrow", INSTRUMENT_ID)
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isBadRequest())
@@ -187,38 +185,12 @@ class InstrumentControllerTest extends MyWebMvcTest {
     }
     
     @Test
-    @DisplayName("악기를 빌릴 때 악기 id는 비어있을 수 없다.")
-    void borrowFail2() throws Exception {
-        //given
-        when(instrumentService.borrowInstrument(any(), any())).thenReturn(InstrumentBorrowResponse.builder()
-                .instrumentId(INSTRUMENT_ID)
-                .returnDate(RETURN_DATE)
-                .returnTime(RETURN_TIME)
-                .build());
-        
-        InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
-                .reservationId(RESERVATION_ID)
-                .build();
-        
-        String json = objectMapper.writeValueAsString(request);
-        
-        //expected
-        mockMvc.perform(post("/instrument/borrow")
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value(400))
-                .andExpect(jsonPath("$.message").value("[악기는 비어있을 수 없습니다.]"))
-                .andDo(print());
-    }
-    
-    @Test
     @DisplayName("악기 반납하기")
     void returnInstrument() throws Exception {
         //given
 
         //expected
-        mockMvc.perform(post("/instrument/return/{id}", INSTRUMENT_ID))
+        mockMvc.perform(post("/instrument/{id}/return", INSTRUMENT_ID))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -227,7 +199,7 @@ class InstrumentControllerTest extends MyWebMvcTest {
     @DisplayName("악기 상세 조회")
     void findInstrumentDetail() throws Exception {
         //given
-        when(instrumentService.findInstrumentDetail(any())).thenReturn(InstrumentResponse.builder()
+        when(instrumentService.findInstrumentDetail(any())).thenReturn(InstrumentDetailResponse.builder()
                 .instrumentId(INSTRUMENT_ID)
                 .type(INSTRUMENT_TYPE.korName)
                 .club(INSTRUMENT_CLUB)

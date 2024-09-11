@@ -25,7 +25,7 @@ public class AttendanceController implements AttendanceApi {
 	}
 	
 	@Secured
-	@PostMapping("/{reservationId}/attendance")
+	@PostMapping("/{reservationId}/attend")
 	public AttendanceResponse attendReservation(@LoginUser UserClaims userClaims, @PathVariable Long reservationId) {
 		return attendanceService.attendReservation(userClaims.getId(), reservationId, LocalDateTime.now());
 	}

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     
-    @Query("SELECT r FROM Reservation r JOIN FETCH r.creator WHERE r.id = :reservationId")
+    @Query("SELECT r FROM Reservation r WHERE r.id = :reservationId")
     Optional<Reservation> findByIdJoinFetchCreator(@Param("reservationId") Long reservationId);
     
     List<Reservation> findAllByDate(LocalDate date);

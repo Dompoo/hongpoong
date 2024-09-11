@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.config;
 
 import Dompoo.Hongpoong.api.config.WebMvcConfig;
+import Dompoo.Hongpoong.api.controller.attendance.AttendanceController;
 import Dompoo.Hongpoong.api.controller.auth.AuthController;
 import Dompoo.Hongpoong.api.controller.chat.ChatController;
 import Dompoo.Hongpoong.api.controller.common.CommonController;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(
 		value = {
 				AuthController.class,
+				AttendanceController.class,
 				ChatController.class,
 				CommonController.class,
 				InfoController.class,

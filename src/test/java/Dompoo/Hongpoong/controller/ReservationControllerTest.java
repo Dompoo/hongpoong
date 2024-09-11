@@ -3,7 +3,9 @@ package Dompoo.Hongpoong.controller;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
+import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
@@ -287,6 +289,42 @@ class ReservationControllerTest extends MyWebMvcTest {
         //expected
         mockMvc.perform(patch("/reservation/{id}/extend", RESERVATION_ID))
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("예약 종료")
+    void endReservation() throws Exception {
+        //given
+        ReservationEndRequest request = ReservationEndRequest.builder()
+                .endImages(List.of("image1", "image2"))
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/reservation/{id}/end", RESERVATION_ID)
+                        .contentType(APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("예약 종료 후 상세 조회")
+    void findReservationEndDetail() throws Exception {
+        //given
+        when(reservationService.findReservationEndDetail(any())).thenReturn(
+                ReservationEndResponse.builder()
+                        .reservationId(1L)
+                        .images(List.of("image.com/1", "image.com/2"))
+                        .build());
+        
+        //expected
+        mockMvc.perform(get("/reservation/manage/{id}", RESERVATION_ID))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.reservationId").value(1L))
+                .andExpect(jsonPath("$.images.size()").value(2))
                 .andDo(print());
     }
     

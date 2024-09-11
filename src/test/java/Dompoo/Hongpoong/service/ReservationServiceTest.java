@@ -2,15 +2,19 @@ package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
+import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.api.service.ReservationService;
 import Dompoo.Hongpoong.common.exception.impl.*;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.repository.ReservationEndImageRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +43,8 @@ class ReservationServiceTest {
     private MemberRepository memberRepository;
     @Autowired
     private ReservationParticipateRepository reservationParticipateRepository;
+    @Autowired
+    private ReservationEndImageRepository reservationEndImageRepository;
     
     private static final LocalDate DATE = LocalDate.now().plusDays(10);
     private static final LocalDate DATE2 = DATE.plusMonths(1);
@@ -49,6 +55,7 @@ class ReservationServiceTest {
     
     @BeforeEach
     void setUp() {
+        reservationEndImageRepository.deleteAllInBatch();
         reservationParticipateRepository.deleteAllInBatch();
         reservationRepository.deleteAllInBatch();
         memberRepository.deleteAllInBatch();
@@ -405,6 +412,66 @@ class ReservationServiceTest {
         //then
         assertEquals("400", e.statusCode());
         assertEquals("시간 연장은 연습 종료 30분 전에만 가능합니다.", e.getMessage());
+    }
+    
+    @Test
+    @DisplayName("예약 종료")
+    void end() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .name("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .build());
+        
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .build());
+        
+        ReservationEndRequest request = ReservationEndRequest.builder()
+                .endImages(List.of("image1", "image2"))
+                .build();
+        
+        //when
+        service.endReservation(member.getId(), reservation.getId(), request);
+        
+        //then
+        List<ReservationEndImage> images = reservationEndImageRepository.findAllByReservation(reservation);
+        assertTrue(images.stream().map(ReservationEndImage::getImageUrl).toList().containsAll(List.of("image1", "image2")));
+    }
+    
+    @Test
+    @DisplayName("예약 종료 후 상세 정보 확인")
+    void endDetail() {
+        //given
+        Member member = memberRepository.save(Member.builder()
+                .name("창근")
+                .email("dompoo@gmail.com")
+                .password("1234")
+                .build());
+        
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .creator(member)
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .build());
+        
+        reservationEndImageRepository.saveAll(List.of(
+                ReservationEndImage.builder().reservation(reservation).imageUrl("image1").build(),
+                ReservationEndImage.builder().reservation(reservation).imageUrl("image2").build()
+        ));
+        
+        //when
+        ReservationEndResponse reservationEndDetail = service.findReservationEndDetail(reservation.getId());
+        
+        //then
+        assertEquals("창근", reservationEndDetail.getCreatorName());
+        assertEquals("dompoo@gmail.com", reservationEndDetail.getEmail());
+        assertTrue(reservationEndDetail.getImages().containsAll(List.of("image1", "image2")));
     }
 
     @Test

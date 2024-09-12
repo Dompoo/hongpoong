@@ -45,6 +45,10 @@ dependencies {
 	// MySQL
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	// Monitoring
+	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 	// H2
 	testRuntimeOnly 'com.h2database:h2'
 

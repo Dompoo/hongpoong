@@ -23,3 +23,9 @@ springdoc:
     path: /api-docs
     tags-sorter: alpha
     operations-sorter: method
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus

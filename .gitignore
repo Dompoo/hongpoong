@@ -43,4 +43,4 @@ http
 #docker-compose.yml
 #Dockerfile
 .monitoring
-.log
+.logs

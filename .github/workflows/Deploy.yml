@@ -70,5 +70,5 @@ jobs:
             docker stop blooming-server || true
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SERVER_NAME }}
             docker rm -f ${{ env.SERVER_NAME }} || true
-            docker run -d --name ${{ env.SERVER_NAME }} -p ${{ secrets.SERVER_PORT }}:8080 ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SERVER_NAME }}
+            docker run -d --name ${{ env.SERVER_NAME }} -p ${{ secrets.SERVER_PORT }}:8080 -v /logs:/.logs ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SERVER_NAME }}
             docker image prune -f

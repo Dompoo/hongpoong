@@ -43,3 +43,4 @@ http
 #docker-compose.yml
 #Dockerfile
 monitoring/prometheus.yml
+.log

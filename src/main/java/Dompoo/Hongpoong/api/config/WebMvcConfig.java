@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.api.config;
 
+import Dompoo.Hongpoong.common.logging.LoggingInterceptor;
 import Dompoo.Hongpoong.common.security.AuthInterceptor;
 import Dompoo.Hongpoong.common.security.LoginUserArgumentResolver;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +15,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 	
+	private final LoggingInterceptor loggingInterceptor;
 	private final AuthInterceptor authInterceptor;
 	private final LoginUserArgumentResolver loginUserArgumentResolver;
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(loggingInterceptor);
 		registry.addInterceptor(authInterceptor);
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}

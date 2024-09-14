@@ -7,7 +7,7 @@
             <totalSizeCap>100MB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -19,15 +19,30 @@
             <totalSizeCap>100MB</totalSizeCap>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
         </encoder>
+    </appender>
+
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <encoder class="com.github.loki4j.logback.LokiPatternEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+
+        <loki4jUrl>http://43.203.222.149:3100/loki/api/v1/push</loki4jUrl>
+        <batchSize>5</batchSize>
+        <batchMaxTime>1000</batchMaxTime>
+        <staticLabels>
+            <label name="app" value="springboot" />
+        </staticLabels>
     </appender>
 
     <root level="INFO">
         <appender-ref ref="APPLICATION" />
+        <appender-ref ref="LOKI"/>
     </root>
 
     <logger name="HTTP" level="INFO" additivity="false">
         <appender-ref ref="HTTP_IN_OUT" />
+        <appender-ref ref="LOKI"/>
     </logger>
 </configuration>

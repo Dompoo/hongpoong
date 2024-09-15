@@ -6,6 +6,8 @@ import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,12 +29,6 @@ public class Instrument {
     
     private Club club;
     
-    @ManyToOne @JoinColumn(name = "borrower_id")
-    private Member borrower;
-
-    @ManyToOne @JoinColumn(name = "reservation_id")
-    private Reservation reservation;
-    
     public void edit(InstrumentEditDto dto) {
         if (dto.getName() != null) this.name = dto.getName();
         if (dto.getType() != null) this.type = dto.getType();
@@ -40,15 +36,18 @@ public class Instrument {
         if (dto.getImageUrl() != null) this.imageUrl = dto.getImageUrl();
     }
     
-    public void borrowInstrument(Member borrower, Reservation reservation) {
-        this.borrower = borrower;
-        this.reservation = reservation;
+    public InstrumentBorrow borrowInstrument(Member borrower, Reservation reservation, LocalDate now) {
         this.available = false;
+        
+        return InstrumentBorrow.builder()
+                .instrument(this)
+                .member(borrower)
+                .reservation(reservation)
+                .borrowDate(now)
+                .build();
     }
     
     public void returnInstrument() {
-        this.borrower = null;
-        this.reservation = null;
         this.available = true;
     }
 }

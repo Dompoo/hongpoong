@@ -47,6 +47,7 @@ class InstrumentServiceTest {
     @Autowired
     private ReservationRepository reservationRepository;
     
+    private static final String NAME = "장구 1";
     private static final Club CLUB1 = HWARANG;
     private static final Club CLUB2 = SANTLE;
     private static final InstrumentType INSTRUMENT_TYPE = JANGGU;
@@ -72,6 +73,7 @@ class InstrumentServiceTest {
                 .build());
 
         InstrumentCreateRequest request = InstrumentCreateRequest.builder()
+                .name(NAME)
                 .type(INSTRUMENT_TYPE)
                 .build();
 
@@ -87,11 +89,11 @@ class InstrumentServiceTest {
     void findOther() {
         //given
         instrumentRepository.saveAll(List.of(
-                Instrument.builder().club(CLUB1).type(KKWANGGWARI).build(),
-                Instrument.builder().club(CLUB1).type(JANGGU).build(),
-                Instrument.builder().club(CLUB2).type(BUK).build(),
-                Instrument.builder().club(CLUB2).type(SOGO).build(),
-                Instrument.builder().club(CLUB2).type(JING).build())
+                Instrument.builder().name("이름 1").club(CLUB1).type(KKWANGGWARI).build(),
+                Instrument.builder().name("이름 2").club(CLUB1).type(JANGGU).build(),
+                Instrument.builder().name("이름 3").club(CLUB2).type(BUK).build(),
+                Instrument.builder().name("이름 4").club(CLUB2).type(SOGO).build(),
+                Instrument.builder().name("이름 5").club(CLUB2).type(JING).build())
         );
 
         //when
@@ -99,8 +101,11 @@ class InstrumentServiceTest {
 
         //then
         assertEquals(3, response.size());
+        assertEquals("이름 3", response.get(0).getName());
         assertEquals("북", response.get(0).getType());
+        assertEquals("이름 4", response.get(1).getName());
         assertEquals("소고", response.get(1).getType());
+        assertEquals("이름 5", response.get(2).getName());
         assertEquals("징", response.get(2).getType());
     }
 
@@ -109,11 +114,11 @@ class InstrumentServiceTest {
     void findMyList() {
         //given
         instrumentRepository.saveAll(List.of(
-                Instrument.builder().club(CLUB1).type(KKWANGGWARI).build(),
-                Instrument.builder().club(CLUB1).type(JANGGU).build(),
-                Instrument.builder().club(CLUB2).type(BUK).build(),
-                Instrument.builder().club(CLUB2).type(SOGO).build(),
-                Instrument.builder().club(CLUB2).type(JING).build())
+                Instrument.builder().name("이름 1").club(CLUB1).type(KKWANGGWARI).build(),
+                Instrument.builder().name("이름 2").club(CLUB1).type(JANGGU).build(),
+                Instrument.builder().name("이름 3").club(CLUB2).type(BUK).build(),
+                Instrument.builder().name("이름 4").club(CLUB2).type(SOGO).build(),
+                Instrument.builder().name("이름 5").club(CLUB2).type(JING).build())
         );
 
         //when
@@ -121,7 +126,9 @@ class InstrumentServiceTest {
 
         //then
         assertEquals(2, response.size());
+        assertEquals("이름 1", response.get(0).getName());
         assertEquals("꽹과리", response.get(0).getType());
+        assertEquals("이름 2", response.get(1).getName());
         assertEquals("장구", response.get(1).getType());
     }
 
@@ -145,6 +152,7 @@ class InstrumentServiceTest {
                 .build());
         
         Instrument instrument = instrumentRepository.save(Instrument.builder()
+                .name(NAME)
                 .club(HWARANG)
                 .available(true)
                 .type(KKWANGGWARI)
@@ -161,6 +169,7 @@ class InstrumentServiceTest {
         assertEquals(instrumentRepository.findById(instrument.getId()).get().getReservation().getId(), reservation.getId());
         assertEquals(instrumentRepository.findById(instrument.getId()).get().getAvailable(), false);
         assertEquals(instrumentRepository.findById(instrument.getId()).get().getBorrower().getId(), me.getId());
+        assertEquals(NAME, response.getName());
         assertEquals(instrument.getId(), response.getInstrumentId());
         assertEquals(LocalDate.of(2025, 12, 20), response.getReturnDate());
         assertEquals(END_TIME.localTime, response.getReturnTime());
@@ -304,8 +313,9 @@ class InstrumentServiceTest {
                 .password("1234")
                 .club(SANTLE)
                 .build());
-
+        
         Instrument instrument = instrumentRepository.save(Instrument.builder()
+                .name(NAME)
                 .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
@@ -314,8 +324,9 @@ class InstrumentServiceTest {
         InstrumentDetailResponse response = service.findInstrumentDetail(instrument.getId());
 
         //then
-        assertEquals("꽹과리", response.getType());
-        assertEquals("산틀", response.getClub());
+        assertEquals(NAME, response.getName());
+        assertEquals(KKWANGGWARI.korName, response.getType());
+        assertEquals(SANTLE.korName, response.getClub());
     }
 
     @Test
@@ -335,6 +346,7 @@ class InstrumentServiceTest {
                 .build());
 
         InstrumentEditRequest request = InstrumentEditRequest.builder()
+                .name(NAME)
                 .type(INSTRUMENT_TYPE)
                 .available(false)
                 .build();
@@ -343,8 +355,10 @@ class InstrumentServiceTest {
         service.editInstrument(me.getClub(), instrument.getId(), request.toDto());
 
         //then
-        assertEquals(INSTRUMENT_TYPE.korName, instrumentRepository.findAll().getFirst().getType().korName);
-        assertFalse(instrumentRepository.findAll().getFirst().getAvailable());
+        Instrument inst = instrumentRepository.findAll().getFirst();
+        assertEquals(NAME, inst.getName());
+        assertEquals(INSTRUMENT_TYPE.korName, inst.getType().korName);
+        assertFalse(inst.getAvailable());
     }
 
     @Test
@@ -387,6 +401,7 @@ class InstrumentServiceTest {
                 .build());
         
         InstrumentEditRequest request = InstrumentEditRequest.builder()
+                .name(NAME)
                 .type(INSTRUMENT_TYPE)
                 .available(false)
                 .build();
@@ -395,8 +410,10 @@ class InstrumentServiceTest {
         service.editInstrumentByAdmin(instrument.getId(), request.toDto());
         
         //then
-        assertEquals(INSTRUMENT_TYPE.korName, instrumentRepository.findAll().getFirst().getType().korName);
-        assertFalse(instrumentRepository.findAll().getFirst().getAvailable());
+        Instrument inst = instrumentRepository.findAll().getFirst();
+        assertEquals(NAME, inst.getName());
+        assertEquals(INSTRUMENT_TYPE.korName, inst.getType().korName);
+        assertFalse(inst.getAvailable());
     }
     
     @Test

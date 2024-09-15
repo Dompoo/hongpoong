@@ -27,6 +27,9 @@ public class ReservationResponse {
     @Schema(example = "2024-04-17")
     private final LocalDate date;
     
+    @Schema(example = "정기연습")
+    private final String type;
+    
     @Schema(example = "10:00:00")
     private final LocalTime startTime;
     
@@ -44,6 +47,7 @@ public class ReservationResponse {
                 .reservationId(reservation.getId())
                 .creatorName(reservation.getCreator().getName())
                 .date(reservation.getDate())
+                .type(reservation.getType().korName)
                 .startTime(reservation.getStartTime().localTime)
                 .endTime(reservation.getEndTime().localTime)
                 .message(reservation.getMessage())

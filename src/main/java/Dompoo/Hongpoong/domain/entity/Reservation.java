@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.domain.entity;
 
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
+import Dompoo.Hongpoong.domain.enums.ReservationType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,9 @@ public class Reservation {
     private LocalDate date;
     
     @Enumerated(EnumType.STRING)
+    private ReservationType type;
+    
+    @Enumerated(EnumType.STRING)
     private ReservationTime startTime;
     
     @Enumerated(EnumType.STRING)
@@ -28,7 +32,6 @@ public class Reservation {
     
     private LocalDateTime lastModified;
     
-    @Lob
     private String message;
     
     @ManyToOne @JoinColumn(name = "creator_id")

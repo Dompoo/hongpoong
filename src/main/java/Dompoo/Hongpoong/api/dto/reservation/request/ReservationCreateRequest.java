@@ -3,6 +3,7 @@ package Dompoo.Hongpoong.api.dto.reservation.request;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
+import Dompoo.Hongpoong.domain.enums.ReservationType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +22,10 @@ public class ReservationCreateRequest {
     @FutureOrPresent(message = "과거 날짜일 수 없습니다.")
     @Schema(example = "2024-04-17")
     private final LocalDate date;
+    
+    @NotNull(message = "예약 종류는 비어있을 수 없습니다.")
+    @Schema(enumAsRef = true)
+    private final ReservationType type;
 
     @NotNull(message = "시작 시간은 비어있을 수 없습니다.")
     @Schema(enumAsRef = true)
@@ -41,6 +46,7 @@ public class ReservationCreateRequest {
         return Reservation.builder()
                 .creator(creator)
                 .date(date)
+                .type(type)
                 .startTime(startTime)
                 .endTime(endTime)
                 .message(message)

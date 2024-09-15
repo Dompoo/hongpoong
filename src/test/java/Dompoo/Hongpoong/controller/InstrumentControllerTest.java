@@ -168,13 +168,6 @@ class InstrumentControllerTest extends MyWebMvcTest {
     @DisplayName("악기 빌리기")
     void borrow() throws Exception {
         //given
-        when(instrumentService.borrowInstrument(any(), any(), any())).thenReturn(InstrumentDetailResponse.builder()
-                .instrumentId(INSTRUMENT_ID)
-                .name(INSTRUMENT_NAME)
-                .returnDate(RETURN_DATE)
-                .returnTime(RETURN_TIME)
-                .build());
-
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .reservationId(RESERVATION_ID)
                 .build();
@@ -186,10 +179,6 @@ class InstrumentControllerTest extends MyWebMvcTest {
                         .contentType(APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.instrumentId").value(INSTRUMENT_ID))
-                .andExpect(jsonPath("$.name").value(INSTRUMENT_NAME))
-                .andExpect(jsonPath("$.returnDate").value(RETURN_DATE_STRING))
-                .andExpect(jsonPath("$.returnTime").value(RETURN_TIME_STRING))
                 .andDo(print());
     }
     
@@ -197,13 +186,6 @@ class InstrumentControllerTest extends MyWebMvcTest {
     @DisplayName("악기를 빌릴 때 예약 id는 비어있을 수 없다.")
     void borrowFail() throws Exception {
         //given
-        when(instrumentService.borrowInstrument(any(), any(), any())).thenReturn(InstrumentDetailResponse.builder()
-                .instrumentId(INSTRUMENT_ID)
-                .name(INSTRUMENT_NAME)
-                .returnDate(RETURN_DATE)
-                .returnTime(RETURN_TIME)
-                .build());
-        
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
                 .build();
         

@@ -9,11 +9,13 @@ import Dompoo.Hongpoong.api.service.InstrumentService;
 import Dompoo.Hongpoong.common.exception.impl.InstrumentNotAvailable;
 import Dompoo.Hongpoong.common.exception.impl.InstrumentNotFound;
 import Dompoo.Hongpoong.domain.entity.Instrument;
+import Dompoo.Hongpoong.domain.entity.InstrumentBorrow;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
+import Dompoo.Hongpoong.domain.repository.InstrumentBorrowRepository;
 import Dompoo.Hongpoong.domain.repository.InstrumentRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
@@ -46,7 +48,10 @@ class InstrumentServiceTest {
     private MemberRepository memberRepository;
     @Autowired
     private ReservationRepository reservationRepository;
+    @Autowired
+    private InstrumentBorrowRepository instrumentBorrowRepository;
     
+    private static final LocalDate NOW = LocalDate.now().minusDays(1);
     private static final String NAME = "장구 1";
     private static final Club CLUB1 = HWARANG;
     private static final Club CLUB2 = SANTLE;
@@ -56,6 +61,7 @@ class InstrumentServiceTest {
 
     @AfterEach
     void setUp() {
+        instrumentBorrowRepository.deleteAllInBatch();
         instrumentRepository.deleteAllInBatch();
         reservationRepository.deleteAllInBatch();
         memberRepository.deleteAllInBatch();
@@ -145,7 +151,7 @@ class InstrumentServiceTest {
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(me)
-                .date(LocalDate.of(2025, 12, 20))
+                .date(NOW)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .message("")
@@ -163,16 +169,16 @@ class InstrumentServiceTest {
                 .build();
 
         //when
-        InstrumentDetailResponse response = service.borrowInstrument(me.getId(), instrument.getId(), request);
+        service.borrowInstrument(me.getId(), instrument.getId(), request, NOW);
 
         //then
-        assertEquals(instrumentRepository.findById(instrument.getId()).get().getReservation().getId(), reservation.getId());
-        assertEquals(instrumentRepository.findById(instrument.getId()).get().getAvailable(), false);
-        assertEquals(instrumentRepository.findById(instrument.getId()).get().getBorrower().getId(), me.getId());
-        assertEquals(NAME, response.getName());
-        assertEquals(instrument.getId(), response.getInstrumentId());
-        assertEquals(LocalDate.of(2025, 12, 20), response.getReturnDate());
-        assertEquals(END_TIME.localTime, response.getReturnTime());
+        assertEquals(false, instrumentRepository.findById(instrument.getId()).get().getAvailable());
+        assertEquals(1, instrumentBorrowRepository.count());
+        InstrumentBorrow first = instrumentBorrowRepository.findAll().getFirst();
+        assertEquals(NOW, first.getBorrowDate());
+        assertEquals(instrument.getId(), first.getInstrument().getId());
+        assertEquals(me.getId(), first.getMember().getId());
+        assertEquals(reservation.getId(), first.getReservation().getId());
     }
     
     @Test
@@ -211,7 +217,7 @@ class InstrumentServiceTest {
                 .build();
         
         //when
-        InstrumentNotFound e = Assertions.assertThrows(InstrumentNotFound.class, () -> service.borrowInstrument(me.getId(), instrument.getId() + 1, request));
+        InstrumentNotFound e = Assertions.assertThrows(InstrumentNotFound.class, () -> service.borrowInstrument(me.getId(), instrument.getId() + 1, request, NOW));
         
         //then
         assertEquals(e.statusCode(), "404");
@@ -255,7 +261,7 @@ class InstrumentServiceTest {
                 .build();
         
         //when
-        InstrumentNotAvailable e = Assertions.assertThrows(InstrumentNotAvailable.class, () -> service.borrowInstrument(me.getId(), instrument.getId(), request));
+        InstrumentNotAvailable e = Assertions.assertThrows(InstrumentNotAvailable.class, () -> service.borrowInstrument(me.getId(), instrument.getId(), request, NOW));
         
         //then
         assertEquals(e.statusCode(), "400");
@@ -291,7 +297,14 @@ class InstrumentServiceTest {
         Instrument instrument = instrumentRepository.save(Instrument.builder()
                 .club(other.getClub())
                 .type(KKWANGGWARI)
+                .available(false)
+                .build());
+        
+        instrumentBorrowRepository.save(InstrumentBorrow.builder()
+                .instrument(instrument)
+                .member(me)
                 .reservation(reservation)
+                .borrowDate(NOW)
                 .build());
         
         //when
@@ -300,7 +313,6 @@ class InstrumentServiceTest {
         //then
         Instrument inst = instrumentRepository.findAll().getFirst();
         assertEquals(inst.getAvailable(), true);
-        assertEquals(inst.getReservation(), null);
     }
 
     @Test
@@ -314,17 +326,31 @@ class InstrumentServiceTest {
                 .club(SANTLE)
                 .build());
         
+        Reservation reservation = reservationRepository.save(Reservation.builder()
+                .creator(me)
+                .date(LocalDate.of(2025, 12, 20))
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .message("")
+                .build());
+        
         Instrument instrument = instrumentRepository.save(Instrument.builder()
                 .name(NAME)
                 .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
+        
+        instrumentBorrowRepository.saveAll(List.of(
+                InstrumentBorrow.builder().instrument(instrument).member(me).reservation(reservation).build(),
+                InstrumentBorrow.builder().instrument(instrument).member(me).reservation(reservation).build()
+        ));
 
         //when
         InstrumentDetailResponse response = service.findInstrumentDetail(instrument.getId());
 
         //then
         assertEquals(NAME, response.getName());
+        assertEquals(2, response.getBorrowHistory().size());
         assertEquals(KKWANGGWARI.korName, response.getType());
         assertEquals(SANTLE.korName, response.getClub());
     }

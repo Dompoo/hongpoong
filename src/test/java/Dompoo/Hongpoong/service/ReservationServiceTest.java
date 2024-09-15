@@ -13,6 +13,7 @@ import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
+import Dompoo.Hongpoong.domain.enums.ReservationType;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationEndImageRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
@@ -48,6 +49,7 @@ class ReservationServiceTest {
     
     private static final LocalDate DATE = LocalDate.now().plusDays(10);
     private static final LocalDate DATE2 = DATE.plusMonths(1);
+    private static final ReservationType TYPE = ReservationType.FIXED_TIME;
     private static final ReservationTime START_TIME = ReservationTime.TIME_0900;
     private static final LocalTime START_TIME_LOCALTIME = START_TIME.localTime;
     private static final ReservationTime END_TIME = ReservationTime.TIME_1500;
@@ -74,6 +76,7 @@ class ReservationServiceTest {
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .message("")
@@ -98,6 +101,7 @@ class ReservationServiceTest {
 
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .message("")
@@ -125,6 +129,7 @@ class ReservationServiceTest {
         
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
+                .type(TYPE)
                 .startTime(END_TIME)
                 .endTime(START_TIME)
                 .message("")
@@ -151,6 +156,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -187,6 +193,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -223,6 +230,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -259,6 +267,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -287,6 +296,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -313,6 +323,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -346,6 +357,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -373,6 +385,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -400,6 +413,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -427,6 +441,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -456,6 +471,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -487,6 +503,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -524,6 +541,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -558,6 +576,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -592,6 +611,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -616,6 +636,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -642,6 +663,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -668,6 +690,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
@@ -705,6 +728,7 @@ class ReservationServiceTest {
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());

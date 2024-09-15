@@ -9,6 +9,7 @@ import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
+import Dompoo.Hongpoong.domain.enums.ReservationType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +32,7 @@ class ReservationControllerTest extends MyWebMvcTest {
     private static final String NAME = "창근";
     private static final String EMAIL = "dompoo@gmail.com";
     private static final LocalDate DATE = LocalDate.of(2040, 5, 17);
+    private static final ReservationType TYPE = ReservationType.FIXED_TIME;
     private static final String DATE_YEAR = "2040";
     private static final String DATE_MONTH = "5";
     private static final String DATE_STRING = "2040-05-17";
@@ -62,6 +64,7 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .participaterIds(PARTICIPATER_IDS)
@@ -85,6 +88,7 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
+                .type(TYPE)
                 .endTime(END_TIME)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
@@ -108,6 +112,7 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
@@ -131,6 +136,7 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(LocalDate.now().minusDays(1))
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .participaterIds(PARTICIPATER_IDS)
@@ -154,6 +160,7 @@ class ReservationControllerTest extends MyWebMvcTest {
     void addFail4() throws Exception {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .participaterIds(PARTICIPATER_IDS)
@@ -178,6 +185,7 @@ class ReservationControllerTest extends MyWebMvcTest {
         //given
         ReservationCreateRequest request = ReservationCreateRequest.builder()
                 .date(DATE)
+                .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .message("")
@@ -192,6 +200,30 @@ class ReservationControllerTest extends MyWebMvcTest {
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("[참가자는 비어있을 수 없습니다.]"))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("예약 추가시 예약 종류는 비어있을 수 없다.")
+    void addFail6() throws Exception {
+        //given
+        ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .date(DATE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .participaterIds(PARTICIPATER_IDS)
+                .message("")
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/reservation")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[예약 종류는 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
 

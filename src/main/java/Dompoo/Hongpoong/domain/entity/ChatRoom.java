@@ -18,7 +18,7 @@ public class ChatRoom {
     
     private String roomName;
     
-    private int memberCount;
+    private Integer memberCount;
     
     public void reduceMemberCount() {
         this.memberCount--;

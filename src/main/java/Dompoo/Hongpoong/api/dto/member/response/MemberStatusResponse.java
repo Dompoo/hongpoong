@@ -49,7 +49,7 @@ public class MemberStatusResponse {
                 .enrollmentNumber(member.getEnrollmentNumber())
                 .role(member.getRole().korName)
                 .profileImageUrl(member.getProfileImageUrl())
-                .push(member.isPushAlarm())
+                .push(member.getPushAlarm())
                 .build();
     }
 }

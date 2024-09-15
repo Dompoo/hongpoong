@@ -29,7 +29,7 @@ public class InstrumentResponse {
                 .instrumentId(instrument.getId())
                 .type(instrument.getType().korName)
                 .club(instrument.getClub().korName)
-                .available(instrument.isAvailable())
+                .available(instrument.getAvailable())
                 .build();
     }
 }

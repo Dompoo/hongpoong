@@ -21,7 +21,7 @@ public class SettingResponse {
     public static SettingResponse from(Member member) {
         return SettingResponse.builder()
                 .memberId(member.getId())
-                .pushAlarm(member.isPushAlarm())
+                .pushAlarm(member.getPushAlarm())
                 .build();
     }
 }

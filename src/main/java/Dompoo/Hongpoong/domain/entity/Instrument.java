@@ -19,7 +19,7 @@ public class Instrument {
     @Enumerated(EnumType.STRING)
     private InstrumentType type;
     
-    private boolean available;
+    private Boolean available;
     
     private String imageUrl;
     

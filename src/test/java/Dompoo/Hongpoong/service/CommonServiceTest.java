@@ -39,6 +39,7 @@ class CommonServiceTest {
                 .name("이창근")
                 .password("1234")
                 .club(Club.SANTLE)
+                .pushAlarm(false)
                 .build());
 
         //when

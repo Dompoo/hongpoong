@@ -37,7 +37,7 @@ public class Member {
     
     private String profileImageUrl;
     
-    private boolean pushAlarm;
+    private Boolean pushAlarm;
     
     public static Member from(SignUp signUp) {
         return Member.builder()

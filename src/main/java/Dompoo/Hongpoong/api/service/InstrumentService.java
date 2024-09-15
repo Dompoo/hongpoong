@@ -59,7 +59,7 @@ public class InstrumentService {
         // 예약의 id 와 member id가 다르면 throw
         if (!reservation.getCreator().getId().equals(memberId)) throw new RentalFail();
         // 악기의 대여를 막았다면 throw
-        if (!instrument.isAvailable()) throw new InstrumentNotAvailable();
+        if (!instrument.getAvailable()) throw new InstrumentNotAvailable();
         // 악기가 이미 대여중이라면 throw
         if (instrument.getBorrower() != null) throw new InstrumentNotAvailable();
 

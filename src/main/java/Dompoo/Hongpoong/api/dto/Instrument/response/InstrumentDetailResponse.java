@@ -42,7 +42,7 @@ public class InstrumentDetailResponse {
                 .type(instrument.getType().korName)
                 .club(instrument.getClub().korName)
                 .borrower(instrument.getBorrower() == null ? null : MemberResponse.from(instrument.getBorrower()))
-                .available(instrument.isAvailable())
+                .available(instrument.getAvailable())
                 .returnDate(instrument.getReservation() == null ? null : instrument.getReservation().getDate())
                 .returnTime(instrument.getReservation() == null ? null : instrument.getReservation().getEndTime().localTime)
                 .build();

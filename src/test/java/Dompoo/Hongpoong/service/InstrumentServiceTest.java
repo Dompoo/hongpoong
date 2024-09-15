@@ -159,7 +159,7 @@ class InstrumentServiceTest {
 
         //then
         assertEquals(instrumentRepository.findById(instrument.getId()).get().getReservation().getId(), reservation.getId());
-        assertEquals(instrumentRepository.findById(instrument.getId()).get().isAvailable(), false);
+        assertEquals(instrumentRepository.findById(instrument.getId()).get().getAvailable(), false);
         assertEquals(instrumentRepository.findById(instrument.getId()).get().getBorrower().getId(), me.getId());
         assertEquals(instrument.getId(), response.getInstrumentId());
         assertEquals(LocalDate.of(2025, 12, 20), response.getReturnDate());
@@ -238,6 +238,7 @@ class InstrumentServiceTest {
         Instrument instrument = instrumentRepository.save(Instrument.builder()
                 .club(other.getClub())
                 .type(KKWANGGWARI)
+                .available(false)
                 .build());
         
         InstrumentBorrowRequest request = InstrumentBorrowRequest.builder()
@@ -289,7 +290,7 @@ class InstrumentServiceTest {
 
         //then
         Instrument inst = instrumentRepository.findAll().getFirst();
-        assertEquals(inst.isAvailable(), true);
+        assertEquals(inst.getAvailable(), true);
         assertEquals(inst.getReservation(), null);
     }
 
@@ -343,7 +344,7 @@ class InstrumentServiceTest {
 
         //then
         assertEquals(INSTRUMENT_TYPE.korName, instrumentRepository.findAll().getFirst().getType().korName);
-        assertFalse(instrumentRepository.findAll().getFirst().isAvailable());
+        assertFalse(instrumentRepository.findAll().getFirst().getAvailable());
     }
 
     @Test
@@ -395,7 +396,7 @@ class InstrumentServiceTest {
         
         //then
         assertEquals(INSTRUMENT_TYPE.korName, instrumentRepository.findAll().getFirst().getType().korName);
-        assertFalse(instrumentRepository.findAll().getFirst().isAvailable());
+        assertFalse(instrumentRepository.findAll().getFirst().getAvailable());
     }
     
     @Test

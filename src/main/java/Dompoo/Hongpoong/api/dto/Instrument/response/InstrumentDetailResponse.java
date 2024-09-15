@@ -19,6 +19,9 @@ public class InstrumentDetailResponse {
     @Schema(example = "1")
     private final Long instrumentId;
     
+    @Schema(example = "검정 장구 8.5치")
+    private final String name;
+    
     @Schema(example = "장구")
     private final String type;
     
@@ -39,6 +42,7 @@ public class InstrumentDetailResponse {
     public static InstrumentDetailResponse from(Instrument instrument) {
         return InstrumentDetailResponse.builder()
                 .instrumentId(instrument.getId())
+                .name(instrument.getName())
                 .type(instrument.getType().korName)
                 .club(instrument.getClub().korName)
                 .borrower(instrument.getBorrower() == null ? null : MemberResponse.from(instrument.getBorrower()))

@@ -10,6 +10,9 @@ import lombok.*;
 @NoArgsConstructor(force = true)
 public class InstrumentEditRequest {
     
+    @Schema(example = "검정 장구 8.5치")
+    private final String name;
+    
     @Schema(enumAsRef = true)
     private final InstrumentType type;
     
@@ -21,6 +24,7 @@ public class InstrumentEditRequest {
     
     public InstrumentEditDto toDto() {
         return InstrumentEditDto.builder()
+                .name(name)
                 .type(type)
                 .available(available)
                 .imageUrl(imageUrl)

@@ -16,6 +16,8 @@ public class Instrument {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    private String name;
+    
     @Enumerated(EnumType.STRING)
     private InstrumentType type;
     
@@ -32,6 +34,7 @@ public class Instrument {
     private Reservation reservation;
     
     public void edit(InstrumentEditDto dto) {
+        if (dto.getName() != null) this.name = dto.getName();
         if (dto.getType() != null) this.type = dto.getType();
         if (dto.getAvailable() != null) this.available = dto.getAvailable();
         if (dto.getImageUrl() != null) this.imageUrl = dto.getImageUrl();

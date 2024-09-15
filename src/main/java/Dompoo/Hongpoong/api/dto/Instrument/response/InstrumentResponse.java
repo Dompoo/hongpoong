@@ -15,6 +15,9 @@ public class InstrumentResponse {
     @Schema(example = "1")
     private final Long instrumentId;
     
+    @Schema(example = "검정 장구 8.5치")
+    private final String name;
+    
     @Schema(example = "장구")
     private final String type;
     
@@ -27,6 +30,7 @@ public class InstrumentResponse {
     public static InstrumentResponse from(Instrument instrument) {
         return InstrumentResponse.builder()
                 .instrumentId(instrument.getId())
+                .name(instrument.getName())
                 .type(instrument.getType().korName)
                 .club(instrument.getClub().korName)
                 .available(instrument.getAvailable())

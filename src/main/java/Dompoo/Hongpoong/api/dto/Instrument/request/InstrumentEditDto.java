@@ -11,6 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class InstrumentEditDto {
 
+    private final String name;
     private final InstrumentType type;
     private final Boolean available;
     private final String imageUrl;

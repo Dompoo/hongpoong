@@ -67,6 +67,7 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
+                .participationAvailable(true)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
                 .build();
@@ -90,6 +91,7 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .date(DATE)
                 .type(TYPE)
                 .endTime(END_TIME)
+                .participationAvailable(true)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
                 .build();
@@ -114,6 +116,7 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
+                .participationAvailable(true)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
                 .build();
@@ -139,6 +142,7 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
+                .participationAvailable(true)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
                 .build();
@@ -163,6 +167,7 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
+                .participationAvailable(true)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
                 .build();
@@ -188,6 +193,7 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
+                .participationAvailable(true)
                 .message("")
                 .build();
         
@@ -211,6 +217,7 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .date(DATE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
+                .participationAvailable(true)
                 .participaterIds(PARTICIPATER_IDS)
                 .message("")
                 .build();
@@ -224,6 +231,31 @@ class ReservationControllerTest extends MyWebMvcTest {
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("[예약 종류는 비어있을 수 없습니다.]"))
+                .andDo(print());
+    }
+    
+    @Test
+    @DisplayName("예약 추가시 참여 가능 여부는 비어있을 수 없다.")
+    void addFail7() throws Exception {
+        //given
+        ReservationCreateRequest request = ReservationCreateRequest.builder()
+                .date(DATE)
+                .type(TYPE)
+                .startTime(START_TIME)
+                .endTime(END_TIME)
+                .participaterIds(PARTICIPATER_IDS)
+                .message("")
+                .build();
+        
+        String json = objectMapper.writeValueAsString(request);
+        
+        //expected
+        mockMvc.perform(post("/reservation")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("[참여 가능 여부는 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
 

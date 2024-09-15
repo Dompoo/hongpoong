@@ -77,8 +77,9 @@ public class InstrumentService {
     @Transactional(readOnly = true)
     public InstrumentDetailResponse findInstrumentDetail(Long instrumentId) {
         Instrument instrument = instrumentRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
+        List<InstrumentBorrow> instrumentBorrows = instrumentBorrowRepository.findAllByInstrument(instrument);
         
-        return InstrumentDetailResponse.from(instrument);
+        return InstrumentDetailResponse.from(instrument, instrumentBorrows);
     }
 
     @Transactional

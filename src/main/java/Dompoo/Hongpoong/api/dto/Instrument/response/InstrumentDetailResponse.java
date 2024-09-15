@@ -1,15 +1,14 @@
 package Dompoo.Hongpoong.api.dto.Instrument.response;
 
-import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.domain.entity.Instrument;
+import Dompoo.Hongpoong.domain.entity.InstrumentBorrow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -31,24 +30,16 @@ public class InstrumentDetailResponse {
     @Schema(example = "false")
     private final Boolean available;
     
-    @Schema(example = "2024-04-17")
-    private final LocalDate returnDate;
+    private final List<InstrumentBorrowResponse> borrowHistory;
     
-    @Schema(example = "20:00:00")
-    private final LocalTime returnTime;
-    
-    private final MemberResponse borrower;
-    
-    public static InstrumentDetailResponse from(Instrument instrument) {
+    public static InstrumentDetailResponse from(Instrument instrument, List<InstrumentBorrow> instrumentBorrows) {
         return InstrumentDetailResponse.builder()
                 .instrumentId(instrument.getId())
                 .name(instrument.getName())
                 .type(instrument.getType().korName)
                 .club(instrument.getClub().korName)
-                .borrower(instrument.getBorrower() == null ? null : MemberResponse.from(instrument.getBorrower()))
                 .available(instrument.getAvailable())
-                .returnDate(instrument.getReservation() == null ? null : instrument.getReservation().getDate())
-                .returnTime(instrument.getReservation() == null ? null : instrument.getReservation().getEndTime().localTime)
+                .borrowHistory(InstrumentBorrowResponse.fromList(instrumentBorrows))
                 .build();
     }
 }

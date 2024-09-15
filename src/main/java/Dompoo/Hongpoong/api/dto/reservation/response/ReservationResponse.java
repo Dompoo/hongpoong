@@ -39,6 +39,9 @@ public class ReservationResponse {
     @Schema(example = "산틀 정공 연습")
     private final String message;
     
+    @Schema(example = "true")
+    private final Boolean participationAvailable;
+    
     @Schema(example = "2024-04-17T20:00:00")
     private final LocalDateTime lastmodified;
     
@@ -51,6 +54,7 @@ public class ReservationResponse {
                 .startTime(reservation.getStartTime().localTime)
                 .endTime(reservation.getEndTime().localTime)
                 .message(reservation.getMessage())
+                .participationAvailable(reservation.getParticipationAvailable())
                 .lastmodified(reservation.getLastModified())
                 .build();
     }

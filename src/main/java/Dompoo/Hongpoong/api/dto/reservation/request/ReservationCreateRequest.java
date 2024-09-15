@@ -42,6 +42,10 @@ public class ReservationCreateRequest {
     @Schema(example = "산틀 정공 연습")
     private final String message;
     
+    @NotNull(message = "참여 가능 여부는 비어있을 수 없습니다.")
+    @Schema(example = "true")
+    private final Boolean participationAvailable;
+    
     public Reservation toReservation(Member creator) {
         return Reservation.builder()
                 .creator(creator)
@@ -50,6 +54,7 @@ public class ReservationCreateRequest {
                 .startTime(startTime)
                 .endTime(endTime)
                 .message(message)
+                .participationAvailable(participationAvailable)
                 .build();
     }
 }

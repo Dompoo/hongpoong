@@ -34,6 +34,8 @@ public class Reservation {
     
     private String message;
     
+    private Boolean participationAvailable;
+    
     @ManyToOne @JoinColumn(name = "creator_id")
     private Member creator;
     

@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.function.Supplier;
 
 @Entity
 @Getter
@@ -51,7 +52,13 @@ public class Reservation {
         endTime = endTime.nextReservationTime();
     }
     
-    public LocalDateTime getEndLocalDateTime() {
-        return LocalDateTime.of(date, endTime.localTime);
+    public ReservationParticipate attendMember(LocalDateTime now, Supplier<ReservationParticipate> participateSupplier) {
+        ReservationParticipate participate = participateSupplier.get();
+        participate.editAttendance(isLate(now));
+        return participate;
+    }
+    
+    private Boolean isLate(LocalDateTime now) {
+        return LocalDateTime.of(date, endTime.localTime).isBefore(now);
     }
 }

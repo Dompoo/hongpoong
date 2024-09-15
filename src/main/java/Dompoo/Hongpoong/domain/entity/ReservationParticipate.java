@@ -35,7 +35,19 @@ public class ReservationParticipate {
 				.toList();
 	}
 	
+	public static ReservationParticipate of(Reservation reservation, Member member) {
+		return ReservationParticipate.builder()
+				.reservation(reservation)
+				.member(member)
+				.attendance(Attendance.NOT_YET_ATTEND)
+				.build();
+	}
+	
 	public void editAttendance(Attendance attendance) {
 		this.attendance = attendance;
+	}
+	
+	public void editAttendance(Boolean isLate) {
+		this.attendance = isLate ? Attendance.LATE : Attendance.ATTEND;
 	}
 }

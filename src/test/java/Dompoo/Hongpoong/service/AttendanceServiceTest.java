@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.service;
 
 import Dompoo.Hongpoong.api.dto.attendance.AttendanceResponse;
 import Dompoo.Hongpoong.api.service.AttendanceService;
+import Dompoo.Hongpoong.common.exception.impl.AttendanceNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -108,6 +110,7 @@ class AttendanceServiceTest {
 		Reservation reservation = reservationRepository.save(Reservation.builder()
 				.date(NOW.toLocalDate())
 				.endTime(ReservationTime.from(NOW.toLocalTime()))
+				.participationAvailable(false)
 				.build());
 		reservationParticipateRepository.saveAll(List.of(
 				ReservationParticipate.builder().reservation(reservation).member(member).attendance(Attendance.NOT_YET_ATTEND).build()
@@ -134,6 +137,7 @@ class AttendanceServiceTest {
 		Reservation reservation = reservationRepository.save(Reservation.builder()
 				.date(NOW.toLocalDate())
 				.endTime(ReservationTime.from(NOW.toLocalTime()))
+				.participationAvailable(false)
 				.build());
 		reservationParticipateRepository.saveAll(List.of(
 				ReservationParticipate.builder().reservation(reservation).member(member).attendance(Attendance.NOT_YET_ATTEND).build()
@@ -146,6 +150,53 @@ class AttendanceServiceTest {
 		//then
 		assertEquals("email1", result.getMember().getEmail());
 		assertEquals(Attendance.LATE.korName, result.getAttendance());
+	}
+	
+	@Test
+	@DisplayName("외부 참여 가능 예약의 외부 참여")
+	void attendReservationOutsider() {
+		//given
+		Member member = memberRepository.save(Member.builder()
+				.email("email1")
+				.name("name1")
+				.club(Club.SANTLE)
+				.build());
+		Reservation reservation = reservationRepository.save(Reservation.builder()
+				.date(NOW.toLocalDate())
+				.endTime(ReservationTime.from(NOW.toLocalTime()))
+				.participationAvailable(true)
+				.build());
+		
+		//when
+		AttendanceResponse result = attendanceService.attendReservation(member.getId(), reservation.getId(), ATTEND_TIME);
+		
+		//then
+		assertEquals("email1", result.getMember().getEmail());
+		assertEquals(Attendance.ATTEND.korName, result.getAttendance());
+		assertEquals(1, reservationParticipateRepository.count());
+	}
+	
+	@Test
+	@DisplayName("외부 참여 불가능 예약의 외부 참여")
+	void attendReservationOutsiderFail() {
+		//given
+		Member member = memberRepository.save(Member.builder()
+				.email("email1")
+				.name("name1")
+				.club(Club.SANTLE)
+				.build());
+		Reservation reservation = reservationRepository.save(Reservation.builder()
+				.date(NOW.toLocalDate())
+				.endTime(ReservationTime.from(NOW.toLocalTime()))
+				.participationAvailable(false)
+				.build());
+		
+		//when
+		AttendanceNotFound e = assertThrows(AttendanceNotFound.class, () -> attendanceService.attendReservation(member.getId(), reservation.getId(), ATTEND_TIME));
+		
+		//then
+		assertEquals("404", e.statusCode());
+		assertEquals("출석현황을 찾을 수 없습니다.", e.getMessage());
 	}
 	
 	@Test

@@ -3,10 +3,12 @@ package Dompoo.Hongpoong.api.service;
 import Dompoo.Hongpoong.api.dto.attendance.AttendanceResponse;
 import Dompoo.Hongpoong.common.exception.impl.AttendanceNotFound;
 import Dompoo.Hongpoong.common.exception.impl.EditFailException;
+import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.common.exception.impl.ReservationNotFound;
+import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
-import Dompoo.Hongpoong.domain.enums.Attendance;
+import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,25 +24,25 @@ import static Dompoo.Hongpoong.domain.enums.Attendance.NO_SHOW;
 @RequiredArgsConstructor
 public class AttendanceService {
 
-    private final ReservationParticipateRepository reservationParticipateRepository;
+    private final ReservationParticipateRepository participateRepository;
     private final ReservationRepository reservationRepository;
+    private final MemberRepository memberRepository;
     
     @Transactional(readOnly = true)
     public List<AttendanceResponse> findAttendance(Long reservationId) {
-        List<ReservationParticipate> reservationParticipates = reservationParticipateRepository.findAllByReservationIdJoinFetchMember(reservationId);
+        List<ReservationParticipate> reservationParticipates = participateRepository.findAllByReservationIdJoinFetchMember(reservationId);
         
         return AttendanceResponse.fromList(reservationParticipates);
     }
     
     @Transactional
     public AttendanceResponse attendReservation(Long memberId, Long reservationId, LocalDateTime now) {
-        ReservationParticipate reservationParticipate = reservationParticipateRepository.findByMemberIdAndReservationId(memberId, reservationId).orElseThrow(AttendanceNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(ReservationNotFound::new);
         
-        boolean isLate = reservationParticipate.getReservation().getEndLocalDateTime().isBefore(now);
+        ReservationParticipate participate = reservation.attendMember(now, () -> findOrCreateParticipate(memberId, reservation));
         
-        reservationParticipate.editAttendance(isLate ? Attendance.LATE : Attendance.ATTEND);
-        
-        return AttendanceResponse.from(reservationParticipate);
+        return AttendanceResponse.from(participate);
     }
     
     @Transactional
@@ -51,10 +53,24 @@ public class AttendanceService {
             throw new EditFailException();
         }
         
-        List<ReservationParticipate> reservationParticipates = reservationParticipateRepository.findByReservationIdAndNotAttend(reservationId);
+        List<ReservationParticipate> reservationParticipates = participateRepository.findByReservationIdAndNotAttend(reservationId);
         
         reservationParticipates.forEach(rp -> rp.editAttendance(NO_SHOW));
         
         return AttendanceResponse.fromList(reservationParticipates);
+    }
+    
+    private ReservationParticipate findOrCreateParticipate(Long memberId, Reservation reservation) {
+        return participateRepository.findByMemberIdAndReservationId(memberId, reservation.getId())
+                .orElseGet(() -> createNewParticipate(memberId, reservation));
+    }
+    
+    private ReservationParticipate createNewParticipate(Long memberId, Reservation reservation) {
+        if (!reservation.getParticipationAvailable()) {
+            throw new AttendanceNotFound();
+        }
+        
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        return participateRepository.save(ReservationParticipate.of(reservation, member));
     }
 }

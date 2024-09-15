@@ -24,7 +24,7 @@ public interface AttendanceApi {
 	);
 	
 	@Operation(summary = "특정 예약 출석 그만 받기")
-	List<AttendanceResponse> clostAttendance(
+	List<AttendanceResponse> closeAttendance(
 			@Schema(hidden = true) UserClaims userClaims,
 			@Parameter(description = "예약 id") Long reservationId
 	);

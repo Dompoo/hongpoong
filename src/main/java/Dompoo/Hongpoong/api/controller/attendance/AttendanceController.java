@@ -32,7 +32,7 @@ public class AttendanceController implements AttendanceApi {
 	
 	@Secured
 	@PostMapping("/{reservationId}/close")
-	public List<AttendanceResponse> clostAttendance(@LoginUser UserClaims userClaims, @PathVariable Long reservationId) {
+	public List<AttendanceResponse> closeAttendance(@LoginUser UserClaims userClaims, @PathVariable Long reservationId) {
 		return attendanceService.closeAttendance(userClaims.getId(), reservationId);
 	}
 }

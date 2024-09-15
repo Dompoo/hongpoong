@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -43,8 +44,8 @@ public class InstrumentController implements InstrumentApi {
 
     @Secured
     @PostMapping("/{instrumentId}/borrow")
-    public InstrumentDetailResponse borrowInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId, @RequestBody @Valid InstrumentBorrowRequest request) {
-        return service.borrowInstrument(claims.getId(), instrumentId, request);
+    public void borrowInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId, @RequestBody @Valid InstrumentBorrowRequest request) {
+        service.borrowInstrument(claims.getId(), instrumentId, request, LocalDate.now());
     }
 
     @Secured

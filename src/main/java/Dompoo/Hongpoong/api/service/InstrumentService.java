@@ -7,9 +7,11 @@ import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentDetailResponse;
 import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.common.exception.impl.*;
 import Dompoo.Hongpoong.domain.entity.Instrument;
+import Dompoo.Hongpoong.domain.entity.InstrumentBorrow;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.enums.Club;
+import Dompoo.Hongpoong.domain.repository.InstrumentBorrowRepository;
 import Dompoo.Hongpoong.domain.repository.InstrumentRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -26,6 +29,7 @@ public class InstrumentService {
     private final InstrumentRepository instrumentRepository;
     private final MemberRepository memberRepository;
     private final ReservationRepository reservationRepository;
+    private final InstrumentBorrowRepository instrumentBorrowRepository;
     
     @Transactional
     public void createInstrument(Club club, InstrumentCreateRequest request) {
@@ -49,23 +53,17 @@ public class InstrumentService {
     }
 
     @Transactional
-    public InstrumentDetailResponse borrowInstrument(Long memberId, Long instrumentId, InstrumentBorrowRequest request) {
+    public void borrowInstrument(Long memberId, Long instrumentId, InstrumentBorrowRequest request, LocalDate now) {
         Reservation reservation = reservationRepository.findById(request.getReservationId()).orElseThrow(ReservationNotFound::new);
-
         Instrument instrument = instrumentRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
-        
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
         // 예약의 id 와 member id가 다르면 throw
         if (!reservation.getCreator().getId().equals(memberId)) throw new RentalFail();
-        // 악기의 대여를 막았다면 throw
+        // 악기 대여가 불가능한 상태라면 throw
         if (!instrument.getAvailable()) throw new InstrumentNotAvailable();
-        // 악기가 이미 대여중이라면 throw
-        if (instrument.getBorrower() != null) throw new InstrumentNotAvailable();
-
-        instrument.borrowInstrument(member, reservation);
-
-        return InstrumentDetailResponse.from(instrument);
+        
+        instrumentBorrowRepository.save(instrument.borrowInstrument(member, reservation, now));
     }
 
     @Transactional

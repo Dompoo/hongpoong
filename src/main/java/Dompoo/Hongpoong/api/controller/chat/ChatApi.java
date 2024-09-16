@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
-@Tag(name = "6. 채팅")
+@Tag(name = "7. 채팅")
 public interface ChatApi {
 	
 	@Operation(summary = "채팅방 생성")

@@ -27,10 +27,10 @@ public class ReservationEditRequest {
     @Schema(example = "산틀 정공 연습")
     private final String message;
     
-    @Schema(example = "{1, 2, 3}")
+    @Schema(example = "[1, 2, 3]")
     private final List<Long> addedParticipatorIds;
     
-    @Schema(example = "{4, 5, 6}")
+    @Schema(example = "[4, 5, 6]")
     private final List<Long> removedParticipatorIds;
     
     public ReservationEditDto toDto() {

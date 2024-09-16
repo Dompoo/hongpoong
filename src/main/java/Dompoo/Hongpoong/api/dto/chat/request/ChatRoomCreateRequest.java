@@ -15,7 +15,7 @@ public class ChatRoomCreateRequest {
     @Schema(example = "걸궁 답사")
     private final String chatroomName;
     
-    @Schema(example = "{1, 2, 3}")
+    @Schema(example = "[1, 2, 3]")
     private final List<Long> memberIds;
     
     public ChatRoom toChatRoom() {

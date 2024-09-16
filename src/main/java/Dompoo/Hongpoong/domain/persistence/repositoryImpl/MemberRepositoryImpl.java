@@ -1,8 +1,9 @@
-package Dompoo.Hongpoong.domain.repository;
+package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Role;
-import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

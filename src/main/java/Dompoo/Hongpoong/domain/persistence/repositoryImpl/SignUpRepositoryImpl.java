@@ -1,7 +1,8 @@
-package Dompoo.Hongpoong.domain.repository;
+package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
 import Dompoo.Hongpoong.domain.entity.SignUp;
-import Dompoo.Hongpoong.domain.jpaRepository.SignUpJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.SignUpJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.SignUpRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

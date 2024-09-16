@@ -1,9 +1,10 @@
-package Dompoo.Hongpoong.domain.repository;
+package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
 import Dompoo.Hongpoong.domain.entity.Attendance;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
-import Dompoo.Hongpoong.domain.jpaRepository.AttendanceJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.AttendanceJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.AttendanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

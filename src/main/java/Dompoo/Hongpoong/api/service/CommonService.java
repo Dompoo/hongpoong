@@ -4,7 +4,7 @@ import Dompoo.Hongpoong.api.dto.common.request.SettingEditDto;
 import Dompoo.Hongpoong.api.dto.common.response.SettingResponse;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

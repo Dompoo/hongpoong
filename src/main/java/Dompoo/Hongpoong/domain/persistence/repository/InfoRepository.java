@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.domain.repository;
+package Dompoo.Hongpoong.domain.persistence.repository;
 
 import Dompoo.Hongpoong.domain.entity.Info;
 

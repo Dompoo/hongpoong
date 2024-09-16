@@ -5,7 +5,7 @@ import Dompoo.Hongpoong.api.dto.common.response.SettingResponse;
 import Dompoo.Hongpoong.api.service.CommonService;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Club;
-import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

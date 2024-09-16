@@ -10,7 +10,7 @@ import Dompoo.Hongpoong.common.exception.impl.EditRoleToAdminException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Role;
-import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

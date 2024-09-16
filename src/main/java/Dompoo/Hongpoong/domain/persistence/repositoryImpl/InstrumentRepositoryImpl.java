@@ -1,10 +1,11 @@
-package Dompoo.Hongpoong.domain.repository;
+package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
 import Dompoo.Hongpoong.domain.entity.Instrument;
 import Dompoo.Hongpoong.domain.entity.InstrumentBorrow;
 import Dompoo.Hongpoong.domain.enums.Club;
-import Dompoo.Hongpoong.domain.jpaRepository.InstrumentBorrowJpaRepository;
-import Dompoo.Hongpoong.domain.jpaRepository.InstrumentJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.InstrumentBorrowJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.InstrumentJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.InstrumentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

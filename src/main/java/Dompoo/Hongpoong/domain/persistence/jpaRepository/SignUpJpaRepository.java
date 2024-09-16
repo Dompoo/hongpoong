@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.domain.jpaRepository;
+package Dompoo.Hongpoong.domain.persistence.jpaRepository;
 
 import Dompoo.Hongpoong.domain.entity.SignUp;
 import org.springframework.data.jpa.repository.JpaRepository;

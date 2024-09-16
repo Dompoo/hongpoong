@@ -1,9 +1,10 @@
-package Dompoo.Hongpoong.domain.repository;
+package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
 import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
-import Dompoo.Hongpoong.domain.jpaRepository.ReservationEndImageJpaRepository;
-import Dompoo.Hongpoong.domain.jpaRepository.ReservationJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.ReservationEndImageJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.ReservationJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

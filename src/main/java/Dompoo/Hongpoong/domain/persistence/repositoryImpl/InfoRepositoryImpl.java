@@ -1,7 +1,8 @@
-package Dompoo.Hongpoong.domain.repository;
+package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
 import Dompoo.Hongpoong.domain.entity.Info;
-import Dompoo.Hongpoong.domain.jpaRepository.InfoJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.InfoJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.InfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

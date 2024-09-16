@@ -1,11 +1,12 @@
-package Dompoo.Hongpoong.domain.repository;
+package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
 import Dompoo.Hongpoong.domain.entity.ChatRoom;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.MemberInChatRoom;
-import Dompoo.Hongpoong.domain.jpaRepository.ChatMessageJpaRepository;
-import Dompoo.Hongpoong.domain.jpaRepository.ChatRoomJpaRepository;
-import Dompoo.Hongpoong.domain.jpaRepository.MemberInChatRoomJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.ChatMessageJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.ChatRoomJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberInChatRoomJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +14,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class ChatRepositoryImpl implements ChatRepository{
+public class ChatRepositoryImpl implements ChatRepository {
 	
 	private final ChatMessageJpaRepository chatMessageJpaRepository;
 	private final ChatRoomJpaRepository chatRoomJpaRepository;

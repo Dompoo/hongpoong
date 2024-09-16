@@ -47,6 +47,7 @@ public class MemberResponse {
                 .nickname(member.getNickname())
                 .club(member.getClub().korName)
                 .enrollmentNumber(member.getEnrollmentNumber())
+                .role(member.getRole().korName)
                 .profileImageUrl(member.getProfileImageUrl())
                 .build();
     }

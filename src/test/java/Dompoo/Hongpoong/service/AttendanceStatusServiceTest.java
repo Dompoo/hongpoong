@@ -9,6 +9,7 @@ import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.enums.AttendanceStatus;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
+import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.repository.AttendanceRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
@@ -56,21 +57,25 @@ class AttendanceStatusServiceTest {
 		Member member1 = memberRepository.save(Member.builder()
 				.email("email1")
 				.name("name1")
+				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
 		Member member2 = memberRepository.save(Member.builder()
 				.email("email2")
 				.name("name2")
+				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
 		Member member3 = memberRepository.save(Member.builder()
 				.email("email3")
 				.name("name3")
+				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
 		Member member4 = memberRepository.save(Member.builder()
 				.email("email4")
 				.name("name4")
+				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
 		Reservation reservation = reservationRepository.save(Reservation.builder()
@@ -105,6 +110,7 @@ class AttendanceStatusServiceTest {
 		Member member = memberRepository.save(Member.builder()
 				.email("email1")
 				.name("name1")
+				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
 		Reservation reservation = reservationRepository.save(Reservation.builder()
@@ -132,6 +138,7 @@ class AttendanceStatusServiceTest {
 		Member member = memberRepository.save(Member.builder()
 				.email("email1")
 				.name("name1")
+				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
 		Reservation reservation = reservationRepository.save(Reservation.builder()
@@ -159,6 +166,7 @@ class AttendanceStatusServiceTest {
 		Member member = memberRepository.save(Member.builder()
 				.email("email1")
 				.name("name1")
+				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
 		Reservation reservation = reservationRepository.save(Reservation.builder()
@@ -207,6 +215,7 @@ class AttendanceStatusServiceTest {
 				.email("email1")
 				.name("name1")
 				.club(Club.SANTLE)
+				.role(Role.LEADER)
 				.build());
 		Reservation reservation = reservationRepository.save(Reservation.builder()
 				.creator(member)

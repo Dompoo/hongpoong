@@ -67,6 +67,7 @@ class MemberServiceTest {
                 .email(EMAIL)
                 .name(NAME)
                 .password(PASSWORD)
+                .role(Role.LEADER)
                 .club(SANTLE)
                 .build());
         
@@ -74,6 +75,7 @@ class MemberServiceTest {
                 .email(EMAIL)
                 .name(NAME2)
                 .password(PASSWORD2)
+                .role(Role.LEADER)
                 .club(SANTLE)
                 .build());
         

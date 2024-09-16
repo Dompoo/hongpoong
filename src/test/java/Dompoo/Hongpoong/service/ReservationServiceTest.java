@@ -14,6 +14,7 @@ import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.enums.ReservationType;
+import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.repository.AttendanceRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationEndImageRepository;
@@ -47,7 +48,8 @@ class ReservationServiceTest {
     @Autowired
     private ReservationEndImageRepository reservationEndImageRepository;
     
-    private static final LocalDate DATE = LocalDate.now().plusDays(10);
+    private static final LocalDateTime NOW = LocalDateTime.now();
+    private static final LocalDate DATE = NOW.plusDays(10).toLocalDate();
     private static final LocalDate DATE2 = DATE.plusMonths(1);
     private static final ReservationType TYPE = ReservationType.FIXED_TIME;
     private static final ReservationTime START_TIME = ReservationTime.TIME_0900;
@@ -71,6 +73,7 @@ class ReservationServiceTest {
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
+                .role(Role.LEADER)
                 .club(Club.SANTLE)
                 .build());
 
@@ -83,7 +86,7 @@ class ReservationServiceTest {
                 .build();
 
         //when
-        service.createReservation(member.getId(), request);
+        service.createReservation(member.getId(), request, NOW);
 
         //then
         assertEquals(1, reservationRepository.count());
@@ -109,7 +112,7 @@ class ReservationServiceTest {
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.createReservation(member.getId() + 1, request));
+                () -> service.createReservation(member.getId() + 1, request, NOW));
 
 
         //then
@@ -136,7 +139,7 @@ class ReservationServiceTest {
                 .build();
         
         //when
-        EndForwardStart e = assertThrows(EndForwardStart.class, () -> service.createReservation(member.getId(), request));
+        EndForwardStart e = assertThrows(EndForwardStart.class, () -> service.createReservation(member.getId(), request, NOW));
         
         //then
         assertEquals(e.getMessage(), "시작 시간은 종료 시간보다 앞서야 합니다.");

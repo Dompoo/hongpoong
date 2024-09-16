@@ -308,7 +308,7 @@ class InstrumentServiceTest {
                 .build());
         
         //when
-        service.returnInstrument(instrument.getId());
+        service.returnInstrument(me.getId(), instrument.getId());
 
         //then
         Instrument inst = instrumentRepository.findAll().getFirst();

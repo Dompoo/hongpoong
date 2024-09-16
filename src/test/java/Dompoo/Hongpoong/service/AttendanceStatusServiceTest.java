@@ -3,14 +3,14 @@ package Dompoo.Hongpoong.service;
 import Dompoo.Hongpoong.api.dto.attendance.AttendanceResponse;
 import Dompoo.Hongpoong.api.service.AttendanceService;
 import Dompoo.Hongpoong.common.exception.impl.AttendanceNotFound;
+import Dompoo.Hongpoong.domain.entity.Attendance;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
-import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
-import Dompoo.Hongpoong.domain.enums.Attendance;
+import Dompoo.Hongpoong.domain.enums.AttendanceStatus;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
+import Dompoo.Hongpoong.domain.repository.AttendanceRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,12 +27,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class AttendanceServiceTest {
+class AttendanceStatusServiceTest {
 	
 	@Autowired
 	private AttendanceService attendanceService;
 	@Autowired
-	private ReservationParticipateRepository reservationParticipateRepository;
+	private AttendanceRepository attendanceRepository;
 	@Autowired
 	private MemberRepository memberRepository;
 	@Autowired
@@ -40,7 +40,7 @@ class AttendanceServiceTest {
 	
 	@AfterEach
 	void tearDown() {
-		reservationParticipateRepository.deleteAllInBatch();
+		attendanceRepository.deleteAllInBatch();
 		reservationRepository.deleteAllInBatch();
 		memberRepository.deleteAllInBatch();
 	}
@@ -76,11 +76,11 @@ class AttendanceServiceTest {
 		Reservation reservation = reservationRepository.save(Reservation.builder()
 				.creator(member1)
 				.build());
-		reservationParticipateRepository.saveAll(List.of(
-				ReservationParticipate.builder().reservation(reservation).member(member1).attendance(Attendance.NOT_YET_ATTEND).build(),
-				ReservationParticipate.builder().reservation(reservation).member(member2).attendance(Attendance.ATTEND).build(),
-				ReservationParticipate.builder().reservation(reservation).member(member3).attendance(Attendance.LATE).build(),
-				ReservationParticipate.builder().reservation(reservation).member(member4).attendance(Attendance.NO_SHOW).build()
+		attendanceRepository.saveAll(List.of(
+				Attendance.builder().reservation(reservation).member(member1).attendanceStatus(AttendanceStatus.NOT_YET_ATTEND).build(),
+				Attendance.builder().reservation(reservation).member(member2).attendanceStatus(AttendanceStatus.ATTEND).build(),
+				Attendance.builder().reservation(reservation).member(member3).attendanceStatus(AttendanceStatus.LATE).build(),
+				Attendance.builder().reservation(reservation).member(member4).attendanceStatus(AttendanceStatus.NO_SHOW).build()
 		));
 		
 		//when
@@ -89,13 +89,13 @@ class AttendanceServiceTest {
 		//then
 	    assertEquals(4, result.size());
 	    assertEquals("email1", result.get(0).getMember().getEmail());
-	    assertEquals(Attendance.NOT_YET_ATTEND.korName, result.get(0).getAttendance());
+	    assertEquals(AttendanceStatus.NOT_YET_ATTEND.korName, result.get(0).getAttendance());
 	    assertEquals("email2", result.get(1).getMember().getEmail());
-	    assertEquals(Attendance.ATTEND.korName, result.get(1).getAttendance());
+	    assertEquals(AttendanceStatus.ATTEND.korName, result.get(1).getAttendance());
 	    assertEquals("email3", result.get(2).getMember().getEmail());
-	    assertEquals(Attendance.LATE.korName, result.get(2).getAttendance());
+	    assertEquals(AttendanceStatus.LATE.korName, result.get(2).getAttendance());
 	    assertEquals("email4", result.get(3).getMember().getEmail());
-	    assertEquals(Attendance.NO_SHOW.korName, result.get(3).getAttendance());
+	    assertEquals(AttendanceStatus.NO_SHOW.korName, result.get(3).getAttendance());
 	}
 	
 	@Test
@@ -112,8 +112,8 @@ class AttendanceServiceTest {
 				.endTime(ReservationTime.from(NOW.toLocalTime()))
 				.participationAvailable(false)
 				.build());
-		reservationParticipateRepository.saveAll(List.of(
-				ReservationParticipate.builder().reservation(reservation).member(member).attendance(Attendance.NOT_YET_ATTEND).build()
+		attendanceRepository.saveAll(List.of(
+				Attendance.builder().reservation(reservation).member(member).attendanceStatus(AttendanceStatus.NOT_YET_ATTEND).build()
 		));
 		
 		
@@ -122,7 +122,7 @@ class AttendanceServiceTest {
 		
 		//then
 		assertEquals("email1", result.getMember().getEmail());
-		assertEquals(Attendance.ATTEND.korName, result.getAttendance());
+		assertEquals(AttendanceStatus.ATTEND.korName, result.getAttendance());
 	}
 	
 	@Test
@@ -139,8 +139,8 @@ class AttendanceServiceTest {
 				.endTime(ReservationTime.from(NOW.toLocalTime()))
 				.participationAvailable(false)
 				.build());
-		reservationParticipateRepository.saveAll(List.of(
-				ReservationParticipate.builder().reservation(reservation).member(member).attendance(Attendance.NOT_YET_ATTEND).build()
+		attendanceRepository.saveAll(List.of(
+				Attendance.builder().reservation(reservation).member(member).attendanceStatus(AttendanceStatus.NOT_YET_ATTEND).build()
 		));
 		
 		
@@ -149,7 +149,7 @@ class AttendanceServiceTest {
 		
 		//then
 		assertEquals("email1", result.getMember().getEmail());
-		assertEquals(Attendance.LATE.korName, result.getAttendance());
+		assertEquals(AttendanceStatus.LATE.korName, result.getAttendance());
 	}
 	
 	@Test
@@ -172,8 +172,8 @@ class AttendanceServiceTest {
 		
 		//then
 		assertEquals("email1", result.getMember().getEmail());
-		assertEquals(Attendance.ATTEND.korName, result.getAttendance());
-		assertEquals(1, reservationParticipateRepository.count());
+		assertEquals(AttendanceStatus.ATTEND.korName, result.getAttendance());
+		assertEquals(1, attendanceRepository.count());
 	}
 	
 	@Test
@@ -213,8 +213,8 @@ class AttendanceServiceTest {
 				.date(NOW.toLocalDate())
 				.endTime(ReservationTime.from(NOW.toLocalTime()))
 				.build());
-		reservationParticipateRepository.saveAll(List.of(
-				ReservationParticipate.builder().reservation(reservation).member(member).attendance(Attendance.NOT_YET_ATTEND).build()
+		attendanceRepository.saveAll(List.of(
+				Attendance.builder().reservation(reservation).member(member).attendanceStatus(AttendanceStatus.NOT_YET_ATTEND).build()
 		));
 		
 		
@@ -223,7 +223,7 @@ class AttendanceServiceTest {
 		
 		//then
 		assertEquals("email1", result.get(0).getMember().getEmail());
-		assertEquals(Attendance.NO_SHOW.korName, result.get(0).getAttendance());
+		assertEquals(AttendanceStatus.NO_SHOW.korName, result.get(0).getAttendance());
 	}
 
 }

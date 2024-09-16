@@ -52,8 +52,8 @@ public class Reservation {
         endTime = endTime.nextReservationTime();
     }
     
-    public ReservationParticipate attendMember(LocalDateTime now, Supplier<ReservationParticipate> participateSupplier) {
-        ReservationParticipate participate = participateSupplier.get();
+    public Attendance attendMember(LocalDateTime now, Supplier<Attendance> participateSupplier) {
+        Attendance participate = participateSupplier.get();
         participate.editAttendance(isLate(now));
         return participate;
     }

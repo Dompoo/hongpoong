@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.api.dto.reservation.response;
 
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
+import Dompoo.Hongpoong.domain.entity.Attendance;
 import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
-import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -49,7 +49,7 @@ public class ReservationEndResponse {
     @Schema(example = "[image.com/1, image.com/2]")
     private final List<String> images;
     
-    public static ReservationEndResponse of(Reservation reservation, List<ReservationParticipate> participates, List<ReservationEndImage> reservationEndImages) {
+    public static ReservationEndResponse of(Reservation reservation, List<Attendance> participates, List<ReservationEndImage> reservationEndImages) {
         return ReservationEndResponse.builder()
                 .reservationId(reservation.getId())
                 .creatorName(reservation.getCreator().getName())
@@ -59,7 +59,7 @@ public class ReservationEndResponse {
                 .endTime(reservation.getEndTime().localTime)
                 .message(reservation.getMessage())
                 .lastmodified(reservation.getLastModified())
-                .participators(MemberResponse.fromList(participates.stream().map(ReservationParticipate::getMember).toList()))
+                .participators(MemberResponse.fromList(participates.stream().map(Attendance::getMember).toList()))
                 .images(reservationEndImages.stream().map(ReservationEndImage::getImageUrl).toList())
                 .build();
     }

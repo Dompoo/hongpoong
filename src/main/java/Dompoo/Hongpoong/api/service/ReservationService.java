@@ -7,14 +7,14 @@ import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.exception.impl.*;
+import Dompoo.Hongpoong.domain.entity.Attendance;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
-import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
+import Dompoo.Hongpoong.domain.repository.AttendanceRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationEndImageRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ import java.util.List;
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final ReservationParticipateRepository reservationParticipateRepository;
+    private final AttendanceRepository attendanceRepository;
     private final ReservationEndImageRepository reservationEndImageRepository;
     private final MemberRepository memberRepository;
     
@@ -46,7 +46,7 @@ public class ReservationService {
         if (!participaters.contains(member)) participaters.add(member);
         
         Reservation savedReservation = reservationRepository.save(request.toReservation(member));
-        reservationParticipateRepository.saveAll(ReservationParticipate.of(savedReservation, participaters));
+        attendanceRepository.saveAll(Attendance.of(savedReservation, participaters));
         
         return ReservationDetailResponse.of(savedReservation, participaters);
     }
@@ -69,15 +69,15 @@ public class ReservationService {
     
     @Transactional(readOnly = true)
     public List<ReservationResponse> findAllTodoReservationOfToday(Long memberId, LocalDate localDate) {
-        List<ReservationParticipate> reservationParticipates = reservationParticipateRepository.findByMemberIdAndReservationDate(memberId, localDate);
+        List<Attendance> attendances = attendanceRepository.findByMemberIdAndReservationDate(memberId, localDate);
         
-        return ReservationResponse.fromParticipateList(reservationParticipates);
+        return ReservationResponse.fromParticipateList(attendances);
     }
     
     @Transactional(readOnly = true)
     public ReservationDetailResponse findReservationDetail(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
-        List<Member> participators = reservationParticipateRepository.findAllMemberByReservation(reservation);
+        List<Member> participators = attendanceRepository.findAllMemberByReservation(reservation);
         
         return ReservationDetailResponse.of(reservation, participators);
     }
@@ -113,7 +113,7 @@ public class ReservationService {
     public ReservationEndResponse findReservationEndDetail(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
-        List<ReservationParticipate> participates = reservationParticipateRepository.findAllByReservation(reservation);
+        List<Attendance> participates = attendanceRepository.findAllByReservation(reservation);
         
         List<ReservationEndImage> images = reservationEndImageRepository.findAllByReservation(reservation);
         
@@ -134,7 +134,7 @@ public class ReservationService {
         updateDeletedParticipators(dto, reservation);
         reservation.edit(dto, now);
         
-        List<Member> members = reservationParticipateRepository.findAllMemberByReservation(reservation);
+        List<Member> members = attendanceRepository.findAllMemberByReservation(reservation);
         
         return ReservationDetailResponse.of(reservation, members);
     }
@@ -147,7 +147,7 @@ public class ReservationService {
             throw new DeleteFailException();
         }
         
-        reservationParticipateRepository.deleteAllByReservation(reservation);
+        attendanceRepository.deleteAllByReservation(reservation);
         reservationRepository.delete(reservation);
     }
     
@@ -162,7 +162,7 @@ public class ReservationService {
     public void deleteReservationByAdmin(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
-        reservationParticipateRepository.deleteAllByReservation(reservation);
+        attendanceRepository.deleteAllByReservation(reservation);
         reservationRepository.delete(reservation);
     }
     
@@ -182,14 +182,14 @@ public class ReservationService {
     private void updateAddedParticipators(ReservationEditDto dto, Reservation reservation) {
         if (dto.getAddedParticipatorIds() != null) {
             List<Member> addedParticipators = memberRepository.findAllByIdIn(dto.getAddedParticipatorIds());
-            reservationParticipateRepository.saveAll(ReservationParticipate.of(reservation, addedParticipators));
+            attendanceRepository.saveAll(Attendance.of(reservation, addedParticipators));
         }
     }
     
     private void updateDeletedParticipators(ReservationEditDto dto, Reservation reservation) {
         if (dto.getRemovedParticipatorIds() != null) {
             List<Member> removedParticipators = memberRepository.findAllByIdIn(dto.getRemovedParticipatorIds());
-            reservationParticipateRepository.deleteAllByReservationAndMemberIn(reservation, removedParticipators);
+            attendanceRepository.deleteAllByReservationAndMemberIn(reservation, removedParticipators);
         }
     }
 }

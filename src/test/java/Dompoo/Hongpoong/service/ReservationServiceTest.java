@@ -14,9 +14,9 @@ import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.enums.ReservationType;
+import Dompoo.Hongpoong.domain.repository.AttendanceRepository;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationEndImageRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationParticipateRepository;
 import Dompoo.Hongpoong.domain.repository.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +43,7 @@ class ReservationServiceTest {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    private ReservationParticipateRepository reservationParticipateRepository;
+    private AttendanceRepository attendanceRepository;
     @Autowired
     private ReservationEndImageRepository reservationEndImageRepository;
     
@@ -58,7 +58,7 @@ class ReservationServiceTest {
     @BeforeEach
     void setUp() {
         reservationEndImageRepository.deleteAllInBatch();
-        reservationParticipateRepository.deleteAllInBatch();
+        attendanceRepository.deleteAllInBatch();
         reservationRepository.deleteAllInBatch();
         memberRepository.deleteAllInBatch();
     }

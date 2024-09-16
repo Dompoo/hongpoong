@@ -3,7 +3,7 @@ package Dompoo.Hongpoong.domain.enums;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum Attendance {
+public enum AttendanceStatus {
 	NOT_YET_ATTEND("미출석"),
 	ATTEND("출석"),
 	LATE("지각"),

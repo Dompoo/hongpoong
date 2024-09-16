@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.domain.entity;
 
-import Dompoo.Hongpoong.domain.enums.Attendance;
+import Dompoo.Hongpoong.domain.enums.AttendanceStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,13 +11,13 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ReservationParticipate {
+public class Attendance {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Enumerated(EnumType.STRING)
-	private Attendance attendance;
+	private AttendanceStatus attendanceStatus;
 	
 	@ManyToOne @JoinColumn(name = "reservation_id")
 	private Reservation reservation;
@@ -25,29 +25,29 @@ public class ReservationParticipate {
 	@ManyToOne @JoinColumn(name = "member_id")
 	private Member member;
 	
-	public static List<ReservationParticipate> of(Reservation reservation, List<Member> members) {
+	public static List<Attendance> of(Reservation reservation, List<Member> members) {
 		return members.stream()
-				.map(member -> ReservationParticipate.builder()
+				.map(member -> Attendance.builder()
 						.member(member)
 						.reservation(reservation)
-						.attendance(Attendance.NOT_YET_ATTEND)
+						.attendanceStatus(AttendanceStatus.NOT_YET_ATTEND)
 						.build())
 				.toList();
 	}
 	
-	public static ReservationParticipate of(Reservation reservation, Member member) {
-		return ReservationParticipate.builder()
+	public static Attendance of(Reservation reservation, Member member) {
+		return Attendance.builder()
 				.reservation(reservation)
 				.member(member)
-				.attendance(Attendance.NOT_YET_ATTEND)
+				.attendanceStatus(AttendanceStatus.NOT_YET_ATTEND)
 				.build();
 	}
 	
-	public void editAttendance(Attendance attendance) {
-		this.attendance = attendance;
+	public void editAttendance(AttendanceStatus attendanceStatus) {
+		this.attendanceStatus = attendanceStatus;
 	}
 	
 	public void editAttendance(Boolean isLate) {
-		this.attendance = isLate ? Attendance.LATE : Attendance.ATTEND;
+		this.attendanceStatus = isLate ? AttendanceStatus.LATE : AttendanceStatus.ATTEND;
 	}
 }

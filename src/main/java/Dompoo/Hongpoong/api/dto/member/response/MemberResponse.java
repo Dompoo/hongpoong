@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.member.response;
 
+import Dompoo.Hongpoong.domain.entity.Attendance;
 import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.entity.ReservationParticipate;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -55,7 +55,7 @@ public class MemberResponse {
         return members.stream().map(MemberResponse::from).toList();
     }
     
-    public static List<MemberResponse> fromParticipates(List<ReservationParticipate> participateList) {
+    public static List<MemberResponse> fromParticipates(List<Attendance> participateList) {
         return participateList.stream().map(participate -> MemberResponse.from(participate.getMember())).toList();
     }
 }

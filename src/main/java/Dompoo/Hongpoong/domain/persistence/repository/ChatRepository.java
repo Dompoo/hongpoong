@@ -1,16 +1,16 @@
 package Dompoo.Hongpoong.domain.persistence.repository;
 
-import Dompoo.Hongpoong.domain.jpaEntity.ChatRoomJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberInChatRoomJpaEntity;
+import Dompoo.Hongpoong.domain.domain.ChatRoom;
+import Dompoo.Hongpoong.domain.domain.Member;
+import Dompoo.Hongpoong.domain.domain.MemberInChatRoom;
 
 import java.util.List;
 
 public interface ChatRepository {
 	
-	List<MemberInChatRoomJpaEntity> findAllByMember(MemberJpaEntity memberJpaEntity);
+	List<MemberInChatRoom> findAllByMember(Member member);
 	
-	void deleteByChatRoom(ChatRoomJpaEntity chatRoomJpaEntity);
+	void deleteByChatRoom(ChatRoom chatRoom);
 	
-	boolean existsByMemberAndChatRoom(MemberJpaEntity memberJpaEntity, ChatRoomJpaEntity chatroom);
+	boolean existsByMemberAndChatRoom(Member member, ChatRoom chatroom);
 }

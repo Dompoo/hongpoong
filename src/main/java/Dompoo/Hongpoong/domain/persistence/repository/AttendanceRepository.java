@@ -1,28 +1,27 @@
 package Dompoo.Hongpoong.domain.persistence.repository;
 
-import Dompoo.Hongpoong.domain.jpaEntity.AttendanceJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
+import Dompoo.Hongpoong.domain.domain.Attendance;
+import Dompoo.Hongpoong.domain.domain.Member;
+import Dompoo.Hongpoong.domain.domain.Reservation;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface AttendanceRepository {
 	
-	List<AttendanceJpaEntity> findByMemberIdAndReservationDate(Long memberId, LocalDate localDate);
+	List<Attendance> findByMemberIdAndReservationDate(Long memberId, LocalDate localDate);
 	
-	List<AttendanceJpaEntity> findAllByReservationIdJoinFetchMember(Long reservationId);
+	List<Attendance> findAllByReservationIdJoinFetchMember(Long reservationId);
 	
-	List<MemberJpaEntity> findAllMemberByReservation(ReservationJpaEntity reservationJpaEntity);
+	List<Member> findAllMemberByReservation(Reservation reservation);
 	
-	Optional<AttendanceJpaEntity> findByMemberIdAndReservationId(Long memberId, Long reservationId);
+	Attendance findByMemberIdAndReservationId(Long memberId, Long reservationId);
 	
-	List<AttendanceJpaEntity> findByReservationIdAndNotAttend(Long reservationId);
+	List<Attendance> findByReservationIdAndNotAttend(Long reservationId);
 	
-	List<AttendanceJpaEntity> findAllByReservation(ReservationJpaEntity reservationJpaEntity);
+	List<Attendance> findAllByReservation(Reservation reservation);
 	
-	void deleteAllByReservationAndMemberIn(ReservationJpaEntity reservationJpaEntity, List<MemberJpaEntity> memberJpaEntities);
+	void deleteAllByReservationAndMemberIn(Reservation reservation, List<Member> members);
 	
-	void deleteAllByReservation(ReservationJpaEntity reservationJpaEntity);
+	void deleteAllByReservation(Reservation reservation);
 }

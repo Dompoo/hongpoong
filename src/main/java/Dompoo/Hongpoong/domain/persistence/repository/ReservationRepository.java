@@ -1,20 +1,18 @@
 package Dompoo.Hongpoong.domain.persistence.repository;
 
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationEndImageJpaEntity;
-import org.springframework.data.repository.query.Param;
+import Dompoo.Hongpoong.domain.domain.Reservation;
+import Dompoo.Hongpoong.domain.domain.ReservationEndImage;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface ReservationRepository {
     
-    Optional<ReservationJpaEntity> findByIdJoinFetchCreator(@Param("reservationId") Long reservationId);
+    Reservation findByIdJoinFetchCreator(Long reservationId);
     
-    List<ReservationJpaEntity> findAllByDate(LocalDate date);
+    List<Reservation> findAllByDate(LocalDate date);
     
-    List<ReservationJpaEntity> findAllByDateBetween(LocalDate startDate, LocalDate endDate);
+    List<Reservation> findAllByDateBetween(LocalDate startDate, LocalDate endDate);
     
-    List<ReservationEndImageJpaEntity> findAllByReservation(ReservationJpaEntity reservationJpaEntity);
+    List<ReservationEndImage> findAllByReservation(Reservation reservation);
 }

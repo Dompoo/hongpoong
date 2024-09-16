@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -46,7 +47,7 @@ public class ReservationCreateRequest {
     @Schema(example = "true")
     private final Boolean participationAvailable;
     
-    public Reservation toReservation(Member creator) {
+    public Reservation toReservation(Member creator, LocalDateTime now) {
         return Reservation.builder()
                 .creator(creator)
                 .date(date)
@@ -55,6 +56,7 @@ public class ReservationCreateRequest {
                 .endTime(endTime)
                 .message(message)
                 .participationAvailable(participationAvailable)
+                .lastModified(now)
                 .build();
     }
 }

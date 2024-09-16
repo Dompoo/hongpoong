@@ -30,7 +30,7 @@ public class ReservationController implements ReservationApi {
     @Secured
     @PostMapping
     public ReservationDetailResponse createReservation(@LoginUser UserClaims claims, @RequestBody @Valid ReservationCreateRequest request) {
-        return reservationService.createReservation(claims.getId(), request);
+        return reservationService.createReservation(claims.getId(), request, LocalDateTime.now());
     }
     
     @Secured

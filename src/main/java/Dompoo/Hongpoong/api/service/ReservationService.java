@@ -33,7 +33,7 @@ public class ReservationService {
     private final MemberRepository memberRepository;
     
     @Transactional
-    public ReservationDetailResponse createReservation(Long memberId, ReservationCreateRequest request) {
+    public ReservationDetailResponse createReservation(Long memberId, ReservationCreateRequest request, LocalDateTime now) {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         List<Member> participaters = memberRepository.findAllByIdIn(request.getParticipaterIds());
         
@@ -45,7 +45,7 @@ public class ReservationService {
         
         if (!participaters.contains(member)) participaters.add(member);
         
-        Reservation savedReservation = reservationRepository.save(request.toReservation(member));
+        Reservation savedReservation = reservationRepository.save(request.toReservation(member, now));
         attendanceRepository.saveAll(Attendance.of(savedReservation, participaters));
         
         return ReservationDetailResponse.of(savedReservation, participaters);

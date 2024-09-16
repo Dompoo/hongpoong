@@ -31,10 +31,9 @@ public class MemberRepositoryImpl implements MemberRepository {
 	}
 	
 	@Override
-	public Member findByEmail(String email) {
+	public Optional<Member> findByEmail(String email) {
 		return memberJpaRepository.findByEmail(email)
-				.orElseThrow(MemberNotFound::new)
-				.toDomain();
+				.map(MemberJpaEntity::toDomain);
 	}
 	
 	@Override
@@ -53,5 +52,10 @@ public class MemberRepositoryImpl implements MemberRepository {
 	public Optional<Member> findById(Long memberId) {
 		return memberJpaRepository.findById(memberId)
 				.map(MemberJpaEntity::toDomain);
+	}
+	
+	@Override
+	public void save(Member member) {
+		memberJpaRepository.save(MemberJpaEntity.of(member));
 	}
 }

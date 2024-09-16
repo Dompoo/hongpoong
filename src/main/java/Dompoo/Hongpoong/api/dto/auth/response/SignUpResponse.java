@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.auth.response;
 
-import Dompoo.Hongpoong.domain.jpaEntity.SignUpJpaEntity;
+import Dompoo.Hongpoong.domain.domain.SignUp;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,14 +30,14 @@ public class SignUpResponse {
     @Schema(example = "19")
     private final Integer enrollmentNumber;
     
-    public static SignUpResponse from(SignUpJpaEntity signUpJpaEntity) {
+    public static SignUpResponse from(SignUp signUp) {
         return SignUpResponse.builder()
-                .signupId(signUpJpaEntity.getId())
-                .email(signUpJpaEntity.getEmail())
-                .name(signUpJpaEntity.getName())
-                .nickname(signUpJpaEntity.getNickname())
-                .club(signUpJpaEntity.getClub().korName)
-                .enrollmentNumber(signUpJpaEntity.getEnrollmentNumber())
+                .signupId(signUp.getId())
+                .email(signUp.getEmail())
+                .name(signUp.getName())
+                .nickname(signUp.getNickname())
+                .club(signUp.getClub().korName)
+                .enrollmentNumber(signUp.getEnrollmentNumber())
                 .build();
     }
 }

@@ -9,12 +9,11 @@ import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.SignUpResponse;
 import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
 import Dompoo.Hongpoong.common.exception.impl.LoginFailException;
-import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
 import Dompoo.Hongpoong.common.security.JwtProvider;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.SignUpJpaEntity;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.SignUpJpaRepository;
+import Dompoo.Hongpoong.domain.domain.Member;
+import Dompoo.Hongpoong.domain.domain.SignUp;
+import Dompoo.Hongpoong.domain.persistence.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.SignUpRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,8 +25,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final MemberJpaRepository memberJpaRepository;
-    private final SignUpJpaRepository signUpJpaRepository;
+    private final MemberRepository memberRepository;
+    private final SignUpRepository signUpRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder encoder;
 
@@ -44,18 +43,17 @@ public class AuthService {
             throw new AlreadyExistEmail();
         }
 
-        signUpJpaRepository.save(request.toSignUp(encoder));
+        signUpRepository.save(request.toSignUp(encoder));
     }
     
     @Transactional(readOnly = true)
     public LoginResponse login(LoginRequest request) {
-        MemberJpaEntity memberJpaEntity = memberJpaRepository.findByEmail(request.getEmail())
-                .orElseThrow(LoginFailException::new);
+        Member member = memberRepository.findByEmail(request.getEmail()).orElseThrow(LoginFailException::new);
         
-        if (!encoder.matches(request.getPassword(), memberJpaEntity.getPassword()))
+        if (!encoder.matches(request.getPassword(), member.getPassword()))
             throw new LoginFailException();
         
-        String token = jwtProvider.generateAccessToken(memberJpaEntity.getId(), memberJpaEntity.getEmail(), memberJpaEntity.getRole(), memberJpaEntity.getClub());
+        String token = jwtProvider.generateAccessToken(member.getId(), member.getEmail(), member.getRole(), member.getClub());
         
         return LoginResponse.builder()
                 .token(token)
@@ -64,25 +62,23 @@ public class AuthService {
     
     @Transactional
     public void acceptSignUp(Long signupId, AcceptSignUpRequest request) {
-        SignUpJpaEntity signUpJpaEntity = signUpJpaRepository.findById(signupId)
-                .orElseThrow(SignUpNotFound::new);
-
+        SignUp signUp = signUpRepository.findById(signupId);
+        
         if (request.getAcceptResult()) {
-            memberJpaRepository.save(MemberJpaEntity.from(signUpJpaEntity));
+            memberRepository.save(Member.from(signUp));
         }
 
-        signUpJpaRepository.delete(signUpJpaEntity);
+        signUpRepository.delete(signUp);
     }
     
     @Transactional(readOnly = true)
     public List<SignUpResponse> findAllSignup() {
-        return signUpJpaRepository.findAll().stream()
+        return signUpRepository.findAll().stream()
                 .map(SignUpResponse::from)
                 .toList();
     }
     
     private boolean isValidEmail(String email) {
-        return !signUpJpaRepository.existsByEmail(email)
-                && !memberJpaRepository.existsByEmail(email);
+        return !signUpRepository.existsByEmail(email) && !memberRepository.existsByEmail(email);
     }
 }

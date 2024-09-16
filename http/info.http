@@ -1,0 +1,31 @@
+### 공지사항 작성
+POST {{url}}/info
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json
+
+{
+  "title": "공지사항 제목",
+  "content": "공지사항 내용"
+}
+
+### 공지사항 전체 조회
+GET {{url}}/info
+Authorization: Bearer {{jwtToken}}
+
+### 공지사항 상세 조회
+GET {{url}}/info/1
+Authorization: Bearer {{jwtToken}}
+
+### 공지사항 수정
+PATCH {{url}}/info/1
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json
+
+{
+  "title": "공지사항 제목 수정",
+  "content": "공지사항 내용 수정"
+}
+
+### 공지사항 삭제
+DELETE {{url}}/info/1
+Authorization: Bearer {{jwtToken}}

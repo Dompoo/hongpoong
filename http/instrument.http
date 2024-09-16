@@ -1,0 +1,31 @@
+### 악기 등록
+POST {{url}}/instrument
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json
+
+{
+  "name": "기타",
+  "type": "JANGGU"
+}
+
+### 다른 패 악기 전체 조회
+GET {{url}}/instrument
+Authorization: Bearer {{jwtToken}}
+
+### 악기 상세 조회
+GET {{url}}/instrument/1
+Authorization: Bearer {{jwtToken}}
+
+### 악기 빌리기
+POST {{url}}/instrument/1/borrow
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json
+
+{
+  "reservationId": 1
+}
+
+### 악기 반납
+POST {{url}}/instrument/1/return
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json

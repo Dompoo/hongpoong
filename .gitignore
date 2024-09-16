@@ -36,11 +36,7 @@ out/
 ### VS Code ###
 .vscode/
 
-### mysql password ###
-#src/main/resources/application-database.yml
 src/main/java/Dompoo/Hongpoong/AdminInit.java
-http
-#docker-compose.yml
-#Dockerfile
+http/http-client.private.env.json
 .monitoring
 .logs

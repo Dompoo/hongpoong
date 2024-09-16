@@ -1,0 +1,51 @@
+### 이메일 유효성 검사
+POST {{url}}/auth/email
+Content-Type: application/json
+
+{
+  "email": "dompoo@gmail.com"
+}
+
+### 회원가입 요청
+POST {{url}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "dompoo@gmail.com",
+  "name": "이창근",
+  "nickname": "불꽃남자",
+  "password": "1234",
+  "club": "SANTLE",
+  "enrollmentNumber": 19
+}
+
+### 어드민 로그인
+POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@gmail.com",
+  "password": "1234"
+}
+
+### 회원가입 요청 조회
+GET {{url}}/auth/signup
+Authorization: Bearer {{jwtToken}}
+
+### 회원가입 요청 승인/거절
+POST {{url}}/auth/signup/2
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json
+
+{
+  "acceptResult": true
+}
+
+### 일반회원 로그인
+POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "leader2@gmail.com",
+  "password": "1234"
+}

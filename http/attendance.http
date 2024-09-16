@@ -1,0 +1,11 @@
+### 출석현황 확인
+GET {{url}}/attendance/1
+Authorization: Bearer {{jwtToken}}
+
+### 출석
+POST {{url}}/attendance/1/attend
+Authorization: Bearer {{jwtToken}}
+
+### 출석 종료
+POST {{url}}/attendance/1/close
+Authorization: Bearer {{jwtToken}}

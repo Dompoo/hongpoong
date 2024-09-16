@@ -1,0 +1,44 @@
+### 회원 전체 조회
+GET {{url}}/member
+Authorization: Bearer {{jwtToken}}
+
+### 내 현재 상태 조회
+GET {{url}}/member/status
+Authorization: Bearer {{jwtToken}}
+
+### 내 정보 수정
+PATCH {{url}}/member
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json
+
+{
+  "password": "1234",
+  "name": "나는패원",
+  "nickname": "불꽃남자",
+  "club": "HWARANG",
+  "enrollmentNumber": 19,
+  "profileImageUrl": "image.com/1",
+  "newPassword": "5678"
+}
+
+### 회원 탈퇴
+DELETE {{url}}/member
+Authorization: Bearer {{jwtToken}}
+
+### 패짱의 회원 권한 수정
+PATCH {{url}}/member/3
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json
+
+{
+  "role": "MEMBER"
+}
+
+### 의장의 회원 권한 수정
+PATCH {{url}}/member/manage/3
+Authorization: Bearer {{jwtToken}}
+Content-Type: application/json
+
+{
+  "role": "MEMBER"
+}

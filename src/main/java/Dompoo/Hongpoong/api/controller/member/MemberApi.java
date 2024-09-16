@@ -43,7 +43,7 @@ public interface MemberApi {
 	);
 	
 	@Operation(summary = "[패짱상쇠] 내 패원 삭제")
-	void deleteMemberByAdmin(
+	void deleteMember(
 			@Schema(hidden = true) UserClaims claims,
 			@Parameter(description = "회원 id") Long memberId
 	);

@@ -54,7 +54,7 @@ public class MemberController implements MemberApi {
     
     @Secured(SecurePolicy.LEADER)
     @DeleteMapping("/{memberId}")
-    public void deleteMemberByAdmin(@LoginUser UserClaims claims, @PathVariable Long memberId) {
+    public void deleteMember(@LoginUser UserClaims claims, @PathVariable Long memberId) {
         service.deleteMember(claims.getId(), memberId);
     }
 

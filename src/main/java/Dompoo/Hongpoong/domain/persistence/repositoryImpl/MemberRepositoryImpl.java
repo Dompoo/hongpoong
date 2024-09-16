@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -46,5 +47,11 @@ public class MemberRepositoryImpl implements MemberRepository {
 	@Override
 	public boolean existsByRole(Role role) {
 		return memberJpaRepository.existsByRole(role);
+	}
+	
+	@Override
+	public Optional<Member> findById(Long memberId) {
+		return memberJpaRepository.findById(memberId)
+				.map(MemberJpaEntity::toDomain);
 	}
 }

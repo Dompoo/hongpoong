@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
+import Dompoo.Hongpoong.common.exception.impl.ReservationNotFound;
 import Dompoo.Hongpoong.domain.domain.Reservation;
 import Dompoo.Hongpoong.domain.domain.ReservationEndImage;
 import Dompoo.Hongpoong.domain.jpaEntity.ReservationEndImageJpaEntity;
@@ -21,9 +22,16 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 	private final ReservationEndImageJpaRepository reservationEndImageJpaRepository;
 	
 	@Override
+	public Reservation findById(Long reservationId) {
+		return reservationJpaRepository.findById(reservationId)
+				.orElseThrow(ReservationNotFound::new)
+				.toDomain();
+	}
+	
+	@Override
 	public Reservation findByIdJoinFetchCreator(Long reservationId) {
 		return reservationJpaRepository.findByIdJoinFetchCreator(reservationId)
-				.orElseThrow()
+				.orElseThrow(ReservationNotFound::new)
 				.toDomain();
 	}
 	

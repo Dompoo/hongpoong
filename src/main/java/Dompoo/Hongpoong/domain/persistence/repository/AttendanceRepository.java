@@ -6,6 +6,7 @@ import Dompoo.Hongpoong.domain.domain.Reservation;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface AttendanceRepository {
 	
@@ -15,7 +16,7 @@ public interface AttendanceRepository {
 	
 	List<Member> findAllMemberByReservation(Reservation reservation);
 	
-	Attendance findByMemberIdAndReservationId(Long memberId, Long reservationId);
+	Optional<Attendance> findByMemberIdAndReservationId(Long memberId, Long reservationId);
 	
 	List<Attendance> findByReservationIdAndNotAttend(Long reservationId);
 	
@@ -24,4 +25,8 @@ public interface AttendanceRepository {
 	void deleteAllByReservationAndMemberIn(Reservation reservation, List<Member> members);
 	
 	void deleteAllByReservation(Reservation reservation);
+	
+	Attendance save(Attendance currAttendance);
+	
+	void saveAll(List<Attendance> attendances);
 }

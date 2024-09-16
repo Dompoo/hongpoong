@@ -1,22 +1,23 @@
 package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.attendance.AttendanceResponse;
+import Dompoo.Hongpoong.api.dto.attendance.AttendanceResultResponse;
 import Dompoo.Hongpoong.common.exception.impl.AttendanceNotFound;
 import Dompoo.Hongpoong.common.exception.impl.EditFailException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.common.exception.impl.ReservationNotFound;
-import Dompoo.Hongpoong.domain.jpaEntity.AttendanceJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.AttendanceJpaRepository;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.ReservationJpaRepository;
+import Dompoo.Hongpoong.domain.domain.Attendance;
+import Dompoo.Hongpoong.domain.domain.Member;
+import Dompoo.Hongpoong.domain.domain.Reservation;
+import Dompoo.Hongpoong.domain.persistence.repository.AttendanceRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static Dompoo.Hongpoong.domain.enums.AttendanceStatus.NO_SHOW;
 
@@ -24,53 +25,55 @@ import static Dompoo.Hongpoong.domain.enums.AttendanceStatus.NO_SHOW;
 @RequiredArgsConstructor
 public class AttendanceService {
 
-    private final AttendanceJpaRepository participateRepository;
-    private final ReservationJpaRepository reservationJpaRepository;
-    private final MemberJpaRepository memberJpaRepository;
+    private final AttendanceRepository attendanceRepository;
+    private final ReservationRepository reservationRepository;
+    private final MemberRepository memberRepository;
     
     @Transactional(readOnly = true)
     public List<AttendanceResponse> findAttendance(Long reservationId) {
-        List<AttendanceJpaEntity> attendanceJpaEntities = participateRepository.findAllByReservationIdJoinFetchMember(reservationId);
+        List<Attendance> attendances = attendanceRepository.findAllByReservationIdJoinFetchMember(reservationId);
         
-        return AttendanceResponse.fromList(attendanceJpaEntities);
+        return AttendanceResponse.fromList(attendances);
     }
     
     @Transactional
-    public AttendanceResponse attendReservation(Long memberId, Long reservationId, LocalDateTime now) {
-        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.findById(reservationId)
-                .orElseThrow(ReservationNotFound::new);
+    public AttendanceResultResponse attendReservation(Long memberId, Long reservationId, LocalDateTime now) {
+        Reservation reservation = reservationRepository.findById(reservationId);
         
-        AttendanceJpaEntity participate = reservationJpaEntity.attendMember(now, () -> findOrCreateParticipate(memberId, reservationJpaEntity));
-        
-        return AttendanceResponse.from(participate);
+        if (reservation.getParticipationAvailable()) {
+            Optional<Attendance> prevAttendance = attendanceRepository.findByMemberIdAndReservationId(memberId, reservationId);
+            
+            if (prevAttendance.isPresent()) {
+                Attendance currAttendance = prevAttendance.get().withAttendance(reservation.getStartTime(), now);
+                attendanceRepository.save(currAttendance);
+                return AttendanceResultResponse.from(currAttendance);
+            } else {
+                Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+                Attendance currAttendance = attendanceRepository.save(Attendance.of(reservation, member).withAttendance(reservation.getStartTime(), now));
+                return AttendanceResultResponse.from(currAttendance);
+            }
+            
+        } else {
+            Attendance prevAttendance = attendanceRepository.findByMemberIdAndReservationId(memberId, reservationId).orElseThrow(AttendanceNotFound::new);
+            Attendance currAttendance = prevAttendance.withAttendance(reservation.getStartTime(), now);
+            
+            attendanceRepository.save(currAttendance);
+            return AttendanceResultResponse.from(currAttendance);
+        }
     }
     
     @Transactional
-    public List<AttendanceResponse> closeAttendance(Long memberId, Long reservationId) {
-        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+    public void closeAttendance(Long memberId, Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId);
         
-        if (!reservationJpaEntity.getCreator().getId().equals(memberId)) {
+        if (!reservation.getCreator().getId().equals(memberId)) {
             throw new EditFailException();
         }
         
-        List<AttendanceJpaEntity> attendanceJpaEntities = participateRepository.findByReservationIdAndNotAttend(reservationId);
-        attendanceJpaEntities.forEach(rp -> rp.editAttendance(NO_SHOW));
+        List<Attendance> attendances = attendanceRepository.findByReservationIdAndNotAttend(reservationId).stream()
+                .map(rp -> rp.withAttendance(NO_SHOW))
+                .toList();
         
-        List<AttendanceJpaEntity> resultAttendanceJpaEntities = participateRepository.findAllByReservation(reservationJpaEntity);
-        return AttendanceResponse.fromList(resultAttendanceJpaEntities);
-    }
-    
-    private AttendanceJpaEntity findOrCreateParticipate(Long memberId, ReservationJpaEntity reservationJpaEntity) {
-        return participateRepository.findByMemberIdAndReservationId(memberId, reservationJpaEntity.getId())
-                .orElseGet(() -> createNewParticipate(memberId, reservationJpaEntity));
-    }
-    
-    private AttendanceJpaEntity createNewParticipate(Long memberId, ReservationJpaEntity reservationJpaEntity) {
-        if (!reservationJpaEntity.getParticipationAvailable()) {
-            throw new AttendanceNotFound();
-        }
-        
-        MemberJpaEntity memberJpaEntity = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
-        return participateRepository.save(AttendanceJpaEntity.of(reservationJpaEntity, memberJpaEntity));
+        attendanceRepository.saveAll(attendances);
     }
 }

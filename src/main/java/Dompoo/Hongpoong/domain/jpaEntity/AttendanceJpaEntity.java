@@ -5,6 +5,8 @@ import Dompoo.Hongpoong.domain.enums.AttendanceStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -40,5 +42,11 @@ public class AttendanceJpaEntity {
 				.reservation(ReservationJpaEntity.of(attendance.getReservation()))
 				.member(MemberJpaEntity.of(attendance.getMember()))
 				.build();
+	}
+	
+	public static List<AttendanceJpaEntity> of(List<Attendance> attendances) {
+		return attendances.stream()
+				.map(AttendanceJpaEntity::of)
+				.toList();
 	}
 }

@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.api.controller.attendance;
 
 import Dompoo.Hongpoong.api.dto.attendance.AttendanceResponse;
+import Dompoo.Hongpoong.api.dto.attendance.AttendanceResultResponse;
 import Dompoo.Hongpoong.api.service.AttendanceService;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import Dompoo.Hongpoong.common.security.annotation.LoginUser;
@@ -26,13 +27,13 @@ public class AttendanceController implements AttendanceApi {
 	
 	@Secured
 	@PostMapping("/{reservationId}/attend")
-	public AttendanceResponse attendReservation(@LoginUser UserClaims userClaims, @PathVariable Long reservationId) {
+	public AttendanceResultResponse attendReservation(@LoginUser UserClaims userClaims, @PathVariable Long reservationId) {
 		return attendanceService.attendReservation(userClaims.getId(), reservationId, LocalDateTime.now());
 	}
 	
 	@Secured
 	@PostMapping("/{reservationId}/close")
-	public List<AttendanceResponse> closeAttendance(@LoginUser UserClaims userClaims, @PathVariable Long reservationId) {
-		return attendanceService.closeAttendance(userClaims.getId(), reservationId);
+	public void closeAttendance(@LoginUser UserClaims userClaims, @PathVariable Long reservationId) {
+		attendanceService.closeAttendance(userClaims.getId(), reservationId);
 	}
 }

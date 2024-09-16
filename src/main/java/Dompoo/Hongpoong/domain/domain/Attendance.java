@@ -1,11 +1,13 @@
 package Dompoo.Hongpoong.domain.domain;
 
 import Dompoo.Hongpoong.domain.enums.AttendanceStatus;
+import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -45,10 +47,10 @@ public class Attendance {
 				.build();
 	}
 	
-	public Attendance withAttendance(Boolean isLate) {
+	public Attendance withAttendance(ReservationTime startTime, LocalDateTime now) {
 		return Attendance.builder()
 				.id(this.id)
-				.attendanceStatus(isLate ? AttendanceStatus.LATE : AttendanceStatus.ATTEND)
+				.attendanceStatus(startTime.localTime.isBefore(now.toLocalTime()) ? AttendanceStatus.LATE : AttendanceStatus.ATTEND)
 				.reservation(this.reservation)
 				.member(this.member)
 				.build();

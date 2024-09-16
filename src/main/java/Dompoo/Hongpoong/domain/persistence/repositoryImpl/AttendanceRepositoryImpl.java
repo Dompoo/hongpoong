@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
-import Dompoo.Hongpoong.common.exception.impl.AttendanceNotFound;
 import Dompoo.Hongpoong.domain.domain.Attendance;
 import Dompoo.Hongpoong.domain.domain.Member;
 import Dompoo.Hongpoong.domain.domain.Reservation;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -43,10 +43,9 @@ public class AttendanceRepositoryImpl implements AttendanceRepository {
 	}
 	
 	@Override
-	public Attendance findByMemberIdAndReservationId(Long memberId, Long reservationId) {
+	public Optional<Attendance> findByMemberIdAndReservationId(Long memberId, Long reservationId) {
 		return attendanceJpaRepository.findByMemberIdAndReservationId(memberId, reservationId)
-				.orElseThrow(AttendanceNotFound::new)
-				.toDomain();
+				.map(AttendanceJpaEntity::toDomain);
 	}
 	
 	@Override
@@ -71,5 +70,16 @@ public class AttendanceRepositoryImpl implements AttendanceRepository {
 	@Override
 	public void deleteAllByReservation(Reservation reservation) {
 		attendanceJpaRepository.deleteAllByReservation(ReservationJpaEntity.of(reservation));
+	}
+	
+	@Override
+	public Attendance save(Attendance currAttendance) {
+		return attendanceJpaRepository.save(AttendanceJpaEntity.of(currAttendance))
+				.toDomain();
+	}
+	
+	@Override
+	public void saveAll(List<Attendance> attendances) {
+		attendanceJpaRepository.saveAll(AttendanceJpaEntity.of(attendances));
 	}
 }

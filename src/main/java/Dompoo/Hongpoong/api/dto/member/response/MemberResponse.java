@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.member.response;
 
-import Dompoo.Hongpoong.domain.jpaEntity.AttendanceJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
+import Dompoo.Hongpoong.domain.domain.Attendance;
+import Dompoo.Hongpoong.domain.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -39,24 +39,24 @@ public class MemberResponse {
     @Schema(example = "image.com/1")
     private final String profileImageUrl;
     
-    public static MemberResponse from(MemberJpaEntity memberJpaEntity) {
+    public static MemberResponse from(Member member) {
         return MemberResponse.builder()
-                .memberId(memberJpaEntity.getId())
-                .email(memberJpaEntity.getEmail())
-                .name(memberJpaEntity.getName())
-                .nickname(memberJpaEntity.getNickname())
-                .club(memberJpaEntity.getClub().korName)
-                .enrollmentNumber(memberJpaEntity.getEnrollmentNumber())
-                .role(memberJpaEntity.getRole().korName)
-                .profileImageUrl(memberJpaEntity.getProfileImageUrl())
+                .memberId(member.getId())
+                .email(member.getEmail())
+                .name(member.getName())
+                .nickname(member.getNickname())
+                .club(member.getClub().korName)
+                .enrollmentNumber(member.getEnrollmentNumber())
+                .role(member.getRole().korName)
+                .profileImageUrl(member.getProfileImageUrl())
                 .build();
     }
     
-    public static List<MemberResponse> fromList(List<MemberJpaEntity> memberJpaEntities) {
-        return memberJpaEntities.stream().map(MemberResponse::from).toList();
+    public static List<MemberResponse> fromList(List<Member> members) {
+        return members.stream().map(MemberResponse::from).toList();
     }
     
-    public static List<MemberResponse> fromParticipates(List<AttendanceJpaEntity> participateList) {
-        return participateList.stream().map(participate -> MemberResponse.from(participate.getMember())).toList();
+    public static List<MemberResponse> fromAttendances(List<Attendance> attendances) {
+        return attendances.stream().map(attendance -> MemberResponse.from(attendance.getMember())).toList();
     }
 }

@@ -4,6 +4,7 @@ import Dompoo.Hongpoong.domain.domain.Member;
 import Dompoo.Hongpoong.domain.enums.Role;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberRepository {
     
@@ -16,4 +17,6 @@ public interface MemberRepository {
     Member findByIdAndEmail(Long id, String email);
     
     boolean existsByRole(Role role);
+    
+    Optional<Member> findById(Long memberId);
 }

@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ReservationRepository {
     
+    Reservation findById(Long reservationId);
+    
     Reservation findByIdJoinFetchCreator(Long reservationId);
     
     List<Reservation> findAllByDate(LocalDate date);

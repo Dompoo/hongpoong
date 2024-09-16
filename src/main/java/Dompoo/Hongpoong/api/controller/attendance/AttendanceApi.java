@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.api.controller.attendance;
 
 import Dompoo.Hongpoong.api.dto.attendance.AttendanceResponse;
+import Dompoo.Hongpoong.api.dto.attendance.AttendanceResultResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,13 +19,13 @@ public interface AttendanceApi {
 	);
 	
 	@Operation(summary = "출석하기")
-	AttendanceResponse attendReservation(
+	AttendanceResultResponse attendReservation(
 			@Schema(hidden = true) UserClaims userClaims,
 			@Parameter(description = "예약 id") Long reservationId
 	);
 	
 	@Operation(summary = "특정 예약 출석 그만 받기")
-	List<AttendanceResponse> closeAttendance(
+	void closeAttendance(
 			@Schema(hidden = true) UserClaims userClaims,
 			@Parameter(description = "예약 id") Long reservationId
 	);

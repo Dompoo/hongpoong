@@ -1,8 +1,8 @@
 package Dompoo.Hongpoong.domain.persistence.jpaRepository;
 
 import Dompoo.Hongpoong.domain.jpaEntity.ChatRoomJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import Dompoo.Hongpoong.domain.jpaEntity.MemberInChatRoomJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

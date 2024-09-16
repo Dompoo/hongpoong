@@ -1,8 +1,11 @@
 package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
+import Dompoo.Hongpoong.domain.domain.ChatRoom;
+import Dompoo.Hongpoong.domain.domain.Member;
+import Dompoo.Hongpoong.domain.domain.MemberInChatRoom;
 import Dompoo.Hongpoong.domain.jpaEntity.ChatRoomJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import Dompoo.Hongpoong.domain.jpaEntity.MemberInChatRoomJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.ChatMessageJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.ChatRoomJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberInChatRoomJpaRepository;
@@ -21,17 +24,19 @@ public class ChatRepositoryImpl implements ChatRepository {
 	private final MemberInChatRoomJpaRepository memberInChatRoomJpaRepository;
 	
 	@Override
-	public List<MemberInChatRoomJpaEntity> findAllByMember(MemberJpaEntity memberJpaEntity) {
-		return memberInChatRoomJpaRepository.findAllByMember(memberJpaEntity);
+	public List<MemberInChatRoom> findAllByMember(Member member) {
+		return memberInChatRoomJpaRepository.findAllByMember(MemberJpaEntity.of(member)).stream()
+				.map(MemberInChatRoomJpaEntity::toDomain)
+				.toList();
 	}
 	
 	@Override
-	public void deleteByChatRoom(ChatRoomJpaEntity chatRoomJpaEntity) {
-		memberInChatRoomJpaRepository.deleteByChatRoom(chatRoomJpaEntity);
+	public void deleteByChatRoom(ChatRoom chatRoom) {
+		chatRoomJpaRepository.delete(ChatRoomJpaEntity.of(chatRoom));
 	}
 	
 	@Override
-	public boolean existsByMemberAndChatRoom(MemberJpaEntity memberJpaEntity, ChatRoomJpaEntity chatroom) {
-		return memberInChatRoomJpaRepository.existsByMemberAndChatRoom(memberJpaEntity, chatroom);
+	public boolean existsByMemberAndChatRoom(Member member, ChatRoom chatroom) {
+		return memberInChatRoomJpaRepository.existsByMemberAndChatRoom(MemberJpaEntity.of(member), ChatRoomJpaEntity.of(chatroom));
 	}
 }

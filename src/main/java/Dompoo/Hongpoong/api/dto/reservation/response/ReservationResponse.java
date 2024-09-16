@@ -64,6 +64,6 @@ public class ReservationResponse {
     }
     
     public static List<ReservationResponse> fromParticipateList(List<AttendanceJpaEntity> reservations) {
-        return reservations.stream().map(rp -> ReservationResponse.from(rp.getReservationJpaEntity())).toList();
+        return reservations.stream().map(rp -> ReservationResponse.from(rp.getReservation())).toList();
     }
 }

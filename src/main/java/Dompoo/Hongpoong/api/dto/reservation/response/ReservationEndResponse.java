@@ -2,8 +2,8 @@ package Dompoo.Hongpoong.api.dto.reservation.response;
 
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.domain.jpaEntity.AttendanceJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
 import Dompoo.Hongpoong.domain.jpaEntity.ReservationEndImageJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -59,7 +59,7 @@ public class ReservationEndResponse {
                 .endTime(reservationJpaEntity.getEndTime().localTime)
                 .message(reservationJpaEntity.getMessage())
                 .lastmodified(reservationJpaEntity.getLastModified())
-                .participators(MemberResponse.fromList(participates.stream().map(AttendanceJpaEntity::getMemberJpaEntity).toList()))
+                .participators(MemberResponse.fromList(participates.stream().map(AttendanceJpaEntity::getMember).toList()))
                 .images(reservationEndImageJpaEntities.stream().map(ReservationEndImageJpaEntity::getImageUrl).toList())
                 .build();
     }

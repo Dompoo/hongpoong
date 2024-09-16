@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.domain.jpaEntity;
 
+import Dompoo.Hongpoong.domain.domain.ChatMessage;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,4 +20,22 @@ public class ChatMessageJpaEntity {
     
     @ManyToOne @JoinColumn(name = "room_id")
     private ChatRoomJpaEntity chatRoomJpaEntity;
+    
+    public ChatMessage toDomain() {
+        return ChatMessage.builder()
+                .id(this.id)
+                .message(this.message)
+                .sender(this.sender)
+                .chatRoom(this.chatRoomJpaEntity.toDomain())
+                .build();
+    }
+    
+    public static ChatMessageJpaEntity of(ChatMessage chatMessage) {
+        return ChatMessageJpaEntity.builder()
+                .id(chatMessage.getId())
+                .message(chatMessage.getMessage())
+                .sender(chatMessage.getSender())
+                .chatRoomJpaEntity(ChatRoomJpaEntity.of(chatMessage.getChatRoom()))
+                .build();
+    }
 }

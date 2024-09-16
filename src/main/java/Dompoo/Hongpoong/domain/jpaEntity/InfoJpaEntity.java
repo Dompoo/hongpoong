@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.domain.jpaEntity;
 
-import Dompoo.Hongpoong.api.dto.info.request.InfoEditDto;
+import Dompoo.Hongpoong.domain.domain.Info;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,8 +25,23 @@ public class InfoJpaEntity {
     @ManyToOne @JoinColumn(name = "member_id")
     private MemberJpaEntity memberJpaEntity;
     
-    public void edit(InfoEditDto dto) {
-        if (dto.getTitle() != null) this.title = dto.getTitle();
-        if (dto.getContent() != null) this.content = dto.getContent();
+    public Info toDomain() {
+        return Info.builder()
+                .id(this.id)
+                .title(this.title)
+                .content(this.content)
+                .date(this.date)
+                .member(this.memberJpaEntity.toDomain())
+                .build();
+    }
+    
+    public static InfoJpaEntity of(Info info) {
+        return InfoJpaEntity.builder()
+                .id(info.getId())
+                .title(info.getTitle())
+                .content(info.getContent())
+                .date(info.getDate())
+                .memberJpaEntity(MemberJpaEntity.of(info.getMember()))
+                .build();
     }
 }

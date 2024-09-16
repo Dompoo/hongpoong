@@ -57,6 +57,6 @@ public class MemberResponse {
     }
     
     public static List<MemberResponse> fromParticipates(List<AttendanceJpaEntity> participateList) {
-        return participateList.stream().map(participate -> MemberResponse.from(participate.getMemberJpaEntity())).toList();
+        return participateList.stream().map(participate -> MemberResponse.from(participate.getMember())).toList();
     }
 }

@@ -1,13 +1,12 @@
 package Dompoo.Hongpoong.domain.jpaEntity;
 
-import Dompoo.Hongpoong.api.dto.common.request.SettingEditDto;
-import Dompoo.Hongpoong.api.dto.member.request.MemberEditDto;
-import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditDto;
+import Dompoo.Hongpoong.domain.domain.Member;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,33 +38,39 @@ public class MemberJpaEntity {
     
     private Boolean pushAlarm;
     
-    public static MemberJpaEntity from(SignUpJpaEntity signUpJpaEntity) {
-        return MemberJpaEntity.builder()
-                .email(signUpJpaEntity.getEmail())
-                .name(signUpJpaEntity.getName())
-                .nickname(signUpJpaEntity.getNickname())
-                .password(signUpJpaEntity.getPassword())
-                .role(Role.MEMBER)
-                .club(signUpJpaEntity.getClub())
-                .enrollmentNumber(signUpJpaEntity.getEnrollmentNumber())
-                .pushAlarm(false)
+    public Member toDomain() {
+        return Member.builder()
+                .id(this.id)
+                .email(this.email)
+                .name(this.name)
+                .nickname(this.nickname)
+                .password(this.password)
+                .role(this.role)
+                .club(this.club)
+                .enrollmentNumber(this.enrollmentNumber)
+                .profileImageUrl(this.profileImageUrl)
+                .pushAlarm(this.pushAlarm)
                 .build();
     }
     
-    public void edit(MemberEditDto dto, PasswordEncoder encoder) {
-        if (dto.getName() != null) this.name = dto.getName();
-        if (dto.getNickname() != null) this.nickname = dto.getNickname();
-        if (dto.getClub() != null) this.club = dto.getClub();
-        if (dto.getEnrollmentNumber() != null) this.enrollmentNumber = dto.getEnrollmentNumber();
-        if (dto.getProfileImageUrl() != null) this.profileImageUrl = dto.getProfileImageUrl();
-        if (dto.getNewPassword() != null) this.password = encoder.encode(dto.getNewPassword());
+    public static MemberJpaEntity of(Member member) {
+        return MemberJpaEntity.builder()
+                .id(member.getId())
+                .email(member.getEmail())
+                .name(member.getName())
+                .nickname(member.getNickname())
+                .password(member.getPassword())
+                .role(member.getRole())
+                .club(member.getClub())
+                .enrollmentNumber(member.getEnrollmentNumber())
+                .profileImageUrl(member.getProfileImageUrl())
+                .pushAlarm(member.getPushAlarm())
+                .build();
     }
     
-    public void editSetting(SettingEditDto dto) {
-        if (dto.getPush() != null) this.pushAlarm = dto.getPush();
-    }
-    
-    public void editRole(MemberRoleEditDto dto) {
-        if (dto.getRole() != null) this.role = dto.getRole();
+    public static List<MemberJpaEntity> of(List<Member> members) {
+        return members.stream()
+                .map(MemberJpaEntity::of)
+                .toList();
     }
 }

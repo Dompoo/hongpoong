@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.domain.jpaEntity;
 
+import Dompoo.Hongpoong.domain.domain.ReservationEndImage;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,4 +18,20 @@ public class ReservationEndImageJpaEntity {
     
     @ManyToOne @JoinColumn(name = "reservation_id")
     private ReservationJpaEntity reservationJpaEntity;
+    
+    public ReservationEndImage toDomain() {
+        return ReservationEndImage.builder()
+                .id(this.id)
+                .imageUrl(this.imageUrl)
+                .reservation(this.reservationJpaEntity.toDomain())
+                .build();
+    }
+    
+    public static ReservationEndImageJpaEntity of(ReservationEndImage reservationEndImage) {
+        return ReservationEndImageJpaEntity.builder()
+                .id(reservationEndImage.getId())
+                .imageUrl(reservationEndImage.getImageUrl())
+                .reservationJpaEntity(ReservationJpaEntity.of(reservationEndImage.getReservation()))
+                .build();
+    }
 }

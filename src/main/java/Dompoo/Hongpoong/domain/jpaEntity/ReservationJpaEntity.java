@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.domain.jpaEntity;
 
-import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
+import Dompoo.Hongpoong.domain.domain.Reservation;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.enums.ReservationType;
 import jakarta.persistence.*;
@@ -8,7 +8,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.function.Supplier;
 
 @Entity
 @Getter
@@ -40,25 +39,31 @@ public class ReservationJpaEntity {
     @ManyToOne @JoinColumn(name = "creator_id")
     private MemberJpaEntity creator;
     
-    public void edit(ReservationEditDto dto, LocalDateTime now) {
-        if (dto.getDate() != null) this.date = dto.getDate();
-        if (dto.getStartTime() != null) this.startTime = dto.getStartTime();
-        if (dto.getEndTime() != null) this.endTime = dto.getEndTime();
-        if (dto.getMessage() != null) this.message = dto.getMessage();
-        this.lastModified = now;
+    public Reservation toDomain() {
+        return Reservation.builder()
+                .id(this.id)
+                .date(this.date)
+                .type(this.type)
+                .startTime(this.startTime)
+                .endTime(this.endTime)
+                .lastModified(this.lastModified)
+                .message(this.message)
+                .participationAvailable(this.participationAvailable)
+                .creator(this.creator.toDomain())
+                .build();
     }
     
-    public void extendEndTime() {
-        endTime = endTime.nextReservationTime();
-    }
-    
-    public AttendanceJpaEntity attendMember(LocalDateTime now, Supplier<AttendanceJpaEntity> participateSupplier) {
-        AttendanceJpaEntity participate = participateSupplier.get();
-        participate.editAttendance(isLate(now));
-        return participate;
-    }
-    
-    private Boolean isLate(LocalDateTime now) {
-        return LocalDateTime.of(date, endTime.localTime).isBefore(now);
+    public static ReservationJpaEntity of(Reservation reservation) {
+        return ReservationJpaEntity.builder()
+                .id(reservation.getId())
+                .date(reservation.getDate())
+                .type(reservation.getType())
+                .startTime(reservation.getStartTime())
+                .endTime(reservation.getEndTime())
+                .lastModified(reservation.getLastModified())
+                .message(reservation.getMessage())
+                .participationAvailable(reservation.getParticipationAvailable())
+                .creator(MemberJpaEntity.of(reservation.getCreator()))
+                .build();
     }
 }

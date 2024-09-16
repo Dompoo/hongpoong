@@ -1,8 +1,11 @@
 package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
-import Dompoo.Hongpoong.domain.jpaEntity.InstrumentJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.InstrumentBorrowJpaEntity;
+import Dompoo.Hongpoong.common.exception.impl.InstrumentNotFound;
+import Dompoo.Hongpoong.domain.domain.Instrument;
+import Dompoo.Hongpoong.domain.domain.InstrumentBorrow;
 import Dompoo.Hongpoong.domain.enums.Club;
+import Dompoo.Hongpoong.domain.jpaEntity.InstrumentBorrowJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.InstrumentJpaEntity;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.InstrumentBorrowJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.InstrumentJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.repository.InstrumentRepository;
@@ -10,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,22 +22,30 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
 	private final InstrumentBorrowJpaRepository instrumentBorrowJpaRepository;
 	
 	@Override
-	public List<InstrumentJpaEntity> findAllByClubNotEquals(Club club) {
-		return instrumentJpaRepository.findAllByClubNotEquals(club);
+	public List<Instrument> findAllByClubNotEquals(Club club) {
+		return instrumentJpaRepository.findAllByClubNotEquals(club).stream()
+				.map(InstrumentJpaEntity::toDomain)
+				.toList();
 	}
 	
 	@Override
-	public List<InstrumentJpaEntity> findAllByClubEquals(Club club) {
-		return instrumentJpaRepository.findAllByClubEquals(club);
+	public List<Instrument> findAllByClubEquals(Club club) {
+		return instrumentJpaRepository.findAllByClubEquals(club).stream()
+				.map(InstrumentJpaEntity::toDomain)
+				.toList();
 	}
 	
 	@Override
-	public List<InstrumentBorrowJpaEntity> findAllByInstrument(InstrumentJpaEntity instrumentJpaEntity) {
-		return instrumentBorrowJpaRepository.findAllByInstrument(instrumentJpaEntity);
+	public List<InstrumentBorrow> findAllBorrowByInstrument(Instrument instrument) {
+		return instrumentBorrowJpaRepository.findAllByInstrument(InstrumentJpaEntity.of(instrument)).stream()
+				.map(InstrumentBorrowJpaEntity::toDomain)
+				.toList();
 	}
 	
 	@Override
-	public Optional<InstrumentJpaEntity> findByMemberIdAndInstrumentId(Long memberId, Long instrumentId) {
-		return instrumentBorrowJpaRepository.findByMemberIdAndInstrumentId(memberId, instrumentId);
+	public Instrument findByMemberIdAndInstrumentId(Long memberId, Long instrumentId) {
+		return instrumentBorrowJpaRepository.findByMemberIdAndInstrumentId(memberId, instrumentId)
+				.orElseThrow(InstrumentNotFound::new)
+				.toDomain();
 	}
 }

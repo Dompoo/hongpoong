@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.api.dto.attendance;
 
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
+import Dompoo.Hongpoong.domain.enums.AttendanceStatus;
 import Dompoo.Hongpoong.domain.jpaEntity.AttendanceJpaEntity;
 import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
-import Dompoo.Hongpoong.domain.enums.AttendanceStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -31,7 +31,7 @@ public class AttendanceResponse {
     
     public static AttendanceResponse from(AttendanceJpaEntity attendanceJpaEntity) {
         return AttendanceResponse.builder()
-                .member(MemberResponse.from(attendanceJpaEntity.getMemberJpaEntity()))
+                .member(MemberResponse.from(attendanceJpaEntity.getMember()))
                 .attendance(attendanceJpaEntity.getAttendanceStatus().korName)
                 .build();
     }

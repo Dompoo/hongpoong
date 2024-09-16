@@ -1,10 +1,9 @@
 package Dompoo.Hongpoong.domain.jpaEntity;
 
+import Dompoo.Hongpoong.domain.domain.Attendance;
 import Dompoo.Hongpoong.domain.enums.AttendanceStatus;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -20,34 +19,26 @@ public class AttendanceJpaEntity {
 	private AttendanceStatus attendanceStatus;
 	
 	@ManyToOne @JoinColumn(name = "reservation_id")
-	private ReservationJpaEntity reservationJpaEntity;
+	private ReservationJpaEntity reservation;
 	
 	@ManyToOne @JoinColumn(name = "member_id")
-	private MemberJpaEntity memberJpaEntity;
+	private MemberJpaEntity member;
 	
-	public static List<AttendanceJpaEntity> of(ReservationJpaEntity reservationJpaEntity, List<MemberJpaEntity> memberJpaEntities) {
-		return memberJpaEntities.stream()
-				.map(member -> AttendanceJpaEntity.builder()
-						.memberJpaEntity(member)
-						.reservationJpaEntity(reservationJpaEntity)
-						.attendanceStatus(AttendanceStatus.NOT_YET_ATTEND)
-						.build())
-				.toList();
-	}
-	
-	public static AttendanceJpaEntity of(ReservationJpaEntity reservationJpaEntity, MemberJpaEntity memberJpaEntity) {
-		return AttendanceJpaEntity.builder()
-				.reservationJpaEntity(reservationJpaEntity)
-				.memberJpaEntity(memberJpaEntity)
-				.attendanceStatus(AttendanceStatus.NOT_YET_ATTEND)
+	public Attendance toDomain() {
+		return Attendance.builder()
+				.id(this.id)
+				.attendanceStatus(this.attendanceStatus)
+				.reservation(this.reservation.toDomain())
+				.member(this.member.toDomain())
 				.build();
 	}
 	
-	public void editAttendance(AttendanceStatus attendanceStatus) {
-		this.attendanceStatus = attendanceStatus;
-	}
-	
-	public void editAttendance(Boolean isLate) {
-		this.attendanceStatus = isLate ? AttendanceStatus.LATE : AttendanceStatus.ATTEND;
+	public static AttendanceJpaEntity of(Attendance attendance) {
+		return AttendanceJpaEntity.builder()
+				.id(attendance.getId())
+				.attendanceStatus(attendance.getAttendanceStatus())
+				.reservation(ReservationJpaEntity.of(attendance.getReservation()))
+				.member(MemberJpaEntity.of(attendance.getMember()))
+				.build();
 	}
 }

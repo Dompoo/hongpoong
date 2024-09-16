@@ -1,12 +1,10 @@
 package Dompoo.Hongpoong.domain.jpaEntity;
 
-import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentEditDto;
+import Dompoo.Hongpoong.domain.domain.Instrument;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -29,25 +27,25 @@ public class InstrumentJpaEntity {
     
     private Club club;
     
-    public void edit(InstrumentEditDto dto) {
-        if (dto.getName() != null) this.name = dto.getName();
-        if (dto.getType() != null) this.type = dto.getType();
-        if (dto.getAvailable() != null) this.available = dto.getAvailable();
-        if (dto.getImageUrl() != null) this.imageUrl = dto.getImageUrl();
-    }
-    
-    public InstrumentBorrowJpaEntity borrowInstrument(MemberJpaEntity borrower, ReservationJpaEntity reservationJpaEntity, LocalDate now) {
-        this.available = false;
-        
-        return InstrumentBorrowJpaEntity.builder()
-                .instrumentJpaEntity(this)
-                .memberJpaEntity(borrower)
-                .reservationJpaEntity(reservationJpaEntity)
-                .borrowDate(now)
+    public Instrument toDomain() {
+        return Instrument.builder()
+                .id(this.id)
+                .name(this.name)
+                .type(this.type)
+                .available(this.available)
+                .imageUrl(this.imageUrl)
+                .club(this.club)
                 .build();
     }
     
-    public void returnInstrument() {
-        this.available = true;
+    public static InstrumentJpaEntity of(Instrument instrument) {
+        return InstrumentJpaEntity.builder()
+                .id(instrument.getId())
+                .name(instrument.getName())
+                .type(instrument.getType())
+                .available(instrument.getAvailable())
+                .imageUrl(instrument.getImageUrl())
+                .club(instrument.getClub())
+                .build();
     }
 }

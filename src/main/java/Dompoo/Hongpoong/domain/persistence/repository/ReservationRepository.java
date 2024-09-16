@@ -14,5 +14,5 @@ public interface ReservationRepository {
     
     List<Reservation> findAllByDateBetween(LocalDate startDate, LocalDate endDate);
     
-    List<ReservationEndImage> findAllByReservation(Reservation reservation);
+    List<ReservationEndImage> findAllEndImageByReservation(Reservation reservation);
 }

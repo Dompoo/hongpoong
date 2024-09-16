@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.domain.persistence.jpaRepository;
 
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Role;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

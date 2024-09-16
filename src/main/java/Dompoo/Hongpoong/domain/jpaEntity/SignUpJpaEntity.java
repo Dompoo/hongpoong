@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.domain.jpaEntity;
 
+import Dompoo.Hongpoong.domain.domain.SignUp;
 import Dompoo.Hongpoong.domain.enums.Club;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,4 +27,28 @@ public class SignUpJpaEntity {
     private Club club;
     
     private Integer enrollmentNumber;
+    
+    public SignUp toDomain() {
+        return SignUp.builder()
+                .id(this.id)
+                .email(this.email)
+                .name(this.name)
+                .nickname(this.nickname)
+                .password(this.password)
+                .club(this.club)
+                .enrollmentNumber(this.enrollmentNumber)
+                .build();
+    }
+    
+    public static SignUpJpaEntity of(SignUp signUp) {
+        return SignUpJpaEntity.builder()
+                .id(signUp.getId())
+                .email(signUp.getEmail())
+                .name(signUp.getName())
+                .nickname(signUp.getNickname())
+                .password(signUp.getPassword())
+                .club(signUp.getClub())
+                .enrollmentNumber(signUp.getEnrollmentNumber())
+                .build();
+    }
 }

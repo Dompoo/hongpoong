@@ -12,7 +12,7 @@ public interface InstrumentRepository {
 	
 	List<Instrument> findAllByClubEquals(Club club);
 	
-	List<InstrumentBorrow> findAllByInstrument(Instrument instrument);
+	List<InstrumentBorrow> findAllBorrowByInstrument(Instrument instrument);
 	
 	Instrument findByMemberIdAndInstrumentId(Long memberId, Long instrumentId);
 }

@@ -235,7 +235,7 @@ class InstrumentJpaEntityControllerTest extends MyWebMvcTest {
     
     @Test
     @DisplayName("악기 수정")
-    void editInstrumentOne() throws Exception {
+    void withEditedInstrumentOne() throws Exception {
         //given
         InstrumentEditRequest request = InstrumentEditRequest.builder()
                 .name(INSTRUMENT_NAME)
@@ -267,7 +267,7 @@ class InstrumentJpaEntityControllerTest extends MyWebMvcTest {
     
     @Test
     @DisplayName("어드민 악기 수정")
-    void editInstrumentByAdmin() throws Exception {
+    void withEditedInstrumentByAdmin() throws Exception {
         //given
         InstrumentEditRequest request = InstrumentEditRequest.builder()
                 .name(INSTRUMENT_NAME)

@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.domain.jpaEntity;
 
+import Dompoo.Hongpoong.domain.domain.InstrumentBorrow;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,4 +26,24 @@ public class InstrumentBorrowJpaEntity {
     
     @ManyToOne @JoinColumn(name = "reservation_id")
     private ReservationJpaEntity reservationJpaEntity;
+    
+    public InstrumentBorrow toDomain() {
+        return InstrumentBorrow.builder()
+                .id(this.id)
+                .borrowDate(this.borrowDate)
+                .instrument(this.instrumentJpaEntity.toDomain())
+                .member(this.memberJpaEntity.toDomain())
+                .reservation(this.reservationJpaEntity.toDomain())
+                .build();
+    }
+    
+    public static InstrumentBorrowJpaEntity of(InstrumentBorrow instrumentBorrow) {
+        return InstrumentBorrowJpaEntity.builder()
+                .id(instrumentBorrow.getId())
+                .borrowDate(instrumentBorrow.getBorrowDate())
+                .instrumentJpaEntity(InstrumentJpaEntity.of(instrumentBorrow.getInstrument()))
+                .memberJpaEntity(MemberJpaEntity.of(instrumentBorrow.getMember()))
+                .reservationJpaEntity(ReservationJpaEntity.of(instrumentBorrow.getReservation()))
+                .build();
+    }
 }

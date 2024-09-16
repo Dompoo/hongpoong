@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.domain.persistence.jpaRepository;
 
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
 import Dompoo.Hongpoong.domain.jpaEntity.ReservationEndImageJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

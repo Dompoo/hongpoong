@@ -8,13 +8,13 @@ import Dompoo.Hongpoong.api.dto.Instrument.response.InstrumentResponse;
 import Dompoo.Hongpoong.api.service.InstrumentService;
 import Dompoo.Hongpoong.common.exception.impl.InstrumentNotAvailable;
 import Dompoo.Hongpoong.common.exception.impl.InstrumentNotFound;
-import Dompoo.Hongpoong.domain.jpaEntity.InstrumentJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.InstrumentBorrowJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
+import Dompoo.Hongpoong.domain.jpaEntity.InstrumentBorrowJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.InstrumentJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.InstrumentBorrowJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.InstrumentJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
@@ -357,7 +357,7 @@ class InstrumentJpaEntityServiceTest {
 
     @Test
     @DisplayName("악기 수정")
-    void editInstrument() {
+    void withEditedInstrument() {
         //given
         MemberJpaEntity me = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
@@ -412,7 +412,7 @@ class InstrumentJpaEntityServiceTest {
     
     @Test
     @DisplayName("어드민 악기 수정")
-    void editInstrumentByAdmin() {
+    void withEditedInstrumentByAdmin() {
         //given
         MemberJpaEntity me = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")

@@ -36,6 +36,7 @@ public enum ReservationTime {
 	TIME_2130(LocalTime.of(21, 30)),
 	TIME_2200(LocalTime.of(22, 0)),
 	TIME_2230(LocalTime.of(22, 30)),
+	TIME_2300(LocalTime.of(23, 0)),
 	;
 	
 	public final LocalTime localTime;
@@ -59,8 +60,9 @@ public enum ReservationTime {
 		}
 	}
 	
-	public boolean isBetween(LocalTime startTime, LocalTime endTime) {
-		return startTime.isBefore(this.localTime) && this.localTime.isBefore(endTime);
+	public static boolean isOverlap(ReservationTime startTime1, ReservationTime endTime1, ReservationTime startTime2, ReservationTime endTime2) {
+		return !(endTime1.localTime.isBefore(startTime2.localTime) || endTime1.localTime.equals(startTime2.localTime) ||
+				endTime2.localTime.isBefore(startTime1.localTime) || endTime2.localTime.equals(startTime1.localTime));
 	}
 	
 	public ReservationTime nextReservationTime() {

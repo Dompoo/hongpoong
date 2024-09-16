@@ -170,10 +170,8 @@ public class ReservationService {
         List<Reservation> reservations = reservationRepository.findAllByDate(request.getDate());
         
         for (Reservation reservation : reservations) {
-            if (reservation.getStartTime().isBetween(request.getStartTime().localTime, request.getEndTime().localTime)
-                    || reservation.getEndTime().isBetween(request.getStartTime().localTime, request.getEndTime().localTime)) {
+            if (ReservationTime.isOverlap(reservation.getStartTime(), reservation.getEndTime(), request.getStartTime(), request.getEndTime()))
                 return true;
-            }
         }
         
         return false;

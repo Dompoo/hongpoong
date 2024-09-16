@@ -33,6 +33,11 @@ public interface InstrumentApi {
 			@Schema(hidden = true) UserClaims claims
 	);
 	
+	@Operation(summary = "악기 상세 조회")
+	InstrumentDetailResponse findInstrumentDetail(
+			@Parameter(description = "악기 id") Long instrumentId
+	);
+	
 	@Operation(summary = "악기 대여")
 	void borrowInstrument(
 			@Schema(hidden = true) UserClaims claims,
@@ -42,11 +47,7 @@ public interface InstrumentApi {
 	
 	@Operation(summary = "악기 반납")
 	void returnInstrument(
-			@Parameter(description = "악기 id") Long instrumentId
-	);
-	
-	@Operation(summary = "악기 조회")
-	InstrumentDetailResponse findInstrumentDetail(
+			@Schema(hidden = true) UserClaims claims,
 			@Parameter(description = "악기 id") Long instrumentId
 	);
 	

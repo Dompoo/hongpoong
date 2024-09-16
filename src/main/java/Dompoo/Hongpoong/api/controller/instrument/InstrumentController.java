@@ -41,7 +41,13 @@ public class InstrumentController implements InstrumentApi {
     public List<InstrumentResponse> findAllMyClubInstrument(@LoginUser UserClaims claims) {
         return service.findAllMyClubInstrument(claims.getClub());
     }
-
+    
+    @Secured
+    @GetMapping("/{instrumentId}")
+    public InstrumentDetailResponse findInstrumentDetail(@PathVariable Long instrumentId) {
+        return service.findInstrumentDetail(instrumentId);
+    }
+    
     @Secured
     @PostMapping("/{instrumentId}/borrow")
     public void borrowInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId, @RequestBody @Valid InstrumentBorrowRequest request) {
@@ -50,14 +56,8 @@ public class InstrumentController implements InstrumentApi {
 
     @Secured
     @PostMapping("/{instrumentId}/return")
-    public void returnInstrument(@PathVariable Long instrumentId) {
-        service.returnInstrument(instrumentId);
-    }
-
-    @Secured
-    @GetMapping("/{instrumentId}")
-    public InstrumentDetailResponse findInstrumentDetail(@PathVariable Long instrumentId) {
-        return service.findInstrumentDetail(instrumentId);
+    public void returnInstrument(@LoginUser UserClaims claims, @PathVariable Long instrumentId) {
+        service.returnInstrument(claims.getId(), instrumentId);
     }
 
     @Secured(SecurePolicy.LEADER_PRIMARY)

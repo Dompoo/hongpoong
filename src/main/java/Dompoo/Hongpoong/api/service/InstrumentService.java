@@ -67,8 +67,8 @@ public class InstrumentService {
     }
 
     @Transactional
-    public void returnInstrument(Long instrumentId) {
-        Instrument instrument = instrumentRepository.findById(instrumentId)
+    public void returnInstrument(Long memberId, Long instrumentId) {
+        Instrument instrument = instrumentBorrowRepository.findByMemberIdAndInstrumentId(memberId, instrumentId)
                 .orElseThrow(InstrumentNotFound::new);
 
         instrument.returnInstrument();

@@ -54,10 +54,10 @@ public class AttendanceService {
         }
         
         List<Attendance> attendances = participateRepository.findByReservationIdAndNotAttend(reservationId);
-        
         attendances.forEach(rp -> rp.editAttendance(NO_SHOW));
         
-        return AttendanceResponse.fromList(attendances);
+        List<Attendance> resultAttendances = participateRepository.findAllByReservation(reservation);
+        return AttendanceResponse.fromList(resultAttendances);
     }
     
     private Attendance findOrCreateParticipate(Long memberId, Reservation reservation) {

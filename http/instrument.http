@@ -1,5 +1,5 @@
 ### 악기 등록
-POST {{url}}/instrument
+POST {{url}}/instrumentJpaEntity
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json
 
@@ -9,15 +9,15 @@ Content-Type: application/json
 }
 
 ### 다른 패 악기 전체 조회
-GET {{url}}/instrument
+GET {{url}}/instrumentJpaEntity
 Authorization: Bearer {{jwtToken}}
 
 ### 악기 상세 조회
-GET {{url}}/instrument/1
+GET {{url}}/instrumentJpaEntity/1
 Authorization: Bearer {{jwtToken}}
 
 ### 악기 빌리기
-POST {{url}}/instrument/1/borrow
+POST {{url}}/instrumentJpaEntity/1/borrow
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json
 
@@ -26,6 +26,6 @@ Content-Type: application/json
 }
 
 ### 악기 반납
-POST {{url}}/instrument/1/return
+POST {{url}}/instrumentJpaEntity/1/return
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json

@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class InstrumentControllerTest extends MyWebMvcTest {
+class InstrumentJpaEntityControllerTest extends MyWebMvcTest {
     
     private static final Long RESERVATION_ID = 1L;
     private static final Long INSTRUMENT_ID = 1L;

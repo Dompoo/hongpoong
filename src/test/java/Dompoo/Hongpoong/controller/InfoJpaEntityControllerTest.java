@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class InfoControllerTest extends MyWebMvcTest {
+class InfoJpaEntityControllerTest extends MyWebMvcTest {
     
     private static final Long ID = 1L;
     private static final Long ID2 = 2L;

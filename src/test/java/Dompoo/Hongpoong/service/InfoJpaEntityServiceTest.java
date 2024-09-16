@@ -6,8 +6,8 @@ import Dompoo.Hongpoong.api.dto.info.response.InfoDetailResponse;
 import Dompoo.Hongpoong.api.dto.info.response.InfoResponse;
 import Dompoo.Hongpoong.api.service.InfoService;
 import Dompoo.Hongpoong.common.exception.impl.InfoNotFound;
-import Dompoo.Hongpoong.domain.entity.Info;
-import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.jpaEntity.InfoJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.InfoJpaRepository;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class InfoServiceTest {
+class InfoJpaEntityServiceTest {
     
     @Autowired
     private InfoService service;
@@ -56,7 +56,7 @@ class InfoServiceTest {
     @DisplayName("공지사항 추가")
     void addOne() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
@@ -71,7 +71,7 @@ class InfoServiceTest {
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
         
         //when
-        service.createInfo(member.getId(), request, now);
+        service.createInfo(memberJpaEntity.getId(), request, now);
 
         //then
         assertEquals(1, infoJpaRepository.count());
@@ -84,12 +84,12 @@ class InfoServiceTest {
     @DisplayName("공지사항 전체 조회")
     void findAll() {
         //given
-        infoJpaRepository.save(Info.builder()
+        infoJpaRepository.save(InfoJpaEntity.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
 
-        infoJpaRepository.save(Info.builder()
+        infoJpaRepository.save(InfoJpaEntity.builder()
                 .title(NEW_TITLE)
                 .content(NEW_CONTENT)
                 .build());
@@ -108,7 +108,7 @@ class InfoServiceTest {
     @DisplayName("공지사항 상세 조회")
     void findOne() {
         //given
-        Info save = infoJpaRepository.save(Info.builder()
+        InfoJpaEntity save = infoJpaRepository.save(InfoJpaEntity.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
@@ -127,7 +127,7 @@ class InfoServiceTest {
     @DisplayName("존재하지 않는 공지사항 상세 조회")
     void findOneFail() {
         //given
-        Info save = infoJpaRepository.save(Info.builder()
+        InfoJpaEntity save = infoJpaRepository.save(InfoJpaEntity.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
@@ -145,7 +145,7 @@ class InfoServiceTest {
     @DisplayName("공지사항 수정")
     void edit() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
@@ -153,10 +153,10 @@ class InfoServiceTest {
                 .club(Club.SANTLE)
                 .build());
         
-        Info info = infoJpaRepository.save(Info.builder()
+        InfoJpaEntity infoJpaEntity = infoJpaRepository.save(InfoJpaEntity.builder()
                 .title(TITLE)
                 .content(CONTENT)
-                .member(member)
+                .memberJpaEntity(memberJpaEntity)
                 .build());
 
         InfoEditRequest request = InfoEditRequest.builder()
@@ -165,11 +165,11 @@ class InfoServiceTest {
                 .build();
 
         //when
-        service.editInfo(member.getId(), info.getId(), request.toDto());
+        service.editInfo(memberJpaEntity.getId(), infoJpaEntity.getId(), request.toDto());
 
         //then
-        assertEquals(NEW_TITLE, infoJpaRepository.findById(info.getId()).get().getTitle());
-        assertEquals(NEW_CONTENT, infoJpaRepository.findById(info.getId()).get().getContent());
+        assertEquals(NEW_TITLE, infoJpaRepository.findById(infoJpaEntity.getId()).get().getTitle());
+        assertEquals(NEW_CONTENT, infoJpaRepository.findById(infoJpaEntity.getId()).get().getContent());
     }
 
     //공지사항 수정 실패 테스트
@@ -177,7 +177,7 @@ class InfoServiceTest {
     @DisplayName("존재하지 않는 공지사항 수정")
     void editFail1() {
         //given
-        Info info = infoJpaRepository.save(Info.builder()
+        InfoJpaEntity infoJpaEntity = infoJpaRepository.save(InfoJpaEntity.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
@@ -200,7 +200,7 @@ class InfoServiceTest {
     @DisplayName("공지사항 삭제")
     void delete() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
@@ -208,14 +208,14 @@ class InfoServiceTest {
                 .club(Club.SANTLE)
                 .build());
         
-        Info info = infoJpaRepository.save(Info.builder()
+        InfoJpaEntity infoJpaEntity = infoJpaRepository.save(InfoJpaEntity.builder()
                 .title(TITLE)
                 .content(CONTENT)
-                .member(member)
+                .memberJpaEntity(memberJpaEntity)
                 .build());
 
         //when
-        service.deleteInfo(member.getId(), info.getId());
+        service.deleteInfo(memberJpaEntity.getId(), infoJpaEntity.getId());
 
         //then
         assertEquals(0, infoJpaRepository.count());
@@ -226,20 +226,20 @@ class InfoServiceTest {
     @DisplayName("존재하지 않는 공지사항 삭제")
     void deleteFail() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
                 .enrollmentNumber(19)
                 .build());
         
-        infoJpaRepository.save(Info.builder()
+        infoJpaRepository.save(InfoJpaEntity.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
 
         //when
-        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.deleteInfo(member.getId(), 2L));
+        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.deleteInfo(memberJpaEntity.getId(), 2L));
 
         //then
         assertEquals("존재하지 않는 공지사항입니다.", e.getMessage());
@@ -251,7 +251,7 @@ class InfoServiceTest {
     @DisplayName("어드민 공지사항 수정")
     void editByAdmin() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
@@ -259,10 +259,10 @@ class InfoServiceTest {
                 .club(Club.SANTLE)
                 .build());
         
-        Info info = infoJpaRepository.save(Info.builder()
+        InfoJpaEntity infoJpaEntity = infoJpaRepository.save(InfoJpaEntity.builder()
                 .title(TITLE)
                 .content(CONTENT)
-                .member(member)
+                .memberJpaEntity(memberJpaEntity)
                 .build());
         
         InfoEditRequest request = InfoEditRequest.builder()
@@ -271,11 +271,11 @@ class InfoServiceTest {
                 .build();
         
         //when
-        service.editInfoByAdmin(info.getId(), request.toDto());
+        service.editInfoByAdmin(infoJpaEntity.getId(), request.toDto());
         
         //then
-        assertEquals(NEW_TITLE, infoJpaRepository.findById(info.getId()).get().getTitle());
-        assertEquals(NEW_CONTENT, infoJpaRepository.findById(info.getId()).get().getContent());
+        assertEquals(NEW_TITLE, infoJpaRepository.findById(infoJpaEntity.getId()).get().getTitle());
+        assertEquals(NEW_CONTENT, infoJpaRepository.findById(infoJpaEntity.getId()).get().getContent());
     }
     
     //어드민 공지사항 수정 실패 테스트
@@ -283,7 +283,7 @@ class InfoServiceTest {
     @DisplayName("어드민 존재하지 않는 공지사항 수정")
     void editByAdminFail1() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
@@ -291,10 +291,10 @@ class InfoServiceTest {
                 .club(Club.SANTLE)
                 .build());
         
-        Info info = infoJpaRepository.save(Info.builder()
+        InfoJpaEntity infoJpaEntity = infoJpaRepository.save(InfoJpaEntity.builder()
                 .title(TITLE)
                 .content(CONTENT)
-                .member(member)
+                .memberJpaEntity(memberJpaEntity)
                 .build());
         
         InfoEditRequest request = InfoEditRequest.builder()
@@ -303,7 +303,7 @@ class InfoServiceTest {
                 .build();
         
         //when
-        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.editInfoByAdmin(info.getId() + 1, request.toDto()));
+        InfoNotFound e = assertThrows(InfoNotFound.class, () -> service.editInfoByAdmin(infoJpaEntity.getId() + 1, request.toDto()));
         
         //then
         assertEquals("존재하지 않는 공지사항입니다.", e.getMessage());

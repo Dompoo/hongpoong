@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.reservation.response;
 
-import Dompoo.Hongpoong.domain.entity.Attendance;
-import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.jpaEntity.AttendanceJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -45,25 +45,25 @@ public class ReservationResponse {
     @Schema(example = "2024-04-17T20:00:00")
     private final LocalDateTime lastmodified;
     
-    public static ReservationResponse from(Reservation reservation) {
+    public static ReservationResponse from(ReservationJpaEntity reservationJpaEntity) {
         return ReservationResponse.builder()
-                .reservationId(reservation.getId())
-                .creatorName(reservation.getCreator().getName())
-                .date(reservation.getDate())
-                .type(reservation.getType().korName)
-                .startTime(reservation.getStartTime().localTime)
-                .endTime(reservation.getEndTime().localTime)
-                .message(reservation.getMessage())
-                .participationAvailable(reservation.getParticipationAvailable())
-                .lastmodified(reservation.getLastModified())
+                .reservationId(reservationJpaEntity.getId())
+                .creatorName(reservationJpaEntity.getCreator().getName())
+                .date(reservationJpaEntity.getDate())
+                .type(reservationJpaEntity.getType().korName)
+                .startTime(reservationJpaEntity.getStartTime().localTime)
+                .endTime(reservationJpaEntity.getEndTime().localTime)
+                .message(reservationJpaEntity.getMessage())
+                .participationAvailable(reservationJpaEntity.getParticipationAvailable())
+                .lastmodified(reservationJpaEntity.getLastModified())
                 .build();
     }
     
-    public static List<ReservationResponse> fromList(List<Reservation> reservations) {
-        return reservations.stream().map(ReservationResponse::from).toList();
+    public static List<ReservationResponse> fromList(List<ReservationJpaEntity> reservationJpaEntities) {
+        return reservationJpaEntities.stream().map(ReservationResponse::from).toList();
     }
     
-    public static List<ReservationResponse> fromParticipateList(List<Attendance> reservations) {
-        return reservations.stream().map(rp -> ReservationResponse.from(rp.getReservation())).toList();
+    public static List<ReservationResponse> fromParticipateList(List<AttendanceJpaEntity> reservations) {
+        return reservations.stream().map(rp -> ReservationResponse.from(rp.getReservationJpaEntity())).toList();
     }
 }

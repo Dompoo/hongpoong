@@ -11,8 +11,8 @@ import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
 import Dompoo.Hongpoong.common.exception.impl.LoginFailException;
 import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
 import Dompoo.Hongpoong.common.security.JwtProvider;
-import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.entity.SignUp;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.SignUpJpaEntity;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.SignUpJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,13 +49,13 @@ public class AuthService {
     
     @Transactional(readOnly = true)
     public LoginResponse login(LoginRequest request) {
-        Member member = memberJpaRepository.findByEmail(request.getEmail())
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.findByEmail(request.getEmail())
                 .orElseThrow(LoginFailException::new);
         
-        if (!encoder.matches(request.getPassword(), member.getPassword()))
+        if (!encoder.matches(request.getPassword(), memberJpaEntity.getPassword()))
             throw new LoginFailException();
         
-        String token = jwtProvider.generateAccessToken(member.getId(), member.getEmail(), member.getRole(), member.getClub());
+        String token = jwtProvider.generateAccessToken(memberJpaEntity.getId(), memberJpaEntity.getEmail(), memberJpaEntity.getRole(), memberJpaEntity.getClub());
         
         return LoginResponse.builder()
                 .token(token)
@@ -64,14 +64,14 @@ public class AuthService {
     
     @Transactional
     public void acceptSignUp(Long signupId, AcceptSignUpRequest request) {
-        SignUp signUp = signUpJpaRepository.findById(signupId)
+        SignUpJpaEntity signUpJpaEntity = signUpJpaRepository.findById(signupId)
                 .orElseThrow(SignUpNotFound::new);
 
         if (request.getAcceptResult()) {
-            memberJpaRepository.save(Member.from(signUp));
+            memberJpaRepository.save(MemberJpaEntity.from(signUpJpaEntity));
         }
 
-        signUpJpaRepository.delete(signUp);
+        signUpJpaRepository.delete(signUpJpaEntity);
     }
     
     @Transactional(readOnly = true)

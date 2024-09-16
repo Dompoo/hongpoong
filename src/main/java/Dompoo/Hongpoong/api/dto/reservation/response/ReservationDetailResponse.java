@@ -1,8 +1,8 @@
 package Dompoo.Hongpoong.api.dto.reservation.response;
 
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
-import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -51,18 +51,18 @@ public class ReservationDetailResponse {
     
     private final List<MemberResponse> participators;
     
-    public static ReservationDetailResponse of(Reservation reservation, List<Member> participators) {
+    public static ReservationDetailResponse of(ReservationJpaEntity reservationJpaEntity, List<MemberJpaEntity> participators) {
         return ReservationDetailResponse.builder()
-                .reservationId(reservation.getId())
-                .creatorName(reservation.getCreator().getName())
-                .email(reservation.getCreator().getEmail())
-                .date(reservation.getDate())
-                .type(reservation.getType().korName)
-                .startTime(reservation.getStartTime().localTime)
-                .endTime(reservation.getEndTime().localTime)
-                .message(reservation.getMessage())
-                .lastmodified(reservation.getLastModified())
-                .participationAvailable(reservation.getParticipationAvailable())
+                .reservationId(reservationJpaEntity.getId())
+                .creatorName(reservationJpaEntity.getCreator().getName())
+                .email(reservationJpaEntity.getCreator().getEmail())
+                .date(reservationJpaEntity.getDate())
+                .type(reservationJpaEntity.getType().korName)
+                .startTime(reservationJpaEntity.getStartTime().localTime)
+                .endTime(reservationJpaEntity.getEndTime().localTime)
+                .message(reservationJpaEntity.getMessage())
+                .lastmodified(reservationJpaEntity.getLastModified())
+                .participationAvailable(reservationJpaEntity.getParticipationAvailable())
                 .participators(MemberResponse.fromList(participators))
                 .build();
     }

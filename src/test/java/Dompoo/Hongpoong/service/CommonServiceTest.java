@@ -3,7 +3,7 @@ package Dompoo.Hongpoong.service;
 import Dompoo.Hongpoong.api.dto.common.request.SettingEditRequest;
 import Dompoo.Hongpoong.api.dto.common.response.SettingResponse;
 import Dompoo.Hongpoong.api.service.CommonService;
-import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -34,7 +34,7 @@ class CommonServiceTest {
     @DisplayName("세팅 정보 불러오기")
     void get1() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .email("dompoo@gmail.com")
                 .name("이창근")
                 .password("1234")
@@ -43,10 +43,10 @@ class CommonServiceTest {
                 .build());
 
         //when
-        SettingResponse response = service.findMySetting(member.getId());
+        SettingResponse response = service.findMySetting(memberJpaEntity.getId());
 
         //then
-        assertEquals(member.getId(), response.getMemberId());
+        assertEquals(memberJpaEntity.getId(), response.getMemberId());
         assertFalse(response.getPushAlarm());
     }
 
@@ -54,7 +54,7 @@ class CommonServiceTest {
     @DisplayName("세팅 정보 저장하기")
     void save() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .email("dompoo@gmail.com")
                 .name("이창근")
                 .password("1234")
@@ -66,6 +66,6 @@ class CommonServiceTest {
                 .build();
 
         //expected
-        service.editSetting(member.getId(), request.toDto());
+        service.editSetting(memberJpaEntity.getId(), request.toDto());
     }
 }

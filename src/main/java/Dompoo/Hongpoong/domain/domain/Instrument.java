@@ -1,32 +1,25 @@
-package Dompoo.Hongpoong.domain.entity;
+package Dompoo.Hongpoong.domain.domain;
 
 import Dompoo.Hongpoong.api.dto.Instrument.request.InstrumentEditDto;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Instrument {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     private String name;
-    
-    @Enumerated(EnumType.STRING)
     private InstrumentType type;
-    
     private Boolean available;
-    
     private String imageUrl;
-    
     private Club club;
     
     public void edit(InstrumentEditDto dto) {

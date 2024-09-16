@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.domain.entity;
+package Dompoo.Hongpoong.domain.jpaEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ChatRoom {
+public class ChatRoomJpaEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

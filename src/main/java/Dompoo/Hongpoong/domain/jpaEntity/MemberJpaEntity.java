@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.domain.entity;
+package Dompoo.Hongpoong.domain.jpaEntity;
 
 import Dompoo.Hongpoong.api.dto.common.request.SettingEditDto;
 import Dompoo.Hongpoong.api.dto.member.request.MemberEditDto;
@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Member {
+public class MemberJpaEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,15 +39,15 @@ public class Member {
     
     private Boolean pushAlarm;
     
-    public static Member from(SignUp signUp) {
-        return Member.builder()
-                .email(signUp.getEmail())
-                .name(signUp.getName())
-                .nickname(signUp.getNickname())
-                .password(signUp.getPassword())
+    public static MemberJpaEntity from(SignUpJpaEntity signUpJpaEntity) {
+        return MemberJpaEntity.builder()
+                .email(signUpJpaEntity.getEmail())
+                .name(signUpJpaEntity.getName())
+                .nickname(signUpJpaEntity.getNickname())
+                .password(signUpJpaEntity.getPassword())
                 .role(Role.MEMBER)
-                .club(signUp.getClub())
-                .enrollmentNumber(signUp.getEnrollmentNumber())
+                .club(signUpJpaEntity.getClub())
+                .enrollmentNumber(signUpJpaEntity.getEnrollmentNumber())
                 .pushAlarm(false)
                 .build();
     }

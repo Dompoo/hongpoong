@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.domain.persistence.repository;
 
-import Dompoo.Hongpoong.domain.entity.Instrument;
-import Dompoo.Hongpoong.domain.entity.InstrumentBorrow;
+import Dompoo.Hongpoong.domain.jpaEntity.InstrumentJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.InstrumentBorrowJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Club;
 import org.springframework.data.repository.query.Param;
 
@@ -10,11 +10,11 @@ import java.util.Optional;
 
 public interface InstrumentRepository {
 	
-	List<Instrument> findAllByClubNotEquals(@Param("club") Club club);
+	List<InstrumentJpaEntity> findAllByClubNotEquals(@Param("club") Club club);
 	
-	List<Instrument> findAllByClubEquals(@Param("club") Club club);
+	List<InstrumentJpaEntity> findAllByClubEquals(@Param("club") Club club);
 	
-	List<InstrumentBorrow> findAllByInstrument(Instrument instrument);
+	List<InstrumentBorrowJpaEntity> findAllByInstrument(InstrumentJpaEntity instrumentJpaEntity);
 	
-	Optional<Instrument> findByMemberIdAndInstrumentId(Long memberId, Long instrumentId);
+	Optional<InstrumentJpaEntity> findByMemberIdAndInstrumentId(Long memberId, Long instrumentId);
 }

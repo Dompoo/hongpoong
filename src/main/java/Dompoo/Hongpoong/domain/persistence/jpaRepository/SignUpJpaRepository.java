@@ -1,11 +1,11 @@
 package Dompoo.Hongpoong.domain.persistence.jpaRepository;
 
-import Dompoo.Hongpoong.domain.entity.SignUp;
+import Dompoo.Hongpoong.domain.jpaEntity.SignUpJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface SignUpJpaRepository extends JpaRepository<SignUp, Long> {
+public interface SignUpJpaRepository extends JpaRepository<SignUpJpaEntity, Long> {
     boolean existsByEmail(String email);
-    Optional<SignUp> findByEmail(String email);
+    Optional<SignUpJpaEntity> findByEmail(String email);
 }

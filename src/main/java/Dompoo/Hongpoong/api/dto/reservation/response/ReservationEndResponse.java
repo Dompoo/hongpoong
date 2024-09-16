@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.api.dto.reservation.response;
 
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
-import Dompoo.Hongpoong.domain.entity.Attendance;
-import Dompoo.Hongpoong.domain.entity.Reservation;
-import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
+import Dompoo.Hongpoong.domain.jpaEntity.AttendanceJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationEndImageJpaEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -49,18 +49,18 @@ public class ReservationEndResponse {
     @Schema(example = "[image.com/1, image.com/2]")
     private final List<String> images;
     
-    public static ReservationEndResponse of(Reservation reservation, List<Attendance> participates, List<ReservationEndImage> reservationEndImages) {
+    public static ReservationEndResponse of(ReservationJpaEntity reservationJpaEntity, List<AttendanceJpaEntity> participates, List<ReservationEndImageJpaEntity> reservationEndImageJpaEntities) {
         return ReservationEndResponse.builder()
-                .reservationId(reservation.getId())
-                .creatorName(reservation.getCreator().getName())
-                .email(reservation.getCreator().getEmail())
-                .date(reservation.getDate())
-                .startTime(reservation.getStartTime().localTime)
-                .endTime(reservation.getEndTime().localTime)
-                .message(reservation.getMessage())
-                .lastmodified(reservation.getLastModified())
-                .participators(MemberResponse.fromList(participates.stream().map(Attendance::getMember).toList()))
-                .images(reservationEndImages.stream().map(ReservationEndImage::getImageUrl).toList())
+                .reservationId(reservationJpaEntity.getId())
+                .creatorName(reservationJpaEntity.getCreator().getName())
+                .email(reservationJpaEntity.getCreator().getEmail())
+                .date(reservationJpaEntity.getDate())
+                .startTime(reservationJpaEntity.getStartTime().localTime)
+                .endTime(reservationJpaEntity.getEndTime().localTime)
+                .message(reservationJpaEntity.getMessage())
+                .lastmodified(reservationJpaEntity.getLastModified())
+                .participators(MemberResponse.fromList(participates.stream().map(AttendanceJpaEntity::getMemberJpaEntity).toList()))
+                .images(reservationEndImageJpaEntities.stream().map(ReservationEndImageJpaEntity::getImageUrl).toList())
                 .build();
     }
 }

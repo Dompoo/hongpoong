@@ -1,5 +1,5 @@
 ### 예약 추가
-POST {{url}}/reservation
+POST {{url}}/reservationJpaEntity
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json
 
@@ -14,30 +14,30 @@ Content-Type: application/json
 }
 
 ### 연도/달 예약 조회
-GET {{url}}/reservation/year-month?
+GET {{url}}/reservationJpaEntity/year-month?
     year=2025&
     month=10
 Authorization: Bearer {{jwtToken}}
 
 ### 연도/달 예약 조회
-GET {{url}}/reservation/day?
+GET {{url}}/reservationJpaEntity/day?
     date=2025-09-20
 Authorization: Bearer {{jwtToken}}
 
 ### 오늘의 해야할 예약 조회
-GET {{url}}/reservation/todo
+GET {{url}}/reservationJpaEntity/todo
 Authorization: Bearer {{jwtToken}}
 
 ### 예약 상세 조회
-GET {{url}}/reservation/1
+GET {{url}}/reservationJpaEntity/1
 Authorization: Bearer {{jwtToken}}
 
 ### 예약 시간 연장
-PATCH {{url}}/reservation/2/extend
+PATCH {{url}}/reservationJpaEntity/2/extend
 Authorization: Bearer {{jwtToken}}
 
 ### 예약 종료
-POST {{url}}/reservation/2/end
+POST {{url}}/reservationJpaEntity/2/end
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json
 
@@ -46,7 +46,7 @@ Content-Type: application/json
 }
 
 ### 예약 수정
-PATCH {{url}}/reservation/2
+PATCH {{url}}/reservationJpaEntity/2
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json
 
@@ -60,16 +60,16 @@ Content-Type: application/json
 }
 
 ### 예약 삭제
-DELETE {{url}}/reservation/2
+DELETE {{url}}/reservationJpaEntity/2
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json
 
 ### 예약 종료 후 상세 조회
-GET {{url}}/reservation/manage/2
+GET {{url}}/reservationJpaEntity/manage/2
 Authorization: Bearer {{jwtToken}}
 
 ### 어드민 예약 수정
-PATCH {{url}}/reservation/manage/2
+PATCH {{url}}/reservationJpaEntity/manage/2
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json
 
@@ -83,6 +83,6 @@ Content-Type: application/json
 }
 
 ### 어드민 예약 삭제
-DELETE {{url}}/reservation/manage/2
+DELETE {{url}}/reservationJpaEntity/manage/2
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json

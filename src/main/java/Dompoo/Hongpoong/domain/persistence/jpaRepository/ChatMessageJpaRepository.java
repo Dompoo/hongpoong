@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.domain.persistence.jpaRepository;
 
-import Dompoo.Hongpoong.domain.entity.ChatMessage;
+import Dompoo.Hongpoong.domain.jpaEntity.ChatMessageJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ChatMessageJpaRepository extends JpaRepository<ChatMessage, Long> {
+public interface ChatMessageJpaRepository extends JpaRepository<ChatMessageJpaEntity, Long> {
 }

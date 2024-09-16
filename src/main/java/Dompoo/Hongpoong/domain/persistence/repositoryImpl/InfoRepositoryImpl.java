@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
-import Dompoo.Hongpoong.domain.entity.Info;
+import Dompoo.Hongpoong.domain.jpaEntity.InfoJpaEntity;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.InfoJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.repository.InfoRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ public class InfoRepositoryImpl implements InfoRepository {
 	private final InfoJpaRepository infoJpaRepository;
 	
 	@Override
-	public Optional<Info> findByIdFetchJoinMember(Long infoId) {
+	public Optional<InfoJpaEntity> findByIdFetchJoinMember(Long infoId) {
 		return infoJpaRepository.findByIdFetchJoinMember(infoId);
 	}
 }

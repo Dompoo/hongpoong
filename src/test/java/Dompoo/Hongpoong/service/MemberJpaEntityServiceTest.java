@@ -8,7 +8,7 @@ import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
 import Dompoo.Hongpoong.api.service.MemberService;
 import Dompoo.Hongpoong.common.exception.impl.EditRoleToAdminException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class MemberServiceTest {
+class MemberJpaEntityServiceTest {
 
     @Autowired
     private MemberJpaRepository memberJpaRepository;
@@ -63,7 +63,7 @@ class MemberServiceTest {
     @DisplayName("회원 리스트 조회")
     void findAllMember() {
         //given
-        memberJpaRepository.save(Member.builder()
+        memberJpaRepository.save(MemberJpaEntity.builder()
                 .email(EMAIL)
                 .name(NAME)
                 .password(PASSWORD)
@@ -71,7 +71,7 @@ class MemberServiceTest {
                 .club(SANTLE)
                 .build());
         
-        memberJpaRepository.save(Member.builder()
+        memberJpaRepository.save(MemberJpaEntity.builder()
                 .email(EMAIL)
                 .name(NAME2)
                 .password(PASSWORD2)
@@ -92,10 +92,10 @@ class MemberServiceTest {
     @DisplayName("로그인 정보")
     void findMyMemberDetail() {
         //given
-        Member member = memberJpaRepository.save(buildMember());
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(buildMember());
 
         //when
-        MemberStatusResponse response = service.findMyMemberDetail(member.getId());
+        MemberStatusResponse response = service.findMyMemberDetail(memberJpaEntity.getId());
 
         //then
         assertEquals(response.getEmail(), EMAIL);
@@ -106,11 +106,11 @@ class MemberServiceTest {
     @DisplayName("존재하지 않는 회원의 로그인 정보")
     void findMyMemberDetailFail() {
         //given
-        Member member = memberJpaRepository.save(buildMember());
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(buildMember());
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class, () ->
-                service.findMyMemberDetail(member.getId() + 1));
+                service.findMyMemberDetail(memberJpaEntity.getId() + 1));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
@@ -121,7 +121,7 @@ class MemberServiceTest {
     @DisplayName("회원정보 수정")
     void editMyMember() {
         //given
-        Member member = memberJpaRepository.save(buildMember());
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(buildMember());
         
         MemberEditDto dto = MemberEditDto.builder()
                 .name(NAME2)
@@ -133,7 +133,7 @@ class MemberServiceTest {
                 .build();
 
         //when
-        service.editMyMember(member.getId(), dto, PASSWORD);
+        service.editMyMember(memberJpaEntity.getId(), dto, PASSWORD);
 
         //then
         assertEquals(memberJpaRepository.findAll().getFirst().getEmail(), "dompoo@gmail.com");
@@ -144,7 +144,7 @@ class MemberServiceTest {
     @Test
     @DisplayName("존재하지 않는 회원정보 수정 시도")
     void editMyMemberFail2() {
-        Member member = memberJpaRepository.save(buildMember());
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(buildMember());
         
         MemberEditRequest request = MemberEditRequest.builder()
                 .name(NAME2)
@@ -153,7 +153,7 @@ class MemberServiceTest {
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.editMyMember(member.getId() + 1, request.toDto(), PASSWORD));
+                () -> service.editMyMember(memberJpaEntity.getId() + 1, request.toDto(), PASSWORD));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
@@ -164,10 +164,10 @@ class MemberServiceTest {
     @DisplayName("회원탈퇴")
     void deleteMyMember() {
         //given
-        Member member = memberJpaRepository.save(buildMember());
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(buildMember());
         
         //when
-        service.deleteMemberByAdmin(member.getId());
+        service.deleteMemberByAdmin(memberJpaEntity.getId());
 
         //then
         assertEquals(memberJpaRepository.count(), 0);
@@ -177,11 +177,11 @@ class MemberServiceTest {
     @DisplayName("존재하지 않는 회원아이디로 회원탈퇴")
     void deleteMemberByAdminFail1() {
         //given
-        Member member = memberJpaRepository.save(buildMember());
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(buildMember());
         
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.deleteMemberByAdmin(member.getId() + 1));
+                () -> service.deleteMemberByAdmin(memberJpaEntity.getId() + 1));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 유저입니다.");
@@ -192,8 +192,8 @@ class MemberServiceTest {
     @DisplayName("내 패 회원 권한 변경")
     void editMemberAuth() {
         //given
-        Member me = memberJpaRepository.save(buildMember());
-        Member target = memberJpaRepository.save(buildMember2());
+        MemberJpaEntity me = memberJpaRepository.save(buildMember());
+        MemberJpaEntity target = memberJpaRepository.save(buildMember2());
         
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
                 .role(Role.LEADER)
@@ -210,8 +210,8 @@ class MemberServiceTest {
     @DisplayName("존재하지 않는 회원 권한 변경")
     void editMemberAuthFail() {
         //given
-        Member me = memberJpaRepository.save(buildMember());
-        Member target = memberJpaRepository.save(buildMember2());
+        MemberJpaEntity me = memberJpaRepository.save(buildMember());
+        MemberJpaEntity target = memberJpaRepository.save(buildMember2());
         
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
                 .role(Role.LEADER)
@@ -230,8 +230,8 @@ class MemberServiceTest {
     @DisplayName("의장으로 권한 변경할 수는 없다.")
     void editMemberAuthFail2() {
         //given
-        Member me = memberJpaRepository.save(buildMember());
-        Member target = memberJpaRepository.save(buildMember2());
+        MemberJpaEntity me = memberJpaRepository.save(buildMember());
+        MemberJpaEntity target = memberJpaRepository.save(buildMember2());
         
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
                 .role(Role.ADMIN)
@@ -250,8 +250,8 @@ class MemberServiceTest {
     @DisplayName("내 패 회원 삭제")
     void deleteMember() {
         //given
-        Member me = memberJpaRepository.save(buildMember());
-        Member target = memberJpaRepository.save(buildMember2());
+        MemberJpaEntity me = memberJpaRepository.save(buildMember());
+        MemberJpaEntity target = memberJpaRepository.save(buildMember2());
         
         //when
         service.deleteMember(me.getId(), target.getId());
@@ -264,8 +264,8 @@ class MemberServiceTest {
     @DisplayName("존재하지 않는 회원 권한 변경")
     void deleteMemberFail() {
         //given
-        Member me = memberJpaRepository.save(buildMember());
-        Member target = memberJpaRepository.save(buildMember2());
+        MemberJpaEntity me = memberJpaRepository.save(buildMember());
+        MemberJpaEntity target = memberJpaRepository.save(buildMember2());
         
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
@@ -280,7 +280,7 @@ class MemberServiceTest {
     @DisplayName("어드민 회원 권한 변경")
     void editMemberAuthByAdmin() {
         //given
-        Member find = memberJpaRepository.save(buildMember());
+        MemberJpaEntity find = memberJpaRepository.save(buildMember());
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
                 .role(Role.LEADER)
@@ -297,7 +297,7 @@ class MemberServiceTest {
     @DisplayName("어드민 존재하지 않는 회원 권한 변경")
     void editMemberAuthByAdminFail() {
         //given
-        Member find = memberJpaRepository.save(buildMember());
+        MemberJpaEntity find = memberJpaRepository.save(buildMember());
 
         MemberRoleEditRequest request = MemberRoleEditRequest.builder()
                 .role(Role.LEADER)
@@ -316,7 +316,7 @@ class MemberServiceTest {
     @DisplayName("어드민 회원 삭제")
     void deleteMemberByAdmin() {
         //given
-        Member target = memberJpaRepository.save(buildMember2());
+        MemberJpaEntity target = memberJpaRepository.save(buildMember2());
         
         //when
         service.deleteMemberByAdmin(target.getId());
@@ -329,7 +329,7 @@ class MemberServiceTest {
     @DisplayName("어드민 존재하지 않는 회원 권한 변경")
     void deleteMemberByAdminFail() {
         //given
-        Member target = memberJpaRepository.save(buildMember2());
+        MemberJpaEntity target = memberJpaRepository.save(buildMember2());
         
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
@@ -340,8 +340,8 @@ class MemberServiceTest {
         assertEquals(e.statusCode(), "404");
     }
     
-    private Member buildMember() {
-        return Member.builder()
+    private MemberJpaEntity buildMember() {
+        return MemberJpaEntity.builder()
                 .email(EMAIL)
                 .name(NAME)
                 .nickname(NICKNAME)
@@ -354,8 +354,8 @@ class MemberServiceTest {
                 .build();
     }
     
-    private Member buildMember2() {
-        return Member.builder()
+    private MemberJpaEntity buildMember2() {
+        return MemberJpaEntity.builder()
                 .email(EMAIL2)
                 .name(NAME2)
                 .nickname(NICKNAME2)

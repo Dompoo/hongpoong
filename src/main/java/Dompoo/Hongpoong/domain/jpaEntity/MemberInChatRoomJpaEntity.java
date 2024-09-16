@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.domain.entity;
+package Dompoo.Hongpoong.domain.jpaEntity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,14 +8,14 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class MemberInChatRoom {
+public class MemberInChatRoomJpaEntity {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@ManyToOne @JoinColumn(name = "member_id")
-	private Member member;
+	private MemberJpaEntity memberJpaEntity;
 	
 	@ManyToOne @JoinColumn(name = "chatroom_id")
-	private ChatRoom chatRoom;
+	private ChatRoomJpaEntity chatRoomJpaEntity;
 }

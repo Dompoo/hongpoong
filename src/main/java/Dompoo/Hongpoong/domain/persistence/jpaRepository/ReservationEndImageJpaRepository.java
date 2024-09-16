@@ -1,11 +1,11 @@
 package Dompoo.Hongpoong.domain.persistence.jpaRepository;
 
-import Dompoo.Hongpoong.domain.entity.Reservation;
-import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationEndImageJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ReservationEndImageJpaRepository extends JpaRepository<ReservationEndImage, Long> {
-	List<ReservationEndImage> findAllByReservation(Reservation reservation);
+public interface ReservationEndImageJpaRepository extends JpaRepository<ReservationEndImageJpaEntity, Long> {
+	List<ReservationEndImageJpaEntity> findAllByReservation(ReservationJpaEntity reservationJpaEntity);
 }

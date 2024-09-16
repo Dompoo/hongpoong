@@ -8,9 +8,9 @@ import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.api.service.ReservationService;
 import Dompoo.Hongpoong.common.exception.impl.*;
-import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.entity.Reservation;
-import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationEndImageJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.enums.ReservationType;
@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
-class ReservationServiceTest {
+class ReservationJpaEntityServiceTest {
 
     @Autowired
     private ReservationService service;
@@ -69,7 +69,7 @@ class ReservationServiceTest {
     @DisplayName("예약 추가")
     void add() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
@@ -86,7 +86,7 @@ class ReservationServiceTest {
                 .build();
 
         //when
-        service.createReservation(member.getId(), request, NOW);
+        service.createReservation(memberJpaEntity.getId(), request, NOW);
 
         //then
         assertEquals(1, reservationJpaRepository.count());
@@ -96,7 +96,7 @@ class ReservationServiceTest {
     @DisplayName("존재하지 않는 유저가 예약 추가 시도시 실패한다.")
     void addFail() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
@@ -112,7 +112,7 @@ class ReservationServiceTest {
 
         //when
         MemberNotFound e = assertThrows(MemberNotFound.class,
-                () -> service.createReservation(member.getId() + 1, request, NOW));
+                () -> service.createReservation(memberJpaEntity.getId() + 1, request, NOW));
 
 
         //then
@@ -124,7 +124,7 @@ class ReservationServiceTest {
     @DisplayName("예약 추가시 시작시간이 종료시간보다 늦으면 안된다.")
     void addFail2() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
@@ -139,7 +139,7 @@ class ReservationServiceTest {
                 .build();
         
         //when
-        EndForwardStart e = assertThrows(EndForwardStart.class, () -> service.createReservation(member.getId(), request, NOW));
+        EndForwardStart e = assertThrows(EndForwardStart.class, () -> service.createReservation(memberJpaEntity.getId(), request, NOW));
         
         //then
         assertEquals(e.getMessage(), "시작 시간은 종료 시간보다 앞서야 합니다.");
@@ -150,22 +150,22 @@ class ReservationServiceTest {
     @DisplayName("연도와 달로 예약 조회")
     void yearMonth() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
         
-        reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE2)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
@@ -176,7 +176,7 @@ class ReservationServiceTest {
         
         //then
         assertEquals(response.size(), 1);
-        assertEquals(response.get(0).getReservationId(), reservation.getId());
+        assertEquals(response.get(0).getReservationId(), reservationJpaEntity.getId());
         assertEquals(response.get(0).getCreatorName(), "창근");
         assertEquals(response.get(0).getDate(), DATE);
         assertEquals(response.get(0).getStartTime(), START_TIME_LOCALTIME);
@@ -187,22 +187,22 @@ class ReservationServiceTest {
     @DisplayName("날짜로 예약 조회")
     void day() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
         
-        reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE2)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
@@ -213,7 +213,7 @@ class ReservationServiceTest {
         
         //then
         assertEquals(response.size(), 1);
-        assertEquals(response.get(0).getReservationId(), reservation.getId());
+        assertEquals(response.get(0).getReservationId(), reservationJpaEntity.getId());
         assertEquals(response.get(0).getCreatorName(), "창근");
         assertEquals(response.get(0).getDate(), DATE);
         assertEquals(response.get(0).getStartTime(), START_TIME_LOCALTIME);
@@ -224,22 +224,22 @@ class ReservationServiceTest {
     @DisplayName("오늘 해야하는 예약 전체 조회")
     void todo() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
                 .build());
         
-        reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE2)
                 .startTime(START_TIME)
                 .endTime(END_TIME)
@@ -250,7 +250,7 @@ class ReservationServiceTest {
         
         //then
         assertEquals(response.size(), 1);
-        assertEquals(response.get(0).getReservationId(), reservation.getId());
+        assertEquals(response.get(0).getReservationId(), reservationJpaEntity.getId());
         assertEquals(response.get(0).getCreatorName(), "창근");
         assertEquals(response.get(0).getDate(), DATE);
         assertEquals(response.get(0).getStartTime(), START_TIME_LOCALTIME);
@@ -261,14 +261,14 @@ class ReservationServiceTest {
     @DisplayName("예약 상세 조회")
     void detail() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -276,10 +276,10 @@ class ReservationServiceTest {
                 .build());
 
         //when
-        ReservationDetailResponse response = service.findReservationDetail(reservation.getId());
+        ReservationDetailResponse response = service.findReservationDetail(reservationJpaEntity.getId());
         
         //then
-        assertEquals(response.getReservationId(), reservation.getId());
+        assertEquals(response.getReservationId(), reservationJpaEntity.getId());
         assertEquals(response.getCreatorName(), "창근");
         assertEquals(response.getDate(), DATE);
         assertEquals(response.getStartTime(), START_TIME_LOCALTIME);
@@ -290,14 +290,14 @@ class ReservationServiceTest {
     @DisplayName("존재하지 않는 예약 상세 조회")
     void detailFail() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -306,7 +306,7 @@ class ReservationServiceTest {
 
         //when
         ReservationNotFound e = assertThrows(ReservationNotFound.class,
-                () -> service.findReservationDetail(reservation.getId() + 1));
+                () -> service.findReservationDetail(reservationJpaEntity.getId() + 1));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 예약입니다.");
@@ -317,14 +317,14 @@ class ReservationServiceTest {
     @DisplayName("예약 시간 연장")
     void extend() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -334,31 +334,31 @@ class ReservationServiceTest {
         LocalTime now = END_TIME_LOCALTIME.minusMinutes(25);
         
         //when
-        service.extendReservationTime(member.getId(), reservation.getId(), now);
+        service.extendReservationTime(memberJpaEntity.getId(), reservationJpaEntity.getId(), now);
         
         //then
-        Reservation editedReservation = reservationJpaRepository.findById(reservation.getId()).get();
-        assertEquals(ReservationTime.from(END_TIME.localTime.plusMinutes(30)), editedReservation.getEndTime());
+        ReservationJpaEntity editedReservationJpaEntity = reservationJpaRepository.findById(reservationJpaEntity.getId()).get();
+        assertEquals(ReservationTime.from(END_TIME.localTime.plusMinutes(30)), editedReservationJpaEntity.getEndTime());
     }
     
     @Test
     @DisplayName("예약 시간 연장은 예약자만 가능하다.")
     void extendFail3() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Member anotherMember = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity anotherMemberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -368,7 +368,7 @@ class ReservationServiceTest {
         LocalTime now = END_TIME_LOCALTIME.minusMinutes(35);
         
         //when
-        EditFailException e = assertThrows(EditFailException.class, () -> service.extendReservationTime(anotherMember.getId(), reservation.getId(), now));
+        EditFailException e = assertThrows(EditFailException.class, () -> service.extendReservationTime(anotherMemberJpaEntity.getId(), reservationJpaEntity.getId(), now));
         
         //then
         assertEquals("403", e.statusCode());
@@ -379,14 +379,14 @@ class ReservationServiceTest {
     @DisplayName("예약 시간 연장은 종료 30분 전에만 가능하다.")
     void extendFail1() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -396,7 +396,7 @@ class ReservationServiceTest {
         LocalTime now = END_TIME_LOCALTIME.minusMinutes(35);
         
         //when
-        TimeExtendNotAvailableException e = assertThrows(TimeExtendNotAvailableException.class, () -> service.extendReservationTime(member.getId(), reservation.getId(), now));
+        TimeExtendNotAvailableException e = assertThrows(TimeExtendNotAvailableException.class, () -> service.extendReservationTime(memberJpaEntity.getId(), reservationJpaEntity.getId(), now));
         
         //then
         assertEquals("400", e.statusCode());
@@ -407,14 +407,14 @@ class ReservationServiceTest {
     @DisplayName("예약 시간 연장은 연습 종료 후에 불가능하다.")
     void extendFail2() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -424,7 +424,7 @@ class ReservationServiceTest {
         LocalTime now = END_TIME_LOCALTIME.plusMinutes(1);
         
         //when
-        TimeExtendNotAvailableException e = assertThrows(TimeExtendNotAvailableException.class, () -> service.extendReservationTime(member.getId(), reservation.getId(), now));
+        TimeExtendNotAvailableException e = assertThrows(TimeExtendNotAvailableException.class, () -> service.extendReservationTime(memberJpaEntity.getId(), reservationJpaEntity.getId(), now));
         
         //then
         assertEquals("400", e.statusCode());
@@ -435,14 +435,14 @@ class ReservationServiceTest {
     @DisplayName("예약 종료")
     void end() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -454,25 +454,25 @@ class ReservationServiceTest {
                 .build();
         
         //when
-        service.endReservation(member.getId(), reservation.getId(), request);
+        service.endReservation(memberJpaEntity.getId(), reservationJpaEntity.getId(), request);
         
         //then
-        List<ReservationEndImage> images = reservationEndImageJpaRepository.findAllByReservation(reservation);
-        assertTrue(images.stream().map(ReservationEndImage::getImageUrl).toList().containsAll(List.of("image1", "image2")));
+        List<ReservationEndImageJpaEntity> images = reservationEndImageJpaRepository.findAllByReservation(reservationJpaEntity);
+        assertTrue(images.stream().map(ReservationEndImageJpaEntity::getImageUrl).toList().containsAll(List.of("image1", "image2")));
     }
     
     @Test
     @DisplayName("예약 종료 후 상세 정보 확인")
     void endDetail() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -480,12 +480,12 @@ class ReservationServiceTest {
                 .build());
         
         reservationEndImageJpaRepository.saveAll(List.of(
-                ReservationEndImage.builder().reservation(reservation).imageUrl("image1").build(),
-                ReservationEndImage.builder().reservation(reservation).imageUrl("image2").build()
+                ReservationEndImageJpaEntity.builder().reservationJpaEntity(reservationJpaEntity).imageUrl("image1").build(),
+                ReservationEndImageJpaEntity.builder().reservationJpaEntity(reservationJpaEntity).imageUrl("image2").build()
         ));
         
         //when
-        ReservationEndResponse reservationEndDetail = service.findReservationEndDetail(reservation.getId());
+        ReservationEndResponse reservationEndDetail = service.findReservationEndDetail(reservationJpaEntity.getId());
         
         //then
         assertEquals("창근", reservationEndDetail.getCreatorName());
@@ -497,14 +497,14 @@ class ReservationServiceTest {
     @DisplayName("예약 수정")
     void edit() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -520,12 +520,12 @@ class ReservationServiceTest {
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
 
         //when
-        service.editReservation(member.getId(), reservation.getId(), request.toDto(), now);
+        service.editReservation(memberJpaEntity.getId(), reservationJpaEntity.getId(), request.toDto(), now);
 
         //then
-        Reservation find = assertDoesNotThrow(() -> reservationJpaRepository.findById(reservation.getId())
+        ReservationJpaEntity find = assertDoesNotThrow(() -> reservationJpaRepository.findById(reservationJpaEntity.getId())
                 .orElseThrow());
-        assertEquals(find.getCreator().getId(), member.getId());
+        assertEquals(find.getCreator().getId(), memberJpaEntity.getId());
         assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
         assertEquals(find.getStartTime(), START_TIME);
         assertEquals(find.getEndTime(), END_TIME);
@@ -535,14 +535,14 @@ class ReservationServiceTest {
     @DisplayName("예약 수정 실패")
     void editFail() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -559,7 +559,7 @@ class ReservationServiceTest {
 
         //when
         ReservationNotFound e = assertThrows(ReservationNotFound.class, () ->
-                service.editReservation(member.getId(), reservation.getId() + 1, request.toDto(), now));
+                service.editReservation(memberJpaEntity.getId(), reservationJpaEntity.getId() + 1, request.toDto(), now));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 예약입니다.");
@@ -570,14 +570,14 @@ class ReservationServiceTest {
     @DisplayName("예약자가 아닌 유저가 예약 수정 시도시 실패")
     void editFai2() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -594,7 +594,7 @@ class ReservationServiceTest {
 
         //when
         EditFailException e = assertThrows(EditFailException.class, () ->
-                service.editReservation(member.getId() + 1, reservation.getId(), request.toDto(), now));
+                service.editReservation(memberJpaEntity.getId() + 1, reservationJpaEntity.getId(), request.toDto(), now));
 
         //then
         assertEquals(e.getMessage(), "수정할 수 없습니다.");
@@ -605,14 +605,14 @@ class ReservationServiceTest {
     @DisplayName("예약 삭제")
     void delete() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -620,7 +620,7 @@ class ReservationServiceTest {
                 .build());
 
         //when
-        service.deleteReservation(member.getId(), reservation.getId());
+        service.deleteReservation(memberJpaEntity.getId(), reservationJpaEntity.getId());
 
         //then
         assertEquals(reservationJpaRepository.count(), 0);
@@ -630,14 +630,14 @@ class ReservationServiceTest {
     @DisplayName("예약 삭제 실패")
     void deleteFail() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -646,7 +646,7 @@ class ReservationServiceTest {
 
         //when
         ReservationNotFound e = assertThrows(ReservationNotFound.class, () ->
-                service.deleteReservation(member.getId(), reservation.getId() + 1));
+                service.deleteReservation(memberJpaEntity.getId(), reservationJpaEntity.getId() + 1));
 
         //then
         assertEquals(e.getMessage(), "존재하지 않는 예약입니다.");
@@ -657,14 +657,14 @@ class ReservationServiceTest {
     @DisplayName("예약자가 아닌 유저가 예약 삭제 시도시 실패")
     void deleteFail2() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -673,7 +673,7 @@ class ReservationServiceTest {
 
         //when
         DeleteFailException e = assertThrows(DeleteFailException.class, () ->
-                service.deleteReservation(member.getId() + 1, reservation.getId()));
+                service.deleteReservation(memberJpaEntity.getId() + 1, reservationJpaEntity.getId()));
 
         //then
         assertEquals(e.getMessage(), "삭제할 수 없습니다.");
@@ -684,14 +684,14 @@ class ReservationServiceTest {
     @DisplayName("관리자 예약 수정")
     void editByAdmin() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -707,12 +707,12 @@ class ReservationServiceTest {
         LocalDateTime now = LocalDateTime.of(2000, 5, 17, 11, 23, 30);
 
         //when
-        service.editReservationByAdmin(reservation.getId(), request.toDto(), now);
+        service.editReservationByAdmin(reservationJpaEntity.getId(), request.toDto(), now);
 
         //then
-        Reservation find = assertDoesNotThrow(() -> reservationJpaRepository.findById(reservation.getId())
+        ReservationJpaEntity find = assertDoesNotThrow(() -> reservationJpaRepository.findById(reservationJpaEntity.getId())
                 .orElseThrow());
-        assertEquals(find.getCreator().getId(), member.getId());
+        assertEquals(find.getCreator().getId(), memberJpaEntity.getId());
         assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
         assertEquals(find.getStartTime(), START_TIME);
         assertEquals(find.getEndTime(), END_TIME);
@@ -722,14 +722,14 @@ class ReservationServiceTest {
     @DisplayName("관리자 예약 삭제")
     void deleteByAdmin() {
         //given
-        Member member = memberJpaRepository.save(Member.builder()
+        MemberJpaEntity memberJpaEntity = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
-                .creator(member)
+        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.save(ReservationJpaEntity.builder()
+                .creator(memberJpaEntity)
                 .date(DATE)
                 .type(TYPE)
                 .startTime(START_TIME)
@@ -737,7 +737,7 @@ class ReservationServiceTest {
                 .build());
         
         //when
-        service.deleteReservationByAdmin(reservation.getId());
+        service.deleteReservationByAdmin(reservationJpaEntity.getId());
         
         //then
         assertEquals(reservationJpaRepository.count(), 0);

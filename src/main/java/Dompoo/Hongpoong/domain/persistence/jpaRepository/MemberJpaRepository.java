@@ -1,16 +1,16 @@
 package Dompoo.Hongpoong.domain.persistence.jpaRepository;
 
-import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface MemberJpaRepository extends JpaRepository<Member, Long> {
-    List<Member> findAllByIdIn(List<Long> memberIds);
+public interface MemberJpaRepository extends JpaRepository<MemberJpaEntity, Long> {
+    List<MemberJpaEntity> findAllByIdIn(List<Long> memberIds);
     boolean existsByEmail(String email);
-    Optional<Member> findByEmail(String email);
-    Optional<Member> findByIdAndEmail(Long id, String email);
+    Optional<MemberJpaEntity> findByEmail(String email);
+    Optional<MemberJpaEntity> findByIdAndEmail(Long id, String email);
     boolean existsByRole(Role role);
 }

@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
-import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.repository.MemberRepository;
@@ -17,7 +17,7 @@ public class MemberRepositoryImpl implements MemberRepository {
 	private final MemberJpaRepository memberJpaRepository;
 	
 	@Override
-	public List<Member> findAllByIdIn(List<Long> memberIds) {
+	public List<MemberJpaEntity> findAllByIdIn(List<Long> memberIds) {
 		return memberJpaRepository.findAllByIdIn(memberIds);
 	}
 	
@@ -27,12 +27,12 @@ public class MemberRepositoryImpl implements MemberRepository {
 	}
 	
 	@Override
-	public Optional<Member> findByEmail(String email) {
+	public Optional<MemberJpaEntity> findByEmail(String email) {
 		return memberJpaRepository.findByEmail(email);
 	}
 	
 	@Override
-	public Optional<Member> findByIdAndEmail(Long id, String email) {
+	public Optional<MemberJpaEntity> findByIdAndEmail(Long id, String email) {
 		return memberJpaRepository.findByIdAndEmail(id, email);
 	}
 	

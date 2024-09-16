@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.info.request;
 
-import Dompoo.Hongpoong.domain.entity.Info;
-import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.jpaEntity.InfoJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -22,12 +22,12 @@ public class InfoCreateRequest {
     @Schema(example = "안합니다.")
     private final String content;
     
-    public Info toInfo(Member member, LocalDateTime now) {
-        return Info.builder()
+    public InfoJpaEntity toInfo(MemberJpaEntity memberJpaEntity, LocalDateTime now) {
+        return InfoJpaEntity.builder()
                 .title(title)
                 .content(content)
                 .date(now)
-                .member(member)
+                .memberJpaEntity(memberJpaEntity)
                 .build();
     }
 }

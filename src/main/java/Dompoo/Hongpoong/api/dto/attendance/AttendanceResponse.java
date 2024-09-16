@@ -1,8 +1,8 @@
 package Dompoo.Hongpoong.api.dto.attendance;
 
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
-import Dompoo.Hongpoong.domain.entity.Attendance;
-import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.jpaEntity.AttendanceJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import Dompoo.Hongpoong.domain.enums.AttendanceStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
@@ -22,21 +22,21 @@ public class AttendanceResponse {
     @Schema(example = "출석")
     private final String attendance;
     
-    public static AttendanceResponse from(Member member, AttendanceStatus attendanceStatus) {
+    public static AttendanceResponse from(MemberJpaEntity memberJpaEntity, AttendanceStatus attendanceStatus) {
         return AttendanceResponse.builder()
-                .member(MemberResponse.from(member))
+                .member(MemberResponse.from(memberJpaEntity))
                 .attendance(attendanceStatus.korName)
                 .build();
     }
     
-    public static AttendanceResponse from(Attendance attendance) {
+    public static AttendanceResponse from(AttendanceJpaEntity attendanceJpaEntity) {
         return AttendanceResponse.builder()
-                .member(MemberResponse.from(attendance.getMember()))
-                .attendance(attendance.getAttendanceStatus().korName)
+                .member(MemberResponse.from(attendanceJpaEntity.getMemberJpaEntity()))
+                .attendance(attendanceJpaEntity.getAttendanceStatus().korName)
                 .build();
     }
     
-    public static List<AttendanceResponse> fromList(List<Attendance> participateList) {
+    public static List<AttendanceResponse> fromList(List<AttendanceJpaEntity> participateList) {
         return participateList.stream().map(AttendanceResponse::from).toList();
     }
 }

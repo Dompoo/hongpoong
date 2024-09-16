@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.domain.entity;
+package Dompoo.Hongpoong.domain.jpaEntity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,13 +8,15 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ReservationEndImage {
+public class ChatMessageJpaEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private String imageUrl;
+    private String message;
     
-    @ManyToOne @JoinColumn(name = "reservation_id")
-    private Reservation reservation;
+    private String sender;
+    
+    @ManyToOne @JoinColumn(name = "room_id")
+    private ChatRoomJpaEntity chatRoomJpaEntity;
 }

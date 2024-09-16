@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
-import Dompoo.Hongpoong.domain.entity.Reservation;
-import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationEndImageJpaEntity;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.ReservationEndImageJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.ReservationJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.repository.ReservationRepository;
@@ -20,22 +20,22 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 	private final ReservationEndImageJpaRepository reservationEndImageJpaRepository;
 	
 	@Override
-	public Optional<Reservation> findByIdJoinFetchCreator(Long reservationId) {
+	public Optional<ReservationJpaEntity> findByIdJoinFetchCreator(Long reservationId) {
 		return reservationJpaRepository.findByIdJoinFetchCreator(reservationId);
 	}
 	
 	@Override
-	public List<Reservation> findAllByDate(LocalDate date) {
+	public List<ReservationJpaEntity> findAllByDate(LocalDate date) {
 		return reservationJpaRepository.findAllByDate(date);
 	}
 	
 	@Override
-	public List<Reservation> findAllByDateBetween(LocalDate startDate, LocalDate endDate) {
+	public List<ReservationJpaEntity> findAllByDateBetween(LocalDate startDate, LocalDate endDate) {
 		return reservationJpaRepository.findAllByDateBetween(startDate, endDate);
 	}
 	
 	@Override
-	public List<ReservationEndImage> findAllByReservation(Reservation reservation) {
-		return reservationEndImageJpaRepository.findAllByReservation(reservation);
+	public List<ReservationEndImageJpaEntity> findAllByReservation(ReservationJpaEntity reservationJpaEntity) {
+		return reservationEndImageJpaRepository.findAllByReservation(reservationJpaEntity);
 	}
 }

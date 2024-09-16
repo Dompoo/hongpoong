@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.domain.entity;
+package Dompoo.Hongpoong.domain.jpaEntity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class InstrumentBorrow {
+public class InstrumentBorrowJpaEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,11 +18,11 @@ public class InstrumentBorrow {
     private LocalDate borrowDate;
     
     @ManyToOne @JoinColumn(name = "instrument_id")
-    private Instrument instrument;
+    private InstrumentJpaEntity instrumentJpaEntity;
     
     @ManyToOne @JoinColumn(name = "member_id")
-    private Member member;
+    private MemberJpaEntity memberJpaEntity;
     
     @ManyToOne @JoinColumn(name = "reservation_id")
-    private Reservation reservation;
+    private ReservationJpaEntity reservationJpaEntity;
 }

@@ -11,8 +11,8 @@ import Dompoo.Hongpoong.api.service.AuthService;
 import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
 import Dompoo.Hongpoong.common.exception.impl.LoginFailException;
 import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
-import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.entity.SignUp;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.SignUpJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.SignUpJpaRepository;
@@ -74,7 +74,7 @@ class AuthServiceTest {
     @DisplayName("이메일 유효성 검사 - 실패")
     void checkEmailFail() {
         //given
-        memberJpaRepository.save(Member.builder()
+        memberJpaRepository.save(MemberJpaEntity.builder()
                 .email(EMAIL)
                 .name(USERNAME)
                 .password(PASSWORD)
@@ -116,7 +116,7 @@ class AuthServiceTest {
     @DisplayName("회원가입 요청시 이메일은 기존 회원과 중복되면 안된다.")
     void requestSignupFail4() {
         //given
-        memberJpaRepository.save(Member.builder()
+        memberJpaRepository.save(MemberJpaEntity.builder()
                 .email(EMAIL)
                 .name(USERNAME)
                 .password(PASSWORD)
@@ -143,7 +143,7 @@ class AuthServiceTest {
     @DisplayName("회원가입 요청시 이메일은 기존 회원가입 요청과 중복되면 안된다.")
     void requestSignupFail5() {
         //given
-        signUpJpaRepository.save(SignUp.builder()
+        signUpJpaRepository.save(SignUpJpaEntity.builder()
                 .email(EMAIL)
                 .name(USERNAME)
                 .password(PASSWORD)
@@ -170,7 +170,7 @@ class AuthServiceTest {
     @DisplayName("로그인")
     void login() {
         //given
-        memberJpaRepository.save(Member.builder()
+        memberJpaRepository.save(MemberJpaEntity.builder()
                 .email(EMAIL)
                 .password(encoder.encode(PASSWORD))
                 .build());
@@ -191,7 +191,7 @@ class AuthServiceTest {
     @DisplayName("존재하지 않는 회원 로그인")
     void loginFail() {
         //given
-        memberJpaRepository.save(Member.builder()
+        memberJpaRepository.save(MemberJpaEntity.builder()
                 .email(EMAIL)
                 .password(encoder.encode(PASSWORD))
                 .build());
@@ -213,7 +213,7 @@ class AuthServiceTest {
     @DisplayName("회원가입 요청 승인")
     void acceptSignUp() {
         //given
-        SignUp signUp = signUpJpaRepository.save(SignUp.builder()
+        SignUpJpaEntity signUpJpaEntity = signUpJpaRepository.save(SignUpJpaEntity.builder()
                 .email(EMAIL)
                 .name(USERNAME)
                 .password(PASSWORD)
@@ -225,7 +225,7 @@ class AuthServiceTest {
                 .build();
 
         //when
-        service.acceptSignUp(signUp.getId(), request);
+        service.acceptSignUp(signUpJpaEntity.getId(), request);
 
         //then
         assertEquals(0, signUpJpaRepository.findAll().size());
@@ -237,7 +237,7 @@ class AuthServiceTest {
     @DisplayName("회원가입 요청 거절")
     void refuseSignUp() {
         //given
-        SignUp signUp = signUpJpaRepository.save(SignUp.builder()
+        SignUpJpaEntity signUpJpaEntity = signUpJpaRepository.save(SignUpJpaEntity.builder()
                 .email(EMAIL)
                 .name(USERNAME)
                 .password(PASSWORD)
@@ -249,7 +249,7 @@ class AuthServiceTest {
                 .build();
 
         //when
-        service.acceptSignUp(signUp.getId(), request);
+        service.acceptSignUp(signUpJpaEntity.getId(), request);
 
         //then
         assertEquals(0, signUpJpaRepository.findAll().size());
@@ -260,7 +260,7 @@ class AuthServiceTest {
     @DisplayName("존재하지 않는 회원가입 요청 승인")
     void acceptSignUpFail() {
         //given
-        SignUp signUp = signUpJpaRepository.save(SignUp.builder()
+        SignUpJpaEntity signUpJpaEntity = signUpJpaRepository.save(SignUpJpaEntity.builder()
                 .email(EMAIL)
                 .name(USERNAME)
                 .password(PASSWORD)
@@ -273,7 +273,7 @@ class AuthServiceTest {
 
         //when
         SignUpNotFound e = assertThrows(SignUpNotFound.class, () ->
-                service.acceptSignUp(signUp.getId() + 1, request));
+                service.acceptSignUp(signUpJpaEntity.getId() + 1, request));
 
         //then
         assertEquals("존재하지 않는 회원가입 요청입니다.", e.getMessage());
@@ -284,14 +284,14 @@ class AuthServiceTest {
     @DisplayName("회원가입 요청 리스트 조회")
     void findAllSignup() {
         //given
-        signUpJpaRepository.save(SignUp.builder()
+        signUpJpaRepository.save(SignUpJpaEntity.builder()
                 .email(EMAIL)
                 .name(USERNAME)
                 .password(PASSWORD)
                 .club(SANTLE)
                 .build());
 
-        signUpJpaRepository.save(SignUp.builder()
+        signUpJpaRepository.save(SignUpJpaEntity.builder()
                 .email("yoonH@naver.com")
                 .name("윤호")
                 .password("qwer")

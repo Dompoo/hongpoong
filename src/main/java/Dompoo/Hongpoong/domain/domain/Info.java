@@ -1,28 +1,22 @@
-package Dompoo.Hongpoong.domain.entity;
+package Dompoo.Hongpoong.domain.domain;
 
 import Dompoo.Hongpoong.api.dto.info.request.InfoEditDto;
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Info {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     private String title;
-    
     private String content;
-    
     private LocalDateTime date;
-    
-    @ManyToOne @JoinColumn(name = "member_id")
     private Member member;
     
     public void edit(InfoEditDto dto) {

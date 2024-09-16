@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.auth.request;
 
-import Dompoo.Hongpoong.domain.entity.SignUp;
+import Dompoo.Hongpoong.domain.jpaEntity.SignUpJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Club;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -40,8 +40,8 @@ public class SignUpRequest {
     @Schema(example = "19")
     private final Integer enrollmentNumber;
     
-    public SignUp toSignUp(PasswordEncoder encoder) {
-        return SignUp.builder()
+    public SignUpJpaEntity toSignUp(PasswordEncoder encoder) {
+        return SignUpJpaEntity.builder()
                 .email(email)
                 .name(name)
                 .nickname(nickname)

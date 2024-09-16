@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.chat.request;
 
-import Dompoo.Hongpoong.domain.entity.ChatMessage;
-import Dompoo.Hongpoong.domain.entity.ChatRoom;
+import Dompoo.Hongpoong.domain.jpaEntity.ChatMessageJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ChatRoomJpaEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -17,11 +17,11 @@ public class ChatMessageRequest {
     @Schema(example = "하이요")
     private String message;
     
-    public ChatMessage toChatMessage(ChatRoom chatRoom, String sender) {
-        return ChatMessage.builder()
+    public ChatMessageJpaEntity toChatMessage(ChatRoomJpaEntity chatRoomJpaEntity, String sender) {
+        return ChatMessageJpaEntity.builder()
                 .sender(sender)
                 .message(message)
-                .chatRoom(chatRoom)
+                .chatRoomJpaEntity(chatRoomJpaEntity)
                 .build();
     }
 }

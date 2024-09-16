@@ -1,8 +1,8 @@
 package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
-import Dompoo.Hongpoong.domain.entity.Attendance;
-import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.jpaEntity.AttendanceJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.AttendanceJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.repository.AttendanceRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,42 +19,42 @@ public class AttendanceRepositoryImpl implements AttendanceRepository {
 	private final AttendanceJpaRepository attendanceJpaRepository;
 	
 	@Override
-	public List<Attendance> findByMemberIdAndReservationDate(Long memberId, LocalDate localDate) {
+	public List<AttendanceJpaEntity> findByMemberIdAndReservationDate(Long memberId, LocalDate localDate) {
 		return attendanceJpaRepository.findByMemberIdAndReservationDate(memberId, localDate);
 	}
 	
 	@Override
-	public List<Attendance> findAllByReservationIdJoinFetchMember(Long reservationId) {
+	public List<AttendanceJpaEntity> findAllByReservationIdJoinFetchMember(Long reservationId) {
 		return attendanceJpaRepository.findAllByReservationIdJoinFetchMember(reservationId);
 	}
 	
 	@Override
-	public List<Member> findAllMemberByReservation(Reservation reservation) {
-		return attendanceJpaRepository.findAllMemberByReservation(reservation);
+	public List<MemberJpaEntity> findAllMemberByReservation(ReservationJpaEntity reservationJpaEntity) {
+		return attendanceJpaRepository.findAllMemberByReservation(reservationJpaEntity);
 	}
 	
 	@Override
-	public Optional<Attendance> findByMemberIdAndReservationId(Long memberId, Long reservationId) {
+	public Optional<AttendanceJpaEntity> findByMemberIdAndReservationId(Long memberId, Long reservationId) {
 		return attendanceJpaRepository.findByMemberIdAndReservationId(memberId, reservationId);
 	}
 	
 	@Override
-	public List<Attendance> findByReservationIdAndNotAttend(Long reservationId) {
+	public List<AttendanceJpaEntity> findByReservationIdAndNotAttend(Long reservationId) {
 		return attendanceJpaRepository.findByReservationIdAndNotAttend(reservationId);
 	}
 	
 	@Override
-	public List<Attendance> findAllByReservation(Reservation reservation) {
-		return attendanceJpaRepository.findAllByReservation(reservation);
+	public List<AttendanceJpaEntity> findAllByReservation(ReservationJpaEntity reservationJpaEntity) {
+		return attendanceJpaRepository.findAllByReservation(reservationJpaEntity);
 	}
 	
 	@Override
-	public void deleteAllByReservationAndMemberIn(Reservation reservation, List<Member> members) {
-		attendanceJpaRepository.deleteAllByReservationAndMemberIn(reservation, members);
+	public void deleteAllByReservationAndMemberIn(ReservationJpaEntity reservationJpaEntity, List<MemberJpaEntity> memberJpaEntities) {
+		attendanceJpaRepository.deleteAllByReservationAndMemberIn(reservationJpaEntity, memberJpaEntities);
 	}
 	
 	@Override
-	public void deleteAllByReservation(Reservation reservation) {
-		attendanceJpaRepository.deleteAllByReservation(reservation);
+	public void deleteAllByReservation(ReservationJpaEntity reservationJpaEntity) {
+		attendanceJpaRepository.deleteAllByReservation(reservationJpaEntity);
 	}
 }

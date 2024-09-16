@@ -1,13 +1,13 @@
 ### 회원 전체 조회
-GET {{url}}/member
+GET {{url}}/memberJpaEntity
 Authorization: Bearer {{jwtToken}}
 
 ### 내 현재 상태 조회
-GET {{url}}/member/status
+GET {{url}}/memberJpaEntity/status
 Authorization: Bearer {{jwtToken}}
 
 ### 내 정보 수정
-PATCH {{url}}/member
+PATCH {{url}}/memberJpaEntity
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json
 
@@ -22,11 +22,11 @@ Content-Type: application/json
 }
 
 ### 회원 탈퇴
-DELETE {{url}}/member
+DELETE {{url}}/memberJpaEntity
 Authorization: Bearer {{jwtToken}}
 
 ### 패짱의 회원 권한 수정
-PATCH {{url}}/member/3
+PATCH {{url}}/memberJpaEntity/3
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json
 
@@ -35,7 +35,7 @@ Content-Type: application/json
 }
 
 ### 의장의 회원 권한 수정
-PATCH {{url}}/member/manage/3
+PATCH {{url}}/memberJpaEntity/manage/3
 Authorization: Bearer {{jwtToken}}
 Content-Type: application/json
 

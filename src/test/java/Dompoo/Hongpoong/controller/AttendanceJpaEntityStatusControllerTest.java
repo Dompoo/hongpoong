@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class AttendanceStatusControllerTest extends MyWebMvcTest {
+class AttendanceJpaEntityStatusControllerTest extends MyWebMvcTest {
 	
 	private static final Long RESERVATION_ID = 1L;
 	private static final String NAME = "창근";

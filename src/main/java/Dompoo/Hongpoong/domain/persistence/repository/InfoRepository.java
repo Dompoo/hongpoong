@@ -1,10 +1,10 @@
 package Dompoo.Hongpoong.domain.persistence.repository;
 
-import Dompoo.Hongpoong.domain.entity.Info;
+import Dompoo.Hongpoong.domain.jpaEntity.InfoJpaEntity;
 
 import java.util.Optional;
 
 public interface InfoRepository {
 	
-	Optional<Info> findByIdFetchJoinMember(Long infoId);
+	Optional<InfoJpaEntity> findByIdFetchJoinMember(Long infoId);
 }

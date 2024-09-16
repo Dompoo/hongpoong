@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.Instrument.request;
 
-import Dompoo.Hongpoong.domain.entity.Instrument;
+import Dompoo.Hongpoong.domain.jpaEntity.InstrumentJpaEntity;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,8 +22,8 @@ public class InstrumentCreateRequest {
     @Schema(enumAsRef = true)
     private final InstrumentType type;
     
-    public Instrument toInstrument(Club club) {
-        return Instrument.builder()
+    public InstrumentJpaEntity toInstrument(Club club) {
+        return InstrumentJpaEntity.builder()
                 .name(name)
                 .type(type)
                 .club(club)

@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.reservation.request;
 
-import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.enums.ReservationType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -47,8 +47,8 @@ public class ReservationCreateRequest {
     @Schema(example = "true")
     private final Boolean participationAvailable;
     
-    public Reservation toReservation(Member creator, LocalDateTime now) {
-        return Reservation.builder()
+    public ReservationJpaEntity toReservation(MemberJpaEntity creator, LocalDateTime now) {
+        return ReservationJpaEntity.builder()
                 .creator(creator)
                 .date(date)
                 .type(type)

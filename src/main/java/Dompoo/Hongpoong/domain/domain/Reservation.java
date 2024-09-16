@@ -1,43 +1,30 @@
-package Dompoo.Hongpoong.domain.entity;
+package Dompoo.Hongpoong.domain.domain;
 
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.enums.ReservationType;
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Reservation {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     private LocalDate date;
-    
-    @Enumerated(EnumType.STRING)
     private ReservationType type;
-    
-    @Enumerated(EnumType.STRING)
     private ReservationTime startTime;
-    
-    @Enumerated(EnumType.STRING)
     private ReservationTime endTime;
-    
     private LocalDateTime lastModified;
-    
     private String message;
-    
     private Boolean participationAvailable;
-    
-    @ManyToOne @JoinColumn(name = "creator_id")
     private Member creator;
     
     public void edit(ReservationEditDto dto, LocalDateTime now) {

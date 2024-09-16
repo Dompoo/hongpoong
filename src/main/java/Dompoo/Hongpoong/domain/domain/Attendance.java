@@ -1,28 +1,21 @@
-package Dompoo.Hongpoong.domain.entity;
+package Dompoo.Hongpoong.domain.domain;
 
 import Dompoo.Hongpoong.domain.enums.AttendanceStatus;
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Attendance {
 	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Enumerated(EnumType.STRING)
 	private AttendanceStatus attendanceStatus;
-	
-	@ManyToOne @JoinColumn(name = "reservation_id")
 	private Reservation reservation;
-	
-	@ManyToOne @JoinColumn(name = "member_id")
 	private Member member;
 	
 	public static List<Attendance> of(Reservation reservation, List<Member> members) {

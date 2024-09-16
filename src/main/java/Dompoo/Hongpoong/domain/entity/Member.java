@@ -42,7 +42,7 @@ public class Member {
     public static Member from(SignUp signUp) {
         return Member.builder()
                 .email(signUp.getEmail())
-                .name(signUp.getPassword())
+                .name(signUp.getName())
                 .nickname(signUp.getNickname())
                 .password(signUp.getPassword())
                 .role(Role.MEMBER)

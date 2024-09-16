@@ -11,10 +11,10 @@ import Dompoo.Hongpoong.domain.entity.InstrumentBorrow;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.enums.Club;
-import Dompoo.Hongpoong.domain.repository.InstrumentBorrowRepository;
-import Dompoo.Hongpoong.domain.repository.InstrumentRepository;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.InstrumentBorrowJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.InstrumentJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.ReservationJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,20 +26,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InstrumentService {
 
-    private final InstrumentRepository instrumentRepository;
-    private final MemberRepository memberRepository;
-    private final ReservationRepository reservationRepository;
-    private final InstrumentBorrowRepository instrumentBorrowRepository;
+    private final InstrumentJpaRepository instrumentJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
+    private final ReservationJpaRepository reservationJpaRepository;
+    private final InstrumentBorrowJpaRepository instrumentBorrowJpaRepository;
     
     @Transactional
     public void createInstrument(Club club, InstrumentCreateRequest request) {
-        instrumentRepository.save(request.toInstrument(club));
+        instrumentJpaRepository.save(request.toInstrument(club));
     }
     
     //member의 클럽과 다른 클럽 소속의 악기리스트 return
     @Transactional(readOnly = true)
     public List<InstrumentResponse> findAllOtherClubInstrument(Club club) {
-        return instrumentRepository.findAllByClubNotEquals(club).stream()
+        return instrumentJpaRepository.findAllByClubNotEquals(club).stream()
                 .map(InstrumentResponse::from)
                 .toList();
     }
@@ -47,28 +47,28 @@ public class InstrumentService {
     //member의 클럽과 같은 클럽 소속의 악기리스트 return
     @Transactional(readOnly = true)
     public List<InstrumentResponse> findAllMyClubInstrument(Club club) {
-        return instrumentRepository.findAllByClubEquals(club).stream()
+        return instrumentJpaRepository.findAllByClubEquals(club).stream()
                 .map(InstrumentResponse::from)
                 .toList();
     }
 
     @Transactional
     public void borrowInstrument(Long memberId, Long instrumentId, InstrumentBorrowRequest request, LocalDate now) {
-        Reservation reservation = reservationRepository.findById(request.getReservationId()).orElseThrow(ReservationNotFound::new);
-        Instrument instrument = instrumentRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Reservation reservation = reservationJpaRepository.findById(request.getReservationId()).orElseThrow(ReservationNotFound::new);
+        Instrument instrument = instrumentJpaRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
+        Member member = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
         // 예약의 id 와 member id가 다르면 throw
         if (!reservation.getCreator().getId().equals(memberId)) throw new RentalFail();
         // 악기 대여가 불가능한 상태라면 throw
         if (!instrument.getAvailable()) throw new InstrumentNotAvailable();
         
-        instrumentBorrowRepository.save(instrument.borrowInstrument(member, reservation, now));
+        instrumentBorrowJpaRepository.save(instrument.borrowInstrument(member, reservation, now));
     }
 
     @Transactional
     public void returnInstrument(Long memberId, Long instrumentId) {
-        Instrument instrument = instrumentBorrowRepository.findByMemberIdAndInstrumentId(memberId, instrumentId)
+        Instrument instrument = instrumentBorrowJpaRepository.findByMemberIdAndInstrumentId(memberId, instrumentId)
                 .orElseThrow(InstrumentNotFound::new);
 
         instrument.returnInstrument();
@@ -76,15 +76,15 @@ public class InstrumentService {
 
     @Transactional(readOnly = true)
     public InstrumentDetailResponse findInstrumentDetail(Long instrumentId) {
-        Instrument instrument = instrumentRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
-        List<InstrumentBorrow> instrumentBorrows = instrumentBorrowRepository.findAllByInstrument(instrument);
+        Instrument instrument = instrumentJpaRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
+        List<InstrumentBorrow> instrumentBorrows = instrumentBorrowJpaRepository.findAllByInstrument(instrument);
         
         return InstrumentDetailResponse.from(instrument, instrumentBorrows);
     }
 
     @Transactional
     public void editInstrument(Club club, Long instrumentId, InstrumentEditDto dto) {
-        Instrument instrument = instrumentRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
+        Instrument instrument = instrumentJpaRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
         
         if (!instrument.getClub().equals(club)) throw new EditFailException();
         
@@ -93,16 +93,16 @@ public class InstrumentService {
 
     @Transactional
     public void deleteInstrument(Club club, Long instrumentId) {
-        Instrument instrument = instrumentRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
+        Instrument instrument = instrumentJpaRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
         
         if (!instrument.getClub().equals(club)) throw new DeleteFailException();
 
-        instrumentRepository.delete(instrument);
+        instrumentJpaRepository.delete(instrument);
     }
     
     @Transactional
     public void editInstrumentByAdmin(Long instrumentId, InstrumentEditDto dto) {
-        Instrument instrument = instrumentRepository.findById(instrumentId)
+        Instrument instrument = instrumentJpaRepository.findById(instrumentId)
                 .orElseThrow(InstrumentNotFound::new);
         
         instrument.edit(dto);
@@ -110,9 +110,9 @@ public class InstrumentService {
     
     @Transactional
     public void deleteInstrumentByAdmin(Long instrumentId) {
-        Instrument instrument = instrumentRepository.findById(instrumentId)
+        Instrument instrument = instrumentJpaRepository.findById(instrumentId)
                 .orElseThrow(InstrumentNotFound::new);
         
-        instrumentRepository.delete(instrument);
+        instrumentJpaRepository.delete(instrument);
     }
 }

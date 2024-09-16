@@ -8,9 +8,9 @@ import Dompoo.Hongpoong.common.exception.impl.ReservationNotFound;
 import Dompoo.Hongpoong.domain.entity.Attendance;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
-import Dompoo.Hongpoong.domain.repository.AttendanceRepository;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.AttendanceJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.ReservationJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,9 +24,9 @@ import static Dompoo.Hongpoong.domain.enums.AttendanceStatus.NO_SHOW;
 @RequiredArgsConstructor
 public class AttendanceService {
 
-    private final AttendanceRepository participateRepository;
-    private final ReservationRepository reservationRepository;
-    private final MemberRepository memberRepository;
+    private final AttendanceJpaRepository participateRepository;
+    private final ReservationJpaRepository reservationJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
     
     @Transactional(readOnly = true)
     public List<AttendanceResponse> findAttendance(Long reservationId) {
@@ -37,7 +37,7 @@ public class AttendanceService {
     
     @Transactional
     public AttendanceResponse attendReservation(Long memberId, Long reservationId, LocalDateTime now) {
-        Reservation reservation = reservationRepository.findById(reservationId)
+        Reservation reservation = reservationJpaRepository.findById(reservationId)
                 .orElseThrow(ReservationNotFound::new);
         
         Attendance participate = reservation.attendMember(now, () -> findOrCreateParticipate(memberId, reservation));
@@ -47,7 +47,7 @@ public class AttendanceService {
     
     @Transactional
     public List<AttendanceResponse> closeAttendance(Long memberId, Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationJpaRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
         if (!reservation.getCreator().getId().equals(memberId)) {
             throw new EditFailException();
@@ -70,7 +70,7 @@ public class AttendanceService {
             throw new AttendanceNotFound();
         }
         
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Member member = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         return participateRepository.save(Attendance.of(reservation, member));
     }
 }

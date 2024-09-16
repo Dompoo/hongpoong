@@ -15,10 +15,10 @@ import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.enums.ReservationType;
 import Dompoo.Hongpoong.domain.enums.Role;
-import Dompoo.Hongpoong.domain.repository.AttendanceRepository;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationEndImageRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.AttendanceJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.ReservationEndImageJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.ReservationJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,13 +40,13 @@ class ReservationServiceTest {
     @Autowired
     private ReservationService service;
     @Autowired
-    private ReservationRepository reservationRepository;
+    private ReservationJpaRepository reservationJpaRepository;
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Autowired
-    private AttendanceRepository attendanceRepository;
+    private AttendanceJpaRepository attendanceJpaRepository;
     @Autowired
-    private ReservationEndImageRepository reservationEndImageRepository;
+    private ReservationEndImageJpaRepository reservationEndImageJpaRepository;
     
     private static final LocalDateTime NOW = LocalDateTime.now();
     private static final LocalDate DATE = NOW.plusDays(10).toLocalDate();
@@ -59,17 +59,17 @@ class ReservationServiceTest {
     
     @BeforeEach
     void setUp() {
-        reservationEndImageRepository.deleteAllInBatch();
-        attendanceRepository.deleteAllInBatch();
-        reservationRepository.deleteAllInBatch();
-        memberRepository.deleteAllInBatch();
+        reservationEndImageJpaRepository.deleteAllInBatch();
+        attendanceJpaRepository.deleteAllInBatch();
+        reservationJpaRepository.deleteAllInBatch();
+        memberJpaRepository.deleteAllInBatch();
     }
 
     @Test
     @DisplayName("예약 추가")
     void add() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
@@ -89,14 +89,14 @@ class ReservationServiceTest {
         service.createReservation(member.getId(), request, NOW);
 
         //then
-        assertEquals(1, reservationRepository.count());
+        assertEquals(1, reservationJpaRepository.count());
     }
 
     @Test
     @DisplayName("존재하지 않는 유저가 예약 추가 시도시 실패한다.")
     void addFail() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
@@ -124,7 +124,7 @@ class ReservationServiceTest {
     @DisplayName("예약 추가시 시작시간이 종료시간보다 늦으면 안된다.")
     void addFail2() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
@@ -150,13 +150,13 @@ class ReservationServiceTest {
     @DisplayName("연도와 달로 예약 조회")
     void yearMonth() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -164,7 +164,7 @@ class ReservationServiceTest {
                 .endTime(END_TIME)
                 .build());
         
-        reservationRepository.save(Reservation.builder()
+        reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE2)
                 .startTime(START_TIME)
@@ -187,13 +187,13 @@ class ReservationServiceTest {
     @DisplayName("날짜로 예약 조회")
     void day() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -201,7 +201,7 @@ class ReservationServiceTest {
                 .endTime(END_TIME)
                 .build());
         
-        reservationRepository.save(Reservation.builder()
+        reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE2)
                 .startTime(START_TIME)
@@ -224,13 +224,13 @@ class ReservationServiceTest {
     @DisplayName("오늘 해야하는 예약 전체 조회")
     void todo() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -238,7 +238,7 @@ class ReservationServiceTest {
                 .endTime(END_TIME)
                 .build());
         
-        reservationRepository.save(Reservation.builder()
+        reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE2)
                 .startTime(START_TIME)
@@ -261,13 +261,13 @@ class ReservationServiceTest {
     @DisplayName("예약 상세 조회")
     void detail() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -290,13 +290,13 @@ class ReservationServiceTest {
     @DisplayName("존재하지 않는 예약 상세 조회")
     void detailFail() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -317,13 +317,13 @@ class ReservationServiceTest {
     @DisplayName("예약 시간 연장")
     void extend() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -337,7 +337,7 @@ class ReservationServiceTest {
         service.extendReservationTime(member.getId(), reservation.getId(), now);
         
         //then
-        Reservation editedReservation = reservationRepository.findById(reservation.getId()).get();
+        Reservation editedReservation = reservationJpaRepository.findById(reservation.getId()).get();
         assertEquals(ReservationTime.from(END_TIME.localTime.plusMinutes(30)), editedReservation.getEndTime());
     }
     
@@ -345,19 +345,19 @@ class ReservationServiceTest {
     @DisplayName("예약 시간 연장은 예약자만 가능하다.")
     void extendFail3() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Member anotherMember = memberRepository.save(Member.builder()
+        Member anotherMember = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -379,13 +379,13 @@ class ReservationServiceTest {
     @DisplayName("예약 시간 연장은 종료 30분 전에만 가능하다.")
     void extendFail1() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -407,13 +407,13 @@ class ReservationServiceTest {
     @DisplayName("예약 시간 연장은 연습 종료 후에 불가능하다.")
     void extendFail2() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -435,13 +435,13 @@ class ReservationServiceTest {
     @DisplayName("예약 종료")
     void end() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -457,7 +457,7 @@ class ReservationServiceTest {
         service.endReservation(member.getId(), reservation.getId(), request);
         
         //then
-        List<ReservationEndImage> images = reservationEndImageRepository.findAllByReservation(reservation);
+        List<ReservationEndImage> images = reservationEndImageJpaRepository.findAllByReservation(reservation);
         assertTrue(images.stream().map(ReservationEndImage::getImageUrl).toList().containsAll(List.of("image1", "image2")));
     }
     
@@ -465,13 +465,13 @@ class ReservationServiceTest {
     @DisplayName("예약 종료 후 상세 정보 확인")
     void endDetail() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -479,7 +479,7 @@ class ReservationServiceTest {
                 .endTime(END_TIME)
                 .build());
         
-        reservationEndImageRepository.saveAll(List.of(
+        reservationEndImageJpaRepository.saveAll(List.of(
                 ReservationEndImage.builder().reservation(reservation).imageUrl("image1").build(),
                 ReservationEndImage.builder().reservation(reservation).imageUrl("image2").build()
         ));
@@ -497,13 +497,13 @@ class ReservationServiceTest {
     @DisplayName("예약 수정")
     void edit() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -523,7 +523,7 @@ class ReservationServiceTest {
         service.editReservation(member.getId(), reservation.getId(), request.toDto(), now);
 
         //then
-        Reservation find = assertDoesNotThrow(() -> reservationRepository.findById(reservation.getId())
+        Reservation find = assertDoesNotThrow(() -> reservationJpaRepository.findById(reservation.getId())
                 .orElseThrow());
         assertEquals(find.getCreator().getId(), member.getId());
         assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
@@ -535,13 +535,13 @@ class ReservationServiceTest {
     @DisplayName("예약 수정 실패")
     void editFail() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -570,13 +570,13 @@ class ReservationServiceTest {
     @DisplayName("예약자가 아닌 유저가 예약 수정 시도시 실패")
     void editFai2() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -605,13 +605,13 @@ class ReservationServiceTest {
     @DisplayName("예약 삭제")
     void delete() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -623,20 +623,20 @@ class ReservationServiceTest {
         service.deleteReservation(member.getId(), reservation.getId());
 
         //then
-        assertEquals(reservationRepository.count(), 0);
+        assertEquals(reservationJpaRepository.count(), 0);
     }
 
     @Test
     @DisplayName("예약 삭제 실패")
     void deleteFail() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -657,13 +657,13 @@ class ReservationServiceTest {
     @DisplayName("예약자가 아닌 유저가 예약 삭제 시도시 실패")
     void deleteFail2() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -684,13 +684,13 @@ class ReservationServiceTest {
     @DisplayName("관리자 예약 수정")
     void editByAdmin() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
 
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -710,7 +710,7 @@ class ReservationServiceTest {
         service.editReservationByAdmin(reservation.getId(), request.toDto(), now);
 
         //then
-        Reservation find = assertDoesNotThrow(() -> reservationRepository.findById(reservation.getId())
+        Reservation find = assertDoesNotThrow(() -> reservationJpaRepository.findById(reservation.getId())
                 .orElseThrow());
         assertEquals(find.getCreator().getId(), member.getId());
         assertEquals(find.getDate(), LocalDate.of(2025, 12, 15));
@@ -722,13 +722,13 @@ class ReservationServiceTest {
     @DisplayName("관리자 예약 삭제")
     void deleteByAdmin() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(member)
                 .date(DATE)
                 .type(TYPE)
@@ -740,6 +740,6 @@ class ReservationServiceTest {
         service.deleteReservationByAdmin(reservation.getId());
         
         //then
-        assertEquals(reservationRepository.count(), 0);
+        assertEquals(reservationJpaRepository.count(), 0);
     }
 }

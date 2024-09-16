@@ -15,10 +15,10 @@ import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.InstrumentType;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
-import Dompoo.Hongpoong.domain.repository.InstrumentBorrowRepository;
-import Dompoo.Hongpoong.domain.repository.InstrumentRepository;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.InstrumentBorrowJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.InstrumentJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.ReservationJpaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -43,13 +43,13 @@ class InstrumentServiceTest {
     @Autowired
     private InstrumentService service;
     @Autowired
-    private InstrumentRepository instrumentRepository;
+    private InstrumentJpaRepository instrumentJpaRepository;
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
     @Autowired
-    private ReservationRepository reservationRepository;
+    private ReservationJpaRepository reservationJpaRepository;
     @Autowired
-    private InstrumentBorrowRepository instrumentBorrowRepository;
+    private InstrumentBorrowJpaRepository instrumentBorrowJpaRepository;
     
     private static final LocalDate NOW = LocalDate.now().minusDays(1);
     private static final String NAME = "장구 1";
@@ -61,17 +61,17 @@ class InstrumentServiceTest {
 
     @AfterEach
     void setUp() {
-        instrumentBorrowRepository.deleteAllInBatch();
-        instrumentRepository.deleteAllInBatch();
-        reservationRepository.deleteAllInBatch();
-        memberRepository.deleteAllInBatch();
+        instrumentBorrowJpaRepository.deleteAllInBatch();
+        instrumentJpaRepository.deleteAllInBatch();
+        reservationJpaRepository.deleteAllInBatch();
+        memberJpaRepository.deleteAllInBatch();
     }
 
     @Test
     @DisplayName("악기 추가")
     void createInstrument() {
         //given
-        Member me = memberRepository.save(Member.builder()
+        Member me = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
@@ -87,14 +87,14 @@ class InstrumentServiceTest {
         service.createInstrument(me.getClub(), request);
 
         //then
-        assertEquals(1, instrumentRepository.findAll().size());
+        assertEquals(1, instrumentJpaRepository.findAll().size());
     }
 
     @Test
     @DisplayName("다른 동아리의 악기 조회")
     void findOther() {
         //given
-        instrumentRepository.saveAll(List.of(
+        instrumentJpaRepository.saveAll(List.of(
                 Instrument.builder().name("이름 1").club(CLUB1).type(KKWANGGWARI).build(),
                 Instrument.builder().name("이름 2").club(CLUB1).type(JANGGU).build(),
                 Instrument.builder().name("이름 3").club(CLUB2).type(BUK).build(),
@@ -119,7 +119,7 @@ class InstrumentServiceTest {
     @DisplayName("내 동아리의 악기 조회")
     void findMyList() {
         //given
-        instrumentRepository.saveAll(List.of(
+        instrumentJpaRepository.saveAll(List.of(
                 Instrument.builder().name("이름 1").club(CLUB1).type(KKWANGGWARI).build(),
                 Instrument.builder().name("이름 2").club(CLUB1).type(JANGGU).build(),
                 Instrument.builder().name("이름 3").club(CLUB2).type(BUK).build(),
@@ -142,14 +142,14 @@ class InstrumentServiceTest {
     @DisplayName("악기 빌리기")
     void borrow() {
         //given
-        Member me = memberRepository.save(Member.builder()
+        Member me = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
 
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(me)
                 .date(NOW)
                 .startTime(START_TIME)
@@ -157,7 +157,7 @@ class InstrumentServiceTest {
                 .message("")
                 .build());
         
-        Instrument instrument = instrumentRepository.save(Instrument.builder()
+        Instrument instrument = instrumentJpaRepository.save(Instrument.builder()
                 .name(NAME)
                 .club(HWARANG)
                 .available(true)
@@ -172,9 +172,9 @@ class InstrumentServiceTest {
         service.borrowInstrument(me.getId(), instrument.getId(), request, NOW);
 
         //then
-        assertEquals(false, instrumentRepository.findById(instrument.getId()).get().getAvailable());
-        assertEquals(1, instrumentBorrowRepository.count());
-        InstrumentBorrow first = instrumentBorrowRepository.findAll().getFirst();
+        assertEquals(false, instrumentJpaRepository.findById(instrument.getId()).get().getAvailable());
+        assertEquals(1, instrumentBorrowJpaRepository.count());
+        InstrumentBorrow first = instrumentBorrowJpaRepository.findAll().getFirst();
         assertEquals(NOW, first.getBorrowDate());
         assertEquals(instrument.getId(), first.getInstrument().getId());
         assertEquals(me.getId(), first.getMember().getId());
@@ -185,21 +185,21 @@ class InstrumentServiceTest {
     @DisplayName("존재하지 않는 악기 빌리기")
     void borrowFail1() {
         //given
-        Member me = memberRepository.save(Member.builder()
+        Member me = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
         
-        Member other = memberRepository.save(Member.builder()
+        Member other = memberJpaRepository.save(Member.builder()
                 .name("윤호")
                 .email("yoonH@naver.com")
                 .password("qwer")
                 .club(HWARANG)
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(me)
                 .date(LocalDate.of(2025, 12, 20))
                 .startTime(START_TIME)
@@ -207,7 +207,7 @@ class InstrumentServiceTest {
                 .message("")
                 .build());
         
-        Instrument instrument = instrumentRepository.save(Instrument.builder()
+        Instrument instrument = instrumentJpaRepository.save(Instrument.builder()
                 .club(other.getClub())
                 .type(KKWANGGWARI)
                 .build());
@@ -228,21 +228,21 @@ class InstrumentServiceTest {
     @DisplayName("빌릴 수 없는 악기 빌리기")
     void borrowFail2() {
         //given
-        Member me = memberRepository.save(Member.builder()
+        Member me = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
         
-        Member other = memberRepository.save(Member.builder()
+        Member other = memberJpaRepository.save(Member.builder()
                 .name("윤호")
                 .email("yoonH@naver.com")
                 .password("qwer")
                 .club(HWARANG)
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(me)
                 .date(LocalDate.of(2025, 12, 20))
                 .startTime(START_TIME)
@@ -250,7 +250,7 @@ class InstrumentServiceTest {
                 .message("")
                 .build());
         
-        Instrument instrument = instrumentRepository.save(Instrument.builder()
+        Instrument instrument = instrumentJpaRepository.save(Instrument.builder()
                 .club(other.getClub())
                 .type(KKWANGGWARI)
                 .available(false)
@@ -272,21 +272,21 @@ class InstrumentServiceTest {
     @DisplayName("악기 반납하기")
     void returnInstrument() {
         //given
-        Member me = memberRepository.save(Member.builder()
+        Member me = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
 
-        Member other = memberRepository.save(Member.builder()
+        Member other = memberJpaRepository.save(Member.builder()
                 .name("윤호")
                 .email("yoonH@naver.com")
                 .password("qwer")
                 .club(HWARANG)
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(me)
                 .date(LocalDate.of(2025, 12, 20))
                 .startTime(START_TIME)
@@ -294,13 +294,13 @@ class InstrumentServiceTest {
                 .message("")
                 .build());
         
-        Instrument instrument = instrumentRepository.save(Instrument.builder()
+        Instrument instrument = instrumentJpaRepository.save(Instrument.builder()
                 .club(other.getClub())
                 .type(KKWANGGWARI)
                 .available(false)
                 .build());
         
-        instrumentBorrowRepository.save(InstrumentBorrow.builder()
+        instrumentBorrowJpaRepository.save(InstrumentBorrow.builder()
                 .instrument(instrument)
                 .member(me)
                 .reservation(reservation)
@@ -311,7 +311,7 @@ class InstrumentServiceTest {
         service.returnInstrument(me.getId(), instrument.getId());
 
         //then
-        Instrument inst = instrumentRepository.findAll().getFirst();
+        Instrument inst = instrumentJpaRepository.findAll().getFirst();
         assertEquals(inst.getAvailable(), true);
     }
 
@@ -319,14 +319,14 @@ class InstrumentServiceTest {
     @DisplayName("악기 1개 조회")
     void findInstrumentDetail() {
         //given
-        Member me = memberRepository.save(Member.builder()
+        Member me = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
         
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationJpaRepository.save(Reservation.builder()
                 .creator(me)
                 .date(LocalDate.of(2025, 12, 20))
                 .startTime(START_TIME)
@@ -334,13 +334,13 @@ class InstrumentServiceTest {
                 .message("")
                 .build());
         
-        Instrument instrument = instrumentRepository.save(Instrument.builder()
+        Instrument instrument = instrumentJpaRepository.save(Instrument.builder()
                 .name(NAME)
                 .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
         
-        instrumentBorrowRepository.saveAll(List.of(
+        instrumentBorrowJpaRepository.saveAll(List.of(
                 InstrumentBorrow.builder().instrument(instrument).member(me).reservation(reservation).build(),
                 InstrumentBorrow.builder().instrument(instrument).member(me).reservation(reservation).build()
         ));
@@ -359,14 +359,14 @@ class InstrumentServiceTest {
     @DisplayName("악기 수정")
     void editInstrument() {
         //given
-        Member me = memberRepository.save(Member.builder()
+        Member me = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
 
-        Instrument instrument = instrumentRepository.save(Instrument.builder()
+        Instrument instrument = instrumentJpaRepository.save(Instrument.builder()
                 .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
@@ -381,7 +381,7 @@ class InstrumentServiceTest {
         service.editInstrument(me.getClub(), instrument.getId(), request.toDto());
 
         //then
-        Instrument inst = instrumentRepository.findAll().getFirst();
+        Instrument inst = instrumentJpaRepository.findAll().getFirst();
         assertEquals(NAME, inst.getName());
         assertEquals(INSTRUMENT_TYPE.korName, inst.getType().korName);
         assertFalse(inst.getAvailable());
@@ -391,14 +391,14 @@ class InstrumentServiceTest {
     @DisplayName("악기 삭제")
     void deleteInstrument() {
         //given
-        Member me = memberRepository.save(Member.builder()
+        Member me = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
 
-        Instrument instrument = instrumentRepository.save(Instrument.builder()
+        Instrument instrument = instrumentJpaRepository.save(Instrument.builder()
                 .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
@@ -407,21 +407,21 @@ class InstrumentServiceTest {
         service.deleteInstrument(me.getClub(), instrument.getId());
 
         //then
-        assertEquals(0, instrumentRepository.findAll().size());
+        assertEquals(0, instrumentJpaRepository.findAll().size());
     }
     
     @Test
     @DisplayName("어드민 악기 수정")
     void editInstrumentByAdmin() {
         //given
-        Member me = memberRepository.save(Member.builder()
+        Member me = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
         
-        Instrument instrument = instrumentRepository.save(Instrument.builder()
+        Instrument instrument = instrumentJpaRepository.save(Instrument.builder()
                 .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
@@ -436,7 +436,7 @@ class InstrumentServiceTest {
         service.editInstrumentByAdmin(instrument.getId(), request.toDto());
         
         //then
-        Instrument inst = instrumentRepository.findAll().getFirst();
+        Instrument inst = instrumentJpaRepository.findAll().getFirst();
         assertEquals(NAME, inst.getName());
         assertEquals(INSTRUMENT_TYPE.korName, inst.getType().korName);
         assertFalse(inst.getAvailable());
@@ -446,14 +446,14 @@ class InstrumentServiceTest {
     @DisplayName("어드민 악기 삭제")
     void deleteInstrumentByAdmin() {
         //given
-        Member me = memberRepository.save(Member.builder()
+        Member me = memberJpaRepository.save(Member.builder()
                 .name("창근")
                 .email("dompoo@gmail.com")
                 .password("1234")
                 .club(SANTLE)
                 .build());
         
-        Instrument instrument = instrumentRepository.save(Instrument.builder()
+        Instrument instrument = instrumentJpaRepository.save(Instrument.builder()
                 .club(me.getClub())
                 .type(KKWANGGWARI)
                 .build());
@@ -462,6 +462,6 @@ class InstrumentServiceTest {
         service.deleteInstrumentByAdmin(instrument.getId());
         
         //then
-        assertEquals(0, instrumentRepository.findAll().size());
+        assertEquals(0, instrumentJpaRepository.findAll().size());
     }
 }

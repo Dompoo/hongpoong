@@ -4,7 +4,7 @@ import Dompoo.Hongpoong.api.dto.common.request.SettingEditDto;
 import Dompoo.Hongpoong.api.dto.common.response.SettingResponse;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommonService {
 
-    private final MemberRepository memberRepository;
+    private final MemberJpaRepository memberJpaRepository;
 
     @Transactional(readOnly = true)
     public SettingResponse findMySetting(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberJpaRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
         
         return SettingResponse.from(member);
@@ -25,7 +25,7 @@ public class CommonService {
 
     @Transactional
     public void editSetting(Long memberId, SettingEditDto dto) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberJpaRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
         
         member.editSetting(dto);

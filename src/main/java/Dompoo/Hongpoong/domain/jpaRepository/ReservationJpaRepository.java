@@ -1,20 +1,19 @@
-package Dompoo.Hongpoong.domain.repository;
+package Dompoo.Hongpoong.domain.jpaRepository;
 
 import Dompoo.Hongpoong.domain.entity.Reservation;
-import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReservationRepository {
+public interface ReservationJpaRepository extends JpaRepository<Reservation, Long> {
     
+    @Query("SELECT r FROM Reservation r WHERE r.id = :reservationId")
     Optional<Reservation> findByIdJoinFetchCreator(@Param("reservationId") Long reservationId);
     
     List<Reservation> findAllByDate(LocalDate date);
-    
     List<Reservation> findAllByDateBetween(LocalDate startDate, LocalDate endDate);
-    
-    List<ReservationEndImage> findAllByReservation(Reservation reservation);
 }

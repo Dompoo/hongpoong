@@ -10,9 +10,9 @@ import Dompoo.Hongpoong.domain.enums.AttendanceStatus;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.enums.Role;
-import Dompoo.Hongpoong.domain.repository.AttendanceRepository;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.AttendanceJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.ReservationJpaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,17 +33,17 @@ class AttendanceStatusServiceTest {
 	@Autowired
 	private AttendanceService attendanceService;
 	@Autowired
-	private AttendanceRepository attendanceRepository;
+	private AttendanceJpaRepository attendanceJpaRepository;
 	@Autowired
-	private MemberRepository memberRepository;
+	private MemberJpaRepository memberJpaRepository;
 	@Autowired
-	private ReservationRepository reservationRepository;
+	private ReservationJpaRepository reservationJpaRepository;
 	
 	@AfterEach
 	void tearDown() {
-		attendanceRepository.deleteAllInBatch();
-		reservationRepository.deleteAllInBatch();
-		memberRepository.deleteAllInBatch();
+		attendanceJpaRepository.deleteAllInBatch();
+		reservationJpaRepository.deleteAllInBatch();
+		memberJpaRepository.deleteAllInBatch();
 	}
 	
 	private static final LocalDateTime NOW = LocalDateTime.of(2024, 5, 17, 15, 0);
@@ -54,34 +54,34 @@ class AttendanceStatusServiceTest {
 	@DisplayName("한 예약의 참가자 조회")
 	void getAttendance() {
 	    //given
-		Member member1 = memberRepository.save(Member.builder()
+		Member member1 = memberJpaRepository.save(Member.builder()
 				.email("email1")
 				.name("name1")
 				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
-		Member member2 = memberRepository.save(Member.builder()
+		Member member2 = memberJpaRepository.save(Member.builder()
 				.email("email2")
 				.name("name2")
 				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
-		Member member3 = memberRepository.save(Member.builder()
+		Member member3 = memberJpaRepository.save(Member.builder()
 				.email("email3")
 				.name("name3")
 				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
-		Member member4 = memberRepository.save(Member.builder()
+		Member member4 = memberJpaRepository.save(Member.builder()
 				.email("email4")
 				.name("name4")
 				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
-		Reservation reservation = reservationRepository.save(Reservation.builder()
+		Reservation reservation = reservationJpaRepository.save(Reservation.builder()
 				.creator(member1)
 				.build());
-		attendanceRepository.saveAll(List.of(
+		attendanceJpaRepository.saveAll(List.of(
 				Attendance.builder().reservation(reservation).member(member1).attendanceStatus(AttendanceStatus.NOT_YET_ATTEND).build(),
 				Attendance.builder().reservation(reservation).member(member2).attendanceStatus(AttendanceStatus.ATTEND).build(),
 				Attendance.builder().reservation(reservation).member(member3).attendanceStatus(AttendanceStatus.LATE).build(),
@@ -107,18 +107,18 @@ class AttendanceStatusServiceTest {
 	@DisplayName("예약 출석 - 출석")
 	void attendReservation() {
 		//given
-		Member member = memberRepository.save(Member.builder()
+		Member member = memberJpaRepository.save(Member.builder()
 				.email("email1")
 				.name("name1")
 				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
-		Reservation reservation = reservationRepository.save(Reservation.builder()
+		Reservation reservation = reservationJpaRepository.save(Reservation.builder()
 				.date(NOW.toLocalDate())
 				.endTime(ReservationTime.from(NOW.toLocalTime()))
 				.participationAvailable(false)
 				.build());
-		attendanceRepository.saveAll(List.of(
+		attendanceJpaRepository.saveAll(List.of(
 				Attendance.builder().reservation(reservation).member(member).attendanceStatus(AttendanceStatus.NOT_YET_ATTEND).build()
 		));
 		
@@ -135,18 +135,18 @@ class AttendanceStatusServiceTest {
 	@DisplayName("예약 출석 - 지각")
 	void attendReservation2() {
 		//given
-		Member member = memberRepository.save(Member.builder()
+		Member member = memberJpaRepository.save(Member.builder()
 				.email("email1")
 				.name("name1")
 				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
-		Reservation reservation = reservationRepository.save(Reservation.builder()
+		Reservation reservation = reservationJpaRepository.save(Reservation.builder()
 				.date(NOW.toLocalDate())
 				.endTime(ReservationTime.from(NOW.toLocalTime()))
 				.participationAvailable(false)
 				.build());
-		attendanceRepository.saveAll(List.of(
+		attendanceJpaRepository.saveAll(List.of(
 				Attendance.builder().reservation(reservation).member(member).attendanceStatus(AttendanceStatus.NOT_YET_ATTEND).build()
 		));
 		
@@ -163,13 +163,13 @@ class AttendanceStatusServiceTest {
 	@DisplayName("외부 참여 가능 예약의 외부 참여")
 	void attendReservationOutsider() {
 		//given
-		Member member = memberRepository.save(Member.builder()
+		Member member = memberJpaRepository.save(Member.builder()
 				.email("email1")
 				.name("name1")
 				.role(Role.LEADER)
 				.club(Club.SANTLE)
 				.build());
-		Reservation reservation = reservationRepository.save(Reservation.builder()
+		Reservation reservation = reservationJpaRepository.save(Reservation.builder()
 				.date(NOW.toLocalDate())
 				.endTime(ReservationTime.from(NOW.toLocalTime()))
 				.participationAvailable(true)
@@ -181,19 +181,19 @@ class AttendanceStatusServiceTest {
 		//then
 		assertEquals("email1", result.getMember().getEmail());
 		assertEquals(AttendanceStatus.ATTEND.korName, result.getAttendance());
-		assertEquals(1, attendanceRepository.count());
+		assertEquals(1, attendanceJpaRepository.count());
 	}
 	
 	@Test
 	@DisplayName("외부 참여 불가능 예약의 외부 참여")
 	void attendReservationOutsiderFail() {
 		//given
-		Member member = memberRepository.save(Member.builder()
+		Member member = memberJpaRepository.save(Member.builder()
 				.email("email1")
 				.name("name1")
 				.club(Club.SANTLE)
 				.build());
-		Reservation reservation = reservationRepository.save(Reservation.builder()
+		Reservation reservation = reservationJpaRepository.save(Reservation.builder()
 				.date(NOW.toLocalDate())
 				.endTime(ReservationTime.from(NOW.toLocalTime()))
 				.participationAvailable(false)
@@ -211,18 +211,18 @@ class AttendanceStatusServiceTest {
 	@DisplayName("예약 출석 마감")
 	void closeAttendance() {
 		//given
-		Member member = memberRepository.save(Member.builder()
+		Member member = memberJpaRepository.save(Member.builder()
 				.email("email1")
 				.name("name1")
 				.club(Club.SANTLE)
 				.role(Role.LEADER)
 				.build());
-		Reservation reservation = reservationRepository.save(Reservation.builder()
+		Reservation reservation = reservationJpaRepository.save(Reservation.builder()
 				.creator(member)
 				.date(NOW.toLocalDate())
 				.endTime(ReservationTime.from(NOW.toLocalTime()))
 				.build());
-		attendanceRepository.saveAll(List.of(
+		attendanceJpaRepository.saveAll(List.of(
 				Attendance.builder().reservation(reservation).member(member).attendanceStatus(AttendanceStatus.NOT_YET_ATTEND).build()
 		));
 		

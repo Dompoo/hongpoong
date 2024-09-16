@@ -10,8 +10,8 @@ import Dompoo.Hongpoong.common.exception.impl.InfoNotFound;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Info;
 import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.repository.InfoRepository;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.InfoJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,28 +23,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InfoService {
     
-    private final InfoRepository infoRepository;
-    private final MemberRepository memberRepository;
+    private final InfoJpaRepository infoJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
 
     @Transactional
     public void createInfo(Long memberId, InfoCreateRequest request, LocalDateTime now) {
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Member member = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
         Info info = request.toInfo(member, now);
         
-        infoRepository.save(info);
+        infoJpaRepository.save(info);
     }
 
     @Transactional(readOnly = true)
     public List<InfoResponse> findAllInfo() {
-        return infoRepository.findAll().stream()
+        return infoJpaRepository.findAll().stream()
                 .map(InfoResponse::from)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public InfoDetailResponse findInfoDetail(Long infoId) {
-        Info info = infoRepository.findById(infoId)
+        Info info = infoJpaRepository.findById(infoId)
                 .orElseThrow(InfoNotFound::new);
 
         return InfoDetailResponse.from(info);
@@ -52,8 +52,8 @@ public class InfoService {
     
     @Transactional
     public void editInfo(Long memberId, Long infoId, InfoEditDto dto) {
-        Info info = infoRepository.findByIdFetchJoinMember(infoId).orElseThrow(InfoNotFound::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Info info = infoJpaRepository.findByIdFetchJoinMember(infoId).orElseThrow(InfoNotFound::new);
+        Member member = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
         if (!info.getMember().getClub().equals(member.getClub())) {
             throw new EditFailException();
@@ -64,19 +64,19 @@ public class InfoService {
     
     @Transactional
     public void deleteInfo(Long memberId, Long infoId) {
-        Info info = infoRepository.findByIdFetchJoinMember(infoId).orElseThrow(InfoNotFound::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Info info = infoJpaRepository.findByIdFetchJoinMember(infoId).orElseThrow(InfoNotFound::new);
+        Member member = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
         if (!info.getMember().getClub().equals(member.getClub())) {
             throw new DeleteFailException();
         }
         
-        infoRepository.delete(info);
+        infoJpaRepository.delete(info);
     }
     
     @Transactional
     public void editInfoByAdmin(Long infoId, InfoEditDto dto) {
-        Info info = infoRepository.findById(infoId)
+        Info info = infoJpaRepository.findById(infoId)
                 .orElseThrow(InfoNotFound::new);
         
         info.edit(dto);
@@ -84,9 +84,9 @@ public class InfoService {
     
     @Transactional
     public void deleteInfoByAdmin(Long infoId) {
-        Info info = infoRepository.findById(infoId)
+        Info info = infoJpaRepository.findById(infoId)
                 .orElseThrow(InfoNotFound::new);
 
-        infoRepository.delete(info);
+        infoJpaRepository.delete(info);
     }
 }

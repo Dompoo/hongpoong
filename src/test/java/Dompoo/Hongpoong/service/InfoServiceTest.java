@@ -10,8 +10,8 @@ import Dompoo.Hongpoong.domain.entity.Info;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
-import Dompoo.Hongpoong.domain.repository.InfoRepository;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.InfoJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,10 +33,10 @@ class InfoServiceTest {
     private InfoService service;
 
     @Autowired
-    private InfoRepository infoRepository;
+    private InfoJpaRepository infoJpaRepository;
     
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberJpaRepository memberJpaRepository;
 
     //info 서비스의 여러 메서드를 테스트하는 코드 작성
 
@@ -47,8 +47,8 @@ class InfoServiceTest {
     
     @AfterEach
     void tearDown() {
-        infoRepository.deleteAllInBatch();
-        memberRepository.deleteAllInBatch();
+        infoJpaRepository.deleteAllInBatch();
+        memberJpaRepository.deleteAllInBatch();
     }
 
     //공지사항 추가 테스트
@@ -56,7 +56,7 @@ class InfoServiceTest {
     @DisplayName("공지사항 추가")
     void addOne() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
@@ -74,9 +74,9 @@ class InfoServiceTest {
         service.createInfo(member.getId(), request, now);
 
         //then
-        assertEquals(1, infoRepository.count());
-        assertEquals(TITLE, infoRepository.findAll().get(0).getTitle());
-        assertEquals(CONTENT, infoRepository.findAll().get(0).getContent());
+        assertEquals(1, infoJpaRepository.count());
+        assertEquals(TITLE, infoJpaRepository.findAll().get(0).getTitle());
+        assertEquals(CONTENT, infoJpaRepository.findAll().get(0).getContent());
     }
 
     //공지사항 전체 조회 테스트
@@ -84,12 +84,12 @@ class InfoServiceTest {
     @DisplayName("공지사항 전체 조회")
     void findAll() {
         //given
-        infoRepository.save(Info.builder()
+        infoJpaRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
 
-        infoRepository.save(Info.builder()
+        infoJpaRepository.save(Info.builder()
                 .title(NEW_TITLE)
                 .content(NEW_CONTENT)
                 .build());
@@ -108,7 +108,7 @@ class InfoServiceTest {
     @DisplayName("공지사항 상세 조회")
     void findOne() {
         //given
-        Info save = infoRepository.save(Info.builder()
+        Info save = infoJpaRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
@@ -127,7 +127,7 @@ class InfoServiceTest {
     @DisplayName("존재하지 않는 공지사항 상세 조회")
     void findOneFail() {
         //given
-        Info save = infoRepository.save(Info.builder()
+        Info save = infoJpaRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
@@ -145,7 +145,7 @@ class InfoServiceTest {
     @DisplayName("공지사항 수정")
     void edit() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
@@ -153,7 +153,7 @@ class InfoServiceTest {
                 .club(Club.SANTLE)
                 .build());
         
-        Info info = infoRepository.save(Info.builder()
+        Info info = infoJpaRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .member(member)
@@ -168,8 +168,8 @@ class InfoServiceTest {
         service.editInfo(member.getId(), info.getId(), request.toDto());
 
         //then
-        assertEquals(NEW_TITLE, infoRepository.findById(info.getId()).get().getTitle());
-        assertEquals(NEW_CONTENT, infoRepository.findById(info.getId()).get().getContent());
+        assertEquals(NEW_TITLE, infoJpaRepository.findById(info.getId()).get().getTitle());
+        assertEquals(NEW_CONTENT, infoJpaRepository.findById(info.getId()).get().getContent());
     }
 
     //공지사항 수정 실패 테스트
@@ -177,7 +177,7 @@ class InfoServiceTest {
     @DisplayName("존재하지 않는 공지사항 수정")
     void editFail1() {
         //given
-        Info info = infoRepository.save(Info.builder()
+        Info info = infoJpaRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
@@ -200,7 +200,7 @@ class InfoServiceTest {
     @DisplayName("공지사항 삭제")
     void delete() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
@@ -208,7 +208,7 @@ class InfoServiceTest {
                 .club(Club.SANTLE)
                 .build());
         
-        Info info = infoRepository.save(Info.builder()
+        Info info = infoJpaRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .member(member)
@@ -218,7 +218,7 @@ class InfoServiceTest {
         service.deleteInfo(member.getId(), info.getId());
 
         //then
-        assertEquals(0, infoRepository.count());
+        assertEquals(0, infoJpaRepository.count());
     }
 
     //공지사항 삭제 실패 테스트
@@ -226,14 +226,14 @@ class InfoServiceTest {
     @DisplayName("존재하지 않는 공지사항 삭제")
     void deleteFail() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
                 .enrollmentNumber(19)
                 .build());
         
-        infoRepository.save(Info.builder()
+        infoJpaRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .build());
@@ -251,7 +251,7 @@ class InfoServiceTest {
     @DisplayName("어드민 공지사항 수정")
     void editByAdmin() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
@@ -259,7 +259,7 @@ class InfoServiceTest {
                 .club(Club.SANTLE)
                 .build());
         
-        Info info = infoRepository.save(Info.builder()
+        Info info = infoJpaRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .member(member)
@@ -274,8 +274,8 @@ class InfoServiceTest {
         service.editInfoByAdmin(info.getId(), request.toDto());
         
         //then
-        assertEquals(NEW_TITLE, infoRepository.findById(info.getId()).get().getTitle());
-        assertEquals(NEW_CONTENT, infoRepository.findById(info.getId()).get().getContent());
+        assertEquals(NEW_TITLE, infoJpaRepository.findById(info.getId()).get().getTitle());
+        assertEquals(NEW_CONTENT, infoJpaRepository.findById(info.getId()).get().getContent());
     }
     
     //어드민 공지사항 수정 실패 테스트
@@ -283,7 +283,7 @@ class InfoServiceTest {
     @DisplayName("어드민 존재하지 않는 공지사항 수정")
     void editByAdminFail1() {
         //given
-        Member member = memberRepository.save(Member.builder()
+        Member member = memberJpaRepository.save(Member.builder()
                 .name("이창근")
                 .nickname("불꽃남자")
                 .role(Role.LEADER)
@@ -291,7 +291,7 @@ class InfoServiceTest {
                 .club(Club.SANTLE)
                 .build());
         
-        Info info = infoRepository.save(Info.builder()
+        Info info = infoJpaRepository.save(Info.builder()
                 .title(TITLE)
                 .content(CONTENT)
                 .member(member)

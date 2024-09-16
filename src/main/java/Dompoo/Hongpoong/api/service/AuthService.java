@@ -13,8 +13,8 @@ import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
 import Dompoo.Hongpoong.common.security.JwtProvider;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.SignUp;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import Dompoo.Hongpoong.domain.repository.SignUpRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.SignUpJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,8 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final MemberRepository memberRepository;
-    private final SignUpRepository signUpRepository;
+    private final MemberJpaRepository memberJpaRepository;
+    private final SignUpJpaRepository signUpJpaRepository;
     private final JwtProvider jwtProvider;
     private final PasswordEncoder encoder;
 
@@ -44,12 +44,12 @@ public class AuthService {
             throw new AlreadyExistEmail();
         }
 
-        signUpRepository.save(request.toSignUp(encoder));
+        signUpJpaRepository.save(request.toSignUp(encoder));
     }
     
     @Transactional(readOnly = true)
     public LoginResponse login(LoginRequest request) {
-        Member member = memberRepository.findByEmail(request.getEmail())
+        Member member = memberJpaRepository.findByEmail(request.getEmail())
                 .orElseThrow(LoginFailException::new);
         
         if (!encoder.matches(request.getPassword(), member.getPassword()))
@@ -64,25 +64,25 @@ public class AuthService {
     
     @Transactional
     public void acceptSignUp(Long signupId, AcceptSignUpRequest request) {
-        SignUp signUp = signUpRepository.findById(signupId)
+        SignUp signUp = signUpJpaRepository.findById(signupId)
                 .orElseThrow(SignUpNotFound::new);
 
         if (request.getAcceptResult()) {
-            memberRepository.save(Member.from(signUp));
+            memberJpaRepository.save(Member.from(signUp));
         }
 
-        signUpRepository.delete(signUp);
+        signUpJpaRepository.delete(signUp);
     }
     
     @Transactional(readOnly = true)
     public List<SignUpResponse> findAllSignup() {
-        return signUpRepository.findAll().stream()
+        return signUpJpaRepository.findAll().stream()
                 .map(SignUpResponse::from)
                 .toList();
     }
     
     private boolean isValidEmail(String email) {
-        return !signUpRepository.existsByEmail(email)
-                && !memberRepository.existsByEmail(email);
+        return !signUpJpaRepository.existsByEmail(email)
+                && !memberJpaRepository.existsByEmail(email);
     }
 }

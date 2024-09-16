@@ -1,4 +1,4 @@
-package Dompoo.Hongpoong.domain.repository;
+package Dompoo.Hongpoong.domain.jpaRepository;
 
 import Dompoo.Hongpoong.domain.entity.Instrument;
 import Dompoo.Hongpoong.domain.entity.InstrumentBorrow;
@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface InstrumentBorrowRepository extends JpaRepository<InstrumentBorrow, Long> {
+public interface InstrumentBorrowJpaRepository extends JpaRepository<InstrumentBorrow, Long> {
 	
 	@Query("SELECT ib FROM InstrumentBorrow ib WHERE ib.instrument = :instrument")
 	List<InstrumentBorrow> findAllByInstrument(@Param("instrument") Instrument instrument);

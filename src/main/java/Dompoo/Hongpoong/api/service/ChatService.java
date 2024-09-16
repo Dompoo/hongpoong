@@ -11,10 +11,10 @@ import Dompoo.Hongpoong.domain.entity.ChatMessage;
 import Dompoo.Hongpoong.domain.entity.ChatRoom;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.MemberInChatRoom;
-import Dompoo.Hongpoong.domain.repository.ChatMessageRepository;
-import Dompoo.Hongpoong.domain.repository.ChatRoomRepository;
-import Dompoo.Hongpoong.domain.repository.MemberInChatRoomRepository;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.ChatMessageJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.ChatRoomJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.MemberInChatRoomJpaRepository;
+import Dompoo.Hongpoong.domain.jpaRepository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,19 +25,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatService {
 
-    private final ChatRoomRepository chatRoomRepository;
-    private final ChatMessageRepository chatMessageRepository;
-    private final MemberRepository memberRepository;
-    private final MemberInChatRoomRepository memberInChatRoomRepository;
+    private final ChatRoomJpaRepository chatRoomJpaRepository;
+    private final ChatMessageJpaRepository chatMessageJpaRepository;
+    private final MemberJpaRepository memberJpaRepository;
+    private final MemberInChatRoomJpaRepository memberInChatRoomJpaRepository;
     
     @Transactional
     public ChatRoomResponse createRoom(ChatRoomCreateRequest request) {
-        List<Member> members = memberRepository.findAllByIdIn(request.getMemberIds());
+        List<Member> members = memberJpaRepository.findAllByIdIn(request.getMemberIds());
         if (members.size() != request.getMemberIds().size()) throw new MemberNotFound();
         
-        ChatRoom savedRoom = chatRoomRepository.save(request.toChatRoom());
+        ChatRoom savedRoom = chatRoomJpaRepository.save(request.toChatRoom());
         
-        memberInChatRoomRepository.saveAll(members.stream()
+        memberInChatRoomJpaRepository.saveAll(members.stream()
                 .map(member -> MemberInChatRoom.builder()
                         .member(member)
                         .chatRoom(savedRoom)
@@ -49,43 +49,43 @@ public class ChatService {
     
     @Transactional(readOnly = true)
     public List<ChatRoomResponse> findAllRoom(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberJpaRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
         
-        List<MemberInChatRoom> memberInChatRooms = memberInChatRoomRepository.findAllByMember(member);
+        List<MemberInChatRoom> memberInChatRooms = memberInChatRoomJpaRepository.findAllByMember(member);
         
         return ChatRoomResponse.fromList(memberInChatRooms);
     }
 
     @Transactional
     public void exitRoom(Long memberId, Long roomId) {
-        Member member = memberRepository.findById(memberId)
+        Member member = memberJpaRepository.findById(memberId)
                 .orElseThrow(MemberNotFound::new);
         
-        ChatRoom chatroom = chatRoomRepository.findById(roomId)
+        ChatRoom chatroom = chatRoomJpaRepository.findById(roomId)
                 .orElseThrow(ChatRoomNotFound::new);
         
         // 해당 멤버가 해당 채팅방에 있지 않다면 예외 발생
-        if (!memberInChatRoomRepository.existsByMemberAndChatRoom(member, chatroom)) throw new DeleteFailException();
+        if (!memberInChatRoomJpaRepository.existsByMemberAndChatRoom(member, chatroom)) throw new DeleteFailException();
         
-        memberInChatRoomRepository.deleteByChatRoom(chatroom);
+        memberInChatRoomJpaRepository.deleteByChatRoom(chatroom);
         chatroom.reduceMemberCount();
         
         // 멤버가 남아있지 않다면 채팅방도 삭제
         if (chatroom.getMemberCount() == 0) {
-            chatRoomRepository.delete(chatroom);
+            chatRoomJpaRepository.delete(chatroom);
         }
     }
     
     @Transactional
     public ChatMessageResponse createChat(Long roomId, ChatMessageRequest request) {
-        ChatRoom chatroom = chatRoomRepository.findById(roomId)
+        ChatRoom chatroom = chatRoomJpaRepository.findById(roomId)
                 .orElseThrow(ChatRoomNotFound::new);
 
-        Member sender = memberRepository.findById(request.getSenderId())
+        Member sender = memberJpaRepository.findById(request.getSenderId())
                 .orElseThrow(MemberNotFound::new);
 
-        ChatMessage savedMessage = chatMessageRepository.save(request.toChatMessage(chatroom, sender.getName()));
+        ChatMessage savedMessage = chatMessageJpaRepository.save(request.toChatMessage(chatroom, sender.getName()));
         
         return ChatMessageResponse.of(savedMessage, sender.getId());
     }

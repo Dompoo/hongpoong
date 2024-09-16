@@ -10,7 +10,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReservationEndImage {
 
-    private Long id;
-    private String imageUrl;
-    private Reservation reservation;
+    private final Long id;
+    private final String imageUrl;
+    private final Reservation reservation;
 }

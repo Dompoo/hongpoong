@@ -13,10 +13,10 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Attendance {
 	
-	private Long id;
-	private AttendanceStatus attendanceStatus;
-	private Reservation reservation;
-	private Member member;
+	private final Long id;
+	private final AttendanceStatus attendanceStatus;
+	private final Reservation reservation;
+	private final Member member;
 	
 	public static List<Attendance> of(Reservation reservation, List<Member> members) {
 		return members.stream()
@@ -36,11 +36,21 @@ public class Attendance {
 				.build();
 	}
 	
-	public void editAttendance(AttendanceStatus attendanceStatus) {
-		this.attendanceStatus = attendanceStatus;
+	public Attendance withAttendance(AttendanceStatus attendanceStatus) {
+		return Attendance.builder()
+				.id(this.id)
+				.attendanceStatus(attendanceStatus)
+				.reservation(this.reservation)
+				.member(this.member)
+				.build();
 	}
 	
-	public void editAttendance(Boolean isLate) {
-		this.attendanceStatus = isLate ? AttendanceStatus.LATE : AttendanceStatus.ATTEND;
+	public Attendance withAttendance(Boolean isLate) {
+		return Attendance.builder()
+				.id(this.id)
+				.attendanceStatus(isLate ? AttendanceStatus.LATE : AttendanceStatus.ATTEND)
+				.reservation(this.reservation)
+				.member(this.member)
+				.build();
 	}
 }

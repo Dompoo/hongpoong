@@ -10,7 +10,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberInChatRoom {
 	
-	private Long id;
-	private Member member;
-	private ChatRoom chatRoom;
+	private final Long id;
+	private final Member member;
+	private final ChatRoom chatRoom;
 }

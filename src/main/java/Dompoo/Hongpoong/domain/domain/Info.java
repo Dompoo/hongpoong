@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.domain.domain;
 
-import Dompoo.Hongpoong.api.dto.info.request.InfoEditDto;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,14 +12,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Info {
 
-    private Long id;
-    private String title;
-    private String content;
-    private LocalDateTime date;
-    private Member member;
+    private final Long id;
+    private final String title;
+    private final String content;
+    private final LocalDateTime date;
+    private final Member member;
     
-    public void edit(InfoEditDto dto) {
-        if (dto.getTitle() != null) this.title = dto.getTitle();
-        if (dto.getContent() != null) this.content = dto.getContent();
+    public Info withEdited(String title, String content) {
+        return Info.builder()
+                .id(this.id)
+                .title(title)
+                .content(content)
+                .date(this.date)
+                .member(this.member)
+                .build();
     }
 }

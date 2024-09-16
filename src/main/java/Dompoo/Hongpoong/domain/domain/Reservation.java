@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.domain.domain;
 
-import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.enums.ReservationType;
 import lombok.AccessLevel;
@@ -17,31 +16,47 @@ import java.util.function.Supplier;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Reservation {
 
-    private Long id;
-    private LocalDate date;
-    private ReservationType type;
-    private ReservationTime startTime;
-    private ReservationTime endTime;
-    private LocalDateTime lastModified;
-    private String message;
-    private Boolean participationAvailable;
-    private Member creator;
+    private final Long id;
+    private final LocalDate date;
+    private final ReservationType type;
+    private final ReservationTime startTime;
+    private final ReservationTime endTime;
+    private final LocalDateTime lastModified;
+    private final String message;
+    private final Boolean participationAvailable;
+    private final Member creator;
     
-    public void edit(ReservationEditDto dto, LocalDateTime now) {
-        if (dto.getDate() != null) this.date = dto.getDate();
-        if (dto.getStartTime() != null) this.startTime = dto.getStartTime();
-        if (dto.getEndTime() != null) this.endTime = dto.getEndTime();
-        if (dto.getMessage() != null) this.message = dto.getMessage();
-        this.lastModified = now;
+    public Reservation withEdited(LocalDate date, ReservationTime startTime, ReservationTime endTime, String message, LocalDateTime now) {
+        return Reservation.builder()
+                .id(this.id)
+                .date(date == null ? this.date : date)
+                .type(this.type)
+                .startTime(startTime == null ? this.startTime : startTime)
+                .endTime(endTime == null ? this.endTime : endTime)
+                .lastModified(now)
+                .message(message == null ? this.message : message)
+                .participationAvailable(this.participationAvailable)
+                .creator(this.creator)
+                .build();
     }
     
-    public void extendEndTime() {
-        endTime = endTime.nextReservationTime();
+    public Reservation withExtendEndTime() {
+        return Reservation.builder()
+                .id(this.id)
+                .date(this.date)
+                .type(this.type)
+                .startTime(this.startTime)
+                .endTime(this.endTime.nextReservationTime())
+                .lastModified(this.lastModified)
+                .message(this.message)
+                .participationAvailable(this.participationAvailable)
+                .creator(this.creator)
+                .build();
     }
     
     public Attendance attendMember(LocalDateTime now, Supplier<Attendance> participateSupplier) {
         Attendance participate = participateSupplier.get();
-        participate.editAttendance(isLate(now));
+        participate.withAttendance(isLate(now));
         return participate;
     }
     

@@ -12,9 +12,18 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class InstrumentBorrow {
 
-    private Long id;
-    private LocalDate borrowDate;
-    private Instrument instrument;
-    private Member member;
-    private Reservation reservation;
+    private final Long id;
+    private final LocalDate borrowDate;
+    private final Instrument instrument;
+    private final Member member;
+    private final Reservation reservation;
+    
+    public InstrumentBorrow of(Instrument instrument, Member borrower, Reservation reservation, LocalDate now) {
+        return InstrumentBorrow.builder()
+                .instrument(instrument)
+                .member(borrower)
+                .reservation(reservation)
+                .borrowDate(now)
+                .build();
+    }
 }

@@ -11,11 +11,11 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SignUp {
 
-    private Long id;
-    private String email;
-    private String name;
-    private String nickname;
-    private String password;
-    private Club club;
-    private Integer enrollmentNumber;
+    private final Long id;
+    private final String email;
+    private final String name;
+    private final String nickname;
+    private final String password;
+    private final Club club;
+    private final Integer enrollmentNumber;
 }

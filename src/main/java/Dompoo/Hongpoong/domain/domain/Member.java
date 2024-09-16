@@ -1,8 +1,5 @@
 package Dompoo.Hongpoong.domain.domain;
 
-import Dompoo.Hongpoong.api.dto.common.request.SettingEditDto;
-import Dompoo.Hongpoong.api.dto.member.request.MemberEditDto;
-import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditDto;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
 import lombok.AccessLevel;
@@ -16,16 +13,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Member {
 
-    private Long id;
-    private String email;
-    private String name;
-    private String nickname;
-    private String password;
-    private Role role;
-    private Club club;
-    private Integer enrollmentNumber;
-    private String profileImageUrl;
-    private Boolean pushAlarm;
+    private final Long id;
+    private final String email;
+    private final String name;
+    private final String nickname;
+    private final String password;
+    private final Role role;
+    private final Club club;
+    private final Integer enrollmentNumber;
+    private final String profileImageUrl;
+    private final Boolean pushAlarm;
     
     public static Member from(SignUp signUp) {
         return Member.builder()
@@ -40,20 +37,48 @@ public class Member {
                 .build();
     }
     
-    public void edit(MemberEditDto dto, PasswordEncoder encoder) {
-        if (dto.getName() != null) this.name = dto.getName();
-        if (dto.getNickname() != null) this.nickname = dto.getNickname();
-        if (dto.getClub() != null) this.club = dto.getClub();
-        if (dto.getEnrollmentNumber() != null) this.enrollmentNumber = dto.getEnrollmentNumber();
-        if (dto.getProfileImageUrl() != null) this.profileImageUrl = dto.getProfileImageUrl();
-        if (dto.getNewPassword() != null) this.password = encoder.encode(dto.getNewPassword());
+    public Member withEdited(String name, String nickname, Club club, Integer enrollmentNumber, String profileImageUrl, String newPassword, PasswordEncoder encoder) {
+        return Member.builder()
+                .id(this.id)
+                .email(this.email)
+                .name(name == null ? this.name : name)
+                .nickname(nickname == null ? this.nickname : nickname)
+                .password(newPassword == null ? this.password : encoder.encode(newPassword))
+                .role(this.role)
+                .club(club == null ? this.club : club)
+                .enrollmentNumber(enrollmentNumber == null ? this.enrollmentNumber : enrollmentNumber)
+                .profileImageUrl(profileImageUrl == null ? this.profileImageUrl : profileImageUrl)
+                .pushAlarm(this.pushAlarm)
+                .build();
     }
     
-    public void editSetting(SettingEditDto dto) {
-        if (dto.getPush() != null) this.pushAlarm = dto.getPush();
+    public Member withEditedSetting(Boolean pushAlarm) {
+        return Member.builder()
+                .id(this.id)
+                .email(this.email)
+                .name(this.name)
+                .nickname(this.nickname)
+                .password(this.password)
+                .role(this.role)
+                .club(this.club)
+                .enrollmentNumber(this.enrollmentNumber)
+                .profileImageUrl(this.profileImageUrl)
+                .pushAlarm(pushAlarm == null ? this.pushAlarm : pushAlarm)
+                .build();
     }
     
-    public void editRole(MemberRoleEditDto dto) {
-        if (dto.getRole() != null) this.role = dto.getRole();
+    public Member withEditedRole(Role role) {
+        return Member.builder()
+                .id(this.id)
+                .email(this.email)
+                .name(this.name)
+                .nickname(this.nickname)
+                .password(this.password)
+                .role(role == null ? this.role : role)
+                .club(this.club)
+                .enrollmentNumber(this.enrollmentNumber)
+                .profileImageUrl(this.profileImageUrl)
+                .pushAlarm(this.pushAlarm)
+                .build();
     }
 }

@@ -10,8 +10,8 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatMessage {
 
-    private Long id;
-    private String message;
-    private String sender;
-    private ChatRoom chatRoom;
+    private final Long id;
+    private final String message;
+    private final String sender;
+    private final ChatRoom chatRoom;
 }

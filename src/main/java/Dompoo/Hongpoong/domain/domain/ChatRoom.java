@@ -10,11 +10,15 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatRoom {
 
-    private Long id;
-    private String roomName;
-    private Integer memberCount;
+    private final Long id;
+    private final String roomName;
+    private final Integer memberCount;
     
-    public void reduceMemberCount() {
-        this.memberCount--;
+    public ChatRoom withReduceMemberCount() {
+        return ChatRoom.builder()
+                .id(this.id)
+                .roomName(this.roomName)
+                .memberCount(this.memberCount - 1)
+                .build();
     }
 }

@@ -28,7 +28,7 @@
         </root>
     </springProfile>
 
-    <springProfile name="prod">
+    <springProfile name="monitor">
         <root level="INFO">
             <appender-ref ref="LOKI" />
         </root>

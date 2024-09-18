@@ -5,6 +5,7 @@ import Dompoo.Hongpoong.api.dto.attendance.AttendanceResultResponse;
 import Dompoo.Hongpoong.common.exception.impl.AttendanceNotFound;
 import Dompoo.Hongpoong.common.exception.impl.EditFailException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
+import Dompoo.Hongpoong.common.exception.impl.ReservationNotFound;
 import Dompoo.Hongpoong.domain.domain.Attendance;
 import Dompoo.Hongpoong.domain.domain.Member;
 import Dompoo.Hongpoong.domain.domain.Reservation;
@@ -38,7 +39,7 @@ public class AttendanceService {
     
     @Transactional
     public AttendanceResultResponse attendReservation(Long memberId, Long reservationId, LocalDateTime now) {
-        Reservation reservation = reservationRepository.findById(reservationId);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
         if (reservation.getParticipationAvailable()) {
             Optional<Attendance> prevAttendance = attendanceRepository.findByMemberIdAndReservationId(memberId, reservationId);
@@ -64,7 +65,7 @@ public class AttendanceService {
     
     @Transactional
     public void closeAttendance(Long memberId, Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
         if (!reservation.getCreator().getId().equals(memberId)) {
             throw new EditFailException();

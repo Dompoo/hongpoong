@@ -9,7 +9,6 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.function.Supplier;
 
 @Getter
 @Builder
@@ -52,15 +51,5 @@ public class Reservation {
                 .participationAvailable(this.participationAvailable)
                 .creator(this.creator)
                 .build();
-    }
-    
-    public Attendance attendMember(LocalDateTime now, Supplier<Attendance> participateSupplier) {
-        Attendance participate = participateSupplier.get();
-        participate.withAttendance(isLate(now));
-        return participate;
-    }
-    
-    private Boolean isLate(LocalDateTime now) {
-        return LocalDateTime.of(date, endTime.localTime).isBefore(now);
     }
 }

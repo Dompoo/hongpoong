@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.Instrument.response;
 
-import Dompoo.Hongpoong.domain.jpaEntity.InstrumentJpaEntity;
+import Dompoo.Hongpoong.domain.domain.Instrument;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,13 +27,13 @@ public class InstrumentResponse {
     @Schema(example = "false")
     private final Boolean available;
     
-    public static InstrumentResponse from(InstrumentJpaEntity instrumentJpaEntity) {
+    public static InstrumentResponse from(Instrument instrument) {
         return InstrumentResponse.builder()
-                .instrumentId(instrumentJpaEntity.getId())
-                .name(instrumentJpaEntity.getName())
-                .type(instrumentJpaEntity.getType().korName)
-                .club(instrumentJpaEntity.getClub().korName)
-                .available(instrumentJpaEntity.getAvailable())
+                .instrumentId(instrument.getId())
+                .name(instrument.getName())
+                .type(instrument.getType().korName)
+                .club(instrument.getClub().korName)
+                .available(instrument.getAvailable())
                 .build();
     }
 }

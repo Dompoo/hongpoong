@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -22,10 +23,9 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 	private final ReservationEndImageJpaRepository reservationEndImageJpaRepository;
 	
 	@Override
-	public Reservation findById(Long reservationId) {
+	public Optional<Reservation> findById(Long reservationId) {
 		return reservationJpaRepository.findById(reservationId)
-				.orElseThrow(ReservationNotFound::new)
-				.toDomain();
+				.map(ReservationJpaEntity::toDomain);
 	}
 	
 	@Override

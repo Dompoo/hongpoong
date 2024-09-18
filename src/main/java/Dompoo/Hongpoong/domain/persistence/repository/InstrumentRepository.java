@@ -5,8 +5,15 @@ import Dompoo.Hongpoong.domain.domain.InstrumentBorrow;
 import Dompoo.Hongpoong.domain.enums.Club;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface InstrumentRepository {
+	
+	void save(Instrument instrument);
+	
+	void saveBorrow(InstrumentBorrow instrumentBorrow);
+	
+	Optional<Instrument> findById(Long instrumentId);
 	
 	List<Instrument> findAllByClubNotEquals(Club club);
 	
@@ -14,5 +21,9 @@ public interface InstrumentRepository {
 	
 	List<InstrumentBorrow> findAllBorrowByInstrument(Instrument instrument);
 	
-	Instrument findByMemberIdAndInstrumentId(Long memberId, Long instrumentId);
+	Optional<Instrument> findByMemberIdAndInstrumentId(Long memberId, Long instrumentId);
+	
+	void update(Instrument instrument);
+	
+	void delete(Instrument instrument);
 }

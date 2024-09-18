@@ -1,6 +1,5 @@
 package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
-import Dompoo.Hongpoong.common.exception.impl.InstrumentNotFound;
 import Dompoo.Hongpoong.domain.domain.Instrument;
 import Dompoo.Hongpoong.domain.domain.InstrumentBorrow;
 import Dompoo.Hongpoong.domain.enums.Club;
@@ -13,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,6 +20,22 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
 	
 	private final InstrumentJpaRepository instrumentJpaRepository;
 	private final InstrumentBorrowJpaRepository instrumentBorrowJpaRepository;
+	
+	@Override
+	public void save(Instrument instrument) {
+		instrumentJpaRepository.save(InstrumentJpaEntity.of(instrument));
+	}
+	
+	@Override
+	public void saveBorrow(InstrumentBorrow instrumentBorrow) {
+		instrumentBorrowJpaRepository.save(InstrumentBorrowJpaEntity.of(instrumentBorrow));
+	}
+	
+	@Override
+	public Optional<Instrument> findById(Long instrumentId) {
+		return instrumentJpaRepository.findById(instrumentId)
+				.map(InstrumentJpaEntity::toDomain);
+	}
 	
 	@Override
 	public List<Instrument> findAllByClubNotEquals(Club club) {
@@ -43,9 +59,18 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
 	}
 	
 	@Override
-	public Instrument findByMemberIdAndInstrumentId(Long memberId, Long instrumentId) {
+	public Optional<Instrument> findByMemberIdAndInstrumentId(Long memberId, Long instrumentId) {
 		return instrumentBorrowJpaRepository.findByMemberIdAndInstrumentId(memberId, instrumentId)
-				.orElseThrow(InstrumentNotFound::new)
-				.toDomain();
+				.map(InstrumentJpaEntity::toDomain);
+	}
+	
+	@Override
+	public void update(Instrument instrument) {
+		instrumentJpaRepository.update(InstrumentJpaEntity.of(instrument));
+	}
+	
+	@Override
+	public void delete(Instrument instrument) {
+		instrumentJpaRepository.delete(InstrumentJpaEntity.of(instrument));
 	}
 }

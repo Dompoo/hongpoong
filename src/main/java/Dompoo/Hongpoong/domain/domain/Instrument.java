@@ -41,7 +41,7 @@ public class Instrument {
                 .build();
     }
     
-    public Instrument returnInstrument() {
+    public Instrument withReturn() {
         return Instrument.builder()
                 .id(this.id)
                 .name(this.name)

@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.Instrument.response;
 
-import Dompoo.Hongpoong.domain.jpaEntity.InstrumentJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.InstrumentBorrowJpaEntity;
+import Dompoo.Hongpoong.domain.domain.Instrument;
+import Dompoo.Hongpoong.domain.domain.InstrumentBorrow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -32,14 +32,14 @@ public class InstrumentDetailResponse {
     
     private final List<InstrumentBorrowResponse> borrowHistory;
     
-    public static InstrumentDetailResponse from(InstrumentJpaEntity instrumentJpaEntity, List<InstrumentBorrowJpaEntity> instrumentBorrowJpaEntities) {
+    public static InstrumentDetailResponse from(Instrument instrument, List<InstrumentBorrow> instrumentBorrows) {
         return InstrumentDetailResponse.builder()
-                .instrumentId(instrumentJpaEntity.getId())
-                .name(instrumentJpaEntity.getName())
-                .type(instrumentJpaEntity.getType().korName)
-                .club(instrumentJpaEntity.getClub().korName)
-                .available(instrumentJpaEntity.getAvailable())
-                .borrowHistory(InstrumentBorrowResponse.fromList(instrumentBorrowJpaEntities))
+                .instrumentId(instrument.getId())
+                .name(instrument.getName())
+                .type(instrument.getType().korName)
+                .club(instrument.getClub().korName)
+                .available(instrument.getAvailable())
+                .borrowHistory(InstrumentBorrowResponse.fromList(instrumentBorrows))
                 .build();
     }
 }

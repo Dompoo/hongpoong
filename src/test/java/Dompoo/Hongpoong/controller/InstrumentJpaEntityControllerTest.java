@@ -203,7 +203,7 @@ class InstrumentJpaEntityControllerTest extends MyWebMvcTest {
     
     @Test
     @DisplayName("악기 반납하기")
-    void returnInstrument() throws Exception {
+    void withReturn() throws Exception {
         //given
 
         //expected

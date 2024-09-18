@@ -270,7 +270,7 @@ class InstrumentJpaEntityServiceTest {
 
     @Test
     @DisplayName("악기 반납하기")
-    void returnInstrument() {
+    void withReturn() {
         //given
         MemberJpaEntity me = memberJpaRepository.save(MemberJpaEntity.builder()
                 .name("창근")

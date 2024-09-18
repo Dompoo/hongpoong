@@ -18,7 +18,7 @@ public class InstrumentBorrow {
     private final Member member;
     private final Reservation reservation;
     
-    public InstrumentBorrow of(Instrument instrument, Member borrower, Reservation reservation, LocalDate now) {
+    public static InstrumentBorrow of(Instrument instrument, Member borrower, Reservation reservation, LocalDate now) {
         return InstrumentBorrow.builder()
                 .instrument(instrument)
                 .member(borrower)

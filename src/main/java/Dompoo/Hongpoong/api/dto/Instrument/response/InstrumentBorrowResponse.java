@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.Instrument.response;
 
-import Dompoo.Hongpoong.domain.jpaEntity.InstrumentBorrowJpaEntity;
+import Dompoo.Hongpoong.domain.domain.InstrumentBorrow;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,15 +24,15 @@ public class InstrumentBorrowResponse {
     @Schema(example = "2024-05-17")
     private final LocalDate borrowDate;
     
-    public static InstrumentBorrowResponse from(InstrumentBorrowJpaEntity instrumentBorrowJpaEntity) {
+    public static InstrumentBorrowResponse from(InstrumentBorrow instrumentBorrow) {
         return InstrumentBorrowResponse.builder()
-                .borrowerName(instrumentBorrowJpaEntity.getMemberJpaEntity().getName())
-                .borrowerNickname(instrumentBorrowJpaEntity.getMemberJpaEntity().getNickname())
-                .borrowDate(instrumentBorrowJpaEntity.getBorrowDate())
+                .borrowerName(instrumentBorrow.getMember().getName())
+                .borrowerNickname(instrumentBorrow.getMember().getNickname())
+                .borrowDate(instrumentBorrow.getBorrowDate())
                 .build();
     }
     
-    public static List<InstrumentBorrowResponse> fromList(List<InstrumentBorrowJpaEntity> instrumentBorrowJpaEntities) {
-        return instrumentBorrowJpaEntities.stream().map(InstrumentBorrowResponse::from).toList();
+    public static List<InstrumentBorrowResponse> fromList(List<InstrumentBorrow> instrumentBorrows) {
+        return instrumentBorrows.stream().map(InstrumentBorrowResponse::from).toList();
     }
 }

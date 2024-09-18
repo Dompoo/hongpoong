@@ -11,9 +11,9 @@ import java.util.Optional;
 
 public interface InstrumentBorrowJpaRepository extends JpaRepository<InstrumentBorrowJpaEntity, Long> {
 	
-	@Query("SELECT ib FROM InstrumentBorrowJpaEntity ib WHERE ib.instrument = :instrument")
+	@Query("SELECT ib FROM InstrumentBorrowJpaEntity ib WHERE ib.instrumentJpaEntity = :instrument")
 	List<InstrumentBorrowJpaEntity> findAllByInstrument(@Param("instrument") InstrumentJpaEntity instrumentJpaEntity);
 	
-	@Query("SELECT ib.instrument FROM InstrumentBorrowJpaEntity ib WHERE ib.member.id = :memberId AND ib.instrument.id = :instrumentId")
+	@Query("SELECT ib.instrumentJpaEntity FROM InstrumentBorrowJpaEntity ib WHERE ib.memberJpaEntity.id = :memberId AND ib.instrumentJpaEntity.id = :instrumentId")
 	Optional<InstrumentJpaEntity> findByMemberIdAndInstrumentId(Long memberId, Long instrumentId);
 }

@@ -5,10 +5,11 @@ import Dompoo.Hongpoong.domain.domain.ReservationEndImage;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface ReservationRepository {
     
-    Reservation findById(Long reservationId);
+    Optional<Reservation> findById(Long reservationId);
     
     Reservation findByIdJoinFetchCreator(Long reservationId);
     

@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.info.response;
 
-import Dompoo.Hongpoong.domain.jpaEntity.InfoJpaEntity;
+import Dompoo.Hongpoong.domain.domain.Info;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,12 +26,12 @@ public class InfoDetailResponse {
     @Schema(example = "2023-09-09T12:34:56")
     private final LocalDateTime date;
     
-    public static InfoDetailResponse from (InfoJpaEntity infoJpaEntity) {
+    public static InfoDetailResponse from (Info info) {
         return InfoDetailResponse.builder()
-                .infoId(infoJpaEntity.getId())
-                .title(infoJpaEntity.getTitle())
-                .content(infoJpaEntity.getContent())
-                .date(infoJpaEntity.getDate())
+                .infoId(info.getId())
+                .title(info.getTitle())
+                .content(info.getContent())
+                .date(info.getDate())
                 .build();
     }
 }

@@ -8,10 +8,10 @@ import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
 import Dompoo.Hongpoong.common.exception.impl.EditFailException;
 import Dompoo.Hongpoong.common.exception.impl.InfoNotFound;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.domain.jpaEntity.InfoJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.InfoJpaRepository;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.domain.Info;
+import Dompoo.Hongpoong.domain.domain.Member;
+import Dompoo.Hongpoong.domain.persistence.repository.InfoRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,70 +23,72 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InfoService {
     
-    private final InfoJpaRepository infoJpaRepository;
-    private final MemberJpaRepository memberJpaRepository;
+    private final InfoRepository infoRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public void createInfo(Long memberId, InfoCreateRequest request, LocalDateTime now) {
-        MemberJpaEntity memberJpaEntity = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
-        InfoJpaEntity infoJpaEntity = request.toInfo(memberJpaEntity, now);
+        Info info = request.toInfo(member, now);
         
-        infoJpaRepository.save(infoJpaEntity);
+        infoRepository.save(info);
     }
 
     @Transactional(readOnly = true)
     public List<InfoResponse> findAllInfo() {
-        return infoJpaRepository.findAll().stream()
+        return infoRepository.findAll().stream()
                 .map(InfoResponse::from)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public InfoDetailResponse findInfoDetail(Long infoId) {
-        InfoJpaEntity infoJpaEntity = infoJpaRepository.findById(infoId)
+        Info info = infoRepository.findById(infoId)
                 .orElseThrow(InfoNotFound::new);
 
-        return InfoDetailResponse.from(infoJpaEntity);
+        return InfoDetailResponse.from(info);
     }
     
     @Transactional
     public void editInfo(Long memberId, Long infoId, InfoEditDto dto) {
-        InfoJpaEntity infoJpaEntity = infoJpaRepository.findByIdFetchJoinMember(infoId).orElseThrow(InfoNotFound::new);
-        MemberJpaEntity memberJpaEntity = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Info info = infoRepository.findByIdFetchJoinMember(infoId).orElseThrow(InfoNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
-        if (!infoJpaEntity.getMemberJpaEntity().getClub().equals(memberJpaEntity.getClub())) {
+        if (!info.getMember().getClub().equals(member.getClub())) {
             throw new EditFailException();
         }
         
-        infoJpaEntity.edit(dto);
+        Info editedInfo = info.withEdited(dto.getTitle(), dto.getContent());
+        infoRepository.save(editedInfo);
     }
     
     @Transactional
     public void deleteInfo(Long memberId, Long infoId) {
-        InfoJpaEntity infoJpaEntity = infoJpaRepository.findByIdFetchJoinMember(infoId).orElseThrow(InfoNotFound::new);
-        MemberJpaEntity memberJpaEntity = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Info info = infoRepository.findByIdFetchJoinMember(infoId).orElseThrow(InfoNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
-        if (!infoJpaEntity.getMemberJpaEntity().getClub().equals(memberJpaEntity.getClub())) {
+        if (!info.getMember().getClub().equals(member.getClub())) {
             throw new DeleteFailException();
         }
         
-        infoJpaRepository.delete(infoJpaEntity);
+        infoRepository.delete(info);
     }
     
     @Transactional
     public void editInfoByAdmin(Long infoId, InfoEditDto dto) {
-        InfoJpaEntity infoJpaEntity = infoJpaRepository.findById(infoId)
+        Info info = infoRepository.findById(infoId)
                 .orElseThrow(InfoNotFound::new);
         
-        infoJpaEntity.edit(dto);
+        info.withEdited(dto.getTitle(), dto.getContent());
+        
+        infoRepository.save(info);
     }
     
     @Transactional
     public void deleteInfoByAdmin(Long infoId) {
-        InfoJpaEntity infoJpaEntity = infoJpaRepository.findById(infoId)
-                .orElseThrow(InfoNotFound::new);
+        Info info = infoRepository.findById(infoId).orElseThrow(InfoNotFound::new);
 
-        infoJpaRepository.delete(infoJpaEntity);
+        infoRepository.delete(info);
     }
 }

@@ -65,11 +65,6 @@ public class InstrumentRepositoryImpl implements InstrumentRepository {
 	}
 	
 	@Override
-	public void update(Instrument instrument) {
-		instrumentJpaRepository.update(InstrumentJpaEntity.of(instrument));
-	}
-	
-	@Override
 	public void delete(Instrument instrument) {
 		instrumentJpaRepository.delete(InstrumentJpaEntity.of(instrument));
 	}

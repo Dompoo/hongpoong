@@ -3,7 +3,6 @@ package Dompoo.Hongpoong.domain.persistence.jpaRepository;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.jpaEntity.InstrumentJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,12 +11,12 @@ import java.util.List;
 public interface InstrumentJpaRepository extends JpaRepository<InstrumentJpaEntity, Long> {
 	
 	@Query("SELECT i FROM InstrumentJpaEntity i WHERE i.club != :club")
-	List<InstrumentJpaEntity> findAllByClubNotEquals(@Param("club") Club club);
+	List<InstrumentJpaEntity> findAllByClubNotEquals(
+			@Param("club") Club club
+	);
 	
 	@Query("SELECT i FROM InstrumentJpaEntity i WHERE i.club = :club")
-	List<InstrumentJpaEntity> findAllByClubEquals(@Param("club") Club club);
-	
-	@Modifying
-	@Query("UPDATE InstrumentJpaEntity i SET i = :of WHERE i.id = :id")
-	void update(InstrumentJpaEntity of);
+	List<InstrumentJpaEntity> findAllByClubEquals(
+			@Param("club") Club club
+	);
 }

@@ -6,20 +6,27 @@ import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface MemberInChatRoomJpaRepository extends JpaRepository<MemberInChatRoomJpaEntity, Long> {
 	
 	@Query("select m from MemberInChatRoomJpaEntity m where m.memberJpaEntity = :member")
-	List<MemberInChatRoomJpaEntity> findAllByMember(MemberJpaEntity member);
+	List<MemberInChatRoomJpaEntity> findAllByMember(
+			@Param("member") MemberJpaEntity member
+	);
 	
-//	void deleteByChatRoom(ChatRoomJpaEntity chatRoomJpaEntity);
-	
-	@Query("select count(m) > 0 from MemberInChatRoomJpaEntity m where m.memberJpaEntity = :member and m.chatRoomJpaEntity = :chatroom")
-	boolean existsByMemberAndChatRoom(MemberJpaEntity member, ChatRoomJpaEntity chatroom);
+	@Query("select count(m) > 0 from MemberInChatRoomJpaEntity m where m.memberJpaEntity = :member and m.chatRoomJpaEntity = :chatRoom")
+	boolean existsByMemberAndChatRoom(
+			@Param("member") MemberJpaEntity member,
+			@Param("chatRoom") ChatRoomJpaEntity chatRoom
+	);
 	
 	@Modifying
 	@Query("delete from MemberInChatRoomJpaEntity m where m.memberJpaEntity = :member and m.chatRoomJpaEntity = :chatRoom")
-	void deleteByMemberAndChatRoom(MemberJpaEntity member, ChatRoomJpaEntity chatRoom);
+	void deleteByMemberAndChatRoom(
+			@Param("member") MemberJpaEntity member,
+			@Param("chatRoom") ChatRoomJpaEntity chatRoom
+	);
 }

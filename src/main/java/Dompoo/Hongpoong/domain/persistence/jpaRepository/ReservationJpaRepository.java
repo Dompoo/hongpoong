@@ -12,8 +12,11 @@ import java.util.Optional;
 public interface ReservationJpaRepository extends JpaRepository<ReservationJpaEntity, Long> {
     
     @Query("SELECT r FROM ReservationJpaEntity r WHERE r.id = :reservationId")
-    Optional<ReservationJpaEntity> findByIdJoinFetchCreator(@Param("reservationId") Long reservationId);
+    Optional<ReservationJpaEntity> findByIdJoinFetchCreator(
+            @Param("reservationId") Long reservationId
+    );
     
     List<ReservationJpaEntity> findAllByDate(LocalDate date);
+    
     List<ReservationJpaEntity> findAllByDateBetween(LocalDate startDate, LocalDate endDate);
 }

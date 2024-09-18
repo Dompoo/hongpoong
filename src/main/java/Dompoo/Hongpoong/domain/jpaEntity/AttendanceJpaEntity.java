@@ -21,17 +21,17 @@ public class AttendanceJpaEntity {
 	private AttendanceStatus attendanceStatus;
 	
 	@ManyToOne @JoinColumn(name = "reservation_id")
-	private ReservationJpaEntity reservation;
+	private ReservationJpaEntity reservationJpaEntity;
 	
 	@ManyToOne @JoinColumn(name = "member_id")
-	private MemberJpaEntity member;
+	private MemberJpaEntity memberJpaEntity;
 	
 	public Attendance toDomain() {
 		return Attendance.builder()
 				.id(this.id)
 				.attendanceStatus(this.attendanceStatus)
-				.reservation(this.reservation.toDomain())
-				.member(this.member.toDomain())
+				.reservation(this.reservationJpaEntity.toDomain())
+				.member(this.memberJpaEntity.toDomain())
 				.build();
 	}
 	
@@ -39,8 +39,8 @@ public class AttendanceJpaEntity {
 		return AttendanceJpaEntity.builder()
 				.id(attendance.getId())
 				.attendanceStatus(attendance.getAttendanceStatus())
-				.reservation(ReservationJpaEntity.of(attendance.getReservation()))
-				.member(MemberJpaEntity.of(attendance.getMember()))
+				.reservationJpaEntity(ReservationJpaEntity.of(attendance.getReservation()))
+				.memberJpaEntity(MemberJpaEntity.of(attendance.getMember()))
 				.build();
 	}
 	

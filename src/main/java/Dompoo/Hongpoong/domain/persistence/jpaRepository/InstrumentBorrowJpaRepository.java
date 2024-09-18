@@ -12,8 +12,13 @@ import java.util.Optional;
 public interface InstrumentBorrowJpaRepository extends JpaRepository<InstrumentBorrowJpaEntity, Long> {
 	
 	@Query("SELECT ib FROM InstrumentBorrowJpaEntity ib WHERE ib.instrumentJpaEntity = :instrument")
-	List<InstrumentBorrowJpaEntity> findAllByInstrument(@Param("instrument") InstrumentJpaEntity instrumentJpaEntity);
+	List<InstrumentBorrowJpaEntity> findAllByInstrument(
+			@Param("instrument") InstrumentJpaEntity instrument
+	);
 	
 	@Query("SELECT ib.instrumentJpaEntity FROM InstrumentBorrowJpaEntity ib WHERE ib.memberJpaEntity.id = :memberId AND ib.instrumentJpaEntity.id = :instrumentId")
-	Optional<InstrumentJpaEntity> findByMemberIdAndInstrumentId(Long memberId, Long instrumentId);
+	Optional<InstrumentJpaEntity> findByMemberIdAndInstrumentId(
+			@Param("memberId") Long memberId,
+			@Param("instrumentId") Long instrumentId
+	);
 }

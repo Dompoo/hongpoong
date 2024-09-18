@@ -61,7 +61,7 @@ public class InstrumentService {
         // 악기 대여가 불가능한 상태라면 throw
         if (!instrument.getAvailable()) throw new InstrumentNotAvailable();
         
-        instrumentRepository.update(instrument.withBorrow());
+        instrumentRepository.save(instrument.withBorrow());
         instrumentRepository.saveBorrow(InstrumentBorrow.of(instrument, member, reservation, now));
     }
 
@@ -70,7 +70,7 @@ public class InstrumentService {
         Instrument instrument = instrumentRepository.findByMemberIdAndInstrumentId(memberId, instrumentId)
                 .orElseThrow(InstrumentNotFound::new);
 
-        instrumentRepository.update(instrument.withReturn());
+        instrumentRepository.save(instrument.withReturn());
     }
 
     @Transactional(readOnly = true)
@@ -88,7 +88,7 @@ public class InstrumentService {
         if (!instrument.getClub().equals(club)) throw new EditFailException();
         
         Instrument editedInstrument = instrument.withEdited(dto.getName(), dto.getType(), dto.getAvailable(), dto.getImageUrl());
-        instrumentRepository.update(editedInstrument);
+        instrumentRepository.save(editedInstrument);
     }
 
     @Transactional
@@ -105,7 +105,7 @@ public class InstrumentService {
         Instrument instrument = instrumentRepository.findById(instrumentId).orElseThrow(InstrumentNotFound::new);
         
         Instrument editedInstrument = instrument.withEdited(dto.getName(), dto.getType(), dto.getAvailable(), dto.getImageUrl());
-        instrumentRepository.update(editedInstrument);
+        instrumentRepository.save(editedInstrument);
     }
     
     @Transactional

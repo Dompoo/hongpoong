@@ -23,7 +23,5 @@ public interface InstrumentRepository {
 	
 	Optional<Instrument> findByMemberIdAndInstrumentId(Long memberId, Long instrumentId);
 	
-	void update(Instrument instrument);
-	
 	void delete(Instrument instrument);
 }

@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.reservation.request;
 
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationEndImageJpaEntity;
+import Dompoo.Hongpoong.domain.domain.Reservation;
+import Dompoo.Hongpoong.domain.domain.ReservationEndImage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -18,10 +18,10 @@ public class ReservationEndRequest {
     @NotNull(message = "연습실 사진은 필수입니다.")
     private final List<String> endImages;
     
-    public List<ReservationEndImageJpaEntity> toReservationEndImages(ReservationJpaEntity reservationJpaEntity) {
-        return endImages.stream().map(image -> ReservationEndImageJpaEntity.builder()
+    public List<ReservationEndImage> toReservationEndImages(Reservation reservation) {
+        return endImages.stream().map(image -> ReservationEndImage.builder()
                         .imageUrl(image)
-                        .reservationJpaEntity(reservationJpaEntity)
+                        .reservation(reservation)
                         .build())
                 .toList();
     }

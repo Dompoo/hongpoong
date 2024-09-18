@@ -23,6 +23,19 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 	private final ReservationEndImageJpaRepository reservationEndImageJpaRepository;
 	
 	@Override
+	public Reservation save(Reservation reservation) {
+		return reservationJpaRepository.save(ReservationJpaEntity.of(reservation))
+				.toDomain();
+	}
+	
+	@Override
+	public void saveAllReservationEndImage(List<ReservationEndImage> reservationEndImages) {
+		reservationEndImageJpaRepository.saveAll(reservationEndImages.stream()
+				.map(ReservationEndImageJpaEntity::of)
+				.toList());
+	}
+	
+	@Override
 	public Optional<Reservation> findById(Long reservationId) {
 		return reservationJpaRepository.findById(reservationId)
 				.map(ReservationJpaEntity::toDomain);
@@ -54,5 +67,10 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 		return reservationEndImageJpaRepository.findAllByReservation(ReservationJpaEntity.of(reservation)).stream()
 				.map(ReservationEndImageJpaEntity::toDomain)
 				.toList();
+	}
+	
+	@Override
+	public void delete(Reservation reservation) {
+		reservationJpaRepository.delete(ReservationJpaEntity.of(reservation));
 	}
 }

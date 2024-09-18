@@ -1,9 +1,9 @@
 package Dompoo.Hongpoong.api.dto.reservation.response;
 
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
-import Dompoo.Hongpoong.domain.jpaEntity.AttendanceJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationEndImageJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
+import Dompoo.Hongpoong.domain.domain.Attendance;
+import Dompoo.Hongpoong.domain.domain.Reservation;
+import Dompoo.Hongpoong.domain.domain.ReservationEndImage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -49,18 +49,18 @@ public class ReservationEndResponse {
     @Schema(example = "[image.com/1, image.com/2]")
     private final List<String> images;
     
-    public static ReservationEndResponse of(ReservationJpaEntity reservationJpaEntity, List<AttendanceJpaEntity> participates, List<ReservationEndImageJpaEntity> reservationEndImageJpaEntities) {
+    public static ReservationEndResponse of(Reservation reservation, List<Attendance> participates, List<ReservationEndImage> reservationEndImages) {
         return ReservationEndResponse.builder()
-                .reservationId(reservationJpaEntity.getId())
-                .creatorName(reservationJpaEntity.getCreator().getName())
-                .email(reservationJpaEntity.getCreator().getEmail())
-                .date(reservationJpaEntity.getDate())
-                .startTime(reservationJpaEntity.getStartTime().localTime)
-                .endTime(reservationJpaEntity.getEndTime().localTime)
-                .message(reservationJpaEntity.getMessage())
-                .lastmodified(reservationJpaEntity.getLastModified())
-                .participators(MemberResponse.fromList(participates.stream().map(AttendanceJpaEntity::getMember).toList()))
-                .images(reservationEndImageJpaEntities.stream().map(ReservationEndImageJpaEntity::getImageUrl).toList())
+                .reservationId(reservation.getId())
+                .creatorName(reservation.getCreator().getName())
+                .email(reservation.getCreator().getEmail())
+                .date(reservation.getDate())
+                .startTime(reservation.getStartTime().localTime)
+                .endTime(reservation.getEndTime().localTime)
+                .message(reservation.getMessage())
+                .lastmodified(reservation.getLastModified())
+                .participators(MemberResponse.fromList(participates.stream().map(Attendance::getMember).toList()))
+                .images(reservationEndImages.stream().map(ReservationEndImage::getImageUrl).toList())
                 .build();
     }
 }

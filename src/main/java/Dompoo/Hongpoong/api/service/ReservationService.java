@@ -7,15 +7,14 @@ import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.exception.impl.*;
-import Dompoo.Hongpoong.domain.jpaEntity.AttendanceJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.ReservationEndImageJpaEntity;
+import Dompoo.Hongpoong.domain.domain.Attendance;
+import Dompoo.Hongpoong.domain.domain.Member;
+import Dompoo.Hongpoong.domain.domain.Reservation;
+import Dompoo.Hongpoong.domain.domain.ReservationEndImage;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.AttendanceJpaRepository;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.ReservationEndImageJpaRepository;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.ReservationJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.AttendanceRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.MemberRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.ReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,15 +26,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReservationService {
 
-    private final ReservationJpaRepository reservationJpaRepository;
-    private final AttendanceJpaRepository attendanceJpaRepository;
-    private final ReservationEndImageJpaRepository reservationEndImageJpaRepository;
-    private final MemberJpaRepository memberJpaRepository;
+    private final ReservationRepository reservationRepository;
+    private final AttendanceRepository attendanceRepository;
+    private final MemberRepository memberJpaRepository;
     
     @Transactional
     public ReservationDetailResponse createReservation(Long memberId, ReservationCreateRequest request, LocalDateTime now) {
-        MemberJpaEntity memberJpaEntity = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
-        List<MemberJpaEntity> participaters = memberJpaRepository.findAllByIdIn(request.getParticipaterIds());
+        Member creator = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        List<Member> participaters = memberJpaRepository.findAllByIdIn(request.getParticipaterIds());
         
         ReservationTime.validateStartTimeAndEndTime(request.getStartTime(), request.getEndTime());
         
@@ -43,151 +41,154 @@ public class ReservationService {
             throw new ReservationOverlapException();
         }
         
-        if (!participaters.contains(memberJpaEntity)) participaters.add(memberJpaEntity);
+        if (!participaters.contains(creator)) participaters.add(creator);
         
-        ReservationJpaEntity savedReservationJpaEntity = reservationJpaRepository.save(request.toReservation(memberJpaEntity, now));
-        attendanceJpaRepository.saveAll(AttendanceJpaEntity.of(savedReservationJpaEntity, participaters));
+        Reservation savedReservation = reservationRepository.save(request.toReservation(creator, now));
+        attendanceRepository.saveAll(Attendance.of(savedReservation, participaters));
         
-        return ReservationDetailResponse.of(savedReservationJpaEntity, participaters);
+        return ReservationDetailResponse.of(savedReservation, participaters);
     }
     
     @Transactional(readOnly = true)
     public List<ReservationResponse> findAllReservationOfYearAndMonth(Integer year, Integer month) {
         YearMonth yearMonth = YearMonth.of(year, month);
         
-        List<ReservationJpaEntity> reservationJpaEntities = reservationJpaRepository.findAllByDateBetween(yearMonth.atDay(1), yearMonth.atEndOfMonth());
+        List<Reservation> reservations = reservationRepository.findAllByDateBetween(yearMonth.atDay(1), yearMonth.atEndOfMonth());
         
-        return ReservationResponse.fromList(reservationJpaEntities);
+        return ReservationResponse.fromList(reservations);
     }
     
     @Transactional(readOnly = true)
     public List<ReservationResponse> findAllReservationOfDate(LocalDate date) {
-        List<ReservationJpaEntity> reservationJpaEntities = reservationJpaRepository.findAllByDate(date);
+        List<Reservation> reservations = reservationRepository.findAllByDate(date);
         
-        return ReservationResponse.fromList(reservationJpaEntities);
+        return ReservationResponse.fromList(reservations);
     }
     
     @Transactional(readOnly = true)
     public List<ReservationResponse> findAllTodoReservationOfToday(Long memberId, LocalDate localDate) {
-        List<AttendanceJpaEntity> attendanceJpaEntities = attendanceJpaRepository.findByMemberIdAndReservationDate(memberId, localDate);
+        List<Attendance> attendances = attendanceRepository.findByMemberIdAndReservationDate(memberId, localDate);
         
-        return ReservationResponse.fromParticipateList(attendanceJpaEntities);
+        return ReservationResponse.fromAttendances(attendances);
     }
     
     @Transactional(readOnly = true)
     public ReservationDetailResponse findReservationDetail(Long reservationId) {
-        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
-        List<MemberJpaEntity> participators = attendanceJpaRepository.findAllMemberByReservation(reservationJpaEntity);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        List<Member> participators = attendanceRepository.findAllMemberByReservation(reservation);
         
-        return ReservationDetailResponse.of(reservationJpaEntity, participators);
+        return ReservationDetailResponse.of(reservation, participators);
     }
     
     @Transactional
     public void extendReservationTime(Long memberId, Long reservationId, LocalTime now) {
-        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
-        if (!reservationJpaEntity.getCreator().getId().equals(memberId)) {
+        if (!reservation.getCreator().getId().equals(memberId)) {
             throw new EditFailException();
         }
         
-        long minutes = Duration.between(now, reservationJpaEntity.getEndTime().localTime).toMinutes();
+        long minutes = Duration.between(now, reservation.getEndTime().localTime).toMinutes();
         if (0 > minutes || minutes > 30) { // 연습이 끝난 후거나 아직 30분 전이 되지 않았을 경우
             throw new TimeExtendNotAvailableException();
         }
         
-        reservationJpaEntity.extendEndTime();
+        Reservation editedReservation = reservation.withExtendEndTime();
+        reservationRepository.save(editedReservation);
     }
     
     @Transactional
     public void endReservation(Long memberId, Long reservationId, ReservationEndRequest request) {
-        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
-        if (!reservationJpaEntity.getCreator().getId().equals(memberId)) {
+        if (!reservation.getCreator().getId().equals(memberId)) {
             throw new EditFailException();
         }
         
-        reservationEndImageJpaRepository.saveAll(request.toReservationEndImages(reservationJpaEntity));
+        reservationRepository.saveAllReservationEndImage(request.toReservationEndImages(reservation));
     }
     
     @Transactional(readOnly = true)
     public ReservationEndResponse findReservationEndDetail(Long reservationId) {
-        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
-        List<AttendanceJpaEntity> participates = attendanceJpaRepository.findAllByReservation(reservationJpaEntity);
+        List<Attendance> participates = attendanceRepository.findAllByReservation(reservation);
         
-        List<ReservationEndImageJpaEntity> images = reservationEndImageJpaRepository.findAllByReservation(reservationJpaEntity);
+        List<ReservationEndImage> images = reservationRepository.findAllEndImageByReservation(reservation);
         
-        return ReservationEndResponse.of(reservationJpaEntity, participates, images);
+        return ReservationEndResponse.of(reservation, participates, images);
     }
     
     @Transactional
     public ReservationDetailResponse editReservation(Long memberId, Long reservationId, ReservationEditDto dto, LocalDateTime now) {
-        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
-        if (!reservationJpaEntity.getCreator().getId().equals(memberId)) {
+        if (!reservation.getCreator().getId().equals(memberId)) {
             throw new EditFailException();
         }
         
         ReservationTime.validateStartTimeAndEndTime(dto.getStartTime(), dto.getEndTime());
         
-        updateAddedParticipators(dto, reservationJpaEntity);
-        updateDeletedParticipators(dto, reservationJpaEntity);
-        reservationJpaEntity.edit(dto, now);
+        updateAddedParticipators(dto, reservation);
+        updateDeletedParticipators(dto, reservation);
+        Reservation editedReservation = reservation.withEdited(dto.getDate(), dto.getStartTime(), dto.getEndTime(), dto.getMessage(), now);
+        reservationRepository.save(editedReservation);
         
-        List<MemberJpaEntity> memberJpaEntities = attendanceJpaRepository.findAllMemberByReservation(reservationJpaEntity);
+        List<Member> members = attendanceRepository.findAllMemberByReservation(reservation);
         
-        return ReservationDetailResponse.of(reservationJpaEntity, memberJpaEntities);
+        return ReservationDetailResponse.of(reservation, members);
     }
     
     @Transactional
     public void deleteReservation(Long memberId, Long reservationId) {
-        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
 
-        if (!reservationJpaEntity.getCreator().getId().equals(memberId)) {
+        if (!reservation.getCreator().getId().equals(memberId)) {
             throw new DeleteFailException();
         }
         
-        attendanceJpaRepository.deleteAllByReservation(reservationJpaEntity);
-        reservationJpaRepository.delete(reservationJpaEntity);
+        attendanceRepository.deleteAllByReservation(reservation);
+        reservationRepository.delete(reservation);
     }
     
     @Transactional
     public void editReservationByAdmin(Long reservationId, ReservationEditDto dto, LocalDateTime now) {
-        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
-
-        reservationJpaEntity.edit(dto, now);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        
+        Reservation editedReservation = reservation.withEdited(dto.getDate(), dto.getStartTime(), dto.getEndTime(), dto.getMessage(), now);
+        reservationRepository.save(editedReservation);
     }
     
     @Transactional
     public void deleteReservationByAdmin(Long reservationId) {
-        ReservationJpaEntity reservationJpaEntity = reservationJpaRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         
-        attendanceJpaRepository.deleteAllByReservation(reservationJpaEntity);
-        reservationJpaRepository.delete(reservationJpaEntity);
+        attendanceRepository.deleteAllByReservation(reservation);
+        reservationRepository.delete(reservation);
     }
     
     private boolean isOverlapReservationExist(ReservationCreateRequest request) {
-        List<ReservationJpaEntity> reservationJpaEntities = reservationJpaRepository.findAllByDate(request.getDate());
+        List<Reservation> reservations = reservationRepository.findAllByDate(request.getDate());
         
-        for (ReservationJpaEntity reservationJpaEntity : reservationJpaEntities) {
-            if (ReservationTime.isOverlap(reservationJpaEntity.getStartTime(), reservationJpaEntity.getEndTime(), request.getStartTime(), request.getEndTime()))
+        for (Reservation reservation : reservations) {
+            if (ReservationTime.isOverlap(reservation.getStartTime(), reservation.getEndTime(), request.getStartTime(), request.getEndTime()))
                 return true;
         }
         
         return false;
     }
     
-    private void updateAddedParticipators(ReservationEditDto dto, ReservationJpaEntity reservationJpaEntity) {
+    private void updateAddedParticipators(ReservationEditDto dto, Reservation reservation) {
         if (dto.getAddedParticipatorIds() != null) {
-            List<MemberJpaEntity> addedParticipators = memberJpaRepository.findAllByIdIn(dto.getAddedParticipatorIds());
-            attendanceJpaRepository.saveAll(AttendanceJpaEntity.of(reservationJpaEntity, addedParticipators));
+            List<Member> addedParticipators = memberJpaRepository.findAllByIdIn(dto.getAddedParticipatorIds());
+            attendanceRepository.saveAll(Attendance.of(reservation, addedParticipators));
         }
     }
     
-    private void updateDeletedParticipators(ReservationEditDto dto, ReservationJpaEntity reservationJpaEntity) {
+    private void updateDeletedParticipators(ReservationEditDto dto, Reservation reservation) {
         if (dto.getRemovedParticipatorIds() != null) {
-            List<MemberJpaEntity> removedParticipators = memberJpaRepository.findAllByIdIn(dto.getRemovedParticipatorIds());
-            attendanceJpaRepository.deleteAllByReservationAndMemberIn(reservationJpaEntity, removedParticipators);
+            List<Member> removedParticipators = memberJpaRepository.findAllByIdIn(dto.getRemovedParticipatorIds());
+            attendanceRepository.deleteAllByReservationAndMemberIn(reservation, removedParticipators);
         }
     }
 }

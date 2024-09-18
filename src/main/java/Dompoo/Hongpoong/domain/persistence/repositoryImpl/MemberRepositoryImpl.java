@@ -83,4 +83,16 @@ public class MemberRepositoryImpl implements MemberRepository {
 	public void deleteMemberInChatRoomByMemberAndChatRoom(Member member, ChatRoom chatroom) {
 		memberInChatRoomJpaRepository.deleteByMemberAndChatRoom(MemberJpaEntity.of(member), ChatRoomJpaEntity.of(chatroom));
 	}
+	
+	@Override
+	public void delete(Member member) {
+		memberJpaRepository.delete(MemberJpaEntity.of(member));
+	}
+	
+	@Override
+	public List<Member> findAll() {
+		return memberJpaRepository.findAll().stream()
+				.map(MemberJpaEntity::toDomain)
+				.toList();
+	}
 }

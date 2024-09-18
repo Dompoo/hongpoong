@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.member.response;
 
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
+import Dompoo.Hongpoong.domain.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -39,17 +39,17 @@ public class MemberStatusResponse {
     @Schema(example = "true")
     private final Boolean push;
     
-    public static MemberStatusResponse from(MemberJpaEntity memberJpaEntity) {
+    public static MemberStatusResponse from(Member member) {
         return MemberStatusResponse.builder()
-                .memberId(memberJpaEntity.getId())
-                .email(memberJpaEntity.getEmail())
-                .name(memberJpaEntity.getName())
-                .nickname(memberJpaEntity.getNickname())
-                .club(memberJpaEntity.getClub().korName)
-                .enrollmentNumber(memberJpaEntity.getEnrollmentNumber())
-                .role(memberJpaEntity.getRole().korName)
-                .profileImageUrl(memberJpaEntity.getProfileImageUrl())
-                .push(memberJpaEntity.getPushAlarm())
+                .memberId(member.getId())
+                .email(member.getEmail())
+                .name(member.getName())
+                .nickname(member.getNickname())
+                .club(member.getClub().korName)
+                .enrollmentNumber(member.getEnrollmentNumber())
+                .role(member.getRole().korName)
+                .profileImageUrl(member.getProfileImageUrl())
+                .push(member.getPushAlarm())
                 .build();
     }
 }

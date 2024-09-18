@@ -8,9 +8,9 @@ import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
 import Dompoo.Hongpoong.common.exception.impl.EditFailException;
 import Dompoo.Hongpoong.common.exception.impl.EditRoleToAdminException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
+import Dompoo.Hongpoong.domain.domain.Member;
 import Dompoo.Hongpoong.domain.enums.Role;
-import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
+import Dompoo.Hongpoong.domain.persistence.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,40 +22,48 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberJpaRepository memberJpaRepository;
+    private final MemberRepository memberRepository;
     private final PasswordEncoder encoder;
-
+    
+    @Transactional(readOnly = true)
+    public MemberStatusResponse findMyMemberDetail(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        
+        return MemberStatusResponse.from(member);
+    }
+    
     @Transactional
     public void editMyMember(Long memberId, MemberEditDto dto, String password) {
-        MemberJpaEntity memberJpaEntity = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
         
-        if (!encoder.matches(password, memberJpaEntity.getPassword())) {
+        if (!encoder.matches(password, member.getPassword())) {
             throw new EditFailException();
         }
         
-        memberJpaEntity.edit(dto, encoder);
+        Member editedMember = member.withEdited(dto.getName(), dto.getNickname(), dto.getClub(), dto.getEnrollmentNumber(), dto.getProfileImageUrl(), dto.getNewPassword(), encoder);
+        memberRepository.save(editedMember);
     }
-
+    
     @Transactional
     public void deleteMemberByAdmin(Long memberId) {
-        MemberJpaEntity memberJpaEntity = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
 
-        memberJpaRepository.delete(memberJpaEntity);
+        memberRepository.delete(member);
     }
-
+    
     @Transactional(readOnly = true)
     public List<MemberResponse> findAllMember() {
-        List<MemberJpaEntity> memberJpaEntities = memberJpaRepository.findAll();
+        List<Member> members = memberRepository.findAll();
         
-        return MemberResponse.fromList(memberJpaEntities);
+        return MemberResponse.fromList(members);
     }
     
     @Transactional
     public void editMemberAuth(Long myMemberId, Long memberId, MemberRoleEditDto dto) {
-        MemberJpaEntity targetMemberJpaEntity = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
-        MemberJpaEntity me = memberJpaRepository.findById(myMemberId).orElseThrow(MemberNotFound::new);
+        Member target = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Member me = memberRepository.findById(myMemberId).orElseThrow(MemberNotFound::new);
         
-        if (me.getClub() != targetMemberJpaEntity.getClub()) {
+        if (me.getClub() != target.getClub()) {
             throw new EditFailException();
         }
         
@@ -63,32 +71,27 @@ public class MemberService {
             throw new EditRoleToAdminException();
         }
         
-        targetMemberJpaEntity.editRole(dto);
+        Member editedMember = target.withEditedRole(dto.getRole());
+        memberRepository.save(editedMember);
     }
     
     @Transactional
     public void deleteMember(Long myMemberId, Long memberId) {
-        MemberJpaEntity targetMemberJpaEntity = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
-        MemberJpaEntity me = memberJpaRepository.findById(myMemberId).orElseThrow(MemberNotFound::new);
+        Member target = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        Member me = memberRepository.findById(myMemberId).orElseThrow(MemberNotFound::new);
         
-        if (me.getClub() != targetMemberJpaEntity.getClub()) {
+        if (me.getClub() != target.getClub()) {
             throw new DeleteFailException();
         }
         
-        memberJpaRepository.delete(targetMemberJpaEntity);
+        memberRepository.delete(target);
     }
     
     @Transactional
     public void editMemberAuthByAdmin(Long id, MemberRoleEditDto dto) {
-        MemberJpaEntity memberJpaEntity = memberJpaRepository.findById(id).orElseThrow(MemberNotFound::new);
-
-        memberJpaEntity.editRole(dto);
-    }
-    
-    @Transactional(readOnly = true)
-    public MemberStatusResponse findMyMemberDetail(Long memberId) {
-        MemberJpaEntity memberJpaEntity = memberJpaRepository.findById(memberId).orElseThrow(MemberNotFound::new);
-
-        return MemberStatusResponse.from(memberJpaEntity);
+        Member member = memberRepository.findById(id).orElseThrow(MemberNotFound::new);
+        
+        Member editedMember = member.withEditedRole(dto.getRole());
+        memberRepository.save(editedMember);
     }
 }

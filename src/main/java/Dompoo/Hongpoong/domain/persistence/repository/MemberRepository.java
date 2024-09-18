@@ -29,4 +29,8 @@ public interface MemberRepository {
     List<MemberInChatRoom> findAllMemberInChatRoomByMember(Member member);
     
     void deleteMemberInChatRoomByMemberAndChatRoom(Member member, ChatRoom chatroom);
+    
+    void delete(Member member);
+    
+    List<Member> findAll();
 }

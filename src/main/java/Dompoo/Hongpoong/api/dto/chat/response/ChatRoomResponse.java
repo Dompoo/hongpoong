@@ -1,7 +1,7 @@
 package Dompoo.Hongpoong.api.dto.chat.response;
 
-import Dompoo.Hongpoong.domain.jpaEntity.ChatRoomJpaEntity;
-import Dompoo.Hongpoong.domain.jpaEntity.MemberInChatRoomJpaEntity;
+import Dompoo.Hongpoong.domain.domain.ChatRoom;
+import Dompoo.Hongpoong.domain.domain.MemberInChatRoom;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,17 +24,17 @@ public class ChatRoomResponse {
     @Schema(example = "10")
     private final Integer memberCount;
     
-    public static ChatRoomResponse of(ChatRoomJpaEntity chatRoomJpaEntity) {
+    public static ChatRoomResponse of(ChatRoom chatRoom) {
         return ChatRoomResponse.builder()
-                .chatroomId(chatRoomJpaEntity.getId())
-                .roomName(chatRoomJpaEntity.getRoomName())
-                .memberCount(chatRoomJpaEntity.getMemberCount())
+                .chatroomId(chatRoom.getId())
+                .roomName(chatRoom.getRoomName())
+                .memberCount(chatRoom.getMemberCount())
                 .build();
     }
     
-    public static List<ChatRoomResponse> fromList(List<MemberInChatRoomJpaEntity> memberInChatRoomJpaEntities) {
-        return memberInChatRoomJpaEntities.stream()
-                .map(memberInChatRoom -> ChatRoomResponse.of(memberInChatRoom.getChatRoomJpaEntity()))
+    public static List<ChatRoomResponse> fromList(List<MemberInChatRoom> memberInChatRooms) {
+        return memberInChatRooms.stream()
+                .map(memberInChatRoom -> ChatRoomResponse.of(memberInChatRoom.getChatRoom()))
                 .toList();
     }
     

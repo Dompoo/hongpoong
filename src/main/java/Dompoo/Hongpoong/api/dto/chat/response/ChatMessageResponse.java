@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.chat.response;
 
-import Dompoo.Hongpoong.domain.jpaEntity.ChatMessageJpaEntity;
+import Dompoo.Hongpoong.domain.domain.ChatMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class ChatMessageResponse {
     @Schema(example = "하이요")
     private String message;
     
-    public static ChatMessageResponse of(ChatMessageJpaEntity message, Long senderId) {
+    public static ChatMessageResponse of(ChatMessage message, Long senderId) {
         return ChatMessageResponse.builder()
                 .senderId(senderId)
                 .message(message.getMessage())

@@ -1,9 +1,14 @@
 package Dompoo.Hongpoong.domain.persistence.repositoryImpl;
 
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
+import Dompoo.Hongpoong.domain.domain.ChatRoom;
 import Dompoo.Hongpoong.domain.domain.Member;
+import Dompoo.Hongpoong.domain.domain.MemberInChatRoom;
 import Dompoo.Hongpoong.domain.enums.Role;
+import Dompoo.Hongpoong.domain.jpaEntity.ChatRoomJpaEntity;
+import Dompoo.Hongpoong.domain.jpaEntity.MemberInChatRoomJpaEntity;
 import Dompoo.Hongpoong.domain.jpaEntity.MemberJpaEntity;
+import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberInChatRoomJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.jpaRepository.MemberJpaRepository;
 import Dompoo.Hongpoong.domain.persistence.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +22,7 @@ import java.util.Optional;
 public class MemberRepositoryImpl implements MemberRepository {
 	
 	private final MemberJpaRepository memberJpaRepository;
+	private final MemberInChatRoomJpaRepository memberInChatRoomJpaRepository;
 	
 	@Override
 	public List<Member> findAllByIdIn(List<Long> memberIds) {
@@ -57,5 +63,24 @@ public class MemberRepositoryImpl implements MemberRepository {
 	@Override
 	public void save(Member member) {
 		memberJpaRepository.save(MemberJpaEntity.of(member));
+	}
+	
+	@Override
+	public void saveAll(List<MemberInChatRoom> memberInChatRooms) {
+		memberInChatRoomJpaRepository.saveAll(memberInChatRooms.stream()
+				.map(MemberInChatRoomJpaEntity::of)
+				.toList());
+	}
+	
+	@Override
+	public List<MemberInChatRoom> findAllMemberInChatRoomByMember(Member member) {
+		return memberInChatRoomJpaRepository.findAllByMember(MemberJpaEntity.of(member)).stream()
+				.map(MemberInChatRoomJpaEntity::toDomain)
+				.toList();
+	}
+	
+	@Override
+	public void deleteMemberInChatRoomByMemberAndChatRoom(Member member, ChatRoom chatroom) {
+		memberInChatRoomJpaRepository.deleteByMemberAndChatRoom(MemberJpaEntity.of(member), ChatRoomJpaEntity.of(chatroom));
 	}
 }

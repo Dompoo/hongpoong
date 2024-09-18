@@ -1,6 +1,8 @@
 package Dompoo.Hongpoong.domain.persistence.repository;
 
+import Dompoo.Hongpoong.domain.domain.ChatRoom;
 import Dompoo.Hongpoong.domain.domain.Member;
+import Dompoo.Hongpoong.domain.domain.MemberInChatRoom;
 import Dompoo.Hongpoong.domain.enums.Role;
 
 import java.util.List;
@@ -21,4 +23,10 @@ public interface MemberRepository {
     Optional<Member> findById(Long memberId);
     
     void save(Member member);
+    
+    void saveAll(List<MemberInChatRoom> memberInChatRooms);
+    
+    List<MemberInChatRoom> findAllMemberInChatRoomByMember(Member member);
+    
+    void deleteMemberInChatRoomByMemberAndChatRoom(Member member, ChatRoom chatroom);
 }

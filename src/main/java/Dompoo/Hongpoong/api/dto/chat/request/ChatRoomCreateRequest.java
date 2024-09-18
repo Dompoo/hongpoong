@@ -1,6 +1,6 @@
 package Dompoo.Hongpoong.api.dto.chat.request;
 
-import Dompoo.Hongpoong.domain.jpaEntity.ChatRoomJpaEntity;
+import Dompoo.Hongpoong.domain.domain.ChatRoom;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -18,8 +18,8 @@ public class ChatRoomCreateRequest {
     @Schema(example = "[1, 2, 3]")
     private final List<Long> memberIds;
     
-    public ChatRoomJpaEntity toChatRoom() {
-        return ChatRoomJpaEntity.builder()
+    public ChatRoom toChatRoom() {
+        return ChatRoom.builder()
                 .roomName(chatroomName)
                 .memberCount(memberIds.size())
                 .build();

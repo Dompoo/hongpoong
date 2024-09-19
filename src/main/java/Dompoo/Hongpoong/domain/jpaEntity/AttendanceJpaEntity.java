@@ -20,10 +20,10 @@ public class AttendanceJpaEntity {
 	@Enumerated(EnumType.STRING)
 	private AttendanceStatus attendanceStatus;
 	
-	@ManyToOne @JoinColumn(name = "reservation_id")
+	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "reservation_id")
 	private ReservationJpaEntity reservationJpaEntity;
 	
-	@ManyToOne @JoinColumn(name = "member_id")
+	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "member_id")
 	private MemberJpaEntity memberJpaEntity;
 	
 	public Attendance toDomain() {

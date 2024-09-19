@@ -14,10 +14,10 @@ public class MemberInChatRoomJpaEntity {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne @JoinColumn(name = "member_id")
+	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "member_id")
 	private MemberJpaEntity memberJpaEntity;
 	
-	@ManyToOne @JoinColumn(name = "chatroom_id")
+	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "chatroom_id")
 	private ChatRoomJpaEntity chatRoomJpaEntity;
 	
 	public MemberInChatRoom toDomain() {

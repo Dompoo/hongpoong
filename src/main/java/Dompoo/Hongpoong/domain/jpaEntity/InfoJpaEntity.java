@@ -22,7 +22,7 @@ public class InfoJpaEntity {
     
     private LocalDateTime date;
     
-    @ManyToOne @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "member_id")
     private MemberJpaEntity memberJpaEntity;
     
     public Info toDomain() {

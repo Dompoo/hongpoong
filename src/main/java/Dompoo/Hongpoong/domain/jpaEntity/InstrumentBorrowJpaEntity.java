@@ -18,13 +18,13 @@ public class InstrumentBorrowJpaEntity {
     
     private LocalDate borrowDate;
     
-    @ManyToOne @JoinColumn(name = "instrument_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "instrument_id")
     private InstrumentJpaEntity instrumentJpaEntity;
     
-    @ManyToOne @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "member_id")
     private MemberJpaEntity memberJpaEntity;
     
-    @ManyToOne @JoinColumn(name = "reservation_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "reservation_id")
     private ReservationJpaEntity reservationJpaEntity;
     
     public InstrumentBorrow toDomain() {

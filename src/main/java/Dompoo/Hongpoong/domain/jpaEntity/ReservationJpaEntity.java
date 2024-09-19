@@ -36,7 +36,7 @@ public class ReservationJpaEntity {
     
     private Boolean participationAvailable;
     
-    @ManyToOne @JoinColumn(name = "creator_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "creator_id")
     private MemberJpaEntity creator;
     
     public Reservation toDomain() {

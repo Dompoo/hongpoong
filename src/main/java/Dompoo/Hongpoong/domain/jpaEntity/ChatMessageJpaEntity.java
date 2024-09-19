@@ -18,7 +18,7 @@ public class ChatMessageJpaEntity {
     
     private String sender;
     
-    @ManyToOne @JoinColumn(name = "room_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "room_id")
     private ChatRoomJpaEntity chatRoomJpaEntity;
     
     public ChatMessage toDomain() {

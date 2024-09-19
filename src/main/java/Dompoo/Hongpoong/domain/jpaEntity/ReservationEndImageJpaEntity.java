@@ -16,7 +16,7 @@ public class ReservationEndImageJpaEntity {
     
     private String imageUrl;
     
-    @ManyToOne @JoinColumn(name = "reservation_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "reservation_id")
     private ReservationJpaEntity reservationJpaEntity;
     
     public ReservationEndImage toDomain() {

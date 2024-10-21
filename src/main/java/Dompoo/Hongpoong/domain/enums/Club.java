@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Club {
-	HWARANG("화랑"),
+	HWARANG("신명화랑"),
 	SANTLE("산틀"),
 	AKBAN("악반"),
 	DEULNEOK("들녘"),

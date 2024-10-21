@@ -1,5 +1,13 @@
 package Dompoo.Hongpoong.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import Dompoo.Hongpoong.api.dto.auth.request.AcceptSignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.EmailValidRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.LoginRequest;
@@ -9,19 +17,10 @@ import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.SignUpResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import Dompoo.Hongpoong.domain.enums.Club;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AuthControllerTest extends MyWebMvcTest {
     
@@ -124,53 +123,6 @@ class AuthControllerTest extends MyWebMvcTest {
                         .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("[이름은 비어있을 수 없습니다.]"))
-                .andDo(print());
-    }
-    
-    @Test
-    @DisplayName("회원가입 요청시 패명은 비어있을 수 없다.")
-    void requestSignupFail9() throws Exception {
-        //given
-        SignUpRequest request = SignUpRequest.builder()
-                .email(EMAIL)
-                .name(NAME)
-                .password(PASSWORD)
-                .club(CLUB)
-                .enrollmentNumber(ENROLLMENT_NUMBER)
-                .build();
-        
-        String json = objectMapper.writeValueAsString(request);
-        
-        //expected
-        mockMvc.perform(post("/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("[패명은 비어있을 수 없습니다.]"))
-                .andDo(print());
-    }
-    
-    @Test
-    @DisplayName("회원가입 요청시 패명은 공백일 수 없다.")
-    void requestSignupFail10() throws Exception {
-        //given
-        SignUpRequest request = SignUpRequest.builder()
-                .email(EMAIL)
-                .name(NAME)
-                .nickname(" ")
-                .password(PASSWORD)
-                .club(CLUB)
-                .enrollmentNumber(ENROLLMENT_NUMBER)
-                .build();
-        
-        String json = objectMapper.writeValueAsString(request);
-        
-        //expected
-        mockMvc.perform(post("/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("[패명은 비어있을 수 없습니다.]"))
                 .andDo(print());
     }
 

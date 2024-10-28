@@ -3,10 +3,13 @@ package Dompoo.Hongpoong.api.dto.reservation.request;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
-import lombok.*;
-
 import java.time.LocalDate;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
@@ -32,6 +35,13 @@ public class ReservationEditRequest {
     
     @Schema(example = "[4, 5, 6]")
     private final List<Long> removedParticipatorIds;
+
+    @Schema(example = "[1, 2, 3]")
+    private final List<Long> addedBorrowInstrumentIds;
+
+    @Schema(example = "[4, 5, 6]")
+    private final List<Long> removedBorrowInstrumentIds;
+
     
     public ReservationEditDto toDto() {
         return ReservationEditDto.builder()
@@ -41,6 +51,8 @@ public class ReservationEditRequest {
                 .message(message)
                 .addedParticipatorIds(addedParticipatorIds)
                 .removedParticipatorIds(removedParticipatorIds)
+                .addedBorrowInstrumentIds(addedBorrowInstrumentIds)
+                .removedBorrowInstrumentIds(removedBorrowInstrumentIds)
                 .build();
     }
 }

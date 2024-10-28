@@ -12,9 +12,11 @@ import Dompoo.Hongpoong.common.exception.impl.InstrumentNotAvailable;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.common.exception.impl.ReservationNotFound;
 import Dompoo.Hongpoong.common.exception.impl.ReservationOverlapException;
+import Dompoo.Hongpoong.common.exception.impl.ReturningInstrumentNotAvailable;
 import Dompoo.Hongpoong.common.exception.impl.TimeExtendNotAvailableException;
 import Dompoo.Hongpoong.domain.entity.Attendance;
 import Dompoo.Hongpoong.domain.entity.Instrument;
+import Dompoo.Hongpoong.domain.entity.InstrumentBorrow;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
 import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
@@ -158,6 +160,33 @@ public class ReservationService {
         updateAddedParticipators(dto, reservation);
         updateDeletedParticipators(dto, reservation);
         reservation.edit(dto, now);
+
+        List<Long> addedInstrumentIds = dto.getAddedBorrowInstrumentIds();
+        List<Long> removedInstrumentIds = dto.getRemovedBorrowInstrumentIds();
+        if (addedInstrumentIds != null) {
+            List<Instrument> addedInstrument = instrumentRepository.findAllById(addedInstrumentIds);
+            addedInstrument.stream()
+                    .peek(inst -> {
+                        if (!inst.getAvailable()) {
+                            throw new InstrumentNotAvailable();
+                        }
+                    }).forEach(inst ->
+                            instrumentBorrowRepository.save(
+                                    inst.borrowInstrument(
+                                            reservation.getCreator(),
+                                            reservation,
+                                            now.toLocalDate()
+                                    )));
+        }
+        if (removedInstrumentIds != null) {
+            List<InstrumentBorrow> removedInstrument = instrumentBorrowRepository.findAllById(removedInstrumentIds);
+            removedInstrument.forEach(instBorrow -> {
+                        if (instBorrow.getReservation() != reservation) {
+                            throw new ReturningInstrumentNotAvailable();
+                        }
+                        instBorrow.getInstrument().returnInstrument();
+                    });
+        }
 
         List<Member> members = attendanceRepository.findAllMemberByReservation(reservation);
 

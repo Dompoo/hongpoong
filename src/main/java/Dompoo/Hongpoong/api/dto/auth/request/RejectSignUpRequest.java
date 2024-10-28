@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(force = true)
-public class AcceptSignUpRequest {
+public class RejectSignUpRequest {
     
-    @NotNull(message = "승인할 회원가입 요청은 필수입니다.")
+    @NotNull(message = "거절할 회원가입 요청은 필수입니다.")
     @Schema(example = "[1, 2, 3]")
-    private final List<Long> acceptedSignUpIds;
+    private final List<Long> rejectedSignUpIds;
 }

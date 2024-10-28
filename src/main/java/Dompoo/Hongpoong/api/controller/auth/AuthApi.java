@@ -3,15 +3,14 @@ package Dompoo.Hongpoong.api.controller.auth;
 import Dompoo.Hongpoong.api.dto.auth.request.AcceptSignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.EmailValidRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.LoginRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.RejectSignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.SignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.response.EmailValidResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.SignUpResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import java.util.List;
 
 @Tag(name = "1. 인증")
@@ -37,7 +36,11 @@ public interface AuthApi {
 	
 	@Operation(summary = "[관리자] 회원가입 요청 승인")
 	void acceptSignup(
-			@Parameter(description = "회원가입 요청 id") Long signupId,
 			@RequestBody AcceptSignUpRequest request
+	);
+
+	@Operation(summary = "[관리자] 회원가입 요청 거절")
+	void rejectSignup(
+			@RequestBody RejectSignUpRequest request
 	);
 }

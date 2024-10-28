@@ -1,8 +1,17 @@
 package Dompoo.Hongpoong.service;
 
+import static Dompoo.Hongpoong.domain.enums.Club.HWARANG;
+import static Dompoo.Hongpoong.domain.enums.Club.SANTLE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import Dompoo.Hongpoong.api.dto.auth.request.AcceptSignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.EmailValidRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.LoginRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.RejectSignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.SignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.response.EmailValidResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
@@ -10,12 +19,12 @@ import Dompoo.Hongpoong.api.dto.auth.response.SignUpResponse;
 import Dompoo.Hongpoong.api.service.AuthService;
 import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
 import Dompoo.Hongpoong.common.exception.impl.LoginFailException;
-import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.SignUp;
 import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.SignUpRepository;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,12 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.util.List;
-
-import static Dompoo.Hongpoong.domain.enums.Club.HWARANG;
-import static Dompoo.Hongpoong.domain.enums.Club.SANTLE;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -221,11 +224,11 @@ class AuthServiceTest {
                 .build());
 
         AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .acceptResult(true)
+                .acceptedSignUpIds(List.of(signUp.getId()))
                 .build();
 
         //when
-        service.acceptSignUp(signUp.getId(), request);
+        service.acceptSignUp(request);
 
         //then
         assertEquals(0, signUpRepository.findAll().size());
@@ -244,40 +247,16 @@ class AuthServiceTest {
                 .club(SANTLE)
                 .build());
 
-        AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .acceptResult(false)
+        RejectSignUpRequest request = RejectSignUpRequest.builder()
+                .rejectedSignUpIds(List.of(signUp.getId()))
                 .build();
 
         //when
-        service.acceptSignUp(signUp.getId(), request);
+        service.rejectSignUp(request);
 
         //then
         assertEquals(0, signUpRepository.findAll().size());
         assertEquals(0, memberRepository.findAll().size());
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 회원가입 요청 승인")
-    void acceptSignUpFail() {
-        //given
-        SignUp signUp = signUpRepository.save(SignUp.builder()
-                .email(EMAIL)
-                .name(USERNAME)
-                .password(PASSWORD)
-                .club(SANTLE)
-                .build());
-
-        AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .acceptResult(true)
-                .build();
-
-        //when
-        SignUpNotFound e = assertThrows(SignUpNotFound.class, () ->
-                service.acceptSignUp(signUp.getId() + 1, request));
-
-        //then
-        assertEquals("존재하지 않는 회원가입 요청입니다.", e.getMessage());
-        assertEquals("404", e.statusCode());
     }
 
     @Test

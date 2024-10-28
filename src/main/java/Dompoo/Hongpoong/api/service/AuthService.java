@@ -3,24 +3,23 @@ package Dompoo.Hongpoong.api.service;
 import Dompoo.Hongpoong.api.dto.auth.request.AcceptSignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.EmailValidRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.LoginRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.RejectSignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.SignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.response.EmailValidResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.SignUpResponse;
 import Dompoo.Hongpoong.common.exception.impl.AlreadyExistEmail;
 import Dompoo.Hongpoong.common.exception.impl.LoginFailException;
-import Dompoo.Hongpoong.common.exception.impl.SignUpNotFound;
 import Dompoo.Hongpoong.common.security.JwtProvider;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.SignUp;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
 import Dompoo.Hongpoong.domain.repository.SignUpRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -61,28 +60,32 @@ public class AuthService {
                 .token(token)
                 .build();
     }
-    
+
     @Transactional
-    public void acceptSignUp(Long signupId, AcceptSignUpRequest request) {
-        SignUp signUp = signUpRepository.findById(signupId)
-                .orElseThrow(SignUpNotFound::new);
+    public void acceptSignUp(AcceptSignUpRequest request) {
+        List<SignUp> signUps = signUpRepository.findAllById(request.getAcceptedSignUpIds());
 
-        if (request.getAcceptResult()) {
+        signUps.forEach(signUp -> {
             memberRepository.save(Member.from(signUp));
-        }
-
-        signUpRepository.delete(signUp);
+            signUpRepository.delete(signUp);
+        });
     }
-    
+
+    @Transactional
+    public void rejectSignUp(RejectSignUpRequest request) {
+        signUpRepository.deleteAllById(request.getRejectedSignUpIds());
+    }
+
     @Transactional(readOnly = true)
     public List<SignUpResponse> findAllSignup() {
         return signUpRepository.findAll().stream()
                 .map(SignUpResponse::from)
                 .toList();
     }
-    
+
     private boolean isValidEmail(String email) {
         return !signUpRepository.existsByEmail(email)
                 && !memberRepository.existsByEmail(email);
     }
+
 }

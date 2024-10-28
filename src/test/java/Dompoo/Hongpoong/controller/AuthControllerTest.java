@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import Dompoo.Hongpoong.api.dto.auth.request.AcceptSignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.EmailValidRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.LoginRequest;
+import Dompoo.Hongpoong.api.dto.auth.request.RejectSignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.request.SignUpRequest;
 import Dompoo.Hongpoong.api.dto.auth.response.EmailValidResponse;
 import Dompoo.Hongpoong.api.dto.auth.response.LoginResponse;
@@ -358,13 +359,13 @@ class AuthControllerTest extends MyWebMvcTest {
     void acceptSignup() throws Exception {
         //given
         AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .acceptResult(true)
+                .acceptedSignUpIds(List.of(1L, 2L, 3L))
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(post("/auth/signup/{id}", SIGNUP_ID)
+        mockMvc.perform(post("/auth/signup/accept", SIGNUP_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -375,14 +376,14 @@ class AuthControllerTest extends MyWebMvcTest {
     @DisplayName("회원가입 요청 거절")
     void acceptSignup1() throws Exception {
         //given
-        AcceptSignUpRequest request = AcceptSignUpRequest.builder()
-                .acceptResult(false)
+        RejectSignUpRequest request = RejectSignUpRequest.builder()
+                .rejectedSignUpIds(List.of(1L, 2L, 3L))
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
 
         //expected
-        mockMvc.perform(post("/auth/signup/{id}", SIGNUP_ID)
+        mockMvc.perform(post("/auth/signup/reject", SIGNUP_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())

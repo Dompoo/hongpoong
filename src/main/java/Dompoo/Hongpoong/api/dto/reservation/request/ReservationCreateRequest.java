@@ -7,11 +7,14 @@ import Dompoo.Hongpoong.domain.enums.ReservationType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
@@ -39,6 +42,9 @@ public class ReservationCreateRequest {
     @NotNull(message = "참가자는 비어있을 수 없습니다.")
     @Schema(example = "[1, 2, 3]")
     private final List<Long> participaterIds;
+
+    @Schema(example = "[4, 5]")
+    private final List<Long> borrowInstrumentIds;
     
     @Schema(example = "산틀 정공 연습")
     private final String message;

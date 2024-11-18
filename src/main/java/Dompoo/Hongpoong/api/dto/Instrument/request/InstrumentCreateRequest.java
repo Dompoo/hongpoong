@@ -22,12 +22,16 @@ public class InstrumentCreateRequest {
     @Schema(enumAsRef = true)
     private final InstrumentType type;
     
+    @Schema(example = "image.com/1")
+    private final String imageUrl;
+    
     public Instrument toInstrument(Club club) {
         return Instrument.builder()
                 .name(name)
                 .type(type)
                 .club(club)
                 .available(true)
+                .imageUrl(imageUrl)
                 .build();
     }
 }

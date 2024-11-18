@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.api.controller.reservation;
 
+import Dompoo.Hongpoong.api.dto.reservation.request.ReservationBatchCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
@@ -75,6 +76,11 @@ public interface ReservationApi {
 	@Operation(summary = "[관리자] 예약 종료 후 상세 조회")
 	ReservationEndResponse findReservationEndDetail(
 			@Parameter(description = "예약 id") Long reservationId
+	);
+	
+	@Operation(summary = "[관리자] 한번에 여러 개의 예약 등록")
+	void addReservationInBatchByAdmin(
+			@RequestBody ReservationBatchCreateRequest request
 	);
 	
 	@Operation(summary = "[관리자] 예약 수정")

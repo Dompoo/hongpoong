@@ -45,11 +45,6 @@ dependencies {
 	// MySQL
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
-	// Monitoring
-	runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'com.github.loki4j:loki-logback-appender:1.5.1'
-
 	// H2
 	testRuntimeOnly 'com.h2database:h2'
 

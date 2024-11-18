@@ -23,12 +23,3 @@ springdoc:
     path: /api-docs
     tags-sorter: alpha
     operations-sorter: method
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: prometheus
-
-loki:
-  url: ${LOKI_URL}

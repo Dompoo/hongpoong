@@ -1,6 +1,7 @@
 package Dompoo.Hongpoong.domain.repository;
 
 import Dompoo.Hongpoong.domain.entity.Member;
+import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,6 +12,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     List<Member> findAllByIdIn(List<Long> memberIds);
     boolean existsByEmail(String email);
     Optional<Member> findByEmail(String email);
-    Optional<Member> findByIdAndEmail(Long id, String email);
-    boolean existsByRole(Role role);
+    Optional<Member> findByClubAndRole(Club club, Role role);
 }

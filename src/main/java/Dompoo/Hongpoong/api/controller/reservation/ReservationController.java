@@ -1,5 +1,6 @@
 package Dompoo.Hongpoong.api.controller.reservation;
 
+import Dompoo.Hongpoong.api.dto.reservation.request.ReservationBatchCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
@@ -85,6 +86,12 @@ public class ReservationController implements ReservationApi {
     @GetMapping("/manage/{reservationId}")
     public ReservationEndResponse findReservationEndDetail(@PathVariable Long reservationId) {
         return reservationService.findReservationEndDetail(reservationId);
+    }
+    
+    @Secured(SecurePolicy.ADMIN)
+    @PostMapping("/manage")
+    public void addReservationInBatchByAdmin(@RequestBody @Valid ReservationBatchCreateRequest request) {
+        reservationService.createReservationInBatch(request, LocalDateTime.now());
     }
     
     @Secured(SecurePolicy.ADMIN)

@@ -1,41 +1,23 @@
 package Dompoo.Hongpoong.api.service;
 
+import Dompoo.Hongpoong.api.dto.reservation.request.ReservationBatchCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
-import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
-import Dompoo.Hongpoong.common.exception.impl.EditFailException;
-import Dompoo.Hongpoong.common.exception.impl.InstrumentNotAvailable;
-import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
-import Dompoo.Hongpoong.common.exception.impl.ReservationNotFound;
-import Dompoo.Hongpoong.common.exception.impl.ReservationOverlapException;
-import Dompoo.Hongpoong.common.exception.impl.ReturningInstrumentNotAvailable;
-import Dompoo.Hongpoong.common.exception.impl.TimeExtendNotAvailableException;
-import Dompoo.Hongpoong.domain.entity.Attendance;
-import Dompoo.Hongpoong.domain.entity.Instrument;
-import Dompoo.Hongpoong.domain.entity.InstrumentBorrow;
-import Dompoo.Hongpoong.domain.entity.Member;
-import Dompoo.Hongpoong.domain.entity.Reservation;
-import Dompoo.Hongpoong.domain.entity.ReservationEndImage;
+import Dompoo.Hongpoong.common.exception.impl.*;
+import Dompoo.Hongpoong.domain.entity.*;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
-import Dompoo.Hongpoong.domain.repository.AttendanceRepository;
-import Dompoo.Hongpoong.domain.repository.InstrumentBorrowRepository;
-import Dompoo.Hongpoong.domain.repository.InstrumentRepository;
-import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationEndImageRepository;
-import Dompoo.Hongpoong.domain.repository.ReservationRepository;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.YearMonth;
-import java.util.List;
+import Dompoo.Hongpoong.domain.enums.Role;
+import Dompoo.Hongpoong.domain.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.*;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -204,14 +186,21 @@ public class ReservationService {
         attendanceRepository.deleteAllByReservation(reservation);
         reservationRepository.delete(reservation);
     }
-
+    
+    @Transactional
+    public void createReservationInBatch(ReservationBatchCreateRequest request, LocalDateTime now) {
+        Member member = memberRepository.findByClubAndRole(request.getClub(), Role.LEADER).orElseThrow(MemberNotFound::new);
+        List<Reservation> reservations = request.toReservation(member, now);
+        reservationRepository.saveAll(reservations);
+    }
+    
     @Transactional
     public void editReservationByAdmin(Long reservationId, ReservationEditDto dto, LocalDateTime now) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
 
         reservation.edit(dto, now);
     }
-
+    
     @Transactional
     public void deleteReservationByAdmin(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
@@ -219,7 +208,7 @@ public class ReservationService {
         attendanceRepository.deleteAllByReservation(reservation);
         reservationRepository.delete(reservation);
     }
-
+    
     private boolean isOverlapReservationExist(ReservationCreateRequest request) {
         List<Reservation> reservations = reservationRepository.findAllByDate(request.getDate());
 
@@ -230,14 +219,14 @@ public class ReservationService {
 
         return false;
     }
-
+    
     private void updateAddedParticipators(ReservationEditDto dto, Reservation reservation) {
         if (dto.getAddedParticipatorIds() != null) {
             List<Member> addedParticipators = memberRepository.findAllByIdIn(dto.getAddedParticipatorIds());
             attendanceRepository.saveAll(Attendance.of(reservation, addedParticipators));
         }
     }
-
+    
     private void updateDeletedParticipators(ReservationEditDto dto, Reservation reservation) {
         if (dto.getRemovedParticipatorIds() != null) {
             List<Member> removedParticipators = memberRepository.findAllByIdIn(dto.getRemovedParticipatorIds());

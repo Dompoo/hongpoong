@@ -5,6 +5,7 @@ import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditDto;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponseWithInstrument;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.exception.impl.*;
@@ -84,11 +85,12 @@ public class ReservationService {
     }
 
     @Transactional(readOnly = true)
-    public ReservationDetailResponse findReservationDetail(Long reservationId) {
+    public ReservationDetailResponseWithInstrument findReservationDetail(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
         List<Member> participators = attendanceRepository.findAllMemberByReservation(reservation);
-
-        return ReservationDetailResponse.of(reservation, participators);
+        List<InstrumentBorrow> instrumentBorrows = instrumentBorrowRepository.findInstrumentBorrowByReservation(reservation);
+        List<Instrument> instruments = instrumentBorrows.stream().map(InstrumentBorrow::getInstrument).toList();
+        return ReservationDetailResponseWithInstrument.of(reservation, participators, instruments);
     }
 
     @Transactional

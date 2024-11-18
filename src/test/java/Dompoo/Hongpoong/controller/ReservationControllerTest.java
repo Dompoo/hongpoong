@@ -1,32 +1,31 @@
 package Dompoo.Hongpoong.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponseWithInstrument;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.config.MyWebMvcTest;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.enums.ReservationType;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ReservationControllerTest extends MyWebMvcTest {
     
@@ -330,7 +329,7 @@ class ReservationControllerTest extends MyWebMvcTest {
     @DisplayName("예약 상세 조회")
     void findReservationDetail() throws Exception {
         //given
-        when(reservationService.findReservationDetail(any())).thenReturn(getReservationDetailResponse());
+        when(reservationService.findReservationDetail(any())).thenReturn(getReservationDetailResponseWithInstruments());
         
         //expected
         mockMvc.perform(get("/reservation/{id}", RESERVATION_ID))
@@ -498,6 +497,28 @@ class ReservationControllerTest extends MyWebMvcTest {
                 .endTime(END_TIME_LOCALTIME)
                 .message(MESSAGE)
                 .lastmodified(LAST_MODIFIED)
+                .build();
+    }
+    
+    private static ReservationDetailResponseWithInstrument getReservationDetailResponseWithInstruments() {
+        return ReservationDetailResponseWithInstrument.builder()
+                .reservationId(RESERVATION_ID)
+                .creatorName(NAME)
+                .email(EMAIL)
+                .date(DATE)
+                .startTime(START_TIME_LOCALTIME)
+                .endTime(END_TIME_LOCALTIME)
+                .message(MESSAGE)
+                .lastmodified(LAST_MODIFIED)
+                .borrowedInstruments(List.of())
+                .participators(List.of(
+                        MemberResponse.builder()
+                                .name(NAME)
+                                .build(),
+                        MemberResponse.builder()
+                                .name("윤호")
+                                .build()
+                ))
                 .build();
     }
     

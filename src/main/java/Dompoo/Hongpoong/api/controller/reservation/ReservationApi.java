@@ -5,6 +5,7 @@ import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponseWithInstrument;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
@@ -43,7 +44,7 @@ public interface ReservationApi {
 	);
 	
 	@Operation(summary = "예약 상세 조회")
-	ReservationDetailResponse findReservationDetail(
+	ReservationDetailResponseWithInstrument findReservationDetail(
 			@Parameter(description = "예약 id") Long reservationId
 	);
 	

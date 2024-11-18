@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -35,5 +37,11 @@ public class InstrumentResponse {
                 .club(instrument.getClub().korName)
                 .available(instrument.getAvailable())
                 .build();
+    }
+    
+    public static List<InstrumentResponse> fromList(List<Instrument> borrowedInstruments) {
+        return borrowedInstruments.stream()
+                .map(InstrumentResponse::from)
+                .toList();
     }
 }

@@ -5,6 +5,7 @@ import Dompoo.Hongpoong.api.dto.reservation.request.ReservationCreateRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEditRequest;
 import Dompoo.Hongpoong.api.dto.reservation.request.ReservationEndRequest;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponse;
+import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponseWithInstrument;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.api.service.ReservationService;
@@ -54,7 +55,7 @@ public class ReservationController implements ReservationApi {
     
     @Secured
     @GetMapping("/{reservationId}")
-    public ReservationDetailResponse findReservationDetail(@PathVariable Long reservationId) {
+    public ReservationDetailResponseWithInstrument findReservationDetail(@PathVariable Long reservationId) {
         return reservationService.findReservationDetail(reservationId);
     }
     

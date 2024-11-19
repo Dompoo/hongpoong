@@ -69,21 +69,30 @@ public class ReservationService {
 
         return ReservationResponse.fromList(reservations);
     }
-
+    
+    @Transactional(readOnly = true)
+    public List<ReservationResponse> findAllReservationOfYearAndMonthAndMemberId(Integer year, Integer month, Long memberId) {
+        YearMonth yearMonth = YearMonth.of(year, month);
+        
+        List<Reservation> reservations = attendanceRepository.findAllReservationByDateBetweenAndMemberId(yearMonth.atDay(1), yearMonth.atEndOfMonth(), memberId);
+        
+        return ReservationResponse.fromList(reservations);
+    }
+    
     @Transactional(readOnly = true)
     public List<ReservationResponse> findAllReservationOfDate(LocalDate date) {
         List<Reservation> reservations = reservationRepository.findAllByDate(date);
 
         return ReservationResponse.fromList(reservations);
     }
-
+    
     @Transactional(readOnly = true)
     public List<ReservationResponse> findAllTodoReservationOfToday(Long memberId, LocalDate localDate) {
         List<Attendance> attendances = attendanceRepository.findByMemberIdAndReservationDate(memberId, localDate);
 
         return ReservationResponse.fromParticipateList(attendances);
     }
-
+    
     @Transactional(readOnly = true)
     public ReservationDetailResponseWithInstrument findReservationDetail(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
@@ -92,7 +101,7 @@ public class ReservationService {
         List<Instrument> instruments = instrumentBorrows.stream().map(InstrumentBorrow::getInstrument).toList();
         return ReservationDetailResponseWithInstrument.of(reservation, participators, instruments);
     }
-
+    
     @Transactional
     public void extendReservationTime(Long memberId, Long reservationId, LocalTime now) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
@@ -108,7 +117,7 @@ public class ReservationService {
 
         reservation.extendEndTime();
     }
-
+    
     @Transactional
     public void endReservation(Long memberId, Long reservationId, ReservationEndRequest request) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
@@ -119,7 +128,7 @@ public class ReservationService {
 
         reservationEndImageRepository.saveAll(request.toReservationEndImages(reservation));
     }
-
+    
     @Transactional(readOnly = true)
     public ReservationEndResponse findReservationEndDetail(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
@@ -130,7 +139,7 @@ public class ReservationService {
 
         return ReservationEndResponse.of(reservation, participates, images);
     }
-
+    
     @Transactional
     public ReservationDetailResponse editReservation(Long memberId, Long reservationId, ReservationEditDto dto, LocalDateTime now) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);
@@ -176,7 +185,7 @@ public class ReservationService {
 
         return ReservationDetailResponse.of(reservation, members);
     }
-
+    
     @Transactional
     public void deleteReservation(Long memberId, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(ReservationNotFound::new);

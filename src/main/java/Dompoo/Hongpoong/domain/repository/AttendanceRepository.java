@@ -33,4 +33,15 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 	void deleteAllByReservationAndMemberIn(Reservation reservation, List<Member> members);
 	
 	void deleteAllByReservation(Reservation reservation);
+	
+	@Query("""
+	SELECT a.reservation FROM Attendance a
+	WHERE a.reservation.date BETWEEN :startDate AND :endDate
+	AND a.member.id = :memberId
+	""")
+	List<Reservation> findAllReservationByDateBetweenAndMemberId(
+			@Param("startDate") LocalDate startDate,
+			@Param("endDate") LocalDate endDate,
+			@Param("memberId") Long memberId
+	);
 }

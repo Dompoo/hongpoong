@@ -37,8 +37,20 @@ public class ReservationController implements ReservationApi {
     
     @Secured
     @GetMapping("/year-month")
-    public List<ReservationResponse> findAllReservationOfYearAndMonth(@RequestParam("year") Integer year, @RequestParam("month") Integer month) {
+    public List<ReservationResponse> findAllReservationOfYearAndMonth(
+            @RequestParam("year") Integer year,
+            @RequestParam("month") Integer month
+    ) {
         return reservationService.findAllReservationOfYearAndMonth(year, month);
+    }
+    
+    @Override
+    public List<ReservationResponse> findAllReservationOfYearAndMonthAndMemberId(
+            @RequestParam("year") Integer year,
+            @RequestParam("month") Integer month,
+            @RequestParam("memberId") Long memberId
+    ) {
+        return reservationService.findAllReservationOfYearAndMonthAndMemberId(year, month, memberId);
     }
     
     @Secured

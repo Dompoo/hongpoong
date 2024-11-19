@@ -33,6 +33,13 @@ public interface ReservationApi {
 			@Parameter(description = "달") Integer month
 	);
 	
+	@Operation(summary = "특정 연도/달과 참가자의 예약 전체 조회")
+	List<ReservationResponse> findAllReservationOfYearAndMonthAndMemberId(
+			@Parameter(description = "연도") Integer year,
+			@Parameter(description = "달") Integer month,
+			@Parameter(description = "참가자 id") Long memberId
+	);
+	
 	@Operation(summary = "특정 날짜의 예약 전체 조회")
 	List<ReservationResponse> findAllReservationOfDate(
 			@Parameter(description = "날짜") LocalDate date

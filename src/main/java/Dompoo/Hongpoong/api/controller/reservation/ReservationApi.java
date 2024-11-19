@@ -9,6 +9,7 @@ import Dompoo.Hongpoong.api.dto.reservation.response.ReservationDetailResponseWi
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.security.UserClaims;
+import Dompoo.Hongpoong.domain.enums.Club;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -38,6 +39,13 @@ public interface ReservationApi {
 			@Parameter(description = "연도") Integer year,
 			@Parameter(description = "달") Integer month,
 			@Parameter(description = "참가자 id") Long memberId
+	);
+	
+	@Operation(summary = "특정 연도/달과 패의 예약 전체 조회")
+	List<ReservationResponse> findAllReservationOfYearAndMonthAndClub(
+			@Parameter(description = "연도") Integer year,
+			@Parameter(description = "달") Integer month,
+			@Parameter(description = "동아리") Club club
 	);
 	
 	@Operation(summary = "특정 날짜의 예약 전체 조회")

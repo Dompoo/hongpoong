@@ -13,6 +13,7 @@ import Dompoo.Hongpoong.common.security.SecurePolicy;
 import Dompoo.Hongpoong.common.security.UserClaims;
 import Dompoo.Hongpoong.common.security.annotation.LoginUser;
 import Dompoo.Hongpoong.common.security.annotation.Secured;
+import Dompoo.Hongpoong.domain.enums.Club;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +52,15 @@ public class ReservationController implements ReservationApi {
             @RequestParam("memberId") Long memberId
     ) {
         return reservationService.findAllReservationOfYearAndMonthAndMemberId(year, month, memberId);
+    }
+    
+    @Override
+    public List<ReservationResponse> findAllReservationOfYearAndMonthAndClub(
+            @RequestParam("year") Integer year,
+            @RequestParam("month") Integer month,
+            @RequestParam("club") Club club
+    ) {
+        return reservationService.findAllReservationOfYearAndMonthAndClub(year, month, club);
     }
     
     @Secured

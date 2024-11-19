@@ -10,6 +10,7 @@ import Dompoo.Hongpoong.api.dto.reservation.response.ReservationEndResponse;
 import Dompoo.Hongpoong.api.dto.reservation.response.ReservationResponse;
 import Dompoo.Hongpoong.common.exception.impl.*;
 import Dompoo.Hongpoong.domain.entity.*;
+import Dompoo.Hongpoong.domain.enums.Club;
 import Dompoo.Hongpoong.domain.enums.ReservationTime;
 import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.repository.*;
@@ -77,6 +78,15 @@ public class ReservationService {
         List<Reservation> reservations = attendanceRepository.findAllReservationByDateBetweenAndMemberId(yearMonth.atDay(1), yearMonth.atEndOfMonth(), memberId);
         
         return ReservationResponse.fromList(reservations);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<ReservationResponse> findAllReservationOfYearAndMonthAndClub(Integer year, Integer month, Club club) {
+        YearMonth yearMonth = YearMonth.of(year, month);
+        
+        attendanceRepository.findAllReservationByDateBetweenAndClub(yearMonth.atDay(1), yearMonth.atEndOfMonth(), club);
+        
+        return null;
     }
     
     @Transactional(readOnly = true)

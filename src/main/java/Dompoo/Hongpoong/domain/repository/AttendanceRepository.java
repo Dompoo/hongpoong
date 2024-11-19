@@ -3,6 +3,7 @@ package Dompoo.Hongpoong.domain.repository;
 import Dompoo.Hongpoong.domain.entity.Attendance;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.entity.Reservation;
+import Dompoo.Hongpoong.domain.enums.Club;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,4 +45,14 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 			@Param("endDate") LocalDate endDate,
 			@Param("memberId") Long memberId
 	);
+	
+	@Query("""
+	SELECT a.reservation FROM Attendance a
+	WHERE a.reservation.date BETWEEN :startDate AND :endDate
+	AND a.member.club = :club
+	""")
+	List<Reservation> findAllReservationByDateBetweenAndClub(
+			@Param("startDate") LocalDate startDate,
+			@Param("endDate") LocalDate endDate,
+			@Param("club") Club club);
 }

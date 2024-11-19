@@ -46,6 +46,7 @@ public class ReservationController implements ReservationApi {
     }
     
     @Override
+    @GetMapping("/year-month-member")
     public List<ReservationResponse> findAllReservationOfYearAndMonthAndMemberId(
             @RequestParam("year") Integer year,
             @RequestParam("month") Integer month,
@@ -55,6 +56,7 @@ public class ReservationController implements ReservationApi {
     }
     
     @Override
+    @GetMapping("/year-month-club")
     public List<ReservationResponse> findAllReservationOfYearAndMonthAndClub(
             @RequestParam("year") Integer year,
             @RequestParam("month") Integer month,

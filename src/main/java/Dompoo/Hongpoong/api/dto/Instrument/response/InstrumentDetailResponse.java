@@ -30,6 +30,9 @@ public class InstrumentDetailResponse {
     @Schema(example = "false")
     private final Boolean available;
     
+    @Schema(example = "image.com/1")
+    private final String imageUrl;
+    
     private final List<InstrumentBorrowResponse> borrowHistory;
     
     public static InstrumentDetailResponse from(Instrument instrument, List<InstrumentBorrow> instrumentBorrows) {
@@ -39,6 +42,7 @@ public class InstrumentDetailResponse {
                 .type(instrument.getType().korName)
                 .club(instrument.getClub().korName)
                 .available(instrument.getAvailable())
+                .imageUrl(instrument.getImageUrl())
                 .borrowHistory(InstrumentBorrowResponse.fromList(instrumentBorrows))
                 .build();
     }

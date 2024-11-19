@@ -29,6 +29,9 @@ public class InstrumentResponse {
     @Schema(example = "false")
     private final Boolean available;
     
+    @Schema(example = "image.com/1")
+    private final String imageUrl;
+    
     public static InstrumentResponse from(Instrument instrument) {
         return InstrumentResponse.builder()
                 .instrumentId(instrument.getId())
@@ -36,6 +39,7 @@ public class InstrumentResponse {
                 .type(instrument.getType().korName)
                 .club(instrument.getClub().korName)
                 .available(instrument.getAvailable())
+                .imageUrl(instrument.getImageUrl())
                 .build();
     }
     

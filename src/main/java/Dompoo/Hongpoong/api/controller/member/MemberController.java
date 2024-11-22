@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.api.controller.member;
 
 import Dompoo.Hongpoong.api.dto.member.request.MemberEditRequest;
 import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditRequest;
+import Dompoo.Hongpoong.api.dto.member.request.PasswordResetRequest;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
 import Dompoo.Hongpoong.api.service.MemberService;
@@ -57,7 +58,15 @@ public class MemberController implements MemberApi {
     public void deleteMember(@LoginUser UserClaims claims, @PathVariable Long memberId) {
         service.deleteMember(claims.getId(), memberId);
     }
-
+    
+    @Secured(SecurePolicy.ADMIN)
+    @PostMapping("/manage/{memberId}/resetPassword")
+    public void resetPasswordByAdmin(
+            @PathVariable Long memberId,
+            @RequestBody @Valid PasswordResetRequest request) {
+        service.resetPasswordByAdmin(memberId, request);
+    }
+    
     @Secured(SecurePolicy.ADMIN)
     @PatchMapping("/manage/{memberId}")
     public void editMemberRoleByAdmin(@PathVariable Long memberId, @RequestBody @Valid MemberRoleEditRequest request) {

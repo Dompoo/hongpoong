@@ -61,6 +61,10 @@ public class Member {
         if (dto.getNewPassword() != null) this.password = encoder.encode(dto.getNewPassword());
     }
     
+    public void resetPassword(String password, PasswordEncoder encoder) {
+        if (password != null) this.password = encoder.encode(password);
+    }
+    
     public void editSetting(SettingEditDto dto) {
         if (dto.getPush() != null) this.pushAlarm = dto.getPush();
     }

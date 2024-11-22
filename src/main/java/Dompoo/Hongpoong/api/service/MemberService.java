@@ -2,6 +2,7 @@ package Dompoo.Hongpoong.api.service;
 
 import Dompoo.Hongpoong.api.dto.member.request.MemberEditDto;
 import Dompoo.Hongpoong.api.dto.member.request.MemberRoleEditDto;
+import Dompoo.Hongpoong.api.dto.member.request.PasswordResetRequest;
 import Dompoo.Hongpoong.api.dto.member.response.MemberResponse;
 import Dompoo.Hongpoong.api.dto.member.response.MemberStatusResponse;
 import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
@@ -11,6 +12,7 @@ import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -90,5 +92,12 @@ public class MemberService {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
 
         return MemberStatusResponse.from(member);
+    }
+    
+    @Transactional
+    public void resetPasswordByAdmin(Long memberId, @Valid PasswordResetRequest request) {
+        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
+        
+        member.resetPassword(request.getNewPassword(), encoder);
     }
 }

@@ -25,13 +25,16 @@ public class JwtProvider {
 	private static final String CLAIMS_CLUB_PROPERTIES = "club";
 	
 	private final String secret;
+	private final String resetSecret;
 	private final long accessTokenExpTime;
 	
 	public JwtProvider(
 			@Value("${jwt.secret}") String secret,
+			@Value("${jwt.reset_secret}") String resetSecret,
 			@Value("${jwt.expiration_time}") long accessTokenExpTime
 	) {
 		this.secret = secret;
+		this.resetSecret = resetSecret;
 		this.accessTokenExpTime = accessTokenExpTime;
 	}
 	
@@ -45,6 +48,13 @@ public class JwtProvider {
 				.role(Role.valueOf((String) claims.get(CLAIMS_ROLE_PROPERTIES)))
 				.club(Club.valueOf((String) claims.get(CLAIMS_CLUB_PROPERTIES)))
 				.build();
+	}
+	
+	public String resolveResetToken(String token) {
+		SecretKey secretKey = getResetKey();
+		Claims claims = getClaims(token, secretKey);
+		
+		return (String) claims.get(CLAIMS_EMAIL_PROPERTIES);
 	}
 	
 	private Claims getClaims(String token, SecretKey secretKey) {
@@ -81,5 +91,9 @@ public class JwtProvider {
 	
 	private SecretKey getSecretKey() {
 		return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+	}
+	
+	private SecretKey getResetKey() {
+		return Keys.hmacShaKeyFor(resetSecret.getBytes(StandardCharsets.UTF_8));
 	}
 }

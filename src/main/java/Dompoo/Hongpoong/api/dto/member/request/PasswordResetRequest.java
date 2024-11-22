@@ -12,7 +12,11 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PasswordResetRequest {
     
+    @NotBlank(message = "JWT 토큰은 비어있을 수 없습니다.")
+    @Schema(example = "asda=qw-easd=zx-1321czxcasdasd")
+    private final String token;
+    
     @NotBlank(message = "새 비밀번호는 비어있을 수 없습니다.")
-    @Schema(example = "1234")
+    @Schema(example = "password1234")
     private final String newPassword;
 }

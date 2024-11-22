@@ -9,10 +9,10 @@ import Dompoo.Hongpoong.common.exception.impl.DeleteFailException;
 import Dompoo.Hongpoong.common.exception.impl.EditFailException;
 import Dompoo.Hongpoong.common.exception.impl.EditRoleToAdminException;
 import Dompoo.Hongpoong.common.exception.impl.MemberNotFound;
+import Dompoo.Hongpoong.common.security.JwtProvider;
 import Dompoo.Hongpoong.domain.entity.Member;
 import Dompoo.Hongpoong.domain.enums.Role;
 import Dompoo.Hongpoong.domain.repository.MemberRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-
+    
+    private final JwtProvider jwtProvider;
     private final MemberRepository memberRepository;
     private final PasswordEncoder encoder;
 
@@ -50,6 +51,14 @@ public class MemberService {
         List<Member> members = memberRepository.findAll();
         
         return MemberResponse.fromList(members);
+    }
+    
+    @Transactional
+    public void resetPassword(PasswordResetRequest request) {
+        String email = jwtProvider.resolveResetToken(request.getToken());
+        Member member = memberRepository.findByEmail(email).orElseThrow(MemberNotFound::new);
+        
+        member.resetPassword(request.getNewPassword(), encoder);
     }
     
     @Transactional
@@ -92,12 +101,5 @@ public class MemberService {
         Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
 
         return MemberStatusResponse.from(member);
-    }
-    
-    @Transactional
-    public void resetPasswordByAdmin(Long memberId, @Valid PasswordResetRequest request) {
-        Member member = memberRepository.findById(memberId).orElseThrow(MemberNotFound::new);
-        
-        member.resetPassword(request.getNewPassword(), encoder);
     }
 }

@@ -17,6 +17,7 @@ spring:
 jwt:
   expiration_time: 86400000 # 1일
   secret: ${JWT_SECRET}
+  reset_secret: ${JWT_RESET_SECRET}
 
 springdoc:
   swagger-ui:

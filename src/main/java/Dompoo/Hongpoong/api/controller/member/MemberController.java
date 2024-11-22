@@ -40,7 +40,12 @@ public class MemberController implements MemberApi {
     public void editMyMember(@LoginUser UserClaims claims, @RequestBody @Valid MemberEditRequest request) {
         service.editMyMember(claims.getId(), request.toDto(), request.getPassword());
     }
-
+    
+    @PutMapping("/password")
+    public void resetPassword(@RequestBody @Valid PasswordResetRequest request) {
+        service.resetPassword(request);
+    }
+    
     @Secured
     @DeleteMapping
     public void withDraw(@LoginUser UserClaims claims) {
@@ -57,14 +62,6 @@ public class MemberController implements MemberApi {
     @DeleteMapping("/{memberId}")
     public void deleteMember(@LoginUser UserClaims claims, @PathVariable Long memberId) {
         service.deleteMember(claims.getId(), memberId);
-    }
-    
-    @Secured(SecurePolicy.ADMIN)
-    @PostMapping("/manage/{memberId}/resetPassword")
-    public void resetPasswordByAdmin(
-            @PathVariable Long memberId,
-            @RequestBody @Valid PasswordResetRequest request) {
-        service.resetPasswordByAdmin(memberId, request);
     }
     
     @Secured(SecurePolicy.ADMIN)

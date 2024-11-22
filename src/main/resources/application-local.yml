@@ -18,6 +18,7 @@ spring:
 jwt:
   expiration_time: 86400000 # 1일
   secret: ilovejava+=ilovespringilove23131ilove136843=me9023984ilove39491anime1323949==3812339
+  reset_secret: ilovejava+=ilovespringilove23131ilove136843=me9023984ilove39491anime1323949==3812339
 
 springdoc:
   swagger-ui:

@@ -31,6 +31,11 @@ public interface MemberApi {
 			@RequestBody MemberEditRequest request
 	);
 	
+	@Operation(summary = "회원 비밀번호 재설정")
+	void resetPassword(
+			@RequestBody PasswordResetRequest request
+	);
+	
 	@Operation(summary = "회원 탈퇴")
 	void withDraw(
 			@Schema(hidden = true) UserClaims claims
@@ -47,12 +52,6 @@ public interface MemberApi {
 	void deleteMember(
 			@Schema(hidden = true) UserClaims claims,
 			@Parameter(description = "회원 id") Long memberId
-	);
-	
-	@Operation(summary = "[의장] 회원 비밀번호 재설정")
-	void resetPasswordByAdmin(
-			@Parameter(description = "회원 id") Long memberId,
-			@RequestBody PasswordResetRequest request
 	);
 	
 	@Operation(summary = "[의장] 회원 권한 수정")
